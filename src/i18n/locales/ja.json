@@ -1,0 +1,329 @@
+{
+  "app": {
+    "name": "TourPlan",
+    "tagline": "スマートな旅を、手軽にプランニング"
+  },
+  "common": {
+    "next": "次へ",
+    "back": "戻る",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "add": "追加",
+    "confirm": "確認",
+    "required": "必須",
+    "optional": "任意",
+    "loading": "読み込み中",
+    "error": "エラー",
+    "success": "成功",
+    "search": "検索",
+    "select": "選択",
+    "submit": "送信",
+    "reset": "リセット",
+    "close": "閉じる",
+    "yes": "はい",
+    "no": "いいえ",
+    "none": "なし",
+    "other": "その他",
+    "done": "完了",
+    "skip": "スキップ"
+  },
+  "auth": {
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "register": "新規登録",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "forgotPassword": "パスワードを忘れた方",
+    "welcomeBack": "おかえりなさい",
+    "createAccount": "アカウント作成"
+  },
+  "survey": {
+    "title": "旅行を計画する",
+    "subtitle": "理想の旅について教えてください",
+    "sections": {
+      "basics": "基本情報",
+      "budget": "予算と費用",
+      "transport": "交通手段",
+      "style": "旅行スタイルと興味",
+      "accommodation": "宿泊施設",
+      "attractions": "観光スポットとアクティビティ",
+      "special": "特別な要件"
+    },
+    "dates": {
+      "label": "旅行日程",
+      "start": "出発日",
+      "end": "帰着日",
+      "flexible": "日程の柔軟性",
+      "flexibleHint": "前後 1〜3 日の調整でより良い選択肢が見つかります",
+      "selectDates": "旅行日程を選択してください",
+      "duration": "旅行期間",
+      "days": "日",
+      "nights": "泊"
+    },
+    "destination": {
+      "label": "目的地",
+      "placeholder": "都市または国を検索",
+      "addMore": "目的地を追加",
+      "remove": "目的地を削除",
+      "multiCity": "複数都市の旅行",
+      "dragToReorder": "ドラッグして並べ替え"
+    },
+    "travelers": {
+      "label": "旅行者の人数",
+      "adults": "大人",
+      "children": "子ども",
+      "childAge": "子どもの年齢",
+      "infants": "乳幼児",
+      "seniors": "シニア"
+    },
+    "tripType": {
+      "label": "旅行タイプ",
+      "family": "家族旅行",
+      "couple": "カップル旅行",
+      "solo": "ひとり旅",
+      "friends": "友人との旅行",
+      "business": "ビジネス",
+      "honeymoon": "ハネムーン"
+    },
+    "departure": {
+      "label": "出発地",
+      "placeholder": "どこから出発しますか？"
+    },
+    "budget": {
+      "label": "総予算",
+      "economy": "エコノミー",
+      "moderate": "スタンダード",
+      "luxury": "ラグジュアリー",
+      "unlimited": "予算上限なし",
+      "dailyMeals": "1 日の食事予算（1 人あたり）",
+      "currency": "希望通貨"
+    },
+    "transport": {
+      "label": "現地の交通手段",
+      "public": "公共交通機関",
+      "taxi": "タクシー／配車サービス（Grab、Uber）",
+      "rental": "レンタカー",
+      "charter": "チャーター車",
+      "walking": "徒歩",
+      "drivingLicense": "国際運転免許証をお持ちですか？",
+      "flightInfo": {
+        "label": "フライト情報",
+        "flightNumber": "便名",
+        "departure": "出発時刻",
+        "arrival": "到着時刻",
+        "addFlight": "フライト情報を追加"
+      }
+    },
+    "interests": {
+      "label": "興味・アクティビティ",
+      "culture": "文化と歴史",
+      "nature": "自然とアウトドア",
+      "food": "グルメ",
+      "shopping": "ショッピング",
+      "nightlife": "ナイトライフ",
+      "water": "マリンアクティビティ",
+      "family": "ファミリー向け",
+      "photo": "フォトスポット",
+      "temple": "寺院・神社・宗教施設",
+      "spa": "スパ・マッサージ",
+      "themepark": "テーマパーク",
+      "art": "アート・展示",
+      "market": "ローカルマーケット"
+    },
+    "pace": {
+      "label": "旅行のペース",
+      "packed": "充実・ハード",
+      "balanced": "バランス型",
+      "relaxed": "のんびり・ゆったり"
+    },
+    "schedule": {
+      "label": "朝の好み",
+      "earlyBird": "早起き派（7:00 前）",
+      "normal": "普通（9:00 頃）",
+      "lateRiser": "ゆっくり派（10:00 以降）"
+    },
+    "dietary": {
+      "label": "食事制限",
+      "vegetarian": "ベジタリアン",
+      "vegan": "ヴィーガン",
+      "halal": "ハラール",
+      "allergies": "アレルギー",
+      "peanut": "ピーナッツアレルギー",
+      "seafood": "魚介アレルギー",
+      "noRestriction": "制限なし"
+    },
+    "accommodation": {
+      "platform": {
+        "label": "予約プラットフォーム",
+        "customUrl": "その他の予約サイト URL"
+      },
+      "type": {
+        "label": "宿泊タイプ",
+        "hotel": "ホテル",
+        "homestay": "民泊・ゲストハウス",
+        "hostel": "ホステル",
+        "resort": "リゾート",
+        "apartment": "アパートメント"
+      },
+      "location": {
+        "label": "希望エリア",
+        "cityCenter": "市街中心部",
+        "nearAttractions": "観光地近く",
+        "quiet": "静かな住宅エリア",
+        "beachfront": "ビーチフロント"
+      },
+      "amenities": {
+        "label": "必要な設備",
+        "pool": "プール",
+        "gym": "ジム",
+        "breakfast": "朝食付き",
+        "kitchen": "キッチン",
+        "laundry": "ランドリー",
+        "parking": "駐車場"
+      }
+    },
+    "attractions": {
+      "reference": {
+        "label": "参考スポット",
+        "hint": "気になるスポットを共有してください。AI がプラン作成時に考慮します。",
+        "addUrl": "URL を追加",
+        "addPhoto": "写真を追加",
+        "addFile": "ファイルを追加",
+        "urlPlaceholder": "スポットのリンクを貼り付け..."
+      },
+      "mustVisit": {
+        "label": "必ず訪れたいスポット",
+        "hint": "これらのスポットは旅程に含まれます。",
+        "specifyDate": "希望日を指定",
+        "specifyTime": "希望時間を指定"
+      }
+    },
+    "map": {
+      "label": "地図サービス",
+      "apple": "Apple マップ",
+      "google": "Google マップ",
+      "amap": "高徳地図",
+      "baidu": "百度地図"
+    },
+    "accessibility": {
+      "label": "バリアフリー",
+      "wheelchair": "車椅子対応",
+      "stroller": "ベビーカー対応",
+      "mobility": "移動に制限あり"
+    },
+    "visa": {
+      "label": "ビザ要件",
+      "nationality": "パスポートの国籍",
+      "hint": "ビザが必要かどうか確認します"
+    },
+    "insurance": {
+      "label": "旅行保険",
+      "have": "加入済み",
+      "need": "おすすめを知りたい",
+      "skip": "今はスキップ"
+    },
+    "notes": {
+      "label": "メモ",
+      "placeholder": "その他のご要望や条件..."
+    },
+    "language": {
+      "label": "アプリの言語",
+      "hint": "ご希望の言語を選択してください"
+    },
+    "generateTrip": "旅行プランを作成",
+    "generating": "AI があなたにぴったりの旅行を計画中...",
+    "tierLabels": {
+      "required": "必須項目",
+      "recommended": "推奨",
+      "optional": "任意項目"
+    }
+  },
+  "itinerary": {
+    "title": "旅行プラン",
+    "day": "{{number}} 日目",
+    "overview": "概要",
+    "dailySummary": "1 日のまとめ",
+    "estimatedCost": "推定費用",
+    "walkingDistance": "徒歩距離",
+    "weather": "天気予報",
+    "timeline": "タイムライン表示",
+    "mapView": "マップ表示",
+    "activity": {
+      "startTime": "開始時刻",
+      "endTime": "終了時刻",
+      "duration": "滞在時間",
+      "cost": "費用",
+      "transport": "アクセス方法",
+      "travelTime": "移動時間",
+      "openHours": "営業時間",
+      "closedDay": "定休日",
+      "rating": "評価",
+      "navigate": "ナビ",
+      "bookTicket": "チケット予約",
+      "moreInfo": "詳細情報",
+      "notes": "メモ",
+      "type": {
+        "attraction": "観光スポット",
+        "restaurant": "レストラン",
+        "shopping": "ショッピング",
+        "transport": "交通",
+        "hotel": "ホテル",
+        "activity": "アクティビティ"
+      }
+    },
+    "hotel": {
+      "label": "本日の宿泊先",
+      "checkIn": "チェックイン",
+      "checkOut": "チェックアウト",
+      "contact": "連絡先",
+      "bookingLink": "予約リンク"
+    },
+    "emergency": {
+      "label": "緊急連絡先",
+      "police": "警察",
+      "ambulance": "救急車",
+      "embassy": "大使館・領事館",
+      "tourist": "ツーリストポリス"
+    },
+    "tips": {
+      "label": "現地のヒント",
+      "tipping": "チップのマナー",
+      "customs": "現地の習慣",
+      "wifi": "Wi-Fi・SIM カード情報"
+    },
+    "export": {
+      "label": "エクスポート",
+      "pdf": "PDF で出力",
+      "share": "リンクを共有",
+      "image": "画像として保存"
+    },
+    "dragHint": "長押しでドラッグして並べ替え",
+    "aiSuggestion": "AI が空き時間に近くのスポットを提案します",
+    "offlineReady": "オフラインで利用可能"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "言語",
+    "darkMode": "ダークモード",
+    "notifications": "通知",
+    "about": "アプリについて",
+    "privacy": "プライバシーポリシー",
+    "terms": "利用規約",
+    "version": "バージョン"
+  },
+  "errors": {
+    "required": "この項目は必須です",
+    "invalidDate": "日程の選択が無効です",
+    "invalidUrl": "有効な URL を入力してください",
+    "networkError": "ネットワークエラーが発生しました。再度お試しください。",
+    "serverError": "サーバーエラーが発生しました。しばらくしてから再度お試しください。",
+    "uploadFailed": "ファイルのアップロードに失敗しました",
+    "fileTooLarge": "ファイルが大きすぎます（上限 10MB）",
+    "unsupportedFormat": "サポートされていないファイル形式です",
+    "minTravelers": "旅行者は 1 名以上必要です",
+    "minDestination": "目的地は 1 つ以上必要です",
+    "dateRange": "帰着日は出発日より後の日付にしてください"
+  }
+}

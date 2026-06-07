@@ -1,0 +1,329 @@
+{
+  "app": {
+    "name": "TourPlan",
+    "tagline": "智慧旅程，輕鬆規劃"
+  },
+  "common": {
+    "next": "下一步",
+    "back": "返回",
+    "save": "儲存",
+    "cancel": "取消",
+    "delete": "刪除",
+    "edit": "編輯",
+    "add": "新增",
+    "confirm": "確認",
+    "required": "必填",
+    "optional": "選填",
+    "loading": "載入中",
+    "error": "錯誤",
+    "success": "成功",
+    "search": "搜尋",
+    "select": "選擇",
+    "submit": "送出",
+    "reset": "重設",
+    "close": "關閉",
+    "yes": "是",
+    "no": "否",
+    "none": "無",
+    "other": "其他",
+    "done": "完成",
+    "skip": "略過"
+  },
+  "auth": {
+    "login": "登入",
+    "logout": "登出",
+    "register": "註冊",
+    "email": "電子信箱",
+    "password": "密碼",
+    "forgotPassword": "忘記密碼",
+    "welcomeBack": "歡迎回來",
+    "createAccount": "建立帳號"
+  },
+  "survey": {
+    "title": "規劃你的旅程",
+    "subtitle": "告訴我們你理想中的旅行",
+    "sections": {
+      "basics": "基本資訊",
+      "budget": "預算與花費",
+      "transport": "交通方式",
+      "style": "旅遊風格與興趣",
+      "accommodation": "住宿",
+      "attractions": "景點與活動",
+      "special": "特殊需求"
+    },
+    "dates": {
+      "label": "旅遊日期",
+      "start": "出發日期",
+      "end": "回程日期",
+      "flexible": "彈性日期",
+      "flexibleHint": "允許前後 1 至 3 天以獲得更多選擇",
+      "selectDates": "選擇你的旅遊日期",
+      "duration": "旅程天數",
+      "days": "天",
+      "nights": "晚"
+    },
+    "destination": {
+      "label": "目的地",
+      "placeholder": "搜尋城市或國家",
+      "addMore": "新增其他目的地",
+      "remove": "移除目的地",
+      "multiCity": "多城市行程",
+      "dragToReorder": "拖曳以重新排序"
+    },
+    "travelers": {
+      "label": "旅客人數",
+      "adults": "成人",
+      "children": "兒童",
+      "childAge": "兒童年齡",
+      "infants": "嬰幼兒",
+      "seniors": "年長者"
+    },
+    "tripType": {
+      "label": "旅行類型",
+      "family": "家庭旅遊",
+      "couple": "情侶旅遊",
+      "solo": "獨自旅行",
+      "friends": "朋友出遊",
+      "business": "商務旅行",
+      "honeymoon": "蜜月旅行"
+    },
+    "departure": {
+      "label": "出發城市",
+      "placeholder": "你從哪裡出發？"
+    },
+    "budget": {
+      "label": "總預算",
+      "economy": "經濟型",
+      "moderate": "中等",
+      "luxury": "豪華",
+      "unlimited": "不限預算",
+      "dailyMeals": "每日餐費預算（每人）",
+      "currency": "偏好幣別"
+    },
+    "transport": {
+      "label": "當地交通偏好",
+      "public": "大眾運輸",
+      "taxi": "計程車／叫車服務（Grab、Uber）",
+      "rental": "租車",
+      "charter": "包車",
+      "walking": "步行",
+      "drivingLicense": "你是否持有國際駕照？",
+      "flightInfo": {
+        "label": "航班資訊",
+        "flightNumber": "航班編號",
+        "departure": "出發時間",
+        "arrival": "抵達時間",
+        "addFlight": "新增航班資訊"
+      }
+    },
+    "interests": {
+      "label": "興趣與活動",
+      "culture": "文化與歷史",
+      "nature": "自然與戶外",
+      "food": "美食與餐飲",
+      "shopping": "購物",
+      "nightlife": "夜生活",
+      "water": "水上活動",
+      "family": "親子友善",
+      "photo": "攝影景點",
+      "temple": "寺廟與宗教景點",
+      "spa": "水療與按摩",
+      "themepark": "主題樂園",
+      "art": "藝術與展覽",
+      "market": "在地市集"
+    },
+    "pace": {
+      "label": "旅行節奏",
+      "packed": "緊湊充實",
+      "balanced": "適中平衡",
+      "relaxed": "悠閒放鬆"
+    },
+    "schedule": {
+      "label": "早晨偏好",
+      "earlyBird": "早起型（7:00 前）",
+      "normal": "一般型（9:00 左右）",
+      "lateRiser": "晚起型（10:00 後）"
+    },
+    "dietary": {
+      "label": "飲食限制",
+      "vegetarian": "素食",
+      "vegan": "純素",
+      "halal": "清真",
+      "allergies": "過敏",
+      "peanut": "花生過敏",
+      "seafood": "海鮮過敏",
+      "noRestriction": "無限制"
+    },
+    "accommodation": {
+      "platform": {
+        "label": "訂房平台",
+        "customUrl": "其他訂房網站網址"
+      },
+      "type": {
+        "label": "住宿類型",
+        "hotel": "飯店",
+        "homestay": "民宿",
+        "hostel": "青年旅館",
+        "resort": "度假村",
+        "apartment": "公寓"
+      },
+      "location": {
+        "label": "偏好地點",
+        "cityCenter": "市中心",
+        "nearAttractions": "鄰近景點",
+        "quiet": "安靜住宅區",
+        "beachfront": "海灘第一排"
+      },
+      "amenities": {
+        "label": "必備設施",
+        "pool": "游泳池",
+        "gym": "健身房",
+        "breakfast": "免費早餐",
+        "kitchen": "廚房",
+        "laundry": "洗衣設備",
+        "parking": "停車場"
+      }
+    },
+    "attractions": {
+      "reference": {
+        "label": "參考景點",
+        "hint": "分享你感興趣的景點，AI 會在規劃時納入考量。",
+        "addUrl": "新增網址",
+        "addPhoto": "新增照片",
+        "addFile": "新增檔案",
+        "urlPlaceholder": "貼上景點連結..."
+      },
+      "mustVisit": {
+        "label": "必去景點",
+        "hint": "這些景點將會被納入你的行程中。",
+        "specifyDate": "指定偏好日期",
+        "specifyTime": "指定偏好時間"
+      }
+    },
+    "map": {
+      "label": "地圖服務",
+      "apple": "Apple 地圖",
+      "google": "Google 地圖",
+      "amap": "高德地圖",
+      "baidu": "百度地圖"
+    },
+    "accessibility": {
+      "label": "無障礙需求",
+      "wheelchair": "輪椅通行",
+      "stroller": "嬰兒車友善",
+      "mobility": "行動不便"
+    },
+    "visa": {
+      "label": "簽證需求",
+      "nationality": "護照國籍",
+      "hint": "我們會確認你是否需要簽證"
+    },
+    "insurance": {
+      "label": "旅遊保險",
+      "have": "已投保",
+      "need": "需要推薦",
+      "skip": "先跳過"
+    },
+    "notes": {
+      "label": "備註",
+      "placeholder": "其他偏好或需求..."
+    },
+    "language": {
+      "label": "應用程式語言",
+      "hint": "選擇你偏好的語言"
+    },
+    "generateTrip": "產生我的行程",
+    "generating": "AI 正在為你規劃完美旅程...",
+    "tierLabels": {
+      "required": "必填資訊",
+      "recommended": "建議填寫",
+      "optional": "選填項目"
+    }
+  },
+  "itinerary": {
+    "title": "我的行程",
+    "day": "第 {{number}} 天",
+    "overview": "總覽",
+    "dailySummary": "每日摘要",
+    "estimatedCost": "預估費用",
+    "walkingDistance": "步行距離",
+    "weather": "天氣預報",
+    "timeline": "時間軸檢視",
+    "mapView": "地圖檢視",
+    "activity": {
+      "startTime": "開始時間",
+      "endTime": "結束時間",
+      "duration": "停留時間",
+      "cost": "費用",
+      "transport": "交通方式",
+      "travelTime": "交通時間",
+      "openHours": "營業時間",
+      "closedDay": "公休日",
+      "rating": "評分",
+      "navigate": "導航",
+      "bookTicket": "訂票",
+      "moreInfo": "更多資訊",
+      "notes": "備註",
+      "type": {
+        "attraction": "景點",
+        "restaurant": "餐廳",
+        "shopping": "購物",
+        "transport": "交通",
+        "hotel": "飯店",
+        "activity": "活動"
+      }
+    },
+    "hotel": {
+      "label": "今日住宿",
+      "checkIn": "入住",
+      "checkOut": "退房",
+      "contact": "聯絡方式",
+      "bookingLink": "訂房連結"
+    },
+    "emergency": {
+      "label": "緊急聯絡",
+      "police": "警察",
+      "ambulance": "救護車",
+      "embassy": "大使館／領事館",
+      "tourist": "觀光警察"
+    },
+    "tips": {
+      "label": "在地小撇步",
+      "tipping": "小費禮儀",
+      "customs": "當地習俗",
+      "wifi": "Wi-Fi／SIM 卡資訊"
+    },
+    "export": {
+      "label": "匯出",
+      "pdf": "匯出為 PDF",
+      "share": "分享連結",
+      "image": "儲存為圖片"
+    },
+    "dragHint": "長按並拖曳以重新排序",
+    "aiSuggestion": "AI 為你的空檔推薦附近景點",
+    "offlineReady": "支援離線瀏覽"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "語言",
+    "darkMode": "深色模式",
+    "notifications": "通知",
+    "about": "關於",
+    "privacy": "隱私權政策",
+    "terms": "服務條款",
+    "version": "版本"
+  },
+  "errors": {
+    "required": "此欄位為必填",
+    "invalidDate": "日期選擇無效",
+    "invalidUrl": "請輸入有效的網址",
+    "networkError": "網路錯誤，請稍後再試。",
+    "serverError": "伺服器錯誤，請稍後再試。",
+    "uploadFailed": "檔案上傳失敗",
+    "fileTooLarge": "檔案過大（上限 10MB）",
+    "unsupportedFormat": "不支援的檔案格式",
+    "minTravelers": "至少需要 1 位旅客",
+    "minDestination": "至少需要 1 個目的地",
+    "dateRange": "回程日期必須在出發日期之後"
+  }
+}

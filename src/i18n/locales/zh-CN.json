@@ -1,0 +1,329 @@
+{
+  "app": {
+    "name": "TourPlan",
+    "tagline": "智慧旅程，轻松规划"
+  },
+  "common": {
+    "next": "下一步",
+    "back": "返回",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "add": "添加",
+    "confirm": "确认",
+    "required": "必填",
+    "optional": "选填",
+    "loading": "加载中",
+    "error": "错误",
+    "success": "成功",
+    "search": "搜索",
+    "select": "选择",
+    "submit": "提交",
+    "reset": "重置",
+    "close": "关闭",
+    "yes": "是",
+    "no": "否",
+    "none": "无",
+    "other": "其他",
+    "done": "完成",
+    "skip": "跳过"
+  },
+  "auth": {
+    "login": "登录",
+    "logout": "退出登录",
+    "register": "注册",
+    "email": "电子邮箱",
+    "password": "密码",
+    "forgotPassword": "忘记密码",
+    "welcomeBack": "欢迎回来",
+    "createAccount": "创建账号"
+  },
+  "survey": {
+    "title": "规划你的旅程",
+    "subtitle": "告诉我们你理想中的旅行",
+    "sections": {
+      "basics": "基本信息",
+      "budget": "预算与花费",
+      "transport": "交通方式",
+      "style": "旅行风格与兴趣",
+      "accommodation": "住宿",
+      "attractions": "景点与活动",
+      "special": "特殊需求"
+    },
+    "dates": {
+      "label": "旅行日期",
+      "start": "出发日期",
+      "end": "返程日期",
+      "flexible": "弹性日期",
+      "flexibleHint": "允许前后 1 至 3 天以获得更多选择",
+      "selectDates": "选择你的旅行日期",
+      "duration": "行程天数",
+      "days": "天",
+      "nights": "晚"
+    },
+    "destination": {
+      "label": "目的地",
+      "placeholder": "搜索城市或国家",
+      "addMore": "添加其他目的地",
+      "remove": "移除目的地",
+      "multiCity": "多城市行程",
+      "dragToReorder": "拖拽以重新排序"
+    },
+    "travelers": {
+      "label": "旅客人数",
+      "adults": "成人",
+      "children": "儿童",
+      "childAge": "儿童年龄",
+      "infants": "婴幼儿",
+      "seniors": "老年人"
+    },
+    "tripType": {
+      "label": "旅行类型",
+      "family": "家庭出游",
+      "couple": "情侣出游",
+      "solo": "独自旅行",
+      "friends": "朋友出游",
+      "business": "商务旅行",
+      "honeymoon": "蜜月旅行"
+    },
+    "departure": {
+      "label": "出发城市",
+      "placeholder": "你从哪里出发？"
+    },
+    "budget": {
+      "label": "总预算",
+      "economy": "经济型",
+      "moderate": "中等",
+      "luxury": "豪华",
+      "unlimited": "不限预算",
+      "dailyMeals": "每日餐费预算（每人）",
+      "currency": "偏好币种"
+    },
+    "transport": {
+      "label": "当地交通偏好",
+      "public": "公共交通",
+      "taxi": "出租车／打车服务（Grab、Uber）",
+      "rental": "租车",
+      "charter": "包车",
+      "walking": "步行",
+      "drivingLicense": "你是否持有国际驾照？",
+      "flightInfo": {
+        "label": "航班信息",
+        "flightNumber": "航班号",
+        "departure": "出发时间",
+        "arrival": "到达时间",
+        "addFlight": "添加航班信息"
+      }
+    },
+    "interests": {
+      "label": "兴趣与活动",
+      "culture": "文化与历史",
+      "nature": "自然与户外",
+      "food": "美食与餐饮",
+      "shopping": "购物",
+      "nightlife": "夜生活",
+      "water": "水上活动",
+      "family": "亲子友好",
+      "photo": "摄影景点",
+      "temple": "寺庙与宗教景点",
+      "spa": "水疗与按摩",
+      "themepark": "主题乐园",
+      "art": "艺术与展览",
+      "market": "本地集市"
+    },
+    "pace": {
+      "label": "旅行节奏",
+      "packed": "紧凑充实",
+      "balanced": "适中平衡",
+      "relaxed": "悠闲放松"
+    },
+    "schedule": {
+      "label": "早晨偏好",
+      "earlyBird": "早起型（7:00 前）",
+      "normal": "一般型（9:00 左右）",
+      "lateRiser": "晚起型（10:00 后）"
+    },
+    "dietary": {
+      "label": "饮食限制",
+      "vegetarian": "素食",
+      "vegan": "纯素",
+      "halal": "清真",
+      "allergies": "过敏",
+      "peanut": "花生过敏",
+      "seafood": "海鲜过敏",
+      "noRestriction": "无限制"
+    },
+    "accommodation": {
+      "platform": {
+        "label": "预订平台",
+        "customUrl": "其他预订网站网址"
+      },
+      "type": {
+        "label": "住宿类型",
+        "hotel": "酒店",
+        "homestay": "民宿",
+        "hostel": "青年旅舍",
+        "resort": "度假村",
+        "apartment": "公寓"
+      },
+      "location": {
+        "label": "偏好位置",
+        "cityCenter": "市中心",
+        "nearAttractions": "靠近景点",
+        "quiet": "安静住宅区",
+        "beachfront": "海滨一线"
+      },
+      "amenities": {
+        "label": "必备设施",
+        "pool": "游泳池",
+        "gym": "健身房",
+        "breakfast": "免费早餐",
+        "kitchen": "厨房",
+        "laundry": "洗衣设施",
+        "parking": "停车场"
+      }
+    },
+    "attractions": {
+      "reference": {
+        "label": "参考景点",
+        "hint": "分享你感兴趣的景点，AI 会在规划时纳入考虑。",
+        "addUrl": "添加网址",
+        "addPhoto": "添加照片",
+        "addFile": "添加文件",
+        "urlPlaceholder": "粘贴景点链接..."
+      },
+      "mustVisit": {
+        "label": "必去景点",
+        "hint": "这些景点将会被纳入你的行程中。",
+        "specifyDate": "指定偏好日期",
+        "specifyTime": "指定偏好时间"
+      }
+    },
+    "map": {
+      "label": "地图服务",
+      "apple": "Apple 地图",
+      "google": "Google 地图",
+      "amap": "高德地图",
+      "baidu": "百度地图"
+    },
+    "accessibility": {
+      "label": "无障碍需求",
+      "wheelchair": "轮椅通行",
+      "stroller": "婴儿车友好",
+      "mobility": "行动不便"
+    },
+    "visa": {
+      "label": "签证需求",
+      "nationality": "护照国籍",
+      "hint": "我们会确认你是否需要签证"
+    },
+    "insurance": {
+      "label": "旅行保险",
+      "have": "已投保",
+      "need": "需要推荐",
+      "skip": "先跳过"
+    },
+    "notes": {
+      "label": "备注",
+      "placeholder": "其他偏好或需求..."
+    },
+    "language": {
+      "label": "应用语言",
+      "hint": "选择你偏好的语言"
+    },
+    "generateTrip": "生成我的行程",
+    "generating": "AI 正在为你规划完美旅程...",
+    "tierLabels": {
+      "required": "必填信息",
+      "recommended": "建议填写",
+      "optional": "选填项目"
+    }
+  },
+  "itinerary": {
+    "title": "我的行程",
+    "day": "第 {{number}} 天",
+    "overview": "总览",
+    "dailySummary": "每日摘要",
+    "estimatedCost": "预估费用",
+    "walkingDistance": "步行距离",
+    "weather": "天气预报",
+    "timeline": "时间轴视图",
+    "mapView": "地图视图",
+    "activity": {
+      "startTime": "开始时间",
+      "endTime": "结束时间",
+      "duration": "停留时间",
+      "cost": "费用",
+      "transport": "交通方式",
+      "travelTime": "交通时间",
+      "openHours": "营业时间",
+      "closedDay": "休息日",
+      "rating": "评分",
+      "navigate": "导航",
+      "bookTicket": "订票",
+      "moreInfo": "更多信息",
+      "notes": "备注",
+      "type": {
+        "attraction": "景点",
+        "restaurant": "餐厅",
+        "shopping": "购物",
+        "transport": "交通",
+        "hotel": "酒店",
+        "activity": "活动"
+      }
+    },
+    "hotel": {
+      "label": "今日住宿",
+      "checkIn": "入住",
+      "checkOut": "退房",
+      "contact": "联系方式",
+      "bookingLink": "预订链接"
+    },
+    "emergency": {
+      "label": "紧急联系",
+      "police": "警察",
+      "ambulance": "救护车",
+      "embassy": "大使馆／领事馆",
+      "tourist": "旅游警察"
+    },
+    "tips": {
+      "label": "本地小贴士",
+      "tipping": "小费礼仪",
+      "customs": "当地习俗",
+      "wifi": "Wi-Fi／SIM 卡信息"
+    },
+    "export": {
+      "label": "导出",
+      "pdf": "导出为 PDF",
+      "share": "分享链接",
+      "image": "保存为图片"
+    },
+    "dragHint": "长按并拖拽以重新排序",
+    "aiSuggestion": "AI 为你的空闲时间推荐附近景点",
+    "offlineReady": "支持离线浏览"
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "darkMode": "深色模式",
+    "notifications": "通知",
+    "about": "关于",
+    "privacy": "隐私政策",
+    "terms": "服务条款",
+    "version": "版本"
+  },
+  "errors": {
+    "required": "此项为必填",
+    "invalidDate": "日期选择无效",
+    "invalidUrl": "请输入有效的网址",
+    "networkError": "网络错误，请稍后再试。",
+    "serverError": "服务器错误，请稍后再试。",
+    "uploadFailed": "文件上传失败",
+    "fileTooLarge": "文件过大（上限 10MB）",
+    "unsupportedFormat": "不支持的文件格式",
+    "minTravelers": "至少需要 1 位旅客",
+    "minDestination": "至少需要 1 个目的地",
+    "dateRange": "返程日期必须在出发日期之后"
+  }
+}

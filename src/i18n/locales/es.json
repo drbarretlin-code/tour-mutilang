@@ -1,0 +1,329 @@
+{
+  "app": {
+    "name": "TourPlan",
+    "tagline": "Smart trips, effortless planning"
+  },
+  "common": {
+    "next": "Next",
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "confirm": "Confirm",
+    "required": "Required",
+    "optional": "Optional",
+    "loading": "Loading",
+    "error": "Error",
+    "success": "Success",
+    "search": "Search",
+    "select": "Select",
+    "submit": "Submit",
+    "reset": "Reset",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "none": "None",
+    "other": "Other",
+    "done": "Done",
+    "skip": "Skip"
+  },
+  "auth": {
+    "login": "Log In",
+    "logout": "Log Out",
+    "register": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password",
+    "welcomeBack": "Welcome Back",
+    "createAccount": "Create Account"
+  },
+  "survey": {
+    "title": "Plan Your Trip",
+    "subtitle": "Tell us about your dream trip",
+    "sections": {
+      "basics": "Basic Information",
+      "budget": "Budget & Spending",
+      "transport": "Transportation",
+      "style": "Travel Style & Interests",
+      "accommodation": "Accommodation",
+      "attractions": "Attractions & Activities",
+      "special": "Special Requirements"
+    },
+    "dates": {
+      "label": "Travel Dates",
+      "start": "Start Date",
+      "end": "End Date",
+      "flexible": "Flexible Dates",
+      "flexibleHint": "Allow +/- 1-3 days for better options",
+      "selectDates": "Select your travel dates",
+      "duration": "Duration",
+      "days": "days",
+      "nights": "nights"
+    },
+    "destination": {
+      "label": "Destination",
+      "placeholder": "Search for a city or country",
+      "addMore": "Add another destination",
+      "remove": "Remove destination",
+      "multiCity": "Multi-city trip",
+      "dragToReorder": "Drag to reorder"
+    },
+    "travelers": {
+      "label": "Number of Travelers",
+      "adults": "Adults",
+      "children": "Children",
+      "childAge": "Child age",
+      "infants": "Infants",
+      "seniors": "Seniors"
+    },
+    "tripType": {
+      "label": "Trip Type",
+      "family": "Family",
+      "couple": "Couple",
+      "solo": "Solo",
+      "friends": "Friends",
+      "business": "Business",
+      "honeymoon": "Honeymoon"
+    },
+    "departure": {
+      "label": "Departure City",
+      "placeholder": "Where are you departing from?"
+    },
+    "budget": {
+      "label": "Total Budget",
+      "economy": "Economy",
+      "moderate": "Moderate",
+      "luxury": "Luxury",
+      "unlimited": "No Limit",
+      "dailyMeals": "Daily Meal Budget (per person)",
+      "currency": "Preferred Currency"
+    },
+    "transport": {
+      "label": "Local Transportation Preference",
+      "public": "Public Transit",
+      "taxi": "Taxi / Ride-hailing (Grab, Uber)",
+      "rental": "Rental Car",
+      "charter": "Private Charter",
+      "walking": "Walking",
+      "drivingLicense": "Do you have an international driving license?",
+      "flightInfo": {
+        "label": "Flight Information",
+        "flightNumber": "Flight Number",
+        "departure": "Departure Time",
+        "arrival": "Arrival Time",
+        "addFlight": "Add flight info"
+      }
+    },
+    "interests": {
+      "label": "Interests & Activities",
+      "culture": "Culture & History",
+      "nature": "Nature & Outdoors",
+      "food": "Food & Dining",
+      "shopping": "Shopping",
+      "nightlife": "Nightlife",
+      "water": "Water Activities",
+      "family": "Family-friendly",
+      "photo": "Photography Spots",
+      "temple": "Temples & Religious Sites",
+      "spa": "Spa & Massage",
+      "themepark": "Theme Parks",
+      "art": "Art & Exhibitions",
+      "market": "Local Markets"
+    },
+    "pace": {
+      "label": "Travel Pace",
+      "packed": "Packed & Busy",
+      "balanced": "Balanced",
+      "relaxed": "Relaxed & Easy"
+    },
+    "schedule": {
+      "label": "Morning Preference",
+      "earlyBird": "Early Bird (before 7:00)",
+      "normal": "Normal (around 9:00)",
+      "lateRiser": "Late Riser (after 10:00)"
+    },
+    "dietary": {
+      "label": "Dietary Restrictions",
+      "vegetarian": "Vegetarian",
+      "vegan": "Vegan",
+      "halal": "Halal",
+      "allergies": "Allergies",
+      "peanut": "Peanut allergy",
+      "seafood": "Seafood allergy",
+      "noRestriction": "No restrictions"
+    },
+    "accommodation": {
+      "platform": {
+        "label": "Booking Platform",
+        "customUrl": "Other booking website URL"
+      },
+      "type": {
+        "label": "Accommodation Type",
+        "hotel": "Hotel",
+        "homestay": "Homestay / B&B",
+        "hostel": "Hostel",
+        "resort": "Resort",
+        "apartment": "Apartment"
+      },
+      "location": {
+        "label": "Preferred Location",
+        "cityCenter": "City Center",
+        "nearAttractions": "Near Attractions",
+        "quiet": "Quiet Residential Area",
+        "beachfront": "Beachfront"
+      },
+      "amenities": {
+        "label": "Required Amenities",
+        "pool": "Swimming Pool",
+        "gym": "Gym",
+        "breakfast": "Free Breakfast",
+        "kitchen": "Kitchen",
+        "laundry": "Laundry",
+        "parking": "Parking"
+      }
+    },
+    "attractions": {
+      "reference": {
+        "label": "Reference Attractions",
+        "hint": "Share places you're interested in. AI will consider these when planning.",
+        "addUrl": "Add URL",
+        "addPhoto": "Add Photo",
+        "addFile": "Add File",
+        "urlPlaceholder": "Paste a link to an attraction..."
+      },
+      "mustVisit": {
+        "label": "Must-Visit Attractions",
+        "hint": "These will be included in your itinerary.",
+        "specifyDate": "Specify preferred date",
+        "specifyTime": "Specify preferred time"
+      }
+    },
+    "map": {
+      "label": "Map Provider",
+      "apple": "Apple Maps",
+      "google": "Google Maps",
+      "amap": "Amap (Gaode)",
+      "baidu": "Baidu Maps"
+    },
+    "accessibility": {
+      "label": "Accessibility Needs",
+      "wheelchair": "Wheelchair Access",
+      "stroller": "Stroller Friendly",
+      "mobility": "Limited Mobility"
+    },
+    "visa": {
+      "label": "Visa Requirements",
+      "nationality": "Passport Nationality",
+      "hint": "We'll check if you need a visa"
+    },
+    "insurance": {
+      "label": "Travel Insurance",
+      "have": "Already covered",
+      "need": "Need recommendations",
+      "skip": "Skip for now"
+    },
+    "notes": {
+      "label": "Additional Notes",
+      "placeholder": "Any other preferences or requirements..."
+    },
+    "language": {
+      "label": "App Language",
+      "hint": "Choose your preferred language"
+    },
+    "generateTrip": "Generate My Trip",
+    "generating": "AI is planning your perfect trip...",
+    "tierLabels": {
+      "required": "Required Information",
+      "recommended": "Recommended",
+      "optional": "Optional Details"
+    }
+  },
+  "itinerary": {
+    "title": "My Itinerary",
+    "day": "Day {{number}}",
+    "overview": "Overview",
+    "dailySummary": "Daily Summary",
+    "estimatedCost": "Estimated Cost",
+    "walkingDistance": "Walking Distance",
+    "weather": "Weather Forecast",
+    "timeline": "Timeline View",
+    "mapView": "Map View",
+    "activity": {
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "duration": "Duration",
+      "cost": "Cost",
+      "transport": "Getting There",
+      "travelTime": "Travel Time",
+      "openHours": "Opening Hours",
+      "closedDay": "Closed on",
+      "rating": "Rating",
+      "navigate": "Navigate",
+      "bookTicket": "Book Ticket",
+      "moreInfo": "More Info",
+      "notes": "Notes",
+      "type": {
+        "attraction": "Attraction",
+        "restaurant": "Restaurant",
+        "shopping": "Shopping",
+        "transport": "Transportation",
+        "hotel": "Hotel",
+        "activity": "Activity"
+      }
+    },
+    "hotel": {
+      "label": "Today's Hotel",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "contact": "Contact",
+      "bookingLink": "Booking Link"
+    },
+    "emergency": {
+      "label": "Emergency Contacts",
+      "police": "Police",
+      "ambulance": "Ambulance",
+      "embassy": "Embassy/Consulate",
+      "tourist": "Tourist Police"
+    },
+    "tips": {
+      "label": "Local Tips",
+      "tipping": "Tipping Etiquette",
+      "customs": "Local Customs",
+      "wifi": "Wi-Fi / SIM Card Info"
+    },
+    "export": {
+      "label": "Export",
+      "pdf": "Export as PDF",
+      "share": "Share Link",
+      "image": "Save as Image"
+    },
+    "dragHint": "Hold and drag to reorder",
+    "aiSuggestion": "AI suggests nearby attractions for your free time",
+    "offlineReady": "Available offline"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "notifications": "Notifications",
+    "about": "About",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "version": "Version"
+  },
+  "errors": {
+    "required": "This field is required",
+    "invalidDate": "Invalid date selection",
+    "invalidUrl": "Please enter a valid URL",
+    "networkError": "Network error. Please try again.",
+    "serverError": "Server error. Please try again later.",
+    "uploadFailed": "File upload failed",
+    "fileTooLarge": "File is too large (max 10MB)",
+    "unsupportedFormat": "Unsupported file format",
+    "minTravelers": "At least 1 traveler is required",
+    "minDestination": "At least 1 destination is required",
+    "dateRange": "End date must be after start date"
+  }
+}
