@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
@@ -32,10 +33,9 @@ export default function RootLayout() {
     prepare();
   }, []);
 
-  if (!appIsReady) {
-    return null;
-  }
-
+  // CRITICAL: Never return null. React 19 + react-native-web crashes with
+  // insertBefore when reconciling null -> complex tree in Expo Router.
+  // Instead, always render the full tree and overlay a loading screen.
   return (
     <SafeAreaProvider>
       <LanguageProvider>
@@ -43,9 +43,15 @@ export default function RootLayout() {
           <ThemeProvider>
             <PACProvider>
               <SurveyProvider>
-                <Stack screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="index" />
-                </Stack>
+                {appIsReady ? (
+                  <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="index" />
+                  </Stack>
+                ) : (
+                  <View style={layoutStyles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#3366FF" />
+                  </View>
+                )}
               </SurveyProvider>
             </PACProvider>
           </ThemeProvider>
@@ -54,3 +60,12 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
+
+const layoutStyles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFC',
+  },
+});

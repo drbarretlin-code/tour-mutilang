@@ -27,9 +27,9 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     setLocale(newLocale); // Triggers re-render across the app
   };
 
-  if (!isReady) {
-    return null; // or a splash screen
-  }
+  // CRITICAL: Never return null here. On React 19 + react-native-web,
+  // returning null then switching to children causes insertBefore DOM crash.
+  // The locale defaults to 'zh-TW' until async init completes, which is fine.
 
   return (
     <LanguageContext.Provider value={{ locale, changeLanguage, isReady }}>
