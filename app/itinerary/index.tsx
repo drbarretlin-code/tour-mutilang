@@ -427,7 +427,7 @@ export default function ItineraryScreen() {
 
       {viewMode === 'guide' && (
         <DestinationGuide 
-          onNavigateToTranslator={() => setViewMode('translator')}
+          onNavigateToTranslator={() => Linking.openURL('https://acia-2.vercel.app')}
         />
       )}
     </View>
