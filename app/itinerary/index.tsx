@@ -615,132 +615,153 @@ export default function ItineraryScreen() {
       {/* === STATE 3: Main Itinerary Content === */}
       <View style={[styles.container, { display: showContent ? 'flex' : 'none' }]}>
         
-        {/* 1. App Header */}
-        <View style={[styles.header, { borderBottomColor: colors.divider, borderBottomWidth: 1, padding: spacing.md }]}>
-          <TouchableOpacity onPress={() => router.replace('/')} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color={colors.text} />
-          </TouchableOpacity>
-          
-          <View style={styles.headerTitleContainer}>
-            <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '700' }]} numberOfLines={1}>
-              {itinerary?.title}
-            </Text>
-            {isOffline && (
-              <View style={[styles.offlineBadge, { backgroundColor: colors.warning50 }]}>
-                <Text style={{ color: colors.warning600, fontSize: 10, fontWeight: '700' }}>
-                  {t('itinerary.offline')}
+        {/* Consolidated Floating Control Panel */}
+        <View style={{ 
+          backgroundColor: colors.surface, 
+          borderColor: colors.divider,
+          borderRadius: borderRadius.lg,
+          margin: isLargeScreen ? spacing.md : spacing.xs,
+          marginBottom: spacing.md,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.08,
+          shadowRadius: 12,
+          elevation: 4,
+          borderWidth: 1,
+          zIndex: 100
+        }}>
+          {/* Row 1: Header (Back, Title) + Action Icons */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: spacing.md, borderBottomColor: colors.divider, borderBottomWidth: isNavExpanded ? 1 : 0 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: spacing.md }}>
+              <TouchableOpacity onPress={() => router.replace('/')} style={{ padding: 6, marginRight: spacing.xs }}>
+                <Ionicons name="arrow-back" size={24} color={colors.text} />
+              </TouchableOpacity>
+              <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '800' }]} numberOfLines={1}>
+                  {itinerary?.title}
                 </Text>
-              </View>
-            )}
-          </View>
-        </View>
-
-        {/* Navigation Collapsible Header */}
-        <TouchableOpacity 
-          style={[styles.navPanelHeader, { backgroundColor: colors.surface, borderBottomColor: colors.divider, borderBottomWidth: 1 }]}
-          activeOpacity={0.7}
-          onPress={() => setIsNavExpanded(!isNavExpanded)}
-        >
-          <Text style={[typography.labelMedium, { color: colors.textSecondary, fontWeight: '600' }]}>
-            {isNavExpanded ? t('itinerary.nav.collapse') : t('itinerary.nav.expand')}
-          </Text>
-          <Ionicons name={isNavExpanded ? 'chevron-up' : 'chevron-down'} size={16} color={colors.textSecondary} />
-        </TouchableOpacity>
-
-        {/* Navigation Panel Content */}
-        {isNavExpanded && (
-          <View style={{ backgroundColor: colors.surface, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderBottomColor: colors.divider, borderBottomWidth: 1, zIndex: 10 }}>
-            
-            {/* Top Row: View Modes + Action Icons */}
-            <View style={{ flexDirection: isLargeScreen ? 'row' : 'column', alignItems: isLargeScreen ? 'center' : 'stretch', gap: spacing.md }}>
-              
-              {/* 1. View Switch Tab (5-Tab scrollable bar) */}
-              <View style={{ flex: isLargeScreen ? 1 : undefined }}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center', paddingRight: spacing.lg }}>
-                  {[
-                    { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
-                    { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
-                    { code: 'checklist', label: t('itinerary.tabs.checklist'), icon: 'checkbox-outline' },
-                    { code: 'expenses', label: t('itinerary.tabs.expenses'), icon: 'wallet-outline' },
-                    { code: 'translator', label: t('itinerary.tabs.translator'), icon: 'language-outline' },
-                  ].map((mode) => {
-                    const isSelected = viewMode === mode.code;
-                    return (
-                      <TouchableOpacity
-                        key={mode.code}
-                        onPress={() => setViewMode(mode.code as any)}
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          backgroundColor: isSelected ? colors.primary500 : colors.backgroundSecondary,
-                          paddingHorizontal: spacing.md,
-                          paddingVertical: spacing.sm,
-                          borderRadius: borderRadius.full,
-                          marginRight: spacing.sm,
-                        }}
-                      >
-                        <Ionicons name={mode.icon as any} size={16} color={isSelected ? '#fff' : colors.textSecondary} />
-                        <Text style={[typography.labelMedium, { color: isSelected ? '#fff' : colors.textSecondary, marginLeft: 6, fontWeight: '700' }]}>
-                          {mode.label}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </ScrollView>
-              </View>
-
-              {/* 2. Functional Action Panel (Icons) */}
-              <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: isLargeScreen ? 'auto' : 'flex-end', backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.full, padding: 4 }}>
-                {!isOffline && (
-                  <TouchableOpacity onPress={handleRefreshItinerary} style={{ padding: 8, marginHorizontal: 4 }}>
-                    <Ionicons name="sync" size={20} color={colors.textSecondary} />
-                  </TouchableOpacity>
+                {isOffline && (
+                  <View style={[styles.offlineBadge, { backgroundColor: colors.warning50, marginLeft: 8 }]}>
+                    <Text style={{ color: colors.warning600, fontSize: 10, fontWeight: '700' }}>
+                      {t('itinerary.offline')}
+                    </Text>
+                  </View>
                 )}
-                <TouchableOpacity onPress={handleExportPDF} style={{ padding: 8, marginHorizontal: 4 }}>
-                  <Ionicons name="document-text" size={20} color={colors.textSecondary} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
-                  if (Platform.OS === 'web') {
-                    window.alert(`${t('itinerary.shareTitle')}\n${t('itinerary.shareMsg')}`);
-                  } else {
-                    showAlert(t('itinerary.shareTitle'), t('itinerary.shareMsg'));
-                  }
-                }} style={{ padding: 8, marginHorizontal: 4 }}>
-                  <Ionicons name="share-social" size={20} color={colors.textSecondary} />
-                </TouchableOpacity>
               </View>
             </View>
-
-            {/* 3. Days Selector Tab (Only show for timeline/map view modes) */}
-            {isDailyView && (
-              <View style={{ marginTop: spacing.md, paddingTop: spacing.sm, borderTopColor: colors.divider, borderTopWidth: 1 }}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={Platform.OS === 'web'} contentContainerStyle={{ paddingBottom: spacing.xs }}>
-                  {activeItinerary.days.map((d) => {
-                    const isSelected = d.dayNumber === activeDay;
-                    return (
-                      <TouchableOpacity
-                        key={d.dayNumber}
-                        onPress={() => setActiveDay(d.dayNumber)}
-                        style={{
-                          paddingHorizontal: 20,
-                          paddingVertical: 10,
-                          backgroundColor: isSelected ? colors.primary50 : 'transparent',
-                          borderBottomWidth: 3,
-                          borderBottomColor: isSelected ? colors.primary500 : 'transparent',
-                          marginRight: spacing.sm,
-                        }}
-                      >
-                        <Text style={[typography.labelLarge, { color: isSelected ? colors.primary600 : colors.text, fontWeight: isSelected ? '800' : '600' }]}>
-                          Day {d.dayNumber}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  })}
-                </ScrollView>
-              </View>
-            )}
+            
+            {/* Action Buttons (Always visible in Header) */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.full, padding: 4 }}>
+              {!isOffline && (
+                <TouchableOpacity onPress={handleRefreshItinerary} style={{ padding: 8, marginHorizontal: 4 }}>
+                  <Ionicons name="sync" size={18} color={colors.textSecondary} />
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity onPress={handleExportPDF} style={{ padding: 8, marginHorizontal: 4 }}>
+                <Ionicons name="document-text" size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => {
+                if (Platform.OS === 'web') {
+                  window.alert(`${t('itinerary.shareTitle')}\n${t('itinerary.shareMsg')}`);
+                } else {
+                  showAlert(t('itinerary.shareTitle'), t('itinerary.shareMsg'));
+                }
+              }} style={{ padding: 8, marginHorizontal: 4 }}>
+                <Ionicons name="share-social" size={18} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
           </View>
-        )}
+
+          {/* Row 2 & 3: View Modes + Days (Visible only when expanded) */}
+          {isNavExpanded && (
+            <View style={{ padding: spacing.md }}>
+              {/* View Switch Tab */}
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center', paddingBottom: spacing.sm }}>
+                {[
+                  { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
+                  { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
+                  { code: 'checklist', label: t('itinerary.tabs.checklist'), icon: 'checkbox-outline' },
+                  { code: 'expenses', label: t('itinerary.tabs.expenses'), icon: 'wallet-outline' },
+                  { code: 'translator', label: t('itinerary.tabs.translator'), icon: 'language-outline' },
+                ].map((mode) => {
+                  const isSelected = viewMode === mode.code;
+                  return (
+                    <TouchableOpacity
+                      key={mode.code}
+                      onPress={() => setViewMode(mode.code as any)}
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        backgroundColor: isSelected ? colors.primary500 : colors.backgroundSecondary,
+                        paddingHorizontal: spacing.md,
+                        paddingVertical: spacing.sm,
+                        borderRadius: borderRadius.full,
+                        marginRight: spacing.sm,
+                      }}
+                    >
+                      <Ionicons name={mode.icon as any} size={16} color={isSelected ? '#fff' : colors.textSecondary} />
+                      <Text style={[typography.labelMedium, { color: isSelected ? '#fff' : colors.textSecondary, marginLeft: 6, fontWeight: '700' }]}>
+                        {mode.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
+
+              {/* Days Selector Tab (Only show for timeline/map view modes) */}
+              {isDailyView && (
+                <View style={{ paddingTop: spacing.sm, borderTopColor: colors.divider, borderTopWidth: 1, marginTop: spacing.xs }}>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={Platform.OS === 'web'} contentContainerStyle={{ paddingBottom: spacing.xs }}>
+                    {activeItinerary.days.map((d) => {
+                      const isSelected = d.dayNumber === activeDay;
+                      return (
+                        <TouchableOpacity
+                          key={d.dayNumber}
+                          onPress={() => setActiveDay(d.dayNumber)}
+                          style={{
+                            paddingHorizontal: 20,
+                            paddingVertical: 10,
+                            backgroundColor: isSelected ? colors.primary50 : 'transparent',
+                            borderBottomWidth: 3,
+                            borderBottomColor: isSelected ? colors.primary500 : 'transparent',
+                            marginRight: spacing.sm,
+                          }}
+                        >
+                          <Text style={[typography.labelLarge, { color: isSelected ? colors.primary600 : colors.text, fontWeight: isSelected ? '800' : '600' }]}>
+                            Day {d.dayNumber}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </ScrollView>
+                </View>
+              )}
+            </View>
+          )}
+
+          {/* Toggle Panel Button (Bottom Handle) */}
+          <TouchableOpacity 
+            style={{ 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              paddingVertical: 6, 
+              borderTopColor: colors.divider, 
+              borderTopWidth: isNavExpanded ? 1 : 0, 
+              backgroundColor: colors.backgroundSecondary,
+              borderBottomLeftRadius: borderRadius.lg,
+              borderBottomRightRadius: borderRadius.lg
+            }}
+            activeOpacity={0.7}
+            onPress={() => setIsNavExpanded(!isNavExpanded)}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              <Text style={[typography.caption, { color: colors.textSecondary, fontWeight: '700' }]}>
+                {isNavExpanded ? t('itinerary.nav.collapse') : t('itinerary.nav.expand')}
+              </Text>
+              <Ionicons name={isNavExpanded ? 'chevron-up' : 'chevron-down'} size={14} color={colors.textSecondary} />
+            </View>
+          </TouchableOpacity>
+        </View>
 
         {/* 4. Main Responsive Body */}
         {isDailyView ? (
