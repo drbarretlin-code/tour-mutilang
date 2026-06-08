@@ -310,47 +310,46 @@ export default function HomeDashboard() {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <View style={{ marginBottom: 32 }}>
-              {!hasApiKey ? (
-                <View key="header-no-api">
-                  {renderApiKeySetup()}
-                </View>
-              ) : (
-                <View key="header-has-api">
-                  {/* Minimal Header Section when API is ready */}
-                  <View style={styles.sectionHeader}>
-                    <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '800' }]}>
-                      {t('home.myItineraries', { defaultValue: '我的旅遊計畫' })}
-                    </Text>
-                    
-                    {/* Small Action Button */}
-                    {itineraries.length > 0 ? (
-                      <TouchableOpacity 
-                        style={[styles.smallAddBtn, { backgroundColor: colors.primary50 }]}
-                        onPress={handleCreateNew}
-                      >
-                        <Ionicons name="add" size={16} color={colors.primary600} />
-                        <Text style={[typography.labelMedium, { color: colors.primary600, fontWeight: '700', marginLeft: 4 }]}>
-                          {t('home.newPlan')}
-                        </Text>
-                      </TouchableOpacity>
-                    ) : null}
-                  </View>
+              {/* API Setup View */}
+              <View style={{ display: !hasApiKey ? 'flex' : 'none' }}>
+                {renderApiKeySetup()}
+              </View>
+              
+              {/* Dashboard Header View */}
+              <View style={{ display: hasApiKey ? 'flex' : 'none' }}>
+                <View style={styles.sectionHeader}>
+                  <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '800' }]}>
+                    {t('home.myItineraries', { defaultValue: '我的旅遊計畫' })}
+                  </Text>
                   
-                  {/* Secondary Actions (Batch Scheduler) */}
-                  <TouchableOpacity 
-                    style={[styles.miniBanner, { backgroundColor: colors.surface, borderColor: colors.border }]}
-                    onPress={() => router.push('/batch-scheduler')}
-                  >
-                    <View style={[styles.miniBannerIcon, { backgroundColor: colors.primary50 }]}>
-                      <Ionicons name="sparkles" size={18} color={colors.primary500} />
-                    </View>
-                    <Text style={[typography.labelLarge, { color: colors.text, flex: 1, fontWeight: '600' }]}>
-                      {t('home.aiBatchTitle', { defaultValue: 'AI Batch Scheduler' })}
-                    </Text>
-                    <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
-                  </TouchableOpacity>
+                  {/* Small Action Button */}
+                  <View style={{ display: itineraries.length > 0 ? 'flex' : 'none' }}>
+                    <TouchableOpacity 
+                      style={[styles.smallAddBtn, { backgroundColor: colors.primary50 }]}
+                      onPress={handleCreateNew}
+                    >
+                      <Ionicons name="add" size={16} color={colors.primary600} />
+                      <Text style={[typography.labelMedium, { color: colors.primary600, fontWeight: '700', marginLeft: 4 }]}>
+                        {t('home.newPlan')}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              )}
+                
+                {/* Secondary Actions (Batch Scheduler) */}
+                <TouchableOpacity 
+                  style={[styles.miniBanner, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                  onPress={() => router.push('/batch-scheduler')}
+                >
+                  <View style={[styles.miniBannerIcon, { backgroundColor: colors.primary50 }]}>
+                    <Ionicons name="sparkles" size={18} color={colors.primary500} />
+                  </View>
+                  <Text style={[typography.labelLarge, { color: colors.text, flex: 1, fontWeight: '600' }]}>
+                    {t('home.aiBatchTitle', { defaultValue: 'AI Batch Scheduler' })}
+                  </Text>
+                  <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
+                </TouchableOpacity>
+              </View>
             </View>
           }
           renderItem={({ item }) => (
@@ -361,11 +360,20 @@ export default function HomeDashboard() {
               onDelete={() => handleDeleteItinerary(item.id)}
             />
           )}
-          ListEmptyComponent={hasApiKey && !loadingList ? renderEmptyState() : null}
+          ListEmptyComponent={
+            <View style={{ minHeight: 200, justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ display: loadingList ? 'flex' : 'none' }}>
+                <ActivityIndicator size="large" color={colors.primary500} />
+              </View>
+              <View style={{ display: (!loadingList && hasApiKey && itineraries.length === 0) ? 'flex' : 'none', width: '100%' }}>
+                {renderEmptyState()}
+              </View>
+            </View>
+          }
         />
 
         {/* Main Floating Action Button */}
-        {hasApiKey && itineraries.length === 0 && !loadingList ? (
+        <View style={{ display: (hasApiKey && itineraries.length === 0 && !loadingList) ? 'flex' : 'none', position: 'absolute', bottom: 40, width: '100%', alignItems: 'center' }}>
           <TouchableOpacity
             activeOpacity={0.9}
             onPress={handleCreateNew}
@@ -380,7 +388,7 @@ export default function HomeDashboard() {
               {t('home.newPlan')}
             </Text>
           </TouchableOpacity>
-        ) : null}
+        </View>
       </View>
     </View>
   );
