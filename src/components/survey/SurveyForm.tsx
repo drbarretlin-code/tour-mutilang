@@ -89,6 +89,8 @@ export function SurveyForm() {
   const handleBack = () => {
     if (step > 0) {
       setStep(step - 1);
+    } else {
+      router.replace("/");
     }
   };
 
