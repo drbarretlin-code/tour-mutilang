@@ -1,116 +1,70 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, SafeAreaView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { SUPPORTED_LOCALES, LocaleCode, t } from '../../i18n';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
+import { SUPPORTED_LOCALES, LocaleCode } from '../../i18n';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
-  visible: boolean;
-  onClose: () => void;
+  // We no longer need visible/onClose since it's a dropdown, but keeping the signature empty
 }
 
-export const LanguagePicker: React.FC<Props> = ({ visible, onClose }) => {
+export const LanguagePicker: React.FC<Props> = () => {
   const { locale, changeLanguage } = useLanguage();
-  const { colors, typography, spacing, borderRadius } = useTheme();
+  const { colors, typography } = useTheme();
 
-  const handleSelect = async (code: LocaleCode) => {
-    await changeLanguage(code);
-    onClose();
-  };
+  // Create a customized data array for the dropdown
+  const dropdownData = SUPPORTED_LOCALES.map((item) => ({
+    label: `${item.flag} ${item.nativeLabel}`,
+    value: item.code,
+  }));
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={onClose}
-    >
-      <View style={styles.overlay}>
-        <TouchableOpacity style={styles.backdrop} activeOpacity={1} onPress={onClose} />
-        <View style={[styles.modalContent, { backgroundColor: colors.surface }]}>
-          <View style={styles.header}>
-            <Text style={[typography.titleMedium, { color: colors.text, fontWeight: '700' }]}>
-              {t('settings.language')}
-            </Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-              <Ionicons name="close" size={24} color={colors.textSecondary} />
-            </TouchableOpacity>
-          </View>
-          
-          <FlatList
-            data={SUPPORTED_LOCALES}
-            keyExtractor={item => item.code}
-            contentContainerStyle={{ paddingBottom: 40 }}
-            renderItem={({ item }) => {
-              const isSelected = item.code === locale;
-              return (
-                <TouchableOpacity
-                  style={[
-                    styles.item,
-                    { borderBottomColor: colors.border },
-                    isSelected && { backgroundColor: colors.primary50 }
-                  ]}
-                  onPress={() => handleSelect(item.code)}
-                >
-                  <Text style={[
-                    typography.bodyMedium,
-                    { color: isSelected ? colors.primary700 : colors.text },
-                    isSelected && { fontWeight: '700' }
-                  ]}>
-                    {item.nativeLabel} {String(item.code) !== String(item.label) && String(item.nativeLabel) !== String(item.label) ? `(${item.label})` : ''}
-                  </Text>
-                  {isSelected && (
-                    <Ionicons name="checkmark" size={20} color={colors.primary600} />
-                  )}
-                </TouchableOpacity>
-              );
-            }}
-          />
-        </View>
-      </View>
-    </Modal>
+    <View style={styles.container}>
+      <Dropdown
+        style={[styles.dropdown, { backgroundColor: colors.surface }]}
+        containerStyle={[styles.dropdownContainer, { backgroundColor: colors.surface, borderColor: colors.border }]}
+        selectedTextStyle={[typography.labelMedium, { color: colors.text, fontWeight: '600' }]}
+        itemTextStyle={[typography.bodyMedium, { color: colors.text }]}
+        activeColor={colors.primary50}
+        data={dropdownData}
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        value={locale}
+        onChange={async (item) => {
+          await changeLanguage(item.value as LocaleCode);
+        }}
+        renderLeftIcon={() => null}
+        renderRightIcon={() => (
+          <Ionicons name="chevron-down" size={16} color={colors.textSecondary} style={{ marginLeft: 4 }} />
+        )}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0,0,0,0.5)'
+  container: {
+    width: 130, // Adjust width as needed to fit the flag + text
   },
-  backdrop: {
-    flex: 1,
+  dropdown: {
+    height: 36,
+    paddingHorizontal: 12,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'transparent', // Will inherit from theme if needed, but surface usually looks clean
   },
-  modalContent: {
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    maxHeight: '70%',
-    minHeight: 300,
-    paddingTop: 16,
-    paddingBottom: 24,
+  dropdownContainer: {
+    borderRadius: 12,
+    marginTop: 4,
+    borderWidth: 1,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 5,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.05)',
-    marginBottom: 8,
-  },
-  closeBtn: {
-    position: 'absolute',
-    right: 16,
-    top: 0,
-    padding: 4,
-  },
-  item: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderBottomWidth: 0.5,
-  }
 });

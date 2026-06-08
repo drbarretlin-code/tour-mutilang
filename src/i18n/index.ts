@@ -30,16 +30,16 @@ i18n.defaultLocale = 'en';
 i18n.enableFallback = true;
 
 export const SUPPORTED_LOCALES = [
-  { code: 'zh-TW', label: '繁體中文', nativeLabel: '繁體中文' },
-  { code: 'zh-CN', label: '简体中文', nativeLabel: '简体中文' },
-  { code: 'en', label: 'English', nativeLabel: 'English' },
-  { code: 'ja', label: '日本語', nativeLabel: '日本語' },
-  { code: 'ko', label: '한국어', nativeLabel: '한국어' },
-  { code: 'th', label: 'ไทย', nativeLabel: 'ไทย' },
-  { code: 'vi', label: 'Tiếng Việt', nativeLabel: 'Tiếng Việt' },
-  { code: 'ms', label: 'Bahasa Melayu', nativeLabel: 'Bahasa Melayu' },
-  { code: 'es', label: 'Español', nativeLabel: 'Español' },
-  { code: 'pt', label: 'Português', nativeLabel: 'Português' },
+  { code: 'zh-TW', label: '繁體中文', nativeLabel: '繁體中文', flag: '🇹🇼' },
+  { code: 'zh-CN', label: '简体中文', nativeLabel: '简体中文', flag: '🇨🇳' },
+  { code: 'en', label: 'English', nativeLabel: 'English', flag: '🇺🇸' },
+  { code: 'ja', label: '日本語', nativeLabel: '日本語', flag: '🇯🇵' },
+  { code: 'ko', label: '한국어', nativeLabel: '한국어', flag: '🇰🇷' },
+  { code: 'th', label: 'ไทย', nativeLabel: 'ไทย', flag: '🇹🇭' },
+  { code: 'vi', label: 'Tiếng Việt', nativeLabel: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: 'ms', label: 'Bahasa Melayu', nativeLabel: 'Bahasa Melayu', flag: '🇲🇾' },
+  { code: 'es', label: 'Español', nativeLabel: 'Español', flag: '🇪🇸' },
+  { code: 'pt', label: 'Português', nativeLabel: 'Português', flag: '🇵🇹' },
 ] as const;
 
 export type LocaleCode = typeof SUPPORTED_LOCALES[number]['code'];

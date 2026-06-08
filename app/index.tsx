@@ -22,7 +22,6 @@ export default function HomeDashboard() {
 
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
   const [loadingList, setLoadingList] = useState(true);
-  const [langModalVisible, setLangModalVisible] = useState(false);
 
   // Fetch itineraries when the screen comes into focus
   useFocusEffect(
@@ -175,9 +174,7 @@ export default function HomeDashboard() {
           </View>
         </View>
         <View style={styles.headerRight}>
-          <TouchableOpacity onPress={() => setLangModalVisible(true)} style={styles.iconBtn}>
-            <Ionicons name="language-outline" size={24} color={colors.textSecondary} />
-          </TouchableOpacity>
+          <LanguagePicker />
           <TouchableOpacity onPress={handleLogout} style={styles.iconBtn}>
             <Ionicons name="log-out-outline" size={24} color={colors.textSecondary} />
           </TouchableOpacity>
@@ -245,10 +242,6 @@ export default function HomeDashboard() {
         </Text>
       </TouchableOpacity>
 
-      <LanguagePicker 
-        visible={langModalVisible} 
-        onClose={() => setLangModalVisible(false)} 
-      />
     </View>
   );
 }
