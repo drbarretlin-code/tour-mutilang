@@ -1,0 +1,177 @@
+app/batch-scheduler/index.tsx:54: alert('分析失敗，請稍後再試。');
+app/batch-scheduler/index.tsx:71: case 'adoptable': return '可採用';
+app/batch-scheduler/index.tsx:72: case 'optional': return '可選擇';
+app/batch-scheduler/index.tsx:73: case 'not_recommended': return '不建議';
+app/batch-scheduler/index.tsx:74: default: return '未知';
+app/batch-scheduler/index.tsx:104: const finalTitle = decision?.title || item.title || '未知景點';
+app/batch-scheduler/index.tsx:108: alert('選擇的天數超出既有行程範圍。');
+app/batch-scheduler/index.tsx:119: endTime: '15:00', // 預設給1小時
+app/batch-scheduler/index.tsx:142: alert('加入失敗，請稍後再試。');
+app/batch-scheduler/index.tsx:163: 🤖 AI 智慧批次排程
+app/batch-scheduler/index.tsx:176: 請貼入多個網頁介紹或景點名稱（每行一筆），AI 將分析其地理位置、分類、同質性，並給出專業排程與體驗警示。
+app/batch-scheduler/index.tsx:180: <Text style={[typography.labelSmall, { color: colors.textTertiary, fontWeight: '700' }]}>輸入內容：</Text>
+app/batch-scheduler/index.tsx:182: <Text style={[typography.labelSmall, { color: colors.primary500 }]}>帶入範例</Text>
+app/batch-scheduler/index.tsx:198: placeholder="貼上網址或景點名稱..."
+app/batch-scheduler/index.tsx:216: <Text style={[typography.titleMedium, { color: '#fff', fontWeight: '700' }]}>開始智能分析</Text>
+app/batch-scheduler/index.tsx:225: 分析結果 ({results.length} 筆)
+app/batch-scheduler/index.tsx:245: <Text style={styles.statusBannerText}>已成功匯入</Text>
+app/batch-scheduler/index.tsx:251: <Text style={styles.statusBannerText}>已略過建議</Text>
+app/batch-scheduler/index.tsx:258: {item.title || '未知景點'}
+app/batch-scheduler/index.tsx:265: 分類：{item.category}
+app/batch-scheduler/index.tsx:279: <Ionicons name="location-outline" size={14} /> 景點主要名稱 (可編輯)
+app/batch-scheduler/index.tsx:288: 💡 此名稱將作為匯入後 Google Maps 導航與搜尋之關鍵字。
+app/batch-scheduler/index.tsx:295: <Text style={{ fontWeight: '700' }}>實務邏輯分析與建議：</Text>{'\n'}
+app/batch-scheduler/index.tsx:301: {item.warnings && item.warnings !== '無' && (
+app/batch-scheduler/index.tsx:305: 警示: {item.warnings}
+app/batch-scheduler/index.tsx:314: 排程建議: {item.suggestion}
+app/batch-scheduler/index.tsx:325: 請先退回首頁「選擇」或「建立」一份行程計畫，才能使用一鍵匯入功能喔！
+app/batch-scheduler/index.tsx:331: 選擇欲安插的天數：
+app/batch-scheduler/index.tsx:362: <Text style={[typography.labelMedium, { color: colors.textSecondary, marginLeft: 4 }]}>略過建議</Text>
+app/batch-scheduler/index.tsx:370: <Text style={[typography.labelMedium, { color: '#FFF', marginLeft: 4, fontWeight: '700' }]}>確認匯入 (Day {decisionState.day})</Text>
+app/index.tsx:93: { text: '取消', style: 'cancel' },
+app/index.tsx:94: { text: '確定', style: 'destructive', onPress: onConfirm }
+app/itinerary/index.tsx:265: title: 'AI 推薦：精選在地美食品嚐',
+app/itinerary/index.tsx:267: description: '為您推薦周邊高人氣美食餐廳，適合在行程空檔放鬆享用。',
+app/itinerary/index.tsx:269: name: '特色小吃與咖啡廳',
+app/itinerary/index.tsx:270: address: '景點步行區域內',
+app/itinerary/index.tsx:276: notes: '推薦試試當地特色冷飲。',
+app/itinerary/index.tsx:287: Alert.alert('AI 推薦', '已為您自動填補行程空檔並更新路線！');
+app/itinerary/index.tsx:341: dialogTitle: '匯出行程 PDF',
+app/itinerary/index.tsx:345: Alert.alert('匯出成功', `PDF 已產生至：${uri}`);
+app/itinerary/index.tsx:350: Alert.alert('匯出失敗', '無法產生 PDF 檔案。');
+app/itinerary/index.tsx:372: 無行程資料
+app/itinerary/index.tsx:375: title="返回首頁"
+app/itinerary/index.tsx:391: 全行程 3D 立體景觀圖
+app/itinerary/index.tsx:467: 離線瀏覽模式
+app/itinerary/index.tsx:482: <TouchableOpacity onPress={() => Alert.alert('分享行程', '行程連結已複製到剪貼簿！')} style={styles.shareButton}>
+app/itinerary/index.tsx:495: {isNavExpanded ? '收起選單面板' : '展開視圖與天數選單'}
+app/itinerary/index.tsx:536: { code: 'timeline', label: '行程總覽', icon: 'map' },
+app/itinerary/index.tsx:537: { code: 'guide', label: '當地指南', icon: 'compass-outline' },
+app/itinerary/index.tsx:538: { code: 'checklist', label: '行前清單', icon: 'checkbox-outline' },
+app/itinerary/index.tsx:539: { code: 'expenses', label: '費用分帳', icon: 'wallet-outline' },
+app/itinerary/index.tsx:540: { code: 'translator', label: '旅遊翻譯', icon: 'language-outline' },
+src/services/ai.ts:64: 4. TRANSPORT RULE: If transport is 'public' or 'walk', provide EXTREMELY detailed routing in transport.description. If transport is 'charter' (包車), you MUST add a safe booking link (e.g. Klook/KKday) to the activity's "links" array, and add safety tips in transport.description.
+src/services/ai.ts:113: const destName = firstDay.region || survey.destinations[0]?.name || '當地';
+src/services/ai.ts:119: if (!firstAct.title.includes('機場') && !firstAct.title.toLowerCase().includes('airport')) {
+src/services/ai.ts:125: title: '抵達當地機場',
+src/services/ai.ts:127: description: '順利抵達當地機場，完成通關手續並領取行李。建議您先在機場購買當地的網卡或兌換部分當地貨幣，為接下來的旅程做好準備。',
+src/services/ai.ts:128: location: { name: `${destName}國際機場`, address: `${destName}機場航廈` },
+src/services/ai.ts:130: transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘機場接送專車直達市區。' },
+src/services/ai.ts:131: links: [{ label: 'Klook 機場接送預訂', url: 'https://www.klook.com/', type: 'booking' }],
+src/services/ai.ts:132: notes: '請備妥入境文件與護照。',
+src/services/ai.ts:135: openingHours: '24小時開放'
+src/services/ai.ts:146: if (!lastAct.title.includes('機場') && !lastAct.title.toLowerCase().includes('airport')) {
+src/services/ai.ts:152: title: '抵達機場準備返國',
+src/services/ai.ts:154: description: '帶著滿滿的美好回憶，抵達機場準備搭機返國。建議您預留足夠的時間辦理退稅手續，並在免稅店做最後的採購。',
+src/services/ai.ts:155: location: { name: `${destName}國際機場`, address: `${destName}機場航廈` },
+src/services/ai.ts:157: transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘包車前往機場。' },
+src/services/ai.ts:158: links: [{ label: '當地推薦安全叫車 App', url: 'https://www.grab.com/', type: 'info' }],
+src/services/ai.ts:159: notes: '請提早2-3小時抵達機場。',
+src/services/ai.ts:162: openingHours: '24小時開放'
+src/services/ai.ts:243: const mainDest = survey?.destinations?.[0]?.name || '台北';
+src/services/ai.ts:244: const country = survey?.destinations?.[0]?.country || '台灣';
+src/services/ai.ts:250: if (lower.includes('東京') || lower.includes('tokyo') || lower.includes('日本')) {
+src/services/ai.ts:257: titles: ['淺草寺與雷門江戶風情', '澀谷十字路口與潮流探索', '明治神宮森呼吸'],
+src/services/ai.ts:259: '淺草寺是東京都內歷史最悠久的寺廟，創建於公元628年。其標誌性的巨型紅燈籠「雷門」是江戶文化的象徵，兩側的仲見世通商店街販售各式傳統小吃與工藝品，是體驗日本傳統佛教底蘊的必訪之地。',
+src/services/ai.ts:260: '澀谷是東京乃至全球時尚與青年文化的發源地。著名的澀谷站前十字路口在綠燈亮起時，成百上千的人潮交織穿梭，極具震撼感。周邊林立著百貨公司、潮流品牌與特色居酒屋。',
+src/services/ai.ts:261: '明治神宮是為了供奉明治天皇與昭憲皇太后而建的神社。神宮掩映在佔地70公頃的巨大人工森林中，踏入神宮，塵囂頓消，是繁華東京市中心難得的靜謐綠洲與神聖之所。'
+src/services/ai.ts:265: if (lower.includes('曼谷') || lower.includes('bangkok') || lower.includes('泰國')) {
+src/services/ai.ts:272: titles: ['大皇宮與玉佛寺金碧輝煌', '安帕瓦水上市場熱鬧體驗', '鄭王廟夕陽光輝'],
+src/services/ai.ts:274: '大皇宮是曼谷王朝的象徵，自1782年建立起便是暹羅王室的官方官邸。其內部建築融合了泰式傳統與歐式風情，雕樑畫棟、極盡奢華。供奉於玉佛寺的翡翠玉佛更是泰國最崇高的國寶。',
+src/services/ai.ts:275: '水上市場是泰國古老運河文化的縮影。商家划著裝滿新鮮水果、椰子烤肉的小船在河道上穿梭兜售，空氣中瀰漫著地道泰式調味料的香氣，是體驗泰國常民風情與美食的絕佳去處。',
+src/services/ai.ts:276: '鄭王廟又稱黎明寺，座落於昭披耶河畔。其主塔高達82米，塔身鑲嵌了無數碎陶瓷與貝殼，在陽光下熠熠生輝。黃昏時分，夕陽將塔影拉長，倒映在河面上，極具詩意。'
+src/services/ai.ts:288: titles: ['台北 101 與信義商圈俯瞰', '九份老街悲情城市茶香', '士林夜市在地美食巡禮'],
+src/services/ai.ts:290: '台北101曾是世界第一高樓，是台灣現代科技的里程碑。搭乘超高速電梯僅需37秒即可直達89樓觀景台，俯瞰台北盆地壯麗的城市天際線，並近距離觀察重達660公噸的風阻尼器巨大鋼球。',
+src/services/ai.ts:291: '九份是一座依山面海的古老礦業小鎮，因李安導演《悲情城市》與傳聞中神似宮崎駿《神隱少女》場景而聲名大噪。窄小的石階、錯落有致的紅燈籠與茶樓，漫步其間，彷彿時空倒流。',
+src/services/ai.ts:292: '夜市是台灣最具代表性的飲食文化核心。士林夜市歷史悠久，匯聚了超大雞排、蚵宰煎、大腸包小腸與珍珠奶茶等全球知名的庶民美食，是感受台北夜生活與熱情民風的必選地。'
+src/services/ai.ts:323: title: '抵達當地機場',
+src/services/ai.ts:325: description: '順利抵達當地機場，完成通關手續並領取行李。建議您先在機場購買當地的網卡或兌換部分當地貨幣，為接下來的旅程做好準備。',
+src/services/ai.ts:327: name: `${currentDest.name}國際機場`,
+src/services/ai.ts:328: address: `${currentDest.name}機場航廈`,
+src/services/ai.ts:333: transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘機場接送專車直達市區，省去搬運行李的麻煩。' },
+src/services/ai.ts:334: links: [{ label: 'Klook 機場接送預訂', url: 'https://www.klook.com/', type: 'booking' }],
+src/services/ai.ts:335: notes: '請備妥入境文件與護照。',
+src/services/ai.ts:339: openingHours: '24小時開放'
+src/services/ai.ts:347: title: '從飯店出發',
+src/services/ai.ts:349: description: '在飯店享用完豐盛的早餐後，整理行囊準備出發。今日行程較為豐富，建議攜帶足夠的飲用水與防曬用品。',
+src/services/ai.ts:351: name: `精選特色飯店`,
+src/services/ai.ts:352: address: `${currentDest.name}市中心街區`,
+src/services/ai.ts:357: transport: { mode: 'charter', duration: 30, distance: 15000, description: '搭乘包車前往第一站，當地包車服務安全有保障，司機皆具備良民證。' },
+src/services/ai.ts:358: links: [{ label: 'Klook 泰國包車推薦', url: 'https://www.klook.com/', type: 'booking' }],
+src/services/ai.ts:362: openingHours: '24小時開放'
+src/services/ai.ts:374: morningTitle = `必訪景點：${matchedMust.value}`;
+src/services/ai.ts:375: morningDesc = `這是您在問卷中指定安排的必去景點。${templates.descs[0]} \n\n這座景點蘊含了深厚的文化底蘊與獨特的歷史背景，是當地最具代表性的地標之一。我們為您安排在上午時段前往，避開了午後擁擠的人潮，讓您能有更充裕的時間細細品味這裡的建築之美與人文風情。建議您可以尋找當地的專業導覽，進一步了解其背後動人的故事與傳說。`;
+src/services/ai.ts:378: label: '您的參考網站',
+src/services/ai.ts:386: morningDesc = `（參照您提供的參考網站進行深度遊覽）${morningDesc} \n\n這座景點蘊含了深厚的文化底蘊與獨特的歷史背景，是當地最具代表性的地標之一。我們為您安排在上午時段前往，避開了午後擁擠的人潮，讓您能有更充裕的時間細細品味這裡的建築之美與人文風情。`;
+src/services/ai.ts:388: label: ref.fileName || '使用者參考網站',
+src/services/ai.ts:404: name: matchedMust?.value || `${currentDest.name}經典名勝`,
+src/services/ai.ts:411: notes: '建議穿著舒適好走的鞋子，並攜帶水壺。',
+src/services/ai.ts:420: const lunchTitles = ['在地推薦人氣私房菜', '文青風特色咖啡廳輕食', '老字號經典道地小吃', '米其林必比登推薦餐廳'];
+src/services/ai.ts:428: title: `午餐：${currentLunchTitle}`,
+src/services/ai.ts:430: description: `這家在地私房菜館不僅提供道地的傳統風味，更是當地老饕的首選。每一道菜品背後都有著深厚的家傳淵源，使用每日清晨從市集採購的最新鮮食材製作。AI 根據您的預算級別（${survey?.budgetLevel || '中等'}）與飲食偏好為您精選，提供乾淨衛生的用餐環境與豐富的素食、過敏原標示選擇。`,
+src/services/ai.ts:432: name: '人氣在地風味館',
+src/services/ai.ts:433: address: `${currentDest.name}美食街區`,
+src/services/ai.ts:438: transport: { mode: 'public', duration: 15, distance: 2000, description: '自景點步行約 5 分鐘至捷運站，搭乘淺綠線至市中心站，出站後由 3 號出口步行即達。' },
+src/services/ai.ts:440: notes: '午餐時間人潮較多，已為您將時間挪移避開最擁擠時段。',
+src/services/ai.ts:460: description: `${afternoonDesc} \n\n這裡不僅是購物的絕佳去處，更是體驗當地常民生活脈動的最佳櫥窗。穿梭在琳琅滿目的特色小舖間，您可以發掘許多獨一無二的手工藝品與原創設計。我們特別為您預留了充足的時間，讓您可以悠閒地在此散步、拍照，並在充滿異國情調的咖啡館裡享受一個美好的下午茶時光。`,
+src/services/ai.ts:462: name: `${currentDest.name}商圈地標`,
+src/services/ai.ts:469: notes: '適合拍照留念與挑選伴手禮，可使用行動支付。',
+src/services/ai.ts:474: openingHours: '24小時開放'
+src/services/ai.ts:484: title: '抵達機場準備返國',
+src/services/ai.ts:486: description: '帶著滿滿的美好回憶，抵達機場準備搭機返國。建議您預留足夠的時間辦理退稅手續，並在免稅店做最後的採購。',
+src/services/ai.ts:488: name: `${currentDest.name}國際機場`,
+src/services/ai.ts:489: address: `${currentDest.name}機場航廈`,
+src/services/ai.ts:494: transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘包車前往機場，請務必再三確認護照與隨身行李是否帶齊。' },
+src/services/ai.ts:495: links: [{ label: '當地推薦安全叫車 App', url: 'https://www.grab.com/', type: 'info' }],
+src/services/ai.ts:496: notes: '請提早2-3小時抵達機場。',
+src/services/ai.ts:500: openingHours: '24小時開放'
+src/services/ai.ts:508: title: '返回飯店休息',
+src/services/ai.ts:510: description: '結束一整天豐富充實的行程，搭乘交通工具返回溫馨舒適的飯店。您可以先洗去一身的疲憊，或是在飯店周邊的便利商店採買宵夜，為明天的旅程充飽電。',
+src/services/ai.ts:512: name: `精選特色飯店`,
+src/services/ai.ts:513: address: `${currentDest.name}市中心街區`,
+src/services/ai.ts:518: transport: { mode: 'charter', duration: 30, distance: 15000, description: '搭乘包車返回飯店，夜間搭車請隨時留意隨身物品。' },
+src/services/ai.ts:519: links: [{ label: '當地推薦安全叫車 App', url: 'https://www.grab.com/', type: 'info' }],
+src/services/ai.ts:523: openingHours: '24小時開放'
+src/services/ai.ts:530: title: `Day ${i + 1} - ${currentDest.name}探索之旅`,
+src/services/ai.ts:531: summary: `深度探訪 ${currentDest.name} 的核心觀光資源，感受當地的獨特氛圍。`,
+src/services/ai.ts:540: name: `精選特色${survey?.accommodationType?.[0] || '飯店'}`,
+src/services/ai.ts:541: address: `${currentDest.name}市中心街區`,
+src/services/ai.ts:547: title: '當地小費與消費習慣',
+src/services/ai.ts:548: content: '一般餐廳已包含服務費。路邊小吃與市場以現金支付為主，部分商店支援街口/Line Pay。'
+src/services/ai.ts:552: title: '上網與通訊建議',
+src/services/ai.ts:553: content: '推薦於機場領取實體 SIM 卡或提前開通 eSIM，在市區內各景點連線訊號極佳。'
+src/services/ai.ts:563: title: `${survey.destinations.map(d => d.name).join(' & ')} ${dayCount} 天智慧之旅`,
+src/services/ai.ts:569: { label: '當地觀光警察局', number: '1155', description: '24小時英文求助專線' },
+src/services/ai.ts:570: { label: '緊急求難專線', number: '119' }
+src/services/ai.ts:582: ? `\n**既有行程摘要**：\n${JSON.stringify(
+src/services/ai.ts:591: const prompt = `您是一位專業的旅遊行程規劃助手。現在使用者提供了一些想要新增的行程網址或景點名稱。
+src/services/ai.ts:592: 請針對這些新增項目進行分析，評估它們的地理位置、景點分類，以及如果適用，與既有行程的同質性。
+src/services/ai.ts:594: **使用者貼入的新增網址/景點**：
+src/services/ai.ts:597: **分析要求與限制**：
+src/services/ai.ts:598: 1. 分析每一個輸入。如果使用者貼入的是網址，請根據網址推估出景點的實際中文名稱與細節。
+src/services/ai.ts:599: 2. 進行以下評估：
+src/services/ai.ts:600: - **分類與地理位置**：推估其主要區域及分類 (如: coffee/food/shopping/camera/hotel/transport/info)。
+src/services/ai.ts:601: - **決策分類 (aiDecision)**：必須為 'adoptable' (可採用)、'not_recommended' (不建議) 或 'optional' (可選擇性)。
+src/services/ai.ts:602: - **決策理由 (aiDecisionReason)**：詳細的中文評估理由。
+src/services/ai.ts:603: - **同質性與地理警示 (warnings)**：分析是否與既有行程同質性太高、或地理位置太遠導致不順路。沒有則寫 "無"。
+src/services/ai.ts:604: - **排程建議說明 (suggestion)**：建議怎麼安排。
+src/services/ai.ts:606: 3. 務必使用 JSON 格式回傳，直接輸出以 \`{ "analysisResults": [...] }\` 格式的 JSON，不要加上 \`\`\`json 等任何 markdown 標記。
+src/services/ai.ts:608: JSON 結構樣式：
+src/services/ai.ts:612: "title": "景點名稱",
+src/services/ai.ts:613: "url": "輸入的原始網址",
+src/services/ai.ts:614: "category": "分類",
+src/services/ai.ts:615: "region": "地理區域",
+src/services/ai.ts:617: "aiDecisionReason": "詳細評估理由",
+src/services/ai.ts:618: "warnings": "警示內容或無",
+src/services/ai.ts:619: "suggestion": "排程建議說明"
+src/services/ai.ts:664: const prompt = `您是一位專業的在地導遊。使用者準備前往「${country}」旅遊。
+src/services/ai.ts:665: 請根據這個國家，整理出以下實用旅遊資訊，並以嚴格的 JSON 格式回傳，不含任何 markdown 標記。
+src/services/ai.ts:667: 要求：
+src/services/ai.ts:668: 1. currencyCode: 當地官方貨幣的 3 碼 ISO 代碼 (如 JPY, THB, KRW)。如果是台灣，回傳 TWD。
+src/services/ai.ts:669: 2. currencyName: 當地貨幣的中文名稱 (如 日圓, 泰銖, 韓元)。
+src/services/ai.ts:670: 3. emergencyContacts: 陣列，提供 3 到 4 組最重要的緊急聯絡電話。欄位包含 title (如 旅遊警察), subTitle (如 24小時英文服務), phone (如 110)。(請務必包含急救、報警，若有駐地外館更好)。
+src/services/ai.ts:671: 4. usefulPhrases: 陣列，提供 3 句最實用的在地問候或結帳用語。欄位包含 local (當地拼音或寫法), zh (中文對照), isHighlight (boolean, 將結帳或最重要的設為 true)。
+src/services/ai.ts:672: 5. guideItems: 陣列，提供 3 到 4 項當地具代表性的平民美食或按摩等服務的「預估價格」。欄位包含 item (如 路邊攤拉麵), priceRange (如 ~ 800 - 1000 ¥)。
+src/services/ai.ts:674: 請以如下的 JSON 格式輸出：
+src/services/ai.ts:677: "currencyName": "泰銖",
+src/services/settings.ts:20: throw new Error('無法儲存 API Key，請檢查您的系統權限。');

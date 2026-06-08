@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, ActivityIndicator, FlatList, Text, TouchableOpacity, Alert, Platform } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, FlatList, Text, TouchableOpacity, Alert, Platform, Image } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../src/context/AuthContext';
@@ -148,41 +148,60 @@ export default function HomeDashboard() {
     </View>
   );
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return t('home.greetingMorning', { defaultValue: 'Good Morning' });
+    if (hour < 18) return t('home.greetingAfternoon', { defaultValue: 'Good Afternoon' });
+    return t('home.greetingEvening', { defaultValue: 'Good Evening' });
+  };
+
+  const displayName = user?.email ? user.email.split('@')[0] : 'Traveler';
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
-      <View style={[styles.header, { backgroundColor: colors.surface }]}>
-        <Text style={[typography.headlineMedium, { color: colors.text, fontWeight: '700' }]}>
-          {t('home.title')}
-        </Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TouchableOpacity onPress={() => setLangModalVisible(true)} style={{ marginRight: 16 }}>
-            <Ionicons name="language-outline" size={28} color={colors.primary500} />
+      <View style={[styles.header, { backgroundColor: colors.background }]}>
+        <View style={styles.headerLeft}>
+          <Image source={require('../assets/images/logo.png')} style={styles.logo} />
+          <View>
+            <Text style={[typography.labelMedium, { color: colors.textSecondary }]}>
+              {getGreeting()},
+            </Text>
+            <Text style={[typography.headlineMedium, { color: colors.text, fontWeight: '800' }]}>
+              {displayName}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.headerRight}>
+          <TouchableOpacity onPress={() => setLangModalVisible(true)} style={styles.iconBtn}>
+            <Ionicons name="language-outline" size={24} color={colors.textSecondary} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleLogout}>
-            <Ionicons name="log-out-outline" size={30} color={colors.primary500} />
+          <TouchableOpacity onPress={handleLogout} style={styles.iconBtn}>
+            <Ionicons name="log-out-outline" size={24} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Feature Entry: AI Batch Scheduler */}
+      {/* Feature Entry: AI Batch Scheduler (Hero Banner) */}
       <TouchableOpacity 
-        style={[styles.featureCard, shadows.sm, { backgroundColor: colors.surface, borderRadius: borderRadius.md }]}
-        activeOpacity={0.8}
+        style={[styles.heroBanner, shadows.md, { backgroundColor: colors.primary500, borderRadius: 24 }]}
+        activeOpacity={0.9}
         onPress={() => router.push('/batch-scheduler')}
       >
-        <View style={[styles.iconContainer, { backgroundColor: colors.primary50 }]}>
-          <Ionicons name="sparkles" size={24} color={colors.primary500} />
+        <View style={styles.heroContent}>
+          <View style={[styles.heroIconBox, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+            <Ionicons name="sparkles" size={28} color="#fff" />
+          </View>
+          <View style={styles.heroTextContainer}>
+            <Text style={[typography.titleLarge, { color: '#fff', fontWeight: '800', marginBottom: 4 }]}>
+              {t('home.aiBatchTitle')}
+            </Text>
+            <Text style={[typography.bodyMedium, { color: 'rgba(255,255,255,0.8)' }]} numberOfLines={2}>
+              {t('home.aiBatchSubtitle')}
+            </Text>
+          </View>
         </View>
-        <View style={styles.featureTextContainer}>
-          <Text style={[typography.titleMedium, { color: colors.text, fontWeight: '700', marginBottom: 2 }]}>
-            {t('home.aiBatchTitle')}
-          </Text>
-          <Text style={[typography.bodySmall, { color: colors.textSecondary }]} numberOfLines={1}>
-            {t('home.aiBatchSubtitle')}
-          </Text>
-        </View>
-        <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
+        <Ionicons name="arrow-forward-circle" size={32} color="#fff" style={styles.heroActionIcon} />
       </TouchableOpacity>
 
       {/* List */}
@@ -246,9 +265,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 60, // Safe area roughly
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.05)',
+    paddingBottom: 24,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  logo: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  iconBtn: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.05)',
   },
   emptyListContent: {
     flex: 1,
@@ -267,23 +304,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 14,
   },
-  featureCard: {
+  heroBanner: {
+    marginHorizontal: 16,
+    marginBottom: 24,
+    padding: 24,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  heroContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 16,
-    marginTop: 16,
-    marginBottom: 8,
-    padding: 16,
+    gap: 16,
   },
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  heroIconBox: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
   },
-  featureTextContainer: {
+  heroTextContainer: {
     flex: 1,
+    paddingRight: 24,
+  },
+  heroActionIcon: {
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    opacity: 0.9,
   },
 });

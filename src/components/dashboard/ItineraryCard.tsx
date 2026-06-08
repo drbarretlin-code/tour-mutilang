@@ -25,9 +25,9 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={onPress}
-      style={[styles.card, shadows.md, { borderRadius: borderRadius.lg, backgroundColor: colors.surface }]}
+      style={[styles.card, shadows.sm, { borderRadius: 24, backgroundColor: colors.surface }]}
     >
-      <View style={[styles.imageContainer, { borderRadius: borderRadius.lg }]}>
+      <View style={[styles.imageContainer, { borderRadius: 24 }]}>
         {bgImage ? (
           <ImageBackground source={{ uri: bgImage }} style={styles.imageBackground} resizeMode="cover">
             <View style={styles.overlay} />
@@ -74,12 +74,15 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
           </View>
 
           <View style={styles.footer}>
-            <Text style={[typography.titleLarge, { color: '#fff', fontWeight: '700', marginBottom: 4 }]} numberOfLines={2}>
+            <Text style={[typography.headlineSmall, { color: '#fff', fontWeight: '800', marginBottom: 6 }]} numberOfLines={2}>
               {itinerary.title || t('dashboard.untitledItinerary')}
             </Text>
-            <Text style={[typography.labelMedium, { color: 'rgba(255,255,255,0.8)' }]}>
-              {startDate} {endDate && startDate !== endDate ? `~ ${endDate}` : ''}
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name="location-outline" size={14} color="rgba(255,255,255,0.8)" style={{ marginRight: 4 }} />
+              <Text style={[typography.labelMedium, { color: 'rgba(255,255,255,0.8)' }]}>
+                {startDate} {endDate && startDate !== endDate ? `~ ${endDate}` : ''}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -90,8 +93,8 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
 const styles = StyleSheet.create({
   card: {
     marginHorizontal: 16,
-    marginVertical: 8,
-    height: 180,
+    marginVertical: 10,
+    height: 220,
     overflow: 'hidden',
   },
   imageContainer: {
@@ -127,10 +130,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   actionBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 8,

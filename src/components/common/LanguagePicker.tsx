@@ -41,7 +41,7 @@ export const LanguagePicker: React.FC<Props> = ({ visible, onClose }) => {
           <FlatList
             data={SUPPORTED_LOCALES}
             keyExtractor={item => item.code}
-            contentContainerStyle={{ paddingBottom: spacing.xxl }}
+            contentContainerStyle={{ paddingBottom: 40 }}
             renderItem={({ item }) => {
               const isSelected = item.code === locale;
               return (
@@ -58,7 +58,7 @@ export const LanguagePicker: React.FC<Props> = ({ visible, onClose }) => {
                     { color: isSelected ? colors.primary700 : colors.text },
                     isSelected && { fontWeight: '700' }
                   ]}>
-                    {item.nativeLabel} {item.code !== item.label && item.nativeLabel !== item.label ? `(${item.label})` : ''}
+                    {item.nativeLabel} {String(item.code) !== String(item.label) && String(item.nativeLabel) !== String(item.label) ? `(${item.label})` : ''}
                   </Text>
                   {isSelected && (
                     <Ionicons name="checkmark" size={20} color={colors.primary600} />
