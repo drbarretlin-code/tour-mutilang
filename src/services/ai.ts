@@ -61,7 +61,7 @@ CRITICAL RULES:
 - Day 1: The FIRST activity (order 0) MUST be "Arrive at Airport" (type: "transport"). The LAST activity MUST be "Return to Hotel" (type: "hotel").
 - Middle Days: The FIRST activity MUST be "Depart from Hotel" (type: "hotel"). The LAST activity MUST be "Return to Hotel" (type: "hotel").
 - Final Day: The FIRST activity MUST be "Depart from Hotel" (type: "hotel"). The LAST activity MUST be "Arrive at Airport for Departure" (type: "transport").
-4. TRANSPORT RULE: If transport is 'public' or 'walk', provide EXTREMELY detailed routing in transport.description. If transport is 'charter' (包車), you MUST add a safe booking link (e.g. Klook/KKday) to the activity's "links" array, and add safety tips in transport.description.
+4. TRANSPORT RULE: The transport.duration MUST be realistically estimated based on the actual geographic distance from the previous activity's location. DO NOT use a static 10 minutes for everything. If transport is 'public' or 'walk', provide EXTREMELY detailed routing in transport.description. If transport is 'charter' (包車), you MUST add a safe booking link (e.g. Klook/KKday) to the activity's "links" array, and add safety tips in transport.description.
 5. AIRPORT MAP RULE: For the "Arrive at Airport" and "Arrive at Airport for Departure" activities, you MUST set the "photoUrl" field to exactly "local-asset://airport_map".
 6. LOGICAL TIMING: Pay strict attention to typical business hours. Night Markets MUST be in the evening.
 7. USER INPUT & COMPREHENSIVENESS: 
