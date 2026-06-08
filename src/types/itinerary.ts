@@ -15,6 +15,7 @@ export interface Itinerary {
   emergencyContacts: EmergencyContact[];
   totalEstimatedCost: CostEstimate;
   currency: string;
+  mapImageUrl?: string;
 }
 
 export interface ItineraryDay {

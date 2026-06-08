@@ -211,35 +211,57 @@ export function createDefaultSurvey(userId: string): TripSurvey {
     status: 'draft',
 
     dates: {
-      startDate: '',
-      endDate: '',
+      startDate: '2026-07-14',
+      endDate: '2026-07-20',
       isFlexible: false,
     },
-    destinations: [],
+    destinations: [
+      { id: generateId(), name: '曼谷', country: '泰國', order: 0 },
+      { id: generateId(), name: '芭達雅', country: '泰國', order: 1 },
+      { id: generateId(), name: '羅勇', country: '泰國', order: 2 }
+    ],
     travelers: { adults: 2, children: [], infants: 0, seniors: 0 },
     tripType: 'family',
-    departureCity: '',
+    departureCity: '台北',
     budgetLevel: 'moderate',
-    transportModes: [],
+    transportModes: ['public', 'charter'],
     bookingPlatforms: ['booking'],
     mapProvider: 'google',
     locale: 'zh-TW',
 
     flights: [],
-    interests: [],
-    pace: 'balanced',
+    interests: ['food', 'shopping', 'nightlife', 'water'],
+    pace: 'packed',
     dietaryRestrictions: [],
-    accommodationType: [],
+    accommodationType: ['hotel', 'resort'],
     currency: 'TWD',
 
-    referenceAttractions: [],
-    mustVisitAttractions: [],
+    referenceAttractions: [
+      { id: generateId(), type: 'text', value: '1.docx: 需安排單趟跨城包車 (芭達雅至曼谷)。抵達曼谷後，全程搭乘 BTS 捷運。' }
+    ],
+    mustVisitAttractions: [
+      { id: generateId(), type: 'text', value: '羅勇 Pa Dee 咖啡廳' },
+      { id: generateId(), type: 'text', value: '羅勇 水果園' },
+      { id: generateId(), type: 'text', value: '羅勇 森林餐廳' },
+      { id: generateId(), type: 'text', value: '芭提雅寰庭帕塔納克酒店 (Cross Pattaya)' },
+      { id: generateId(), type: 'text', value: 'Kliff Beach Club 懸崖海景餐廳' },
+      { id: generateId(), type: 'text', value: '羅摩衍那水上樂園 (Ramayana Water Park)' },
+      { id: generateId(), type: 'text', value: 'House of Benedict' },
+      { id: generateId(), type: 'text', value: 'The Lunar Beach House' },
+      { id: generateId(), type: 'text', value: '四方水上市場' },
+      { id: generateId(), type: 'text', value: '芭達雅夜市 (Thepprasit Night Market)' },
+      { id: generateId(), type: 'text', value: 'Terminal 21 旁邊小吃與手標牌泰式奶茶' },
+      { id: generateId(), type: 'text', value: '丹嫩沙多水上市場' },
+      { id: generateId(), type: 'text', value: '美功鐵道市場' },
+      { id: generateId(), type: 'text', value: 'Big C Supercenter' },
+      { id: generateId(), type: 'text', value: 'Park Sathorn Restaurant' }
+    ],
     morningPreference: 'normal',
     accommodationAmenities: [],
     accessibilityNeeds: [],
     hasInternationalLicense: false,
     insuranceStatus: 'skip',
-    notes: '',
+    notes: '必須考量到家庭旅遊的體力負荷，以及交通順暢度',
   };
 }
 

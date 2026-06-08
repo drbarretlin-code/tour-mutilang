@@ -317,6 +317,7 @@
     "required": "この項目は必須です",
     "invalidDate": "日程の選択が無効です",
     "invalidUrl": "有効な URL を入力してください",
+    "invalidEmail": "無効なメールアドレスの形式",
     "networkError": "ネットワークエラーが発生しました。再度お試しください。",
     "serverError": "サーバーエラーが発生しました。しばらくしてから再度お試しください。",
     "uploadFailed": "ファイルのアップロードに失敗しました",

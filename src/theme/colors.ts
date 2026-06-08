@@ -98,7 +98,7 @@ export const lightColors = {
   cardBackground: '#FFFFFF',
   inputBackground: '#F9FAFB',
   tabBarBackground: '#FFFFFF',
-  statusBar: 'dark' as const,
+  statusBar: 'dark' as 'light' | 'dark',
 };
 
 export const darkColors = {
@@ -120,7 +120,7 @@ export const darkColors = {
   cardBackground: '#1A2036',
   inputBackground: '#111827',
   tabBarBackground: '#0A0E1A',
-  statusBar: 'light' as const,
+  statusBar: 'light' as 'light' | 'dark',
 };
 
 export type ThemeColors = typeof lightColors;

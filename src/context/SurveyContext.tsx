@@ -1,11 +1,18 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../services/firebase';
 import { TripSurvey, createDefaultSurvey } from '../types/survey';
+import { Itinerary } from '../types/itinerary';
+import { dbService } from '../services/db';
+import { syncService } from '../services/sync';
+import { aiService } from '../services/ai';
+import { PACEngine } from '../services/pac';
 
 interface SurveyContextType {
   survey: TripSurvey;
+  activeItinerary: Itinerary | null;
+  setActiveItinerary: (it: Itinerary | null) => void;
   updateSurvey: (updates: Partial<TripSurvey>) => void;
   updateDates: (startDate: string, endDate: string, isFlexible: boolean, flexDays?: number) => void;
   addDestination: (name: string, placeId?: string, country?: string) => void;
@@ -15,10 +22,14 @@ interface SurveyContextType {
   removeFlight: (id: string) => void;
   addReferenceAttraction: (type: 'url' | 'image' | 'file' | 'text', value: string, fileName?: string, mimeType?: string) => void;
   removeReferenceAttraction: (id: string) => void;
-  addMustVisitAttraction: (type: 'url' | 'image' | 'file' | 'text', value: string, preferredDate?: string, preferredTime?: string) => void;
+  addMustVisitAttraction: (type: 'url' | 'image' | 'file' | 'text', value: string, preferredDate?: string, preferredTime?: string, fileName?: string, mimeType?: string) => void;
   removeMustVisitAttraction: (id: string) => void;
   saveDraft: () => Promise<void>;
   submitSurvey: () => Promise<void>;
+  resetSurvey: () => Promise<void>;
+  loadSurveyForEdit: (surveyData: TripSurvey, itineraryIdToReplace: string) => void;
+  cancelEditingItinerary: () => void;
+  editingItineraryId: string | null;
   isLoading: boolean;
   isSubmitting: boolean;
 }
@@ -29,6 +40,8 @@ const SURVEY_DRAFT_KEY = '@trip_survey_draft';
 
 export function SurveyProvider({ children }: { children: ReactNode }) {
   const [survey, setSurvey] = useState<TripSurvey>(createDefaultSurvey('anonymous'));
+  const [activeItinerary, setActiveItinerary] = useState<Itinerary | null>(null);
+  const [editingItineraryId, setEditingItineraryId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -40,12 +53,23 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
       const userId = user ? user.uid : 'anonymous';
 
       try {
+        const defaultSurvey = createDefaultSurvey(userId);
+
         if (user) {
           // Try loading from Firestore
           const docRef = doc(db, 'surveys', `${userId}_draft`);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
-            setSurvey(docSnap.data() as TripSurvey);
+            const data = docSnap.data();
+            // Merge with default survey to ensure complete object structure
+            setSurvey({
+              ...defaultSurvey,
+              ...data,
+              dates: { ...defaultSurvey.dates, ...data.dates },
+              travelers: { ...defaultSurvey.travelers, ...data.travelers },
+              destinations: data.destinations || [],
+              userId // Ensure correct userId
+            } as TripSurvey);
             setIsLoading(false);
             return;
           }
@@ -54,11 +78,18 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         // Fallback to Local Storage
         const localDraft = await AsyncStorage.getItem(SURVEY_DRAFT_KEY);
         if (localDraft) {
-          const parsed = JSON.parse(localDraft) as TripSurvey;
-          // Ensure correct userId
-          setSurvey({ ...parsed, userId });
+          const parsed = JSON.parse(localDraft);
+          // Merge with default survey to ensure complete object structure
+          setSurvey({
+            ...defaultSurvey,
+            ...parsed,
+            dates: { ...defaultSurvey.dates, ...parsed.dates },
+            travelers: { ...defaultSurvey.travelers, ...parsed.travelers },
+            destinations: parsed.destinations || [],
+            userId // Ensure correct userId
+          } as TripSurvey);
         } else {
-          setSurvey(createDefaultSurvey(userId));
+          setSurvey(defaultSurvey);
         }
       } catch (error) {
         console.error('Error loading survey draft:', error);
@@ -79,8 +110,29 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
   const updateSurvey = (updates: Partial<TripSurvey>) => {
     setSurvey((prev) => {
       const updated = { ...prev, ...updates, updatedAt: new Date().toISOString() };
-      // Save locally in background
-      AsyncStorage.setItem(SURVEY_DRAFT_KEY, JSON.stringify(updated));
+      
+      // Defer the side-effect outside the React render phase using setTimeout 0
+      setTimeout(() => {
+        PACEngine.debounceWrite(
+          SURVEY_DRAFT_KEY,
+          JSON.stringify(updated),
+          async (key, val) => {
+            // Local save
+            await AsyncStorage.setItem(key, val);
+
+            // Remote sync for logged-in users
+            const user = auth.currentUser;
+            if (user) {
+              const docRef = doc(db, 'surveys', `${user.uid}_draft`);
+              // Using JSON.parse(val) naturally strips all undefined properties 
+              // that were in 'updated', satisfying Firestore's strict rules.
+              setDoc(docRef, JSON.parse(val)).catch(err => console.warn('Remote draft sync failed:', err));
+            }
+          },
+          1200
+        );
+      }, 0);
+
       return updated;
     });
   };
@@ -149,10 +201,12 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     type: 'url' | 'image' | 'file' | 'text',
     value: string,
     preferredDate?: string,
-    preferredTime?: string
+    preferredTime?: string,
+    fileName?: string,
+    mimeType?: string
   ) => {
     const id = Math.random().toString(36).substring(2, 9);
-    const newItem = { id, type, value, preferredDate, preferredTime };
+    const newItem = { id, type, value, preferredDate, preferredTime, fileName, mimeType };
     updateSurvey({
       mustVisitAttractions: [...survey.mustVisitAttractions, newItem]
     });
@@ -165,14 +219,51 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
   };
 
   const saveDraft = async () => {
-    const user = auth.currentUser;
-    if (!user) return;
     try {
-      const docRef = doc(db, 'surveys', `${user.uid}_draft`);
-      await setDoc(docRef, survey);
+      // 1. Always save to Local Storage (Offline support)
+      await AsyncStorage.setItem(SURVEY_DRAFT_KEY, JSON.stringify(survey));
+
+      // 2. Save to Remote Firestore if logged in
+      const user = auth.currentUser;
+      if (user) {
+        const docRef = doc(db, 'surveys', `${user.uid}_draft`);
+        await setDoc(docRef, JSON.parse(JSON.stringify(survey)));
+      }
     } catch (error) {
-      console.error('Error saving draft to Firestore:', error);
+      console.error('Error saving draft:', error);
     }
+  };
+
+  const resetSurvey = async () => {
+    try {
+      const user = auth.currentUser;
+      const userId = user ? user.uid : 'anonymous';
+      
+      // 1. Clear Local AsyncStorage
+      await AsyncStorage.removeItem(SURVEY_DRAFT_KEY);
+      
+      // 2. Clear Remote Firestore draft if logged in
+      if (user) {
+        const docRef = doc(db, 'surveys', `${userId}_draft`);
+        await deleteDoc(docRef);
+      }
+      
+      // 3. Reset React State
+      setSurvey(createDefaultSurvey(userId));
+      setEditingItineraryId(null);
+    } catch (error) {
+      console.error('Error resetting survey:', error);
+    }
+  };
+
+  const loadSurveyForEdit = (surveyData: TripSurvey, itineraryIdToReplace: string) => {
+    setSurvey(surveyData);
+    setEditingItineraryId(itineraryIdToReplace);
+    setActiveItinerary(null);
+  };
+
+  const cancelEditingItinerary = () => {
+    setEditingItineraryId(null);
   };
 
   const submitSurvey = async () => {
@@ -187,27 +278,40 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     };
 
     try {
-      if (user) {
-        // Save to active surveys collection
-        const docRef = doc(db, 'surveys', finalSurvey.id);
-        await setDoc(docRef, finalSurvey);
+      // In pure text/URL mode, we no longer upload images to Firebase Storage.
+      // 1. Just proceed with the original user input references and must-visits.
+      finalSurvey.referenceAttractions = survey.referenceAttractions;
+      finalSurvey.mustVisitAttractions = survey.mustVisitAttractions;
 
-        // Delete draft
+      // 2. Save survey draft & submissions in Firestore if logged in
+      if (user) {
+        await dbService.saveSurvey(finalSurvey);
         const draftRef = doc(db, 'surveys', `${userId}_draft`);
-        await setDoc(draftRef, createDefaultSurvey(userId));
+        await setDoc(draftRef, JSON.parse(JSON.stringify(createDefaultSurvey(userId))));
       }
+
+      // 3. Generate travel itinerary using secure AI Service
+      const itinerary = await aiService.generateItinerary(finalSurvey);
+
+      // 4. Save and Publish itinerary
+      if (user) {
+        if (editingItineraryId) {
+          // Do not delete the old itinerary to preserve history as requested by the user.
+          setEditingItineraryId(null);
+        }
+        await dbService.saveItinerary(itinerary);
+        await syncService.publishItinerary(itinerary);
+      }
+
+      // 5. Update local state
+      setSurvey(finalSurvey);
+      setActiveItinerary(itinerary);
 
       // Clear local draft
       await AsyncStorage.removeItem(SURVEY_DRAFT_KEY);
 
-      // Trigger AI generation (e.g., via RTDB status or Firebase Cloud Functions)
-      // For now, write a request entry in Realtime Database to trigger planning
-      // This matches the no-extra-cost requirement (RTDB free tier)
-      // RTDB has a structure: /planning_requests/{surveyId} = { surveyData }
-      // This can trigger a background process or client-side generation mock
-      setSurvey(finalSurvey);
     } catch (error) {
-      console.error('Error submitting survey:', error);
+      console.warn('Error submitting survey:', error);
       throw error;
     } finally {
       setIsSubmitting(false);
@@ -218,6 +322,8 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     <SurveyContext.Provider
       value={{
         survey,
+        activeItinerary,
+        setActiveItinerary,
         updateSurvey,
         updateDates,
         addDestination,
@@ -231,6 +337,10 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         removeMustVisitAttraction,
         saveDraft,
         submitSurvey,
+        resetSurvey,
+        loadSurveyForEdit,
+        cancelEditingItinerary,
+        editingItineraryId,
         isLoading,
         isSubmitting,
       }}

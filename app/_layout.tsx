@@ -4,7 +4,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
 import { ThemeProvider } from '../src/context/ThemeContext';
 import { SurveyProvider } from '../src/context/SurveyContext';
+import { AuthProvider } from '../src/context/AuthContext';
 import { initLocale } from '../src/i18n';
+import { PACProvider } from '../src/context/PACContext';
+import { LanguageProvider } from '../src/context/LanguageContext';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -35,13 +38,19 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <ThemeProvider>
-        <SurveyProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-          </Stack>
-        </SurveyProvider>
-      </ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <PACProvider>
+              <SurveyProvider>
+                <Stack screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="index" />
+                </Stack>
+              </SurveyProvider>
+            </PACProvider>
+          </ThemeProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </SafeAreaProvider>
   );
 }

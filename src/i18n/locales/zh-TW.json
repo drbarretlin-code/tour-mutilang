@@ -3,6 +3,21 @@
     "name": "TourPlan",
     "tagline": "智慧旅程，輕鬆規劃"
   },
+  "home": {
+    "title": "我的計畫",
+    "emptyStateTitle": "尚未建立任何行程",
+    "emptyStateSubtitle": "點擊下方按鈕，讓 AI 為您規劃完美的專屬旅程。",
+    "aiBatchTitle": "🤖 AI 智慧批次排程助手",
+    "aiBatchSubtitle": "貼入多個網址，快速產生專屬分析與排程建議",
+    "newPlan": "新計劃",
+    "errorNotFound": "找不到對應的計畫資料，可能已被移除。",
+    "errorLoadFailed": "載入失敗，請稍後再試。",
+    "errorDeleteFailed": "刪除失敗，請稍後再試。",
+    "confirmDeleteTitle": "刪除行程",
+    "confirmDeleteMessage": "確定要刪除這個計畫嗎？刪除後將無法復原。",
+    "confirmLogoutTitle": "登出",
+    "confirmLogoutMessage": "確定要登出嗎？"
+  },
   "common": {
     "next": "下一步",
     "back": "返回",
@@ -37,7 +52,15 @@
     "password": "密碼",
     "forgotPassword": "忘記密碼",
     "welcomeBack": "歡迎回來",
-    "createAccount": "建立帳號"
+    "createAccount": "建立帳號",
+    "passwordPlaceholder": "請輸入密碼",
+    "confirmPassword": "確認密碼",
+    "confirmPasswordPlaceholder": "請再次輸入密碼",
+    "noAccount": "還沒有帳號嗎？",
+    "hasAccount": "已經有帳號了？",
+    "or": "或",
+    "guestLogin": "以訪客身份直接開始",
+    "registerSuccess": "帳號建立成功！已為您自動登入。"
   },
   "survey": {
     "title": "規劃你的旅程",
@@ -238,6 +261,35 @@
       "required": "必填資訊",
       "recommended": "建議填寫",
       "optional": "選填項目"
+    },
+    "actions": {
+      "confirmDiscardTitle": "確認捨棄草稿",
+      "confirmDiscardMessage": "您確定要捨棄目前的行程草稿並重新開始規劃嗎？此動作無法復原。",
+      "saveSuccessTitle": "儲存成功",
+      "saveSuccessMessage": "您的問卷資料已安全儲存於本地端。您可以隨時關閉應用程式，下次進入將自動恢復編修狀態。",
+      "cancelEditWebConfirm": "請問您要放棄這次的修改並回到原行程，還是將目前的修改另存為一份全新的行程？\n\n[確定] 放棄修改，回到原行程\n[取消] 另存為新計畫並繼續",
+      "convertedTitle": "已轉換",
+      "convertedMessage": "目前的修改將會另存為全新行程，不會覆蓋舊有計畫。請繼續完成設定並產生！",
+      "cancelEditTitle": "取消編修",
+      "cancelEditMessage": "請問您要放棄這次的修改，還是將目前的修改另存為一份全新的行程？",
+      "discardAndReturn": "放棄修改，回到原行程",
+      "saveAsNew": "另存為新計畫",
+      "continueEditing": "繼續編修",
+      "saveDraft": "儲存草稿",
+      "restart": "重新填寫",
+      "loginOrRegister": "登入/註冊"
+    },
+    "summary": {
+      "title": "我的專屬旅程亮點",
+      "progress": "AI 智慧規劃進度",
+      "notSelectedHint": "未選取（請在第一步設定）",
+      "dateTo": "至",
+      "notSelected": "未選取",
+      "notSet": "未設定",
+      "adults": "成人",
+      "children": "兒童",
+      "guestMode": "訪客模式（資料存於本地）",
+      "loggedInAs": "已登入："
     }
   },
   "itinerary": {
@@ -250,6 +302,289 @@
     "weather": "天氣預報",
     "timeline": "時間軸檢視",
     "mapView": "地圖檢視",
+    "timelineView": {
+      "types": {
+        "transport": "✈️ 交通 / 抵達",
+        "meal": "🍽️ 用餐",
+        "hotel": "🏨 住宿",
+        "attraction": "🏛️ 景點參觀",
+        "default": "📍 活動"
+      },
+      "alerts": {
+        "grabWebHint": "💡 提示：Grab 沒有提供「網頁版」叫車服務喔！必須使用手機 App。\n\n即將為您打開 Grab 官網提供下載資訊。",
+        "boltWebHint": "💡 提示：Bolt 主要提供手機 App 叫車服務。\n\n即將為您打開 Bolt 官網提供下載資訊。",
+        "cannotOpenTitle": "無法開啟",
+        "cannotOpenMessage": "無法開啟此連結，可能是您的裝置沒有安裝對應的 App 或瀏覽器設定阻擋。",
+        "errorTitle": "發生錯誤",
+        "errorMessage": "無法開啟連結。"
+      },
+      "endOfDay": {
+        "title": "🌙 結束今日行程：準備返回住宿地",
+        "transportAdvice": "建議交通方式：搭乘 Grab / Bolt，這段車程大約需要 15 分鐘。",
+        "shuttleGuideTitle": "🚗 住宿接駁指南：",
+        "shuttleGuideDesc": "飯店若無接駁系統，請使用 Bolt 或 Grab 叫車。前往預設住宿地（%{hotelName}）。",
+        "yourHotel": "您的飯店",
+        "tonightStay": "今晚住宿：%{hotelName}",
+        "airportMapHint": "機場入出境大廳平面圖參考",
+        "openGrab": "點此開啟 Grab",
+        "openBolt": "點此開啟 Bolt"
+      },
+      "activity": {
+        "region": "區域：%{region}",
+        "thisRegion": "該區域",
+        "transitGuide": "交通指引：前往下一站大眾運輸不便，本路段無明確地鐵，強烈建議搭乘包車或使用 Bolt/Grab 單程叫車，預估車程 %{gap} 分鐘。",
+        "navigate": "導航到地圖",
+        "charter": "包車",
+        "notesLabel": "傳送調整｜筆記",
+        "notesPlaceholder": "例如：司機大哥電話、確認營業時間..."
+      }
+    },
+    "mapFallbackView": {
+      "errors": {
+        "openFailed": "無法載入地圖導航，將嘗試在瀏覽器中開啟。"
+      },
+      "title": "今日路線網絡拓撲圖",
+      "empty": "今日行程無景點位置資料。"
+    },
+    "combinedView": {
+      "title": "🗺️ Day %{day} 行程路線與時程資訊圖表",
+      "subtitle": "互動式 3D 立體路線軌跡圖，即時反應行程異動",
+      "refresh": "一鍵更新圖表"
+    },
+    "horizontalCard": {
+      "types": {
+        "activity": "景點",
+        "dining": "美食",
+        "shopping": "購物",
+        "experience": "體驗"
+      }
+    },
+    "dailySummary": {
+      "weather": {
+        "sunny": "晴朗炎熱",
+        "cloudy": "多雲時晴",
+        "rainy": "局部陣雨",
+        "partlySunny": "午後雷陣雨",
+        "rainProb": "降雨機率 %{prob}"
+      },
+      "advice": {
+        "sunny": "建議著輕便透氣衣物，並注意防曬。",
+        "cloudy": "著舒適便服，適合戶外活動。",
+        "rainy": "請攜帶雨具，穿著防雨鞋類。",
+        "partlySunny": "建議隨身攜帶折疊傘，下午防範驟雨。"
+      }
+    },
+    "activityEditor": {
+      "title": "編輯行程項目",
+      "types": {
+        "attraction": "景點",
+        "restaurant": "食饗",
+        "cafe": "咖啡廳 / 下午茶",
+        "shopping": "血拼",
+        "spa": "SPA / 按摩",
+        "entertainment": "娛樂",
+        "hotel": "住宿",
+        "transport": "移動",
+        "activity": "體驗"
+      },
+      "errors": {
+        "titleEmpty": "行程名稱不能為空"
+      },
+      "deleteConfirm": {
+        "title": "刪除項目",
+        "message": "確定要刪除這個項目嗎？"
+      },
+      "fields": {
+        "time": "時間 (例如 10:00)",
+        "type": "項目類型",
+        "title": "行程名稱",
+        "titlePlaceholder": "請輸入行程名稱",
+        "location": "地理位置 (區域)",
+        "locationPlaceholder": "例如: 芭達雅",
+        "day": "排定天數 (移動行程)",
+        "notes": "詳細說明 (交通或集合備註)",
+        "notesPlaceholder": "輸入任何提醒事項或筆記...",
+        "links": "參考網址 (選填)"
+      },
+      "links": {
+        "map": "地圖:",
+        "mapPlaceholder": "Google Maps 網址",
+        "info": "介紹:",
+        "infoPlaceholder": "部落格或官方網站",
+        "booking": "交通:",
+        "bookingPlaceholder": "Klook 或包車預訂"
+      },
+      "actions": {
+        "delete": "刪除此項目",
+        "cancel": "取消",
+        "save": "儲存變更"
+      }
+    },
+    "destinationGuide": {
+      "loading": "正在為您編譯當地專屬指南...",
+      "exchange": {
+        "title": "%{currencyName}/台幣 匯率換算助手",
+        "subtitle": "即時試算今日花費與預算（當前匯率約 1 TWD = %{rate} %{code}）",
+        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
+        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
+        "inputTwd": "輸入台幣 (TWD)",
+        "inputLocal": "輸入%{name} (%{code})",
+        "resultLabel": "換算結果 (%{code})",
+        "twdLabel": "TWD 台幣"
+      },
+      "guide": {
+        "title": "💡 旅遊消費實用指南 (%{code}/TWD 概念)",
+        "quickSelect": "快速試算金額點選："
+      },
+      "emergency": {
+        "title": "📞 緊急聯絡資訊"
+      },
+      "phrases": {
+        "title": "☕ 實用語通",
+        "translator": "1. 雙向語音翻譯網頁",
+        "openTool": "開啟工具"
+      }
+    },
+    "expenseSplitter": {
+      "me": "我",
+      "companionN": "旅伴 %{n}",
+      "errors": {
+        "companionExists": "此旅伴名字已存在！",
+        "cannotRemoveCreator": "無法移除帳號建立者。",
+        "emptyTitle": "請輸入費用項目名稱！",
+        "invalidAmount": "請輸入有效的金額！",
+        "noSplitters": "請至少選擇一位分攤費用的旅伴！"
+      },
+      "summary": {
+        "title": "旅程花費總覽",
+        "budgetLevel": "預算層級：%{level}"
+      },
+      "companions": {
+        "title": "分帳旅伴名單 (%{count} 人)",
+        "addPlaceholder": "新增其他旅伴名字...",
+        "addBtn": "新增"
+      },
+      "settlement": {
+        "title": "清償結算建議",
+        "allSettled": "目前所有帳目已結清，無須轉帳！"
+      },
+      "expenses": {
+        "title": "花費明細記錄 (%{count} 筆)",
+        "addBtn": "記一筆",
+        "detail": "付款人：%{paidBy} | 分攤：%{count} 人"
+      },
+      "modal": {
+        "title": "新增費用記錄",
+        "fields": {
+          "titleLabel": "項目名稱",
+          "titlePlaceholder": "例如：泰式晚餐、地鐵票、阿貢火山一日遊",
+          "amountLabel": "花費金額 (%{currency})",
+          "amountPlaceholder": "請輸入金額",
+          "paidByLabel": "付款人",
+          "splitWithLabel": "費用分攤人 (可多選)"
+        }
+      }
+    },
+    "packingChecklist": {
+      "items": {
+        "doc1": "護照與護照影本",
+        "doc2": "電子機票 / 登機證",
+        "doc3": "訂房平台確認憑證",
+        "doc4": "海外旅遊平安保險單",
+        "ess1": "手機與充電線",
+        "ess2": "行動電源",
+        "ess3": "萬國轉接插頭",
+        "ess4": "外幣現金與信用卡",
+        "ess5": "個人常備藥品",
+        "ess6": "盥洗用品與保養品",
+        "clo1": "換洗衣物與睡衣",
+        "clo2": "舒適好走的鞋子",
+        "clo3": "遮陽帽與墨鏡",
+        "child1": "兒童常備感冒藥 / 體溫計",
+        "child2": "兒童濕紙巾與零食",
+        "driver1": "國際駕照與國內駕照正本",
+        "driver2": "手機車用支架",
+        "water1": "泳衣、泳帽與泳鏡",
+        "water2": "手機防塵防水袋",
+        "nat1": "防蚊液與驅蚊貼片",
+        "nat2": "防潑水外套 / 登山便鞋"
+      },
+      "progress": {
+        "title": "行前行李收拾進度",
+        "subtitle": "已收拾 %{checkedCount} / %{totalCount} 件物品"
+      },
+      "custom": {
+        "title": "新增自訂打包項目",
+        "placeholder": "例如：感冒藥、相機腳架..."
+      },
+      "categories": {
+        "docs": "必備證件與文件",
+        "essential": "個人生活必備品",
+        "clothing": "服飾與隨身穿著",
+        "custom": "自訂收拾清單"
+      }
+    },
+    "travelTranslator": {
+      "tabs": {
+        "live": "線上 AI 即時翻譯",
+        "handbook": "離線常用語速查"
+      },
+      "langs": {
+        "english": "英文",
+        "japanese": "日文",
+        "korean": "韓文",
+        "thai": "泰文",
+        "vietnamese": "越南文"
+      },
+      "live": {
+        "targetLabel": "目標翻譯語言",
+        "placeholder": "請輸入想對外國人說的話... (例如：請問點這道菜要等多久？)",
+        "translateBtn": "開始 AI 翻譯",
+        "resultLabel": "翻譯結果"
+      },
+      "categories": {
+        "general": "日常問候",
+        "dining": "餐廳點餐",
+        "transport": "交通指引",
+        "emergency": "緊急狀況"
+      },
+      "errors": {
+        "translationFailed": "翻譯發生錯誤，請稍後再試。"
+      },
+      "phrases": {
+        "mockPrefix": "[模擬翻譯 - %{lang}]",
+        "englishRef": "英語對照：%{text}",
+        "general": {
+          "0": "你好",
+          "1": "謝謝",
+          "2": "不好意思 / 請問",
+          "3": "這個多少錢？"
+        },
+        "dining": {
+          "0": "我想看菜單",
+          "1": "請給我水",
+          "2": "請問這道菜有含花生嗎？",
+          "3": "請幫我結帳"
+        },
+        "transport": {
+          "0": "地鐵站在哪裡？",
+          "1": "我想去這個地方",
+          "2": "廁所在哪裡？"
+        },
+        "emergency": {
+          "0": "請幫我叫救護車！",
+          "1": "我的護照掉了！",
+          "2": "警察局在哪？"
+        }
+      }
+    },
+    "apiKeyModal": {
+      "title": "解鎖 AI 智慧引擎",
+      "description": "為了提供您個人化的行程規劃且無須訂閱費用，本應用程式採用 BYOK 架構。請免費申請 Google Gemini API 金鑰並貼於下方。您的金鑰將被安全地加密儲存於您的設備中。",
+      "linkText": "前往 Google AI Studio 申請免費金鑰",
+      "cancelBtn": "取消 (使用離線範本)",
+      "saveBtn": "儲存並生成"
+    },
     "activity": {
       "startTime": "開始時間",
       "endTime": "結束時間",
@@ -317,6 +652,7 @@
     "required": "此欄位為必填",
     "invalidDate": "日期選擇無效",
     "invalidUrl": "請輸入有效的網址",
+    "invalidEmail": "電子信箱格式不正確",
     "networkError": "網路錯誤，請稍後再試。",
     "serverError": "伺服器錯誤，請稍後再試。",
     "uploadFailed": "檔案上傳失敗",
@@ -324,6 +660,12 @@
     "unsupportedFormat": "不支援的檔案格式",
     "minTravelers": "至少需要 1 位旅客",
     "minDestination": "至少需要 1 個目的地",
-    "dateRange": "回程日期必須在出發日期之後"
+    "dateRange": "回程日期必須在出發日期之後",
+    "passwordMinLength": "密碼長度必須大於 6 位字元",
+    "passwordMismatch": "兩次輸入的密碼不一致",
+    "emailInUse": "此電子信箱已被註冊。",
+    "invalidCredential": "電子信箱或密碼錯誤。",
+    "invalidEmailFormat": "無效的電子信箱格式。",
+    "guestLoginFailed": "匿名登入失敗，請稍後再試。"
   }
 }

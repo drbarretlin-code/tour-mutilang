@@ -23,7 +23,7 @@ export function Card({
   variant = 'elevated',
   padding = 'md'
 }: CardProps) {
-  const { colors, spacing, borderRadius, shadows } = useTheme();
+  const { colors, spacing, borderRadius, shadows, isDark } = useTheme();
 
   const getCardStyles = (): ViewStyle[] => {
     const base: ViewStyle = {
@@ -60,7 +60,7 @@ export function Card({
         variantStyle = {
           ...shadows.md,
           borderWidth: 1,
-          borderColor: colors.isDark ? colors.border : 'transparent',
+          borderColor: isDark ? colors.border : 'transparent',
         };
         break;
       case 'flat':

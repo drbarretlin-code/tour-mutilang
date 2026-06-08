@@ -317,6 +317,7 @@
     "required": "此项为必填",
     "invalidDate": "日期选择无效",
     "invalidUrl": "请输入有效的网址",
+    "invalidEmail": "电子邮箱格式不正确",
     "networkError": "网络错误，请稍后再试。",
     "serverError": "服务器错误，请稍后再试。",
     "uploadFailed": "文件上传失败",

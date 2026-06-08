@@ -115,7 +115,7 @@ export function StepDetails() {
           style={[styles.accordionHeader, { borderBottomColor: colors.divider, borderBottomWidth: activeAccordion === 'flights' ? 1 : 0, padding: spacing.md }]}
         >
           <Text style={[typography.titleMedium, { color: colors.text, fontWeight: '600' }]}>
-            {t('survey.transport.flightInfo.label')} ({survey.flights.length})
+            {t('survey.transport.flightInfo.label')} ({(survey?.flights || []).length})
           </Text>
           <Ionicons name={activeAccordion === 'flights' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
         </TouchableOpacity>
@@ -123,7 +123,7 @@ export function StepDetails() {
         {activeAccordion === 'flights' && (
           <View style={{ padding: spacing.md }}>
             {/* Added Flights List */}
-            {survey.flights.map((f) => (
+            {(survey?.flights || []).map((f) => (
               <View key={f.id} style={[styles.flightBadge, { backgroundColor: colors.backgroundSecondary, borderColor: colors.border }]}>
                 <View>
                   <Text style={[typography.titleSmall, { color: colors.text, fontWeight: '600' }]}>
@@ -183,7 +183,7 @@ export function StepDetails() {
           style={[styles.accordionHeader, { borderBottomColor: colors.divider, borderBottomWidth: activeAccordion === 'interests' ? 1 : 0, padding: spacing.md }]}
         >
           <Text style={[typography.titleMedium, { color: colors.text, fontWeight: '600' }]}>
-            {t('survey.interests.label')} ({survey.interests.length})
+            {t('survey.interests.label')} ({(survey?.interests || []).length})
           </Text>
           <Ionicons name={activeAccordion === 'interests' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
         </TouchableOpacity>
@@ -191,7 +191,7 @@ export function StepDetails() {
         {activeAccordion === 'interests' && (
           <View style={[styles.chipsContainer, { padding: spacing.md }]}>
             {interestTags.map((tag) => {
-              const selected = survey.interests.includes(tag.value);
+              const selected = (survey?.interests || []).includes(tag.value);
               return (
                 <TouchableOpacity
                   key={tag.value}
@@ -225,7 +225,7 @@ export function StepDetails() {
           style={[styles.accordionHeader, { borderBottomColor: colors.divider, borderBottomWidth: activeAccordion === 'dietary' ? 1 : 0, padding: spacing.md }]}
         >
           <Text style={[typography.titleMedium, { color: colors.text, fontWeight: '600' }]}>
-            {t('survey.dietary.label')} ({survey.dietaryRestrictions.length})
+            {t('survey.dietary.label')} ({(survey?.dietaryRestrictions || []).length})
           </Text>
           <Ionicons name={activeAccordion === 'dietary' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
         </TouchableOpacity>
@@ -233,7 +233,7 @@ export function StepDetails() {
         {activeAccordion === 'dietary' && (
           <View style={[styles.chipsContainer, { padding: spacing.md }]}>
             {dietaryOptions.map((opt) => {
-              const selected = survey.dietaryRestrictions.includes(opt.value);
+              const selected = (survey?.dietaryRestrictions || []).includes(opt.value);
               return (
                 <TouchableOpacity
                   key={opt.value}
@@ -276,7 +276,7 @@ export function StepDetails() {
           style={[styles.accordionHeader, { borderBottomColor: colors.divider, borderBottomWidth: activeAccordion === 'accommodation' ? 1 : 0, padding: spacing.md }]}
         >
           <Text style={[typography.titleMedium, { color: colors.text, fontWeight: '600' }]}>
-            {t('survey.accommodation.type.label')} ({survey.accommodationType.length})
+            {t('survey.accommodation.type.label')} ({(survey?.accommodationType || []).length})
           </Text>
           <Ionicons name={activeAccordion === 'accommodation' ? 'chevron-up' : 'chevron-down'} size={20} color={colors.text} />
         </TouchableOpacity>
@@ -285,7 +285,7 @@ export function StepDetails() {
           <View style={{ padding: spacing.md }}>
             <View style={styles.chipsContainer}>
               {accTypes.map((type) => {
-                const selected = survey.accommodationType.includes(type.value);
+                const selected = (survey?.accommodationType || []).includes(type.value);
                 return (
                   <TouchableOpacity
                     key={type.value}
@@ -316,7 +316,7 @@ export function StepDetails() {
             </Text>
             <View style={styles.chipsContainer}>
               {amenityOptions.map((opt) => {
-                const selected = survey.accommodationAmenities.includes(opt.value);
+                const selected = (survey?.accommodationAmenities || []).includes(opt.value);
                 return (
                   <TouchableOpacity
                     key={opt.value}
@@ -364,7 +364,7 @@ export function StepDetails() {
             </Text>
             <View style={[styles.chipsContainer, { marginBottom: spacing.md }]}>
               {accessOptions.map((opt) => {
-                const selected = survey.accessibilityNeeds.includes(opt.value);
+                const selected = (survey?.accessibilityNeeds || []).includes(opt.value);
                 return (
                   <TouchableOpacity
                     key={opt.value}

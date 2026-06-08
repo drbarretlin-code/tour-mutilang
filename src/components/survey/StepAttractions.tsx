@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as DocumentPicker from 'expo-document-picker';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useSurvey } from '../../context/SurveyContext';
 import { useTheme } from '../../context/ThemeContext';
 import { Card } from '../common/Card';
@@ -9,6 +7,8 @@ import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { t } from '../../i18n';
 import { Ionicons } from '@expo/vector-icons';
+import * as DocumentPicker from 'expo-document-picker';
+import { readFileContent } from '../../utils/fileReader';
 
 export function StepAttractions() {
   const {
@@ -26,40 +26,7 @@ export function StepAttractions() {
   const [mustDate, setMustDate] = useState('');
   const [mustTime, setMustTime] = useState('');
 
-  // 1. Pick Reference Image
-  const handlePickImage = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: false,
-        quality: 0.8,
-      });
 
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        const asset = result.assets[0];
-        addReferenceAttraction('image', asset.uri, asset.fileName || 'Image Attachment', asset.mimeType || 'image/jpeg');
-      }
-    } catch (e) {
-      console.warn('Error picking image:', e);
-    }
-  };
-
-  // 2. Pick Reference File
-  const handlePickFile = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: '*/*',
-        copyToCacheDirectory: true,
-      });
-
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        const asset = result.assets[0];
-        addReferenceAttraction('file', asset.uri, asset.name || 'File Attachment', asset.mimeType);
-      }
-    } catch (e) {
-      console.warn('Error picking document:', e);
-    }
-  };
 
   // Add URL Reference
   const handleAddRefUrl = () => {
@@ -75,6 +42,32 @@ export function StepAttractions() {
     setMustUrl('');
     setMustDate('');
     setMustTime('');
+  };
+
+  const handleUploadRefFile = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' });
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const asset = result.assets[0];
+        const content = await readFileContent(asset);
+        addReferenceAttraction('file', content, asset.name, asset.mimeType);
+      }
+    } catch (e) {
+      console.error('File pick error', e);
+    }
+  };
+
+  const handleUploadMustVisitFile = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' });
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const asset = result.assets[0];
+        const content = await readFileContent(asset);
+        addMustVisitAttraction('file', content, mustDate || undefined, mustTime || undefined, asset.name, asset.mimeType);
+      }
+    } catch (e) {
+      console.error('File pick error', e);
+    }
   };
 
   return (
@@ -98,6 +91,12 @@ export function StepAttractions() {
             containerStyle={{ flex: 1, marginRight: spacing.sm }}
           />
           <TouchableOpacity
+            onPress={handleUploadRefFile}
+            style={[styles.addBtn, { backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.md, marginRight: spacing.sm, borderColor: colors.border, borderWidth: 1 }]}
+          >
+            <Ionicons name="document-attach" size={24} color={colors.textSecondary} />
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={handleAddRefUrl}
             style={[styles.addBtn, { backgroundColor: colors.primary500, borderRadius: borderRadius.md }]}
           >
@@ -105,42 +104,20 @@ export function StepAttractions() {
           </TouchableOpacity>
         </View>
 
-        {/* Multi-modal pickers */}
-        <View style={[styles.modalPickers, { marginTop: spacing.md, borderTopColor: colors.divider, borderTopWidth: 1, paddingTop: spacing.md }]}>
-          <TouchableOpacity
-            onPress={handlePickImage}
-            style={[styles.modalBtn, { backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.md }]}
-          >
-            <Ionicons name="image" size={20} color={colors.primary500} style={{ marginRight: spacing.xs }} />
-            <Text style={[typography.labelMedium, { color: colors.text }]}>
-              {t('survey.attractions.reference.addPhoto')}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={handlePickFile}
-            style={[styles.modalBtn, { backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.md }]}
-          >
-            <Ionicons name="document" size={20} color={colors.primary500} style={{ marginRight: spacing.xs }} />
-            <Text style={[typography.labelMedium, { color: colors.text }]}>
-              {t('survey.attractions.reference.addFile')}
-            </Text>
-          </TouchableOpacity>
-        </View>
 
         {/* Reference List */}
         <View style={{ marginTop: spacing.md }}>
-          {survey.referenceAttractions.map((item) => (
+          {(survey?.referenceAttractions || []).map((item) => (
             <View key={item.id} style={[styles.attachmentBadge, { backgroundColor: colors.backgroundSecondary, borderColor: colors.border }]}>
               <View style={styles.flexRow}>
                 <Ionicons
-                  name={item.type === 'url' ? 'link' : item.type === 'image' ? 'image' : 'document'}
+                  name={item.type === 'file' ? 'document-text' : (item.type === 'url' ? 'link' : 'document')}
                   size={18}
                   color={colors.primary500}
                   style={{ marginRight: spacing.xs }}
                 />
                 <Text numberOfLines={1} style={[typography.bodyMedium, { color: colors.text, flex: 1 }]}>
-                  {item.type === 'url' ? item.value : item.fileName}
+                  {item.fileName || item.value}
                 </Text>
               </View>
               <TouchableOpacity onPress={() => removeReferenceAttraction(item.id)}>
@@ -161,12 +138,21 @@ export function StepAttractions() {
 
       <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
         {/* Must Visit Inputs */}
-        <Input
-          placeholder="e.g. Grand Palace, Tokyo Tower"
-          value={mustUrl}
-          onChangeText={setMustUrl}
-          containerStyle={{ marginBottom: spacing.sm }}
-        />
+        <View style={styles.flexRowBetween}>
+          <Input
+            placeholder="e.g. Grand Palace, Tokyo Tower"
+            value={mustUrl}
+            onChangeText={setMustUrl}
+            containerStyle={{ flex: 1, marginRight: spacing.sm }}
+          />
+          <TouchableOpacity
+            onPress={handleUploadMustVisitFile}
+            style={[styles.addBtn, { backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.md, borderColor: colors.border, borderWidth: 1 }]}
+          >
+            <Ionicons name="document-attach" size={24} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
+        <View style={{ marginTop: spacing.sm }} />
         <View style={styles.flexRowBetween}>
           <Input
             placeholder={t('survey.attractions.mustVisit.specifyDate')}
@@ -191,13 +177,13 @@ export function StepAttractions() {
 
         {/* Must-Visit List */}
         <View style={{ marginTop: spacing.md }}>
-          {survey.mustVisitAttractions.map((item) => (
+          {(survey?.mustVisitAttractions || []).map((item) => (
             <View key={item.id} style={[styles.attachmentBadge, { backgroundColor: colors.backgroundSecondary, borderColor: colors.border }]}>
               <View style={[styles.flexRow, { flex: 1 }]}>
-                <Ionicons name="star" size={18} color={colors.warning500} style={{ marginRight: spacing.xs }} />
+                <Ionicons name={item.type === 'file' ? 'document-text' : 'star'} size={18} color={item.type === 'file' ? colors.primary500 : colors.warning500} style={{ marginRight: spacing.xs }} />
                 <View style={{ flex: 1 }}>
                   <Text numberOfLines={1} style={[typography.bodyMedium, { color: colors.text, fontWeight: '600' }]}>
-                    {item.value}
+                    {item.fileName || item.value}
                   </Text>
                   {(item.preferredDate || item.preferredTime) && (
                     <Text style={[typography.bodySmall, { color: colors.textSecondary }]}>

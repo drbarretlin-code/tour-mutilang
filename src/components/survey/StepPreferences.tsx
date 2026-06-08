@@ -53,7 +53,7 @@ export function StepPreferences() {
 
   // Multiselect toggle helper
   const toggleSelection = <T extends string>(field: 'transportModes' | 'bookingPlatforms', value: T) => {
-    const list = survey[field] as string[];
+    const list = (survey[field] as string[]) || [];
     const isSelected = list.includes(value);
     const updated = isSelected ? list.filter(item => item !== value) : [...list, value];
     updateSurvey({ [field]: updated });
@@ -161,7 +161,7 @@ export function StepPreferences() {
       </Text>
       <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
         {transportModes.map((mode, idx) => {
-          const selected = survey.transportModes.includes(mode.value);
+          const selected = (survey?.transportModes || []).includes(mode.value);
           return (
             <TouchableOpacity
               key={idx}
@@ -193,7 +193,7 @@ export function StepPreferences() {
       </Text>
       <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
         {bookingPlatforms.map((platform, idx) => {
-          const selected = survey.bookingPlatforms.includes(platform.value);
+          const selected = (survey?.bookingPlatforms || []).includes(platform.value);
           return (
             <TouchableOpacity
               key={idx}

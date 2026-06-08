@@ -7,7 +7,11 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.barretlin.tourmutilang",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -25,7 +29,14 @@
       "expo-router",
       "expo-localization",
       "expo-secure-store",
-      "expo-splash-screen"
-    ]
+      "expo-splash-screen",
+      "expo-sharing"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f726a72c-5d58-4b9e-b9b0-e777f61eb01a"
+      }
+    }
   }
 }

@@ -3,6 +3,21 @@
     "name": "TourPlan",
     "tagline": "Smart trips, effortless planning"
   },
+  "home": {
+    "title": "My Plans",
+    "emptyStateTitle": "No Itineraries Yet",
+    "emptyStateSubtitle": "Click the button below to let AI plan your perfect trip.",
+    "aiBatchTitle": "🤖 AI Batch Scheduler",
+    "aiBatchSubtitle": "Paste multiple URLs for instant analysis and schedule generation",
+    "newPlan": "New Plan",
+    "errorNotFound": "Plan data not found. It may have been removed.",
+    "errorLoadFailed": "Failed to load. Please try again later.",
+    "errorDeleteFailed": "Failed to delete. Please try again later.",
+    "confirmDeleteTitle": "Delete Itinerary",
+    "confirmDeleteMessage": "Are you sure you want to delete this plan? This action cannot be undone.",
+    "confirmLogoutTitle": "Logout",
+    "confirmLogoutMessage": "Are you sure you want to log out?"
+  },
   "common": {
     "next": "Next",
     "back": "Back",
@@ -37,7 +52,15 @@
     "password": "Password",
     "forgotPassword": "Forgot Password",
     "welcomeBack": "Welcome Back",
-    "createAccount": "Create Account"
+    "createAccount": "Create Account",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "or": "OR",
+    "guestLogin": "Continue as Guest",
+    "registerSuccess": "Account created! You have been logged in automatically."
   },
   "survey": {
     "title": "Plan Your Trip",
@@ -238,6 +261,35 @@
       "required": "Required Information",
       "recommended": "Recommended",
       "optional": "Optional Details"
+    },
+    "actions": {
+      "confirmDiscardTitle": "Discard Draft",
+      "confirmDiscardMessage": "Are you sure you want to discard your current draft and start over? This cannot be undone.",
+      "saveSuccessTitle": "Saved Successfully",
+      "saveSuccessMessage": "Your survey data has been safely saved locally. You can close the app and resume editing next time.",
+      "cancelEditWebConfirm": "Do you want to discard your changes and return to the original itinerary, or save these changes as a new plan?\n\n[OK] Discard changes, return to original\n[Cancel] Save as new plan and continue",
+      "convertedTitle": "Converted",
+      "convertedMessage": "Your changes will be saved as a new plan without overwriting the old one. Please complete the setup!",
+      "cancelEditTitle": "Cancel Editing",
+      "cancelEditMessage": "Do you want to discard your changes, or save them as a brand new plan?",
+      "discardAndReturn": "Discard & Return",
+      "saveAsNew": "Save as New Plan",
+      "continueEditing": "Continue Editing",
+      "saveDraft": "Save Draft",
+      "restart": "Restart",
+      "loginOrRegister": "Log In/Sign Up"
+    },
+    "summary": {
+      "title": "My Trip Highlights",
+      "progress": "AI Planning Progress",
+      "notSelectedHint": "Not selected (Set in Step 1)",
+      "dateTo": "to",
+      "notSelected": "Not selected",
+      "notSet": "Not set",
+      "adults": "Adults",
+      "children": "Children",
+      "guestMode": "Guest Mode (Saved locally)",
+      "loggedInAs": "Logged in as: "
     }
   },
   "itinerary": {
@@ -250,6 +302,289 @@
     "weather": "Weather Forecast",
     "timeline": "Timeline View",
     "mapView": "Map View",
+    "timelineView": {
+      "types": {
+        "transport": "✈️ Transport / Arrival",
+        "meal": "🍽️ Dining",
+        "hotel": "🏨 Accommodation",
+        "attraction": "🏛️ Attraction",
+        "default": "📍 Activity"
+      },
+      "alerts": {
+        "grabWebHint": "💡 Hint: Grab does not provide a web-based booking service! You must use the mobile app.\n\nOpening the Grab official site for download info.",
+        "boltWebHint": "💡 Hint: Bolt primarily uses its mobile app for bookings.\n\nOpening the Bolt official site for download info.",
+        "cannotOpenTitle": "Cannot Open",
+        "cannotOpenMessage": "Unable to open this link. You may not have the corresponding app installed, or your browser blocked it.",
+        "errorTitle": "Error",
+        "errorMessage": "Failed to open the link."
+      },
+      "endOfDay": {
+        "title": "🌙 End of Day: Heading Back",
+        "transportAdvice": "Suggested Transport: Take Grab / Bolt, this ride takes about 15 minutes.",
+        "shuttleGuideTitle": "🚗 Hotel Transfer Guide:",
+        "shuttleGuideDesc": "If the hotel has no shuttle service, please use Bolt or Grab. Head to your accommodation (%{hotelName}).",
+        "yourHotel": "your hotel",
+        "tonightStay": "Tonight's stay: %{hotelName}",
+        "airportMapHint": "Airport Terminal Map Reference",
+        "openGrab": "Tap to open Grab",
+        "openBolt": "Tap to open Bolt"
+      },
+      "activity": {
+        "region": "Region: %{region}",
+        "thisRegion": "this region",
+        "transitGuide": "Transport Guide: Public transit to the next stop is inconvenient. We strongly recommend booking a private charter or taking a Grab/Bolt. Estimated ride: %{gap} mins.",
+        "navigate": "Navigate on Map",
+        "charter": "Charter",
+        "notesLabel": "Notes | Adjustments",
+        "notesPlaceholder": "e.g., Driver's phone number, check business hours..."
+      }
+    },
+    "mapFallbackView": {
+      "errors": {
+        "openFailed": "Unable to load map navigation, will try to open in browser."
+      },
+      "title": "Today's Route Network Topology",
+      "empty": "No location data for today's itinerary."
+    },
+    "combinedView": {
+      "title": "🗺️ Day %{day} Route & Schedule Map",
+      "subtitle": "Interactive 3D route map, reflecting itinerary changes in real-time",
+      "refresh": "Update Chart"
+    },
+    "horizontalCard": {
+      "types": {
+        "activity": "Attraction",
+        "dining": "Dining",
+        "shopping": "Shopping",
+        "experience": "Experience"
+      }
+    },
+    "dailySummary": {
+      "weather": {
+        "sunny": "Sunny & Hot",
+        "cloudy": "Partly Cloudy",
+        "rainy": "Local Showers",
+        "partlySunny": "Afternoon Thunderstorms",
+        "rainProb": "Rain Prob. %{prob}"
+      },
+      "advice": {
+        "sunny": "Light, breathable clothing and sun protection recommended.",
+        "cloudy": "Comfortable casual wear, ideal for outdoor activities.",
+        "rainy": "Please carry an umbrella and wear waterproof shoes.",
+        "partlySunny": "Bring a folding umbrella; watch out for sudden afternoon showers."
+      }
+    },
+    "activityEditor": {
+      "title": "Edit Activity",
+      "types": {
+        "attraction": "Attraction",
+        "restaurant": "Dining",
+        "cafe": "Cafe / Tea",
+        "shopping": "Shopping",
+        "spa": "SPA / Massage",
+        "entertainment": "Entertainment",
+        "hotel": "Accommodation",
+        "transport": "Transport",
+        "activity": "Experience"
+      },
+      "errors": {
+        "titleEmpty": "Activity name cannot be empty"
+      },
+      "deleteConfirm": {
+        "title": "Delete Item",
+        "message": "Are you sure you want to delete this item?"
+      },
+      "fields": {
+        "time": "Time (e.g. 10:00)",
+        "type": "Category",
+        "title": "Activity Name",
+        "titlePlaceholder": "Enter activity name",
+        "location": "Location (Region)",
+        "locationPlaceholder": "e.g., Pattaya",
+        "day": "Assigned Day",
+        "notes": "Details (Transport or Meeting Notes)",
+        "notesPlaceholder": "Enter any reminders or notes...",
+        "links": "Reference Links (Optional)"
+      },
+      "links": {
+        "map": "Map:",
+        "mapPlaceholder": "Google Maps URL",
+        "info": "Info:",
+        "infoPlaceholder": "Blog or Official Website",
+        "booking": "Transit:",
+        "bookingPlaceholder": "Klook or Booking link"
+      },
+      "actions": {
+        "delete": "Delete Item",
+        "cancel": "Cancel",
+        "save": "Save Changes"
+      }
+    },
+    "destinationGuide": {
+      "loading": "Compiling your exclusive local guide...",
+      "exchange": {
+        "title": "%{currencyName}/TWD Exchange Assistant",
+        "subtitle": "Calculate today's budget (Current rate: 1 TWD = %{rate} %{code})",
+        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
+        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
+        "inputTwd": "Enter TWD",
+        "inputLocal": "Enter %{name} (%{code})",
+        "resultLabel": "Result (%{code})",
+        "twdLabel": "TWD"
+      },
+      "guide": {
+        "title": "💡 Practical Spending Guide (%{code}/TWD)",
+        "quickSelect": "Quick Select:"
+      },
+      "emergency": {
+        "title": "📞 Emergency Contacts"
+      },
+      "phrases": {
+        "title": "☕ Useful Phrases",
+        "translator": "1. Two-way Voice Translator",
+        "openTool": "Open Tool"
+      }
+    },
+    "expenseSplitter": {
+      "me": "Me",
+      "companionN": "Companion %{n}",
+      "errors": {
+        "companionExists": "This companion name already exists!",
+        "cannotRemoveCreator": "Cannot remove the account creator.",
+        "emptyTitle": "Please enter the expense item name!",
+        "invalidAmount": "Please enter a valid amount!",
+        "noSplitters": "Please select at least one companion to split the cost!"
+      },
+      "summary": {
+        "title": "Trip Expense Summary",
+        "budgetLevel": "Budget Level: %{level}"
+      },
+      "companions": {
+        "title": "Expense Sharing Companions (%{count})",
+        "addPlaceholder": "Add other companion's name...",
+        "addBtn": "Add"
+      },
+      "settlement": {
+        "title": "Settlement Suggestions",
+        "allSettled": "All accounts are settled, no transfers needed!"
+      },
+      "expenses": {
+        "title": "Expense Details (%{count} records)",
+        "addBtn": "Add Record",
+        "detail": "Paid by: %{paidBy} | Split: %{count} pax"
+      },
+      "modal": {
+        "title": "Add Expense Record",
+        "fields": {
+          "titleLabel": "Item Name",
+          "titlePlaceholder": "e.g., Thai Dinner, Subway Ticket, Volcano Tour",
+          "amountLabel": "Amount (%{currency})",
+          "amountPlaceholder": "Enter amount",
+          "paidByLabel": "Paid By",
+          "splitWithLabel": "Split With (Multiple choices)"
+        }
+      }
+    },
+    "packingChecklist": {
+      "items": {
+        "doc1": "Passport and Copies",
+        "doc2": "E-tickets / Boarding Pass",
+        "doc3": "Accommodation Confirmation",
+        "doc4": "Travel Insurance Policy",
+        "ess1": "Phone and Charger",
+        "ess2": "Power Bank",
+        "ess3": "Universal Adapter",
+        "ess4": "Foreign Currency and Credit Cards",
+        "ess5": "Personal Medications",
+        "ess6": "Toiletries and Skincare",
+        "clo1": "Change of Clothes and Sleepwear",
+        "clo2": "Comfortable Walking Shoes",
+        "clo3": "Sun Hat and Sunglasses",
+        "child1": "Children's Cold Medicine / Thermometer",
+        "child2": "Children's Wipes and Snacks",
+        "driver1": "International & Domestic Driver's License",
+        "driver2": "Car Phone Mount",
+        "water1": "Swimwear, Cap, and Goggles",
+        "water2": "Waterproof Phone Pouch",
+        "nat1": "Mosquito Repellent and Patches",
+        "nat2": "Water-resistant Jacket / Hiking Shoes"
+      },
+      "progress": {
+        "title": "Packing Progress",
+        "subtitle": "Packed %{checkedCount} / %{totalCount} items"
+      },
+      "custom": {
+        "title": "Add Custom Packing Item",
+        "placeholder": "e.g., Cold medicine, Camera tripod..."
+      },
+      "categories": {
+        "docs": "Essential Documents",
+        "essential": "Daily Essentials",
+        "clothing": "Clothing & Wearables",
+        "custom": "Custom Checklist"
+      }
+    },
+    "travelTranslator": {
+      "tabs": {
+        "live": "Live AI Translation",
+        "handbook": "Offline Quick Phrases"
+      },
+      "langs": {
+        "english": "English",
+        "japanese": "Japanese",
+        "korean": "Korean",
+        "thai": "Thai",
+        "vietnamese": "Vietnamese"
+      },
+      "live": {
+        "targetLabel": "Target Language",
+        "placeholder": "Enter what you want to say... (e.g. How long is the wait?)",
+        "translateBtn": "Translate with AI",
+        "resultLabel": "Translation Result"
+      },
+      "categories": {
+        "general": "General Greetings",
+        "dining": "Dining",
+        "transport": "Transportation",
+        "emergency": "Emergency"
+      },
+      "errors": {
+        "translationFailed": "Translation error. Please try again later."
+      },
+      "phrases": {
+        "mockPrefix": "[Mock Translation - %{lang}]",
+        "englishRef": "English Ref: %{text}",
+        "general": {
+          "0": "Hello",
+          "1": "Thank you",
+          "2": "Excuse me",
+          "3": "How much is this?"
+        },
+        "dining": {
+          "0": "Menu please",
+          "1": "Water please",
+          "2": "Does this contain peanuts?",
+          "3": "Check please"
+        },
+        "transport": {
+          "0": "Where is the subway station?",
+          "1": "I want to go here",
+          "2": "Where is the restroom?"
+        },
+        "emergency": {
+          "0": "Call an ambulance please!",
+          "1": "I lost my passport!",
+          "2": "Where is the police station?"
+        }
+      }
+    },
+    "apiKeyModal": {
+      "title": "Unlock AI Engine",
+      "description": "To provide personalized itinerary planning without subscription fees, this app uses a BYOK (Bring Your Own Key) architecture. Please get a free Google Gemini API key and paste it below. Your key will be securely encrypted and stored on your device.",
+      "linkText": "Get a free key from Google AI Studio",
+      "cancelBtn": "Cancel (Use offline template)",
+      "saveBtn": "Save & Generate"
+    },
     "activity": {
       "startTime": "Start Time",
       "endTime": "End Time",
@@ -317,6 +652,7 @@
     "required": "This field is required",
     "invalidDate": "Invalid date selection",
     "invalidUrl": "Please enter a valid URL",
+    "invalidEmail": "Invalid email address",
     "networkError": "Network error. Please try again.",
     "serverError": "Server error. Please try again later.",
     "uploadFailed": "File upload failed",
@@ -324,6 +660,12 @@
     "unsupportedFormat": "Unsupported file format",
     "minTravelers": "At least 1 traveler is required",
     "minDestination": "At least 1 destination is required",
-    "dateRange": "End date must be after start date"
+    "dateRange": "End date must be after start date",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "passwordMismatch": "Passwords do not match",
+    "emailInUse": "This email is already in use.",
+    "invalidCredential": "Invalid email or password.",
+    "invalidEmailFormat": "Invalid email format.",
+    "guestLoginFailed": "Guest login failed. Please try again later."
   }
 }

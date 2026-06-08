@@ -32,23 +32,39 @@ export function StepBasics() {
 
   // Travelers handler
   const handleUpdateTravelers = (type: 'adults' | 'children' | 'infants' | 'seniors', operation: 'add' | 'subtract') => {
-    const currentVal = survey.travelers[type];
-    let newVal = currentVal;
-    if (operation === 'add') {
-      newVal += 1;
-    } else {
-      newVal = Math.max(0, currentVal - 1);
-      if (type === 'adults') {
-        newVal = Math.max(1, newVal); // At least 1 adult
+    if (type === 'children') {
+      const currentChildren = survey.travelers.children || [];
+      let newChildren = [...currentChildren];
+      if (operation === 'add') {
+        newChildren.push({ id: Math.random().toString(36).substring(2, 9), age: 8 });
+      } else {
+        newChildren.pop();
       }
-    }
+      updateSurvey({
+        travelers: {
+          ...survey.travelers,
+          children: newChildren,
+        },
+      });
+    } else {
+      const currentVal = survey.travelers[type] as number;
+      let newVal = currentVal;
+      if (operation === 'add') {
+        newVal += 1;
+      } else {
+        newVal = Math.max(0, currentVal - 1);
+        if (type === 'adults') {
+          newVal = Math.max(1, newVal); // At least 1 adult
+        }
+      }
 
-    updateSurvey({
-      travelers: {
-        ...survey.travelers,
-        [type]: newVal,
-      },
-    });
+      updateSurvey({
+        travelers: {
+          ...survey.travelers,
+          [type]: newVal,
+        },
+      });
+    }
   };
 
   // Language handler
@@ -244,7 +260,9 @@ export function StepBasics() {
                 <Text style={{ fontSize: 18, color: colors.text }}>-</Text>
               </TouchableOpacity>
               <Text style={[typography.titleMedium, { color: colors.text, marginHorizontal: spacing.md }]}>
-                {survey.travelers[item.key as 'adults' | 'children' | 'infants' | 'seniors']}
+                {item.key === 'children'
+                  ? (survey.travelers.children || []).length
+                  : survey.travelers[item.key as 'adults' | 'infants' | 'seniors']}
               </Text>
               <TouchableOpacity
                 onPress={() => handleUpdateTravelers(item.key as any, 'add')}

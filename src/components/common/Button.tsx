@@ -7,10 +7,12 @@ import {
   View,
   ViewStyle,
   TextStyle,
-  GestureResponderEvent
+  GestureResponderEvent,
+  Platform
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { useTheme } from '../../context/ThemeContext';
+import { PACEngine } from '../../services/pac';
 
 export interface ButtonProps {
   onPress: (event: GestureResponderEvent) => void;
@@ -43,10 +45,20 @@ export function Button({
 
   const handlePress = (event: GestureResponderEvent) => {
     if (disabled || loading) return;
-    if (enableHaptics) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    }
-    onPress(event);
+
+    // Use PAC Self-Protection mechanism to prevent double clicks globally
+    PACEngine.executeWithProtection(`btn_${title}`, () => {
+      if (enableHaptics) {
+        try {
+          if (Platform.OS === 'ios' || Platform.OS === 'android') {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }
+        } catch (e) {
+          // Safe fallback for web, macOS, windows, etc.
+        }
+      }
+      onPress(event);
+    }, 600);
   };
 
   const getButtonStyles = (): ViewStyle[] => {
