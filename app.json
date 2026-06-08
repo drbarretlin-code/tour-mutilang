@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "tour-mutilang",
-    "slug": "tour-mutilang",
+    "name": "Tour Plan",
+    "slug": "tour-plan",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

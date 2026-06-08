@@ -122,7 +122,7 @@ export function AuthForm() {
             <Ionicons name="airplane" size={32} color={colors.neutral0} />
           </View>
           <Text style={[typography.headlineLarge, { color: colors.text, fontWeight: '800', marginTop: spacing.md }]}>
-            TourPlan
+            Tour Plan
           </Text>
           <Text style={[typography.bodyMedium, { color: colors.textSecondary, marginTop: spacing.xs }]}>
             {t('app.tagline')}
