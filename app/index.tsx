@@ -11,11 +11,13 @@ import { Itinerary } from '../src/types/itinerary';
 import { ItineraryCard } from '../src/components/dashboard/ItineraryCard';
 import { t } from '../src/i18n';
 import { LanguagePicker } from '../src/components/common/LanguagePicker';
+import { useLanguage } from '../src/context/LanguageContext';
 
 export default function HomeDashboard() {
   const { user, loading: authLoading, logout } = useAuth();
   const { colors, typography, spacing, borderRadius, shadows } = useTheme();
   const { setActiveItinerary, loadSurveyForEdit } = useSurvey();
+  const { locale } = useLanguage();
   const router = useRouter();
 
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
@@ -212,6 +214,7 @@ export default function HomeDashboard() {
       ) : (
         <FlatList
           data={itineraries}
+          extraData={locale}
           keyExtractor={item => item.id}
           contentContainerStyle={itineraries.length === 0 ? styles.emptyListContent : { paddingBottom: 100, paddingTop: 16 }}
           renderItem={({ item }) => (
