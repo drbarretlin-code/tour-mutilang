@@ -22,11 +22,7 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
   const bgImage = itinerary.mapImageUrl || itinerary.days?.[0]?.activities?.find(a => a.photoUrl?.startsWith('http'))?.photoUrl;
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={onPress}
-      style={[styles.card, shadows.sm, { borderRadius: 24, backgroundColor: colors.surface }]}
-    >
+    <View style={[styles.card, shadows.sm, { borderRadius: 24, backgroundColor: colors.surface }]}>
       <View style={[styles.imageContainer, { borderRadius: 24 }]}>
         {bgImage ? (
           <ImageBackground source={{ uri: bgImage }} style={styles.imageBackground} resizeMode="cover">
@@ -36,57 +32,63 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
           <View style={[styles.imageBackground, { backgroundColor: colors.primary500 }]} />
         )}
 
-        <View style={styles.content}>
-          <View style={styles.header}>
-            <View style={[styles.badge, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
-              <Ionicons name="calendar-outline" size={12} color="#fff" style={{ marginRight: 4 }} />
-              <Text style={[typography.labelSmall, { color: '#fff' }]}>{t('common.days', { count: dayCount })}</Text>
+        {/* Clickable Area for navigation - absolute filled to cover the card */}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onPress}
+          style={StyleSheet.absoluteFill}
+        >
+          <View style={styles.content}>
+            <View style={styles.header}>
+              <View style={[styles.badge, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+                <Ionicons name="calendar-outline" size={12} color="#fff" style={{ marginRight: 4 }} />
+                <Text style={[typography.labelSmall, { color: '#fff' }]}>{t('common.days', { count: dayCount })}</Text>
+              </View>
+              <View style={[styles.badge, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+                <Ionicons name="wallet-outline" size={12} color="#fff" style={{ marginRight: 4 }} />
+                <Text style={[typography.labelSmall, { color: '#fff' }]}>
+                  {itinerary.currency || 'TWD'} {itinerary.totalEstimatedCost?.amount || 0}
+                </Text>
+              </View>
             </View>
-            <View style={[styles.badge, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
-              <Ionicons name="wallet-outline" size={12} color="#fff" style={{ marginRight: 4 }} />
-              <Text style={[typography.labelSmall, { color: '#fff' }]}>
-                {itinerary.currency || 'TWD'} {itinerary.totalEstimatedCost?.amount || 0}
-              </Text>
-            </View>
-            <View style={{ flex: 1 }} />
-            {onEdit && (
-              <TouchableOpacity 
-                onPress={(e) => {
-                  if (e && e.stopPropagation) e.stopPropagation();
-                  onEdit();
-                }} 
-                style={styles.actionBtn}
-              >
-                <Ionicons name="pencil" size={18} color="#fff" />
-              </TouchableOpacity>
-            )}
-            {onDelete && (
-              <TouchableOpacity 
-                onPress={(e) => {
-                  if (e && e.stopPropagation) e.stopPropagation();
-                  onDelete();
-                }} 
-                style={styles.actionBtn}
-              >
-                <Ionicons name="trash-outline" size={18} color="#fff" />
-              </TouchableOpacity>
-            )}
-          </View>
 
-          <View style={styles.footer}>
-            <Text style={[typography.headlineSmall, { color: '#fff', fontWeight: '800', marginBottom: 6 }]} numberOfLines={2}>
-              {itinerary.title || t('dashboard.untitledItinerary')}
-            </Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Ionicons name="location-outline" size={14} color="rgba(255,255,255,0.8)" style={{ marginRight: 4 }} />
-              <Text style={[typography.labelMedium, { color: 'rgba(255,255,255,0.8)' }]}>
-                {startDate} {endDate && startDate !== endDate ? `~ ${endDate}` : ''}
+            <View style={styles.footer}>
+              <Text style={[typography.headlineSmall, { color: '#fff', fontWeight: '800', marginBottom: 6 }]} numberOfLines={2}>
+                {itinerary.title || t('dashboard.untitledItinerary')}
               </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Ionicons name="location-outline" size={14} color="rgba(255,255,255,0.8)" style={{ marginRight: 4 }} />
+                <Text style={[typography.labelMedium, { color: 'rgba(255,255,255,0.8)' }]}>
+                  {startDate} {endDate && startDate !== endDate ? `~ ${endDate}` : ''}
+                </Text>
+              </View>
             </View>
           </View>
+        </TouchableOpacity>
+
+        {/* Absolute positioned Action Buttons layer - Sibling to the main TouchableOpacity */}
+        <View style={styles.actionContainer}>
+          {onEdit && (
+            <TouchableOpacity 
+              onPress={onEdit} 
+              style={styles.actionBtn}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="pencil" size={18} color="#fff" />
+            </TouchableOpacity>
+          )}
+          {onDelete && (
+            <TouchableOpacity 
+              onPress={onDelete} 
+              style={styles.actionBtn}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="trash-outline" size={18} color="#fff" />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
@@ -128,6 +130,13 @@ const styles = StyleSheet.create({
   },
   footer: {
     justifyContent: 'flex-end',
+  },
+  actionContainer: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    flexDirection: 'row',
+    zIndex: 10,
   },
   actionBtn: {
     width: 36,

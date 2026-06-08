@@ -351,15 +351,17 @@ export default function HomeDashboard() {
             </View>
           </View>
 
-          {itineraries.map((item) => (
-            <ItineraryCard 
-              key={item.id}
-              itinerary={item} 
-              onPress={() => handleItineraryPress(item)} 
-              onEdit={() => handleEditSurveyPlan(item)}
-              onDelete={() => handleDeleteItinerary(item.id)}
-            />
-          ))}
+          <View style={{ width: '100%' }}>
+            {itineraries.map((item) => (
+              <ItineraryCard 
+                key={item.id}
+                itinerary={item} 
+                onPress={() => handleItineraryPress(item)} 
+                onEdit={() => handleEditSurveyPlan(item)}
+                onDelete={() => handleDeleteItinerary(item.id)}
+              />
+            ))}
+          </View>
         </ScrollView>
 
         {/* Main Floating Action Button */}

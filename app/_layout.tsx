@@ -8,6 +8,7 @@ import { AuthProvider } from '../src/context/AuthContext';
 import { initLocale } from '../src/i18n';
 import { PACProvider } from '../src/context/PACContext';
 import { LanguageProvider } from '../src/context/LanguageContext';
+import { SafeErrorBoundary } from '../src/components/common/SafeErrorBoundary';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -26,29 +27,26 @@ export default function RootLayout() {
     prepare();
   }, []);
 
-  // CRITICAL: The DOM tree structure must be 100% stable from the very
-  // first render. No conditional returns, no ternaries that swap component
-  // types. React 19 + react-native-web 0.21 crashes with insertBefore
-  // when the tree shape changes after mount.
-  //
-  // <Stack> is always rendered. The screen content (app/index.tsx) handles
-  // its own loading/auth states internally with display:none, never by
-  // returning different component trees.
+  // CRITICAL: Wrap the entire application tree inside SafeErrorBoundary.
+  // This catches any runtime DOM reconciliation errors (such as insertBefore crashes)
+  // and attempts to recover via a clean client-side re-mount.
   return (
-    <SafeAreaProvider>
-      <LanguageProvider>
-        <AuthProvider>
-          <ThemeProvider>
-            <PACProvider>
-              <SurveyProvider>
-                <Stack screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="index" />
-                </Stack>
-              </SurveyProvider>
-            </PACProvider>
-          </ThemeProvider>
-        </AuthProvider>
-      </LanguageProvider>
-    </SafeAreaProvider>
+    <SafeErrorBoundary>
+      <SafeAreaProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <ThemeProvider>
+              <PACProvider>
+                <SurveyProvider>
+                  <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="index" />
+                  </Stack>
+                </SurveyProvider>
+              </PACProvider>
+            </ThemeProvider>
+          </AuthProvider>
+        </LanguageProvider>
+      </SafeAreaProvider>
+    </SafeErrorBoundary>
   );
 }
