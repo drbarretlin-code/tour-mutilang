@@ -261,13 +261,15 @@ export default function HomeDashboard() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {authLoading ? (
-        <View style={styles.centerContainer}>
+        <View key="state-loading" style={styles.centerContainer}>
           <ActivityIndicator size="large" color={colors.primary500} />
         </View>
       ) : !user ? (
-        <AuthForm />
+        <View key="state-auth" style={{ flex: 1 }}>
+          <AuthForm />
+        </View>
       ) : (
-        <View style={{ flex: 1 }}>
+        <View key="state-dashboard" style={{ flex: 1 }}>
           {/* Header */}
           <View style={[styles.header, { backgroundColor: colors.background }]}>
             <View style={styles.headerLeft}>
@@ -298,9 +300,11 @@ export default function HomeDashboard() {
             ListHeaderComponent={
               <View style={{ marginBottom: 32 }}>
                 {!hasApiKey ? (
-                  renderApiKeySetup()
+                  <View key="header-no-api">
+                    {renderApiKeySetup()}
+                  </View>
                 ) : (
-                  <View>
+                  <View key="header-has-api">
                     {/* Minimal Header Section when API is ready */}
                     <View style={styles.sectionHeader}>
                       <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '800' }]}>
