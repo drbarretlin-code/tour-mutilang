@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator, TouchableOpacity, Alert, Linking, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSurvey } from '../../src/context/SurveyContext';
+import { useLanguage } from '../../src/context/LanguageContext';
 import { useTheme } from '../../src/context/ThemeContext';
 import { DailySummaryCard } from '../../src/components/itinerary/DailySummaryCard';
 import { TimelineView } from '../../src/components/itinerary/TimelineView';
@@ -34,6 +35,7 @@ type ViewMode = 'timeline' | 'map' | 'checklist' | 'expenses' | 'translator';
 
 export default function ItineraryScreen() {
   const { survey: contextSurvey, activeItinerary: contextItinerary, updateSurvey } = useSurvey();
+  const { locale } = useLanguage();
   const { colors, spacing, borderRadius, typography } = useTheme();
 
   const { isLargeScreen } = useResponsive();
@@ -262,18 +264,18 @@ export default function ItineraryScreen() {
       order: gapStartIndex + 1,
       startTime: actA.endTime,
       endTime: actB.startTime,
-      title: 'AI 推薦：精選在地美食品嚐',
+      title: t('itinerary.aiRecommend.actTitle'),
       type: 'restaurant',
-      description: '為您推薦周邊高人氣美食餐廳，適合在行程空檔放鬆享用。',
+      description: t('itinerary.aiRecommend.actDesc'),
       location: {
-        name: '特色小吃與咖啡廳',
-        address: '景點步行區域內',
+        name: t('itinerary.aiRecommend.actLocName'),
+        address: t('itinerary.aiRecommend.actLocAddr'),
         latitude: actA.location?.latitude || 0,
         longitude: actA.location?.longitude || 0
       },
       duration: 90,
       links: [],
-      notes: '推薦試試當地特色冷飲。',
+      notes: t('itinerary.aiRecommend.actNotes'),
       isMustVisit: false
     };
 
@@ -284,7 +286,7 @@ export default function ItineraryScreen() {
 
     setItinerary(updatedItinerary);
     await saveAndSyncItinerary(updatedItinerary);
-    Alert.alert('AI 推薦', '已為您自動填補行程空檔並更新路線！');
+    Alert.alert(t('itinerary.aiRecommend.title'), t('itinerary.aiRecommend.msg'));
   };
 
   const saveAndSyncItinerary = async (updatedItinerary: Itinerary) => {
@@ -338,16 +340,16 @@ export default function ItineraryScreen() {
         if (await Sharing.isAvailableAsync()) {
           await Sharing.shareAsync(uri, {
             mimeType: 'application/pdf',
-            dialogTitle: '匯出行程 PDF',
+            dialogTitle: t('itinerary.exportTitle'),
             UTI: 'com.adobe.pdf'
           });
         } else {
-          Alert.alert('匯出成功', `PDF 已產生至：${uri}`);
+          Alert.alert(t('itinerary.exportSuccess'), t('itinerary.exportSuccessMsg', { uri }));
         }
       }
     } catch (error) {
       console.error('PDF Export Error:', error);
-      Alert.alert('匯出失敗', '無法產生 PDF 檔案。');
+      Alert.alert(t('itinerary.exportFail'), t('itinerary.exportFailMsg'));
     } finally {
       setLoading(false);
     }
@@ -369,10 +371,10 @@ export default function ItineraryScreen() {
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center', padding: spacing.xl }]}>
         <Ionicons name="alert-circle-outline" size={48} color={colors.error500} />
         <Text style={[typography.titleLarge, { color: colors.text, marginTop: spacing.md }]}>
-          無行程資料
+          {t('itinerary.noData')}
         </Text>
         <Button
-          title="返回首頁"
+          title={t('itinerary.backHome')}
           onPress={() => router.replace('/')}
           style={{ marginTop: spacing.lg }}
         />
@@ -388,7 +390,7 @@ export default function ItineraryScreen() {
     <View style={[styles.leftPanel, { borderRightColor: colors.divider, borderRightWidth: 1 }]}>
       <Card variant="flat" style={styles.mapCard}>
         <Text style={[typography.titleMedium, { color: colors.text, marginBottom: spacing.xs, fontWeight: '700' }]}>
-          全行程 3D 立體景觀圖
+          {t('itinerary.map.title')}
         </Text>
         <Itinerary3DMap itinerary={itinerary} activeDay={activeDay} height={320} />
       </Card>
@@ -464,7 +466,7 @@ export default function ItineraryScreen() {
           {isOffline && (
             <View style={[styles.offlineBadge, { backgroundColor: colors.warning50 }]}>
               <Text style={{ color: colors.warning600, fontSize: 10, fontWeight: '700' }}>
-                離線瀏覽模式
+                {t('itinerary.offline')}
               </Text>
             </View>
           )}
@@ -479,7 +481,7 @@ export default function ItineraryScreen() {
           <TouchableOpacity onPress={handleExportPDF} style={[styles.shareButton, { marginRight: 12 }]}>
             <Ionicons name="document-text-outline" size={22} color={colors.primary500} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => Alert.alert('分享行程', '行程連結已複製到剪貼簿！')} style={styles.shareButton}>
+          <TouchableOpacity onPress={() => Alert.alert(t('itinerary.shareTitle'), t('itinerary.shareMsg'))} style={styles.shareButton}>
             <Ionicons name="share-social-outline" size={22} color={colors.text} />
           </TouchableOpacity>
         </View>
@@ -492,7 +494,7 @@ export default function ItineraryScreen() {
         onPress={() => setIsNavExpanded(!isNavExpanded)}
       >
         <Text style={[typography.labelMedium, { color: colors.textSecondary, fontWeight: '600' }]}>
-          {isNavExpanded ? '收起選單面板' : '展開視圖與天數選單'}
+          {isNavExpanded ? t('itinerary.nav.collapse') : t('itinerary.nav.expand')}
         </Text>
         <Ionicons name={isNavExpanded ? 'chevron-up' : 'chevron-down'} size={16} color={colors.textSecondary} />
       </TouchableOpacity>
@@ -533,11 +535,11 @@ export default function ItineraryScreen() {
           <View style={[styles.viewModeContainer, { borderBottomColor: colors.divider, borderBottomWidth: 1 }]}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.modeScrollContent}>
               {[
-                { code: 'timeline', label: '行程總覽', icon: 'map' },
-                { code: 'guide', label: '當地指南', icon: 'compass-outline' },
-                { code: 'checklist', label: '行前清單', icon: 'checkbox-outline' },
-                { code: 'expenses', label: '費用分帳', icon: 'wallet-outline' },
-                { code: 'translator', label: '旅遊翻譯', icon: 'language-outline' },
+                { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
+                { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
+                { code: 'checklist', label: t('itinerary.tabs.checklist'), icon: 'checkbox-outline' },
+                { code: 'expenses', label: t('itinerary.tabs.expenses'), icon: 'wallet-outline' },
+                { code: 'translator', label: t('itinerary.tabs.translator'), icon: 'language-outline' },
               ].map((mode) => {
                 const isSelected = viewMode === mode.code;
                 return (

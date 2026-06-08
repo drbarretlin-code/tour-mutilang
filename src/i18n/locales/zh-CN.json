@@ -301,7 +301,40 @@
     },
     "dragHint": "长按并拖拽以重新排序",
     "aiSuggestion": "AI 为你的空闲时间推荐附近景点",
-    "offlineReady": "支持离线浏览"
+    "offlineReady": "支持离线浏览",
+    "tabs": {
+      "timeline": "行程總覽",
+      "guide": "當地指南",
+      "checklist": "行前清單",
+      "expenses": "費用分帳",
+      "translator": "旅遊翻譯"
+    },
+    "map": {
+      "title": "全行程 3D 立體景觀圖"
+    },
+    "nav": {
+      "collapse": "收起選單面板",
+      "expand": "展開視圖與天數選單"
+    },
+    "offline": "離線瀏覽模式",
+    "noData": "無行程資料",
+    "backHome": "返回首頁",
+    "shareTitle": "分享行程",
+    "shareMsg": "行程連結已複製到剪貼簿！",
+    "exportTitle": "匯出行程 PDF",
+    "exportSuccess": "匯出成功",
+    "exportSuccessMsg": "PDF 已產生至：%{uri}",
+    "exportFail": "匯出失敗",
+    "exportFailMsg": "無法產生 PDF 檔案。",
+    "aiRecommend": {
+      "title": "AI 推薦",
+      "msg": "已為您自動填補行程空檔並更新路線！",
+      "actTitle": "AI 推薦：精選在地美食品嚐",
+      "actDesc": "為您推薦周邊高人氣美食餐廳，適合在行程空檔放鬆享用。",
+      "actLocName": "特色小吃與咖啡廳",
+      "actLocAddr": "景點步行區域內",
+      "actNotes": "推薦試試當地特色冷飲。"
+    }
   },
   "settings": {
     "title": "设置",

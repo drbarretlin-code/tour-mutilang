@@ -301,7 +301,40 @@
     },
     "dragHint": "Hold and drag to reorder",
     "aiSuggestion": "AI suggests nearby attractions for your free time",
-    "offlineReady": "Available offline"
+    "offlineReady": "Available offline",
+    "tabs": {
+      "timeline": "Timeline",
+      "guide": "Local Guide",
+      "checklist": "Checklist",
+      "expenses": "Expenses",
+      "translator": "Translator"
+    },
+    "map": {
+      "title": "Full Route 3D Map"
+    },
+    "nav": {
+      "collapse": "Collapse Navigation",
+      "expand": "Expand Navigation"
+    },
+    "offline": "Offline Mode",
+    "noData": "No itinerary data found",
+    "backHome": "Back to Home",
+    "shareTitle": "Share Itinerary",
+    "shareMsg": "Itinerary link copied to clipboard!",
+    "exportTitle": "Export Itinerary PDF",
+    "exportSuccess": "Export Successful",
+    "exportSuccessMsg": "PDF generated at: %{uri}",
+    "exportFail": "Export Failed",
+    "exportFailMsg": "Failed to generate PDF file.",
+    "aiRecommend": {
+      "title": "AI Recommendation",
+      "msg": "Automatically filled gap with nearby spots!",
+      "actTitle": "AI Recommended: Local Delicacies",
+      "actDesc": "Recommended popular restaurants nearby.",
+      "actLocName": "Street food & Cafes",
+      "actLocAddr": "Within walking distance",
+      "actNotes": "Try the local cold drinks."
+    }
   },
   "settings": {
     "title": "Settings",

@@ -296,7 +296,21 @@
     "title": "我的行程",
     "day": "第 {{number}} 天",
     "overview": "總覽",
-    "dailySummary": "每日摘要",
+    "dailySummary": {
+      "weather": {
+        "sunny": "晴朗炎熱",
+        "cloudy": "多雲時晴",
+        "rainy": "局部陣雨",
+        "partlySunny": "午後雷陣雨",
+        "rainProb": "降雨機率 %{prob}"
+      },
+      "advice": {
+        "sunny": "建議著輕便透氣衣物，並注意防曬。",
+        "cloudy": "著舒適便服，適合戶外活動。",
+        "rainy": "請攜帶雨具，穿著防雨鞋類。",
+        "partlySunny": "建議隨身攜帶折疊傘，下午防範驟雨。"
+      }
+    },
     "estimatedCost": "預估費用",
     "walkingDistance": "步行距離",
     "weather": "天氣預報",
@@ -357,21 +371,6 @@
         "dining": "美食",
         "shopping": "購物",
         "experience": "體驗"
-      }
-    },
-    "dailySummary": {
-      "weather": {
-        "sunny": "晴朗炎熱",
-        "cloudy": "多雲時晴",
-        "rainy": "局部陣雨",
-        "partlySunny": "午後雷陣雨",
-        "rainProb": "降雨機率 %{prob}"
-      },
-      "advice": {
-        "sunny": "建議著輕便透氣衣物，並注意防曬。",
-        "cloudy": "著舒適便服，適合戶外活動。",
-        "rainy": "請攜帶雨具，穿著防雨鞋類。",
-        "partlySunny": "建議隨身攜帶折疊傘，下午防範驟雨。"
       }
     },
     "activityEditor": {
@@ -636,7 +635,40 @@
     },
     "dragHint": "長按並拖曳以重新排序",
     "aiSuggestion": "AI 為你的空檔推薦附近景點",
-    "offlineReady": "支援離線瀏覽"
+    "offlineReady": "支援離線瀏覽",
+    "tabs": {
+      "timeline": "行程總覽",
+      "guide": "當地指南",
+      "checklist": "行前清單",
+      "expenses": "費用分帳",
+      "translator": "旅遊翻譯"
+    },
+    "map": {
+      "title": "全行程 3D 立體景觀圖"
+    },
+    "nav": {
+      "collapse": "收起選單面板",
+      "expand": "展開視圖與天數選單"
+    },
+    "offline": "離線瀏覽模式",
+    "noData": "無行程資料",
+    "backHome": "返回首頁",
+    "shareTitle": "分享行程",
+    "shareMsg": "行程連結已複製到剪貼簿！",
+    "exportTitle": "匯出行程 PDF",
+    "exportSuccess": "匯出成功",
+    "exportSuccessMsg": "PDF 已產生至：%{uri}",
+    "exportFail": "匯出失敗",
+    "exportFailMsg": "無法產生 PDF 檔案。",
+    "aiRecommend": {
+      "title": "AI 推薦",
+      "msg": "已為您自動填補行程空檔並更新路線！",
+      "actTitle": "AI 推薦：精選在地美食品嚐",
+      "actDesc": "為您推薦周邊高人氣美食餐廳，適合在行程空檔放鬆享用。",
+      "actLocName": "特色小吃與咖啡廳",
+      "actLocAddr": "景點步行區域內",
+      "actNotes": "推薦試試當地特色冷飲。"
+    }
   },
   "settings": {
     "title": "設定",
