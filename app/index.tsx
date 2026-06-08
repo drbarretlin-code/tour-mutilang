@@ -66,14 +66,18 @@ export default function HomeDashboard() {
 
   if (authLoading || loadingApiKey) {
     return (
-      <View style={[styles.centerContainer, { backgroundColor: colors.background, flex: 1 }]}>
+      <View key="loading-screen" style={[styles.centerContainer, { backgroundColor: colors.background, flex: 1 }]}>
         <ActivityIndicator size="large" color={colors.primary500} />
       </View>
     );
   }
 
   if (!user) {
-    return <AuthForm />;
+    return (
+      <View key="auth-screen" style={[styles.container, { backgroundColor: colors.background }]}>
+        <AuthForm />
+      </View>
+    );
   }
 
   const handleSaveApiKey = async () => {
@@ -262,24 +266,8 @@ export default function HomeDashboard() {
 
   const displayName = user?.email ? user.email.split('@')[0] : 'Traveler';
 
-  if (authLoading) {
-    return (
-      <View style={[styles.container, styles.centerContainer, { backgroundColor: colors.background }]}>
-        <ActivityIndicator size="large" color={colors.primary500} />
-      </View>
-    );
-  }
-
-  if (!user) {
-    return (
-      <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <AuthForm />
-      </View>
-    );
-  }
-
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View key="main-dashboard-screen" style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={{ flex: 1 }}>
         {/* Header */}
         <View style={[styles.header, { backgroundColor: colors.background }]}>
@@ -350,6 +338,16 @@ export default function HomeDashboard() {
                   <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
                 </TouchableOpacity>
               </View>
+
+              {/* Empty State / Loading State (Moved from ListEmptyComponent to prevent insertBefore crash) */}
+              <View style={{ display: itineraries.length === 0 ? 'flex' : 'none', minHeight: 200, justifyContent: 'center', alignItems: 'center', marginTop: 32 }}>
+                <View style={{ display: loadingList ? 'flex' : 'none' }}>
+                  <ActivityIndicator size="large" color={colors.primary500} />
+                </View>
+                <View style={{ display: (!loadingList && hasApiKey && itineraries.length === 0) ? 'flex' : 'none', width: '100%' }}>
+                  {renderEmptyState()}
+                </View>
+              </View>
             </View>
           }
           renderItem={({ item }) => (
@@ -360,16 +358,6 @@ export default function HomeDashboard() {
               onDelete={() => handleDeleteItinerary(item.id)}
             />
           )}
-          ListEmptyComponent={
-            <View style={{ minHeight: 200, justifyContent: 'center', alignItems: 'center' }}>
-              <View style={{ display: loadingList ? 'flex' : 'none' }}>
-                <ActivityIndicator size="large" color={colors.primary500} />
-              </View>
-              <View style={{ display: (!loadingList && hasApiKey && itineraries.length === 0) ? 'flex' : 'none', width: '100%' }}>
-                {renderEmptyState()}
-              </View>
-            </View>
-          }
         />
 
         {/* Main Floating Action Button */}
