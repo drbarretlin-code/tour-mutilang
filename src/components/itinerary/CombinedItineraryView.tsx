@@ -77,10 +77,11 @@ export const CombinedItineraryView: React.FC<Props> = ({ itinerary, activeDay, o
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: '100%',
     backgroundColor: '#0F111A', // Very dark blue/black
     borderRadius: 16,
     overflow: 'hidden',
+    marginBottom: 24,
   },
   contentContainer: {
     padding: 24,

@@ -157,211 +157,225 @@ export function ActivityEditorModal({
 
   const currentTypeLabel = getActivityTypes().find(t => t.value === type)?.label || type;
 
-  return (
-    <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
-      <KeyboardAvoidingView 
-        style={styles.overlay} 
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
-        <View style={[styles.modalContainer, { backgroundColor: colors.background, borderRadius: borderRadius.lg }]}>
-          
-          {/* Header */}
-          <View style={[styles.header, { borderBottomColor: colors.divider }]}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Ionicons name="pencil" size={20} color={colors.primary500} style={{ marginRight: 8 }} />
-              <Text style={[typography.titleMedium, { color: colors.text, fontWeight: '700' }]}>
-                {t('itinerary.activityEditor.title')}
-              </Text>
-            </View>
-            <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
-              <Ionicons name="close" size={24} color={colors.textSecondary} />
-            </TouchableOpacity>
+  if (!visible) return null;
+
+  const modalContent = (
+    <KeyboardAvoidingView 
+      style={styles.overlay} 
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <View style={[styles.modalContainer, { backgroundColor: colors.background, borderRadius: borderRadius.lg }]}>
+        
+        {/* Header */}
+        <View style={[styles.header, { borderBottomColor: colors.divider }]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Ionicons name="pencil" size={20} color={colors.primary500} style={{ marginRight: 8 }} />
+            <Text style={[typography.titleMedium, { color: colors.text, fontWeight: '700' }]}>
+              {t('itinerary.activityEditor.title')}
+            </Text>
           </View>
+          <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
+            <Ionicons name="close" size={24} color={colors.textSecondary} />
+          </TouchableOpacity>
+        </View>
 
-          {/* Form Content */}
-          <ScrollView style={styles.scrollContent} contentContainerStyle={{ padding: spacing.md }}>
-            
-            <View style={styles.row}>
-              {/* Time */}
-              <View style={[styles.inputGroup, { flex: 1, marginRight: spacing.sm }]}>
-                <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.time')}</Text>
-                <TextInput
-                  style={[styles.input, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.md }]}
-                  value={startTime}
-                  onChangeText={setStartTime}
-                  placeholder="HH:mm"
-                  placeholderTextColor={colors.textSecondary}
-                />
-              </View>
-
-              {/* Type Selection */}
-              <View style={[styles.inputGroup, { flex: 1, marginLeft: spacing.sm, zIndex: 10 }]}>
-                <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.type')}</Text>
-                <TouchableOpacity 
-                  style={[styles.input, styles.selectBtn, { borderColor: colors.border, borderRadius: borderRadius.md }]}
-                  onPress={() => { setShowTypeMenu(!showTypeMenu); setShowDayMenu(false); }}
-                >
-                  <Text style={[typography.bodyMedium, { color: colors.text }]}>{currentTypeLabel}</Text>
-                  <Ionicons name="chevron-down" size={16} color={colors.textSecondary} />
-                </TouchableOpacity>
-                {showTypeMenu && (
-                  <View style={[styles.dropdownMenu, shadows.md, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-                    {getActivityTypes().map(t => (
-                      <TouchableOpacity 
-                        key={t.value} 
-                        style={[styles.dropdownItem, { borderBottomColor: colors.border }]}
-                        onPress={() => { setType(t.value); setShowTypeMenu(false); }}
-                      >
-                        <Text style={[typography.bodyMedium, { color: colors.text }]}>{t.label}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                )}
-              </View>
-            </View>
-
-            {/* Title */}
-            <View style={[styles.inputGroup, { zIndex: 9 }]}>
-              <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.title')}</Text>
+        {/* Form Content */}
+        <ScrollView style={styles.scrollContent} contentContainerStyle={{ padding: spacing.md }}>
+          
+          <View style={styles.row}>
+            {/* Time */}
+            <View style={[styles.inputGroup, { flex: 1, marginRight: spacing.sm }]}>
+              <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.time')}</Text>
               <TextInput
                 style={[styles.input, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.md }]}
-                value={title}
-                onChangeText={setTitle}
-                placeholder={t('itinerary.activityEditor.fields.titlePlaceholder')}
+                value={startTime}
+                onChangeText={setStartTime}
+                placeholder="HH:mm"
                 placeholderTextColor={colors.textSecondary}
               />
             </View>
 
-            <View style={[styles.row, { zIndex: 8 }]}>
-              {/* Location */}
-              <View style={[styles.inputGroup, { flex: 1, marginRight: spacing.sm }]}>
-                <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.location')}</Text>
-                <TextInput
-                  style={[styles.input, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.md }]}
-                  value={address}
-                  onChangeText={setAddress}
-                  placeholder={t('itinerary.activityEditor.fields.locationPlaceholder')}
-                  placeholderTextColor={colors.textSecondary}
-                />
-              </View>
-
-              {/* Day Selection */}
-              <View style={[styles.inputGroup, { flex: 1, marginLeft: spacing.sm }]}>
-                <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.day')}</Text>
-                <TouchableOpacity 
-                  style={[styles.input, styles.selectBtn, { borderColor: colors.border, borderRadius: borderRadius.md }]}
-                  onPress={() => { setShowDayMenu(!showDayMenu); setShowTypeMenu(false); }}
-                >
-                  <Text style={[typography.bodyMedium, { color: colors.text }]}>Day {targetDay}</Text>
-                  <Ionicons name="chevron-down" size={16} color={colors.textSecondary} />
-                </TouchableOpacity>
-                {showDayMenu && (
-                  <View style={[styles.dropdownMenu, shadows.md, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-                    {itinerary.days.map(d => (
-                      <TouchableOpacity 
-                        key={d.dayNumber} 
-                        style={[styles.dropdownItem, { borderBottomColor: colors.border }]}
-                        onPress={() => { setTargetDay(d.dayNumber); setShowDayMenu(false); }}
-                      >
-                        <Text style={[typography.bodyMedium, { color: colors.text }]}>Day {d.dayNumber}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                )}
-              </View>
-            </View>
-
-            {/* Notes */}
-            <View style={[styles.inputGroup, { zIndex: 7 }]}>
-              <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.notes')}</Text>
-              <TextInput
-                style={[styles.input, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.md, minHeight: 80 }]}
-                value={notes}
-                onChangeText={setNotes}
-                multiline
-                textAlignVertical="top"
-                placeholder={t('itinerary.activityEditor.fields.notesPlaceholder')}
-                placeholderTextColor={colors.textSecondary}
-              />
-            </View>
-
-            {/* Reference Links Area */}
-            <View style={[styles.linksArea, { backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.md, padding: spacing.md, zIndex: 6 }]}>
-              <Text style={[typography.labelMedium, { color: colors.textSecondary, marginBottom: spacing.sm, fontWeight: '700' }]}>
-                {t('itinerary.activityEditor.fields.links')}
-              </Text>
-              
-              <View style={styles.linkRow}>
-                <View style={styles.linkIconCol}>
-                  <Ionicons name="map-outline" size={16} color={colors.primary500} />
-                  <Text style={[typography.caption, { color: colors.textSecondary, marginLeft: 4 }]}>{t('itinerary.activityEditor.links.map')}</Text>
-                </View>
-                <TextInput
-                  style={[styles.input, styles.linkInput, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.sm }]}
-                  value={getLinkByType('map')}
-                  onChangeText={(val) => updateLink('map', 'Map', val)}
-                  placeholder={t('itinerary.activityEditor.links.mapPlaceholder')}
-                  placeholderTextColor={colors.textSecondary}
-                />
-              </View>
-
-              <View style={styles.linkRow}>
-                <View style={styles.linkIconCol}>
-                  <Ionicons name="information-circle-outline" size={16} color={colors.primary500} />
-                  <Text style={[typography.caption, { color: colors.textSecondary, marginLeft: 4 }]}>{t('itinerary.activityEditor.links.info')}</Text>
-                </View>
-                <TextInput
-                  style={[styles.input, styles.linkInput, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.sm }]}
-                  value={getLinkByType('info')}
-                  onChangeText={(val) => updateLink('info', 'Info', val)}
-                  placeholder={t('itinerary.activityEditor.links.infoPlaceholder')}
-                  placeholderTextColor={colors.textSecondary}
-                />
-              </View>
-              
-              <View style={styles.linkRow}>
-                <View style={styles.linkIconCol}>
-                  <Ionicons name="bus-outline" size={16} color={colors.primary500} />
-                  <Text style={[typography.caption, { color: colors.textSecondary, marginLeft: 4 }]}>{t('itinerary.activityEditor.links.booking')}</Text>
-                </View>
-                <TextInput
-                  style={[styles.input, styles.linkInput, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.sm }]}
-                  value={getLinkByType('booking')}
-                  onChangeText={(val) => updateLink('booking', 'Booking', val)}
-                  placeholder={t('itinerary.activityEditor.links.bookingPlaceholder')}
-                  placeholderTextColor={colors.textSecondary}
-                />
-              </View>
-            </View>
-            
-            <View style={{ height: 40 }} />
-          </ScrollView>
-
-          {/* Footer Actions */}
-          <View style={[styles.footer, { borderTopColor: colors.divider }]}>
-            <TouchableOpacity 
-              style={[styles.actionBtn, { backgroundColor: '#FEF2F2', borderColor: '#FECACA', borderWidth: 1 }]}
-              onPress={handleDelete}
-            >
-              <Ionicons name="trash-outline" size={18} color="#EF4444" style={{ marginRight: 6 }} />
-              <Text style={[typography.labelLarge, { color: '#EF4444', fontWeight: '700' }]}>{t('itinerary.activityEditor.actions.delete')}</Text>
-            </TouchableOpacity>
-
-            <View style={{ flexDirection: 'row', gap: 12 }}>
-              <TouchableOpacity style={[styles.actionBtn, { backgroundColor: 'transparent' }]} onPress={onClose}>
-                <Text style={[typography.labelLarge, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.actions.cancel')}</Text>
+            {/* Type Selection */}
+            <View style={[styles.inputGroup, { flex: 1, marginLeft: spacing.sm, zIndex: 10 }]}>
+              <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.type')}</Text>
+              <TouchableOpacity 
+                style={[styles.input, styles.selectBtn, { borderColor: colors.border, borderRadius: borderRadius.md }]}
+                onPress={() => { setShowTypeMenu(!showTypeMenu); setShowDayMenu(false); }}
+              >
+                <Text style={[typography.bodyMedium, { color: colors.text }]}>{currentTypeLabel}</Text>
+                <Ionicons name="chevron-down" size={16} color={colors.textSecondary} />
               </TouchableOpacity>
-              
-              <TouchableOpacity style={[styles.actionBtn, { backgroundColor: colors.primary500, opacity: isVerifying ? 0.7 : 1 }]} onPress={handleSave} disabled={isVerifying}>
-                <Text style={[typography.labelLarge, { color: colors.neutral0, fontWeight: '700' }]}>
-                  {isVerifying ? t('itinerary.activityEditor.actions.verifying', { defaultValue: 'Verifying...' }) : t('itinerary.activityEditor.actions.save')}
-                </Text>
-              </TouchableOpacity>
+              {showTypeMenu && (
+                <View style={[styles.dropdownMenu, shadows.md, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+                  {getActivityTypes().map(t => (
+                    <TouchableOpacity 
+                      key={t.value} 
+                      style={[styles.dropdownItem, { borderBottomColor: colors.border }]}
+                      onPress={() => { setType(t.value); setShowTypeMenu(false); }}
+                    >
+                      <Text style={[typography.bodyMedium, { color: colors.text }]}>{t.label}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
             </View>
           </View>
 
+          {/* Title */}
+          <View style={[styles.inputGroup, { zIndex: 9 }]}>
+            <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.title')}</Text>
+            <TextInput
+              style={[styles.input, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.md }]}
+              value={title}
+              onChangeText={setTitle}
+              placeholder={t('itinerary.activityEditor.fields.titlePlaceholder')}
+              placeholderTextColor={colors.textSecondary}
+            />
+          </View>
+
+          <View style={[styles.row, { zIndex: 8 }]}>
+            {/* Location */}
+            <View style={[styles.inputGroup, { flex: 1, marginRight: spacing.sm }]}>
+              <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.location')}</Text>
+              <TextInput
+                style={[styles.input, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.md }]}
+                value={address}
+                onChangeText={setAddress}
+                placeholder={t('itinerary.activityEditor.fields.locationPlaceholder')}
+                placeholderTextColor={colors.textSecondary}
+              />
+            </View>
+
+            {/* Day Selection */}
+            <View style={[styles.inputGroup, { flex: 1, marginLeft: spacing.sm }]}>
+              <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.day')}</Text>
+              <TouchableOpacity 
+                style={[styles.input, styles.selectBtn, { borderColor: colors.border, borderRadius: borderRadius.md }]}
+                onPress={() => { setShowDayMenu(!showDayMenu); setShowTypeMenu(false); }}
+              >
+                <Text style={[typography.bodyMedium, { color: colors.text }]}>Day {targetDay}</Text>
+                <Ionicons name="chevron-down" size={16} color={colors.textSecondary} />
+              </TouchableOpacity>
+              {showDayMenu && (
+                <View style={[styles.dropdownMenu, shadows.md, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+                  {itinerary.days.map(d => (
+                    <TouchableOpacity 
+                      key={d.dayNumber} 
+                      style={[styles.dropdownItem, { borderBottomColor: colors.border }]}
+                      onPress={() => { setTargetDay(d.dayNumber); setShowDayMenu(false); }}
+                    >
+                      <Text style={[typography.bodyMedium, { color: colors.text }]}>Day {d.dayNumber}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
+          </View>
+
+          {/* Notes */}
+          <View style={[styles.inputGroup, { zIndex: 7 }]}>
+            <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.notes')}</Text>
+            <TextInput
+              style={[styles.input, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.md, minHeight: 80 }]}
+              value={notes}
+              onChangeText={setNotes}
+              multiline
+              textAlignVertical="top"
+              placeholder={t('itinerary.activityEditor.fields.notesPlaceholder')}
+              placeholderTextColor={colors.textSecondary}
+            />
+          </View>
+
+          {/* Reference Links Area */}
+          <View style={[styles.linksArea, { backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.md, padding: spacing.md, zIndex: 6 }]}>
+            <Text style={[typography.labelMedium, { color: colors.textSecondary, marginBottom: spacing.sm, fontWeight: '700' }]}>
+              {t('itinerary.activityEditor.fields.links')}
+            </Text>
+            
+            <View style={styles.linkRow}>
+              <View style={styles.linkIconCol}>
+                <Ionicons name="map-outline" size={16} color={colors.primary500} />
+                <Text style={[typography.caption, { color: colors.textSecondary, marginLeft: 4 }]}>{t('itinerary.activityEditor.links.map')}</Text>
+              </View>
+              <TextInput
+                style={[styles.input, styles.linkInput, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.sm }]}
+                value={getLinkByType('map')}
+                onChangeText={(val) => updateLink('map', 'Map', val)}
+                placeholder={t('itinerary.activityEditor.links.mapPlaceholder')}
+                placeholderTextColor={colors.textSecondary}
+              />
+            </View>
+
+            <View style={styles.linkRow}>
+              <View style={styles.linkIconCol}>
+                <Ionicons name="information-circle-outline" size={16} color={colors.primary500} />
+                <Text style={[typography.caption, { color: colors.textSecondary, marginLeft: 4 }]}>{t('itinerary.activityEditor.links.info')}</Text>
+              </View>
+              <TextInput
+                style={[styles.input, styles.linkInput, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.sm }]}
+                value={getLinkByType('info')}
+                onChangeText={(val) => updateLink('info', 'Info', val)}
+                placeholder={t('itinerary.activityEditor.links.infoPlaceholder')}
+                placeholderTextColor={colors.textSecondary}
+              />
+            </View>
+            
+            <View style={styles.linkRow}>
+              <View style={styles.linkIconCol}>
+                <Ionicons name="bus-outline" size={16} color={colors.primary500} />
+                <Text style={[typography.caption, { color: colors.textSecondary, marginLeft: 4 }]}>{t('itinerary.activityEditor.links.booking')}</Text>
+              </View>
+              <TextInput
+                style={[styles.input, styles.linkInput, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.sm }]}
+                value={getLinkByType('booking')}
+                onChangeText={(val) => updateLink('booking', 'Booking', val)}
+                placeholder={t('itinerary.activityEditor.links.bookingPlaceholder')}
+                placeholderTextColor={colors.textSecondary}
+              />
+            </View>
+          </View>
+          
+          <View style={{ height: 40 }} />
+        </ScrollView>
+
+        {/* Footer Actions */}
+        <View style={[styles.footer, { borderTopColor: colors.divider }]}>
+          <TouchableOpacity 
+            style={[styles.actionBtn, { backgroundColor: '#FEF2F2', borderColor: '#FECACA', borderWidth: 1 }]}
+            onPress={handleDelete}
+          >
+            <Ionicons name="trash-outline" size={18} color="#EF4444" style={{ marginRight: 6 }} />
+            <Text style={[typography.labelLarge, { color: '#EF4444', fontWeight: '700' }]}>{t('itinerary.activityEditor.actions.delete')}</Text>
+          </TouchableOpacity>
+
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            <TouchableOpacity style={[styles.actionBtn, { backgroundColor: 'transparent' }]} onPress={onClose}>
+              <Text style={[typography.labelLarge, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.actions.cancel')}</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={[styles.actionBtn, { backgroundColor: colors.primary500, opacity: isVerifying ? 0.7 : 1 }]} onPress={handleSave} disabled={isVerifying}>
+              <Text style={[typography.labelLarge, { color: colors.neutral0, fontWeight: '700' }]}>
+                {isVerifying ? t('itinerary.activityEditor.actions.verifying', { defaultValue: 'Verifying...' }) : t('itinerary.activityEditor.actions.save')}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </KeyboardAvoidingView>
+
+      </View>
+    </KeyboardAvoidingView>
+  );
+
+  if (Platform.OS === 'web') {
+    return (
+      <View style={[StyleSheet.absoluteFill, { zIndex: 9999 }]}>
+        {modalContent}
+      </View>
+    );
+  }
+
+  return (
+    <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
+      {modalContent}
     </Modal>
   );
 }
