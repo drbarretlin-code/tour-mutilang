@@ -552,19 +552,7 @@ export default function ItineraryScreen() {
           )}
         </View>
 
-        {!isOffline && (
-          <TouchableOpacity onPress={handleRefreshItinerary} style={styles.backButton}>
-            <Ionicons name="refresh" size={24} color={colors.primary500} />
-          </TouchableOpacity>
-        )}
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TouchableOpacity onPress={handleExportPDF} style={[styles.shareButton, { marginRight: 12 }]}>
-            <Ionicons name="document-text-outline" size={22} color={colors.primary500} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => Alert.alert(t('itinerary.shareTitle'), t('itinerary.shareMsg'))} style={styles.shareButton}>
-            <Ionicons name="share-social-outline" size={22} color={colors.text} />
-          </TouchableOpacity>
-        </View>
+        {/* Action icons have been moved to the functional panel below */}
       </View>
 
       {/* Navigation Collapsible Header */}
@@ -611,8 +599,8 @@ export default function ItineraryScreen() {
             </View>
           )}
 
-          {/* 3. View Switch Tab (5-Tab scrollable bar) */}
-          <View style={[styles.viewModeContainer, { borderBottomColor: colors.divider, borderBottomWidth: 1 }]}>
+          {/* 3. View Switch Tab (5-Tab scrollable bar) + Action Panel */}
+          <View style={[styles.viewModeContainer, { borderBottomColor: colors.divider, borderBottomWidth: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
             <ScrollView horizontal showsHorizontalScrollIndicator={Platform.OS === 'web'} contentContainerStyle={styles.modeScrollContent}>
               {[
                 { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
@@ -644,6 +632,21 @@ export default function ItineraryScreen() {
                 );
               })}
             </ScrollView>
+            
+            {/* Functional Action Panel */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.sm, borderLeftWidth: 1, borderLeftColor: colors.divider, height: '100%' }}>
+              {!isOffline && (
+                <TouchableOpacity onPress={handleRefreshItinerary} style={{ padding: 8 }}>
+                  <Ionicons name="refresh" size={20} color={colors.primary500} />
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity onPress={handleExportPDF} style={{ padding: 8 }}>
+                <Ionicons name="document-text-outline" size={20} color={colors.primary500} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => Alert.alert(t('itinerary.shareTitle'), t('itinerary.shareMsg'))} style={{ padding: 8 }}>
+                <Ionicons name="share-social-outline" size={20} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       )}
