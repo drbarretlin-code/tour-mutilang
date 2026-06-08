@@ -66,6 +66,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F8FAFC',
+    ...Platform.select({
+      web: {
+        minHeight: '100vh',
+        width: '100%'
+      } as any,
+      default: {}
+    })
   },
   text: {
     marginTop: 16,

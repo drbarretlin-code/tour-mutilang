@@ -84,7 +84,8 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
 
     } catch (error) {
       console.error('Failed to load guide data', error);
-      setErrorMsg('載入當地指南時發生非預期的錯誤。');
+      const isMissingKey = error instanceof Error && error.message === 'MISSING_API_KEY';
+      setErrorMsg(isMissingKey ? '缺少 Gemini API Key。請先至首頁設定 API Key 以啟用智慧引擎。' : '載入當地指南時發生非預期的錯誤。');
     } finally {
       setLoading(false);
     }

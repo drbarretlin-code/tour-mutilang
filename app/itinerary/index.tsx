@@ -434,34 +434,21 @@ export default function ItineraryScreen() {
     }
   };
 
-  if (loading) {
-    return (
-      <SafeAreaView style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
-        <ActivityIndicator size="large" color={colors.primary500} />
-        <Text style={[typography.titleMedium, { color: colors.text, marginTop: spacing.md }]}>
-          {t('survey.generating')}
-        </Text>
-      </SafeAreaView>
-    );
-  }
+  const dummyItinerary: Itinerary = {
+    id: '',
+    surveyId: '',
+    userId: '',
+    title: '',
+    createdAt: '',
+    updatedAt: '',
+    status: 'draft',
+    days: [],
+    currency: 'TWD',
+    totalEstimatedCost: { amount: 0, currency: 'TWD' }
+  };
 
-  if (!itinerary) {
-    return (
-      <SafeAreaView style={[styles.container, { backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center', padding: spacing.xl }]}>
-        <Ionicons name="alert-circle-outline" size={48} color={colors.error500} />
-        <Text style={[typography.titleLarge, { color: colors.text, marginTop: spacing.md }]}>
-          {t('itinerary.noData')}
-        </Text>
-        <Button
-          title={t('itinerary.backHome')}
-          onPress={() => router.replace('/')}
-          style={{ marginTop: spacing.lg }}
-        />
-      </SafeAreaView>
-    );
-  }
-
-  const currentDayData = itinerary.days.find(d => d.dayNumber === activeDay) || itinerary.days[0];
+  const activeItinerary = itinerary || dummyItinerary;
+  const currentDayData = activeItinerary.days.find(d => d.dayNumber === activeDay) || activeItinerary.days[0] || null;
   const isDailyView = viewMode === 'timeline';
 
   // Render Left Panel (3D Map & Daily Summary Card) for Large screens
@@ -471,7 +458,7 @@ export default function ItineraryScreen() {
         <Text style={[typography.titleMedium, { color: colors.text, marginBottom: spacing.xs, fontWeight: '700' }]}>
           {t('itinerary.map.title')}
         </Text>
-        <Itinerary3DMap itinerary={itinerary} activeDay={activeDay} height={320} />
+        <Itinerary3DMap itinerary={activeItinerary} activeDay={activeDay} height={320} />
       </Card>
       {currentDayData && (
         <ScrollView style={{ flex: 1, marginTop: spacing.md }} showsVerticalScrollIndicator={false}>
@@ -488,14 +475,14 @@ export default function ItineraryScreen() {
 
       {viewMode === 'checklist' && (
         <PackingChecklist
-          itinerary={itinerary}
+          itinerary={activeItinerary}
           survey={contextSurvey}
         />
       )}
 
       {viewMode === 'expenses' && (
         <ExpenseSplitter
-          itinerary={itinerary}
+          itinerary={activeItinerary}
           survey={contextSurvey}
         />
       )}
@@ -530,231 +517,266 @@ export default function ItineraryScreen() {
     }
   };
 
+  // Derived visibility states for ZERO conditional rendering
+  const showLoading = loading;
+  const showNoData = !loading && !itinerary;
+  const showContent = !loading && !!itinerary;
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       
-      {/* 1. App Header */}
-      <View style={[styles.header, { borderBottomColor: colors.divider, borderBottomWidth: 1, padding: spacing.md }]}>
-        <TouchableOpacity onPress={() => router.replace('/')} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color={colors.text} />
-        </TouchableOpacity>
-        
-        <View style={styles.headerTitleContainer}>
-          <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '700' }]} numberOfLines={1}>
-            {itinerary?.title}
-          </Text>
-          {isOffline && (
-            <View style={[styles.offlineBadge, { backgroundColor: colors.warning50 }]}>
-              <Text style={{ color: colors.warning600, fontSize: 10, fontWeight: '700' }}>
-                {t('itinerary.offline')}
-              </Text>
-            </View>
-          )}
-        </View>
-
-        {/* Action icons have been moved to the functional panel below */}
+      {/* === STATE 1: Loading Spinner === */}
+      <View style={[styles.centerContainer, { display: showLoading ? 'flex' : 'none', minHeight: 400, justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={colors.primary500} />
+        <Text style={[typography.titleMedium, { color: colors.text, marginTop: spacing.md }]}>
+          {t('survey.generating')}
+        </Text>
       </View>
 
-      {/* Navigation Collapsible Header */}
-      <TouchableOpacity 
-        style={[styles.navPanelHeader, { backgroundColor: colors.surface, borderBottomColor: colors.divider, borderBottomWidth: 1 }]}
-        activeOpacity={0.7}
-        onPress={() => setIsNavExpanded(!isNavExpanded)}
-      >
-        <Text style={[typography.labelMedium, { color: colors.textSecondary, fontWeight: '600' }]}>
-          {isNavExpanded ? t('itinerary.nav.collapse') : t('itinerary.nav.expand')}
+      {/* === STATE 2: No Data view === */}
+      <View style={[styles.container, { backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center', padding: spacing.xl, display: showNoData ? 'flex' : 'none' }]}>
+        <Ionicons name="alert-circle-outline" size={48} color={colors.error500} />
+        <Text style={[typography.titleLarge, { color: colors.text, marginTop: spacing.md }]}>
+          {t('itinerary.noData')}
         </Text>
-        <Ionicons name={isNavExpanded ? 'chevron-up' : 'chevron-down'} size={16} color={colors.textSecondary} />
-      </TouchableOpacity>
+        <Button
+          title={t('itinerary.backHome')}
+          onPress={() => router.replace('/')}
+          style={{ marginTop: spacing.lg }}
+        />
+      </View>
 
-      {/* Navigation Panel Content */}
-      {isNavExpanded && (
-        <View style={{ backgroundColor: colors.surface, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderBottomColor: colors.divider, borderBottomWidth: 1, zIndex: 10 }}>
+      {/* === STATE 3: Main Itinerary Content === */}
+      <View style={[styles.container, { display: showContent ? 'flex' : 'none' }]}>
+        
+        {/* 1. App Header */}
+        <View style={[styles.header, { borderBottomColor: colors.divider, borderBottomWidth: 1, padding: spacing.md }]}>
+          <TouchableOpacity onPress={() => router.replace('/')} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
+          </TouchableOpacity>
           
-          {/* Top Row: View Modes + Action Icons */}
-          <View style={{ flexDirection: isLargeScreen ? 'row' : 'column', alignItems: isLargeScreen ? 'center' : 'stretch', gap: spacing.md }}>
-            
-            {/* 1. View Switch Tab (5-Tab scrollable bar) */}
-            <View style={{ flex: isLargeScreen ? 1 : undefined }}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center', paddingRight: spacing.lg }}>
-                {[
-                  { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
-                  { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
-                  { code: 'checklist', label: t('itinerary.tabs.checklist'), icon: 'checkbox-outline' },
-                  { code: 'expenses', label: t('itinerary.tabs.expenses'), icon: 'wallet-outline' },
-                  { code: 'translator', label: t('itinerary.tabs.translator'), icon: 'language-outline' },
-                ].map((mode) => {
-                  const isSelected = viewMode === mode.code;
-                  return (
-                    <TouchableOpacity
-                      key={mode.code}
-                      onPress={() => setViewMode(mode.code as any)}
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        backgroundColor: isSelected ? colors.primary500 : colors.backgroundSecondary,
-                        paddingHorizontal: spacing.md,
-                        paddingVertical: spacing.sm,
-                        borderRadius: borderRadius.full,
-                        marginRight: spacing.sm,
-                      }}
-                    >
-                      <Ionicons name={mode.icon as any} size={16} color={isSelected ? '#fff' : colors.textSecondary} />
-                      <Text style={[typography.labelMedium, { color: isSelected ? '#fff' : colors.textSecondary, marginLeft: 6, fontWeight: '700' }]}>
-                        {mode.label}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </ScrollView>
-            </View>
-
-            {/* 2. Functional Action Panel (Icons) */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: isLargeScreen ? 'auto' : 'flex-end', backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.full, padding: 4 }}>
-              {!isOffline && (
-                <TouchableOpacity onPress={handleRefreshItinerary} style={{ padding: 8, marginHorizontal: 4 }}>
-                  <Ionicons name="sync" size={20} color={colors.textSecondary} />
-                </TouchableOpacity>
-              )}
-              <TouchableOpacity onPress={handleExportPDF} style={{ padding: 8, marginHorizontal: 4 }}>
-                <Ionicons name="document-text" size={20} color={colors.textSecondary} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => Alert.alert(t('itinerary.shareTitle'), t('itinerary.shareMsg'))} style={{ padding: 8, marginHorizontal: 4 }}>
-                <Ionicons name="share-social" size={20} color={colors.textSecondary} />
-              </TouchableOpacity>
-            </View>
+          <View style={styles.headerTitleContainer}>
+            <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '700' }]} numberOfLines={1}>
+              {itinerary?.title}
+            </Text>
+            {isOffline && (
+              <View style={[styles.offlineBadge, { backgroundColor: colors.warning50 }]}>
+                <Text style={{ color: colors.warning600, fontSize: 10, fontWeight: '700' }}>
+                  {t('itinerary.offline')}
+                </Text>
+              </View>
+            )}
           </View>
-
-          {/* 3. Days Selector Tab (Only show for timeline/map view modes) */}
-          {isDailyView && (
-            <View style={{ marginTop: spacing.md, paddingTop: spacing.sm, borderTopColor: colors.divider, borderTopWidth: 1 }}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={Platform.OS === 'web'} contentContainerStyle={{ paddingBottom: spacing.xs }}>
-                {itinerary.days.map((d) => {
-                  const isSelected = d.dayNumber === activeDay;
-                  return (
-                    <TouchableOpacity
-                      key={d.dayNumber}
-                      onPress={() => setActiveDay(d.dayNumber)}
-                      style={{
-                        paddingHorizontal: 20,
-                        paddingVertical: 10,
-                        backgroundColor: isSelected ? colors.primary50 : 'transparent',
-                        borderBottomWidth: 3,
-                        borderBottomColor: isSelected ? colors.primary500 : 'transparent',
-                        marginRight: spacing.sm,
-                      }}
-                    >
-                      <Text style={[typography.labelLarge, { color: isSelected ? colors.primary600 : colors.text, fontWeight: isSelected ? '800' : '600' }]}>
-                        Day {d.dayNumber}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </ScrollView>
-            </View>
-          )}
         </View>
-      )}
 
-      {/* 4. Main Responsive Body */}
-      {isDailyView ? (
-        <ScrollView 
-          style={{ flex: 1, backgroundColor: colors.background }} 
-          contentContainerStyle={{ padding: isLargeScreen ? spacing.lg : spacing.xs, paddingBottom: 60 }} 
-          showsVerticalScrollIndicator={false}
-        > 
-          <CombinedItineraryView 
-             itinerary={itinerary}
-             activeDay={activeDay}
-             onEditActivity={setEditingActivityId}
-             onRefreshMap={handleRefreshItinerary}
-             onNavigate={(loc: any, origin?: any) => {
-                const destLat = loc.latitude || 0;
-                const destLng = loc.longitude || 0;
-                const destination = (destLat !== 0 && destLng !== 0) ? `${destLat},${destLng}` : encodeURIComponent(loc.name || loc.address || '');
-                let url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
-                
-                if (origin) {
-                  const origLat = origin.latitude || 0;
-                  const origLng = origin.longitude || 0;
-                  const originParam = (origLat !== 0 && origLng !== 0) ? `${origLat},${origLng}` : encodeURIComponent(origin.name || origin.address || '');
-                  if (originParam) {
-                    url += `&origin=${originParam}`;
+        {/* Navigation Collapsible Header */}
+        <TouchableOpacity 
+          style={[styles.navPanelHeader, { backgroundColor: colors.surface, borderBottomColor: colors.divider, borderBottomWidth: 1 }]}
+          activeOpacity={0.7}
+          onPress={() => setIsNavExpanded(!isNavExpanded)}
+        >
+          <Text style={[typography.labelMedium, { color: colors.textSecondary, fontWeight: '600' }]}>
+            {isNavExpanded ? t('itinerary.nav.collapse') : t('itinerary.nav.expand')}
+          </Text>
+          <Ionicons name={isNavExpanded ? 'chevron-up' : 'chevron-down'} size={16} color={colors.textSecondary} />
+        </TouchableOpacity>
+
+        {/* Navigation Panel Content */}
+        {isNavExpanded && (
+          <View style={{ backgroundColor: colors.surface, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderBottomColor: colors.divider, borderBottomWidth: 1, zIndex: 10 }}>
+            
+            {/* Top Row: View Modes + Action Icons */}
+            <View style={{ flexDirection: isLargeScreen ? 'row' : 'column', alignItems: isLargeScreen ? 'center' : 'stretch', gap: spacing.md }}>
+              
+              {/* 1. View Switch Tab (5-Tab scrollable bar) */}
+              <View style={{ flex: isLargeScreen ? 1 : undefined }}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center', paddingRight: spacing.lg }}>
+                  {[
+                    { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
+                    { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
+                    { code: 'checklist', label: t('itinerary.tabs.checklist'), icon: 'checkbox-outline' },
+                    { code: 'expenses', label: t('itinerary.tabs.expenses'), icon: 'wallet-outline' },
+                    { code: 'translator', label: t('itinerary.tabs.translator'), icon: 'language-outline' },
+                  ].map((mode) => {
+                    const isSelected = viewMode === mode.code;
+                    return (
+                      <TouchableOpacity
+                        key={mode.code}
+                        onPress={() => setViewMode(mode.code as any)}
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          backgroundColor: isSelected ? colors.primary500 : colors.backgroundSecondary,
+                          paddingHorizontal: spacing.md,
+                          paddingVertical: spacing.sm,
+                          borderRadius: borderRadius.full,
+                          marginRight: spacing.sm,
+                        }}
+                      >
+                        <Ionicons name={mode.icon as any} size={16} color={isSelected ? '#fff' : colors.textSecondary} />
+                        <Text style={[typography.labelMedium, { color: isSelected ? '#fff' : colors.textSecondary, marginLeft: 6, fontWeight: '700' }]}>
+                          {mode.label}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+
+              {/* 2. Functional Action Panel (Icons) */}
+              <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: isLargeScreen ? 'auto' : 'flex-end', backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.full, padding: 4 }}>
+                {!isOffline && (
+                  <TouchableOpacity onPress={handleRefreshItinerary} style={{ padding: 8, marginHorizontal: 4 }}>
+                    <Ionicons name="sync" size={20} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity onPress={handleExportPDF} style={{ padding: 8, marginHorizontal: 4 }}>
+                  <Ionicons name="document-text" size={20} color={colors.textSecondary} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                  if (Platform.OS === 'web') {
+                    window.alert(`${t('itinerary.shareTitle')}\n${t('itinerary.shareMsg')}`);
+                  } else {
+                    Alert.alert(t('itinerary.shareTitle'), t('itinerary.shareMsg'));
                   }
-                }
-                Linking.openURL(url);
-             }}
-          /> 
-          <View style={{ marginTop: spacing.xl }}>
-            <TimelineView
-              day={currentDayData}
-              onMoveActivity={handleMoveActivity}
-              onAddRecommendedActivity={handleAddRecommendedActivity}
-              onEditActivity={setEditingActivityId}
-              onReRollActivity={handleReRollActivity}
-              onNavigate={(loc: any, origin?: any) => {
-                const destLat = loc.latitude || 0;
-                const destLng = loc.longitude || 0;
-                const destination = (destLat !== 0 && destLng !== 0) ? `${destLat},${destLng}` : encodeURIComponent(loc.name || loc.address || '');
-                let url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
-                
-                if (origin) {
-                  const origLat = origin.latitude || 0;
-                  const origLng = origin.longitude || 0;
-                  const originParam = (origLat !== 0 && origLng !== 0) ? `${origLat},${origLng}` : encodeURIComponent(origin.name || origin.address || '');
-                  if (originParam) {
-                    url += `&origin=${originParam}`;
+                }} style={{ padding: 8, marginHorizontal: 4 }}>
+                  <Ionicons name="share-social" size={20} color={colors.textSecondary} />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* 3. Days Selector Tab (Only show for timeline/map view modes) */}
+            {isDailyView && (
+              <View style={{ marginTop: spacing.md, paddingTop: spacing.sm, borderTopColor: colors.divider, borderTopWidth: 1 }}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={Platform.OS === 'web'} contentContainerStyle={{ paddingBottom: spacing.xs }}>
+                  {activeItinerary.days.map((d) => {
+                    const isSelected = d.dayNumber === activeDay;
+                    return (
+                      <TouchableOpacity
+                        key={d.dayNumber}
+                        onPress={() => setActiveDay(d.dayNumber)}
+                        style={{
+                          paddingHorizontal: 20,
+                          paddingVertical: 10,
+                          backgroundColor: isSelected ? colors.primary50 : 'transparent',
+                          borderBottomWidth: 3,
+                          borderBottomColor: isSelected ? colors.primary500 : 'transparent',
+                          marginRight: spacing.sm,
+                        }}
+                      >
+                        <Text style={[typography.labelLarge, { color: isSelected ? colors.primary600 : colors.text, fontWeight: isSelected ? '800' : '600' }]}>
+                          Day {d.dayNumber}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+              </View>
+            )}
+          </View>
+        )}
+
+        {/* 4. Main Responsive Body */}
+        {isDailyView ? (
+          <ScrollView 
+            style={{ flex: 1, backgroundColor: colors.background }} 
+            contentContainerStyle={{ padding: isLargeScreen ? spacing.lg : spacing.xs, paddingBottom: 60 }} 
+            showsVerticalScrollIndicator={false}
+          > 
+            <CombinedItineraryView 
+               itinerary={activeItinerary}
+               activeDay={activeDay}
+               onEditActivity={setEditingActivityId}
+               onRefreshMap={handleRefreshItinerary}
+               onNavigate={(loc: any, origin?: any) => {
+                  const destLat = loc.latitude || 0;
+                  const destLng = loc.longitude || 0;
+                  const destination = (destLat !== 0 && destLng !== 0) ? `${destLat},${destLng}` : encodeURIComponent(loc.name || loc.address || '');
+                  let url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+                  
+                  if (origin) {
+                    const origLat = origin.latitude || 0;
+                    const origLng = origin.longitude || 0;
+                    const originParam = (origLat !== 0 && origLng !== 0) ? `${origLat},${origLng}` : encodeURIComponent(origin.name || origin.address || '');
+                    if (originParam) {
+                      url += `&origin=${originParam}`;
+                    }
                   }
-                }
-                Linking.openURL(url);
-             }}
-              onUpdateNote={handleUpdateNote}
-            />
-          </View>
-          <View style={{ marginTop: spacing.lg }}>
-            <AffiliateWidget region={currentDayData?.region || itinerary.title} />
-          </View>
-        </ScrollView>
-      ) : (
-        isLargeScreen ? (
-          <View style={styles.desktopLayout}>
-            <View style={[styles.rightContentPanel, { borderLeftWidth: 0, paddingLeft: 0 }]}>
+                  Linking.openURL(url);
+               }}
+            /> 
+            {currentDayData && (
+              <View style={{ marginTop: spacing.xl }}>
+                <TimelineView
+                  day={currentDayData}
+                  onMoveActivity={handleMoveActivity}
+                  onAddRecommendedActivity={handleAddRecommendedActivity}
+                  onEditActivity={setEditingActivityId}
+                  onReRollActivity={handleReRollActivity}
+                  onNavigate={(loc: any, origin?: any) => {
+                    const destLat = loc.latitude || 0;
+                    const destLng = loc.longitude || 0;
+                    const destination = (destLat !== 0 && destLng !== 0) ? `${destLat},${destLng}` : encodeURIComponent(loc.name || loc.address || '');
+                    let url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+                    
+                    if (origin) {
+                      const origLat = origin.latitude || 0;
+                      const origLng = origin.longitude || 0;
+                      const originParam = (origLat !== 0 && origLng !== 0) ? `${origLat},${origLng}` : encodeURIComponent(origin.name || origin.address || '');
+                      if (originParam) {
+                        url += `&origin=${originParam}`;
+                      }
+                    }
+                    Linking.openURL(url);
+                 }}
+                  onUpdateNote={handleUpdateNote}
+                />
+              </View>
+            )}
+            <View style={{ marginTop: spacing.lg }}>
+              <AffiliateWidget region={currentDayData?.region || activeItinerary.title} />
+            </View>
+          </ScrollView>
+        ) : (
+          isLargeScreen ? (
+            <View style={styles.desktopLayout}>
+              <View style={[styles.rightContentPanel, { borderLeftWidth: 0, paddingLeft: 0 }]}>
+                {renderInnerContent()}
+              </View>
+            </View>
+          ) : (
+            <View style={{ flex: 1, padding: spacing.md }}>
               {renderInnerContent()}
             </View>
-          </View>
-        ) : (
-          <View style={{ flex: 1, padding: spacing.md }}>
-            {renderInnerContent()}
-          </View>
-        )
-      )}
+          )
+        )}
 
-      {/* Global Activity Editor Modal */}
-      <ActivityEditorModal
-        visible={!!editingActivityId}
-        activity={getEditingActivity()}
-        itinerary={itinerary}
-        currentDayNumber={
-          (itinerary && editingActivityId) 
-            ? (itinerary.days.find(d => d.activities.some(a => a.id === editingActivityId))?.dayNumber || activeDay)
-            : activeDay
-        }
-        onClose={() => setEditingActivityId(null)}
-        onSave={handleSaveActivity}
-        onDelete={handleDeleteActivity}
-      />
+        {/* Global Activity Editor Modal */}
+        <ActivityEditorModal
+          visible={!!editingActivityId}
+          activity={getEditingActivity()}
+          itinerary={activeItinerary}
+          currentDayNumber={
+            (itinerary && editingActivityId) 
+              ? (itinerary.days.find(d => d.activities.some(a => a.id === editingActivityId))?.dayNumber || activeDay)
+              : activeDay
+          }
+          onClose={() => setEditingActivityId(null)}
+          onSave={handleSaveActivity}
+          onDelete={handleDeleteActivity}
+        />
 
-      <ReRollModal
-        visible={reRollModalVisible}
-        isLoading={reRollLoading}
-        alternatives={reRollAlternatives}
-        onClose={() => {
-          setReRollModalVisible(false);
-          setReRollTargetActivityId(null);
-        }}
-        onSelect={handleReRollSelect}
-      />
-
+        <ReRollModal
+          visible={reRollModalVisible}
+          isLoading={reRollLoading}
+          alternatives={reRollAlternatives}
+          onClose={() => {
+            setReRollModalVisible(false);
+            setReRollTargetActivityId(null);
+          }}
+          onSelect={handleReRollSelect}
+        />
+      </View>
     </SafeAreaView>
   );
 }
