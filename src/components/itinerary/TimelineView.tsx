@@ -12,7 +12,8 @@ interface TimelineViewProps {
   onAddRecommendedActivity: (gapStartIndex: number) => void;
   onNavigate: (location: NonNullable<Activity['location']>, origin?: NonNullable<Activity['location']>) => void;
   onUpdateNote?: (activityId: string, note: string) => void;
-  onEditActivity: (activityId: string) => void;
+  onEditActivity?: (activityId: string) => void;
+  onReRollActivity?: (activityId: string) => void;
 }
 
 export function TimelineView({
@@ -22,6 +23,7 @@ export function TimelineView({
   onNavigate,
   onUpdateNote,
   onEditActivity,
+  onReRollActivity,
 }: TimelineViewProps) {
   const { colors, spacing, borderRadius, typography, shadows } = useTheme();
 
@@ -220,9 +222,6 @@ export function TimelineView({
                     {t('itinerary.timelineView.activity.region', { region: day.region || t('itinerary.timelineView.activity.thisRegion') })}
                   </Text>
                   <View style={{ flex: 1 }} />
-                  <TouchableOpacity onPress={() => onEditActivity(act.id)} style={{ padding: 4, marginRight: 4 }}>
-                    <Ionicons name="pencil" size={18} color="#3B82F6" />
-                  </TouchableOpacity>
                   {!!act.location && (
                     <TouchableOpacity onPress={() => onNavigate(act.location!, isFirst ? undefined : activities[index - 1]?.location)} style={{ padding: 4 }}>
                       <Ionicons name="open-outline" size={18} color="#94A3B8" />
@@ -296,6 +295,26 @@ export function TimelineView({
                       <Text style={[typography.caption, { color: '#3B82F6', fontWeight: '600' }]} numberOfLines={1}>{link.label}</Text>
                     </TouchableOpacity>
                   ))}
+
+                  {onEditActivity && (
+                    <TouchableOpacity 
+                      style={[styles.actionBtn, { borderColor: '#E2E8F0', backgroundColor: '#F8FAFC' }]}
+                      onPress={() => onEditActivity(act.id)}
+                    >
+                      <Ionicons name="pencil-outline" size={14} color="#64748B" style={{ marginRight: 4 }} />
+                      <Text style={[typography.caption, { color: '#475569', fontWeight: '600' }]}>{t('common.edit')}</Text>
+                    </TouchableOpacity>
+                  )}
+
+                  {onReRollActivity && (
+                    <TouchableOpacity 
+                      style={[styles.actionBtn, { borderColor: '#FDE047', backgroundColor: '#FEF9C3' }]}
+                      onPress={() => onReRollActivity(act.id)}
+                    >
+                      <Ionicons name="dice-outline" size={14} color="#A16207" style={{ marginRight: 4 }} />
+                      <Text style={[typography.caption, { color: '#A16207', fontWeight: '600' }]}>{t('itinerary.timelineView.activity.reroll', { defaultValue: '換一個' })}</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
 
                 {/* 5. Notes Input */}

@@ -14,6 +14,7 @@ import { DestinationGuide } from '../../src/components/itinerary/DestinationGuid
 import { Itinerary3DMap } from '../../src/components/itinerary/Itinerary3DMap';
 import { CombinedItineraryView } from '../../src/components/itinerary/CombinedItineraryView';
 import { ActivityEditorModal } from '../../src/components/itinerary/ActivityEditorModal';
+import { ReRollModal } from '../../src/components/itinerary/ReRollModal';
 import { Card } from '../../src/components/common/Card';
 import { Button } from '../../src/components/common/Button';
 import { t } from '../../src/i18n';
@@ -22,6 +23,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Itinerary, Activity } from '../../src/types/itinerary';
 import { dbService } from '../../src/services/db';
 import { syncService } from '../../src/services/sync';
+import { regenerateActivityAlternatives } from '../../src/services/ai';
 import { auth } from '../../src/services/firebase';
 import { useResponsive } from '../../src/hooks/useResponsive';
 import * as Print from 'expo-print';
@@ -46,6 +48,12 @@ export default function ItineraryScreen() {
   const [activeDay, setActiveDay] = useState<number>(1);
   const [isNavExpanded, setIsNavExpanded] = useState<boolean>(true);
   const [editingActivityId, setEditingActivityId] = useState<string | null>(null);
+
+  // Re-roll state
+  const [reRollModalVisible, setReRollModalVisible] = useState(false);
+  const [reRollLoading, setReRollLoading] = useState(false);
+  const [reRollAlternatives, setReRollAlternatives] = useState<Activity[]>([]);
+  const [reRollTargetActivityId, setReRollTargetActivityId] = useState<string | null>(null);
 
   const itineraryRef = useRef(itinerary);
   useEffect(() => {
@@ -241,6 +249,76 @@ export default function ItineraryScreen() {
     setItinerary(updatedItinerary);
     setEditingActivityId(null);
     await saveAndSyncItinerary(updatedItinerary);
+  };
+
+
+  const handleReRollActivity = async (activityId: string) => {
+    if (!itinerary || !contextSurvey) return;
+    
+    // Find the target activity and its context
+    let targetDayIndex = -1;
+    let targetActIndex = -1;
+    let targetActivity = null;
+    
+    for (let i = 0; i < itinerary.days.length; i++) {
+      const day = itinerary.days[i];
+      const idx = day.activities.findIndex(a => a.id === activityId);
+      if (idx !== -1) {
+        targetDayIndex = i;
+        targetActIndex = idx;
+        targetActivity = day.activities[idx];
+        break;
+      }
+    }
+    
+    if (!targetActivity) return;
+
+    setReRollTargetActivityId(activityId);
+    setReRollModalVisible(true);
+    setReRollLoading(true);
+    setReRollAlternatives([]);
+
+    try {
+      const day = itinerary.days[targetDayIndex];
+      const prevActivity = targetActIndex > 0 ? day.activities[targetActIndex - 1] : undefined;
+      const nextActivity = targetActIndex < day.activities.length - 1 ? day.activities[targetActIndex + 1] : undefined;
+
+      const alternatives = await regenerateActivityAlternatives(
+        contextSurvey,
+        targetActivity,
+        prevActivity,
+        nextActivity,
+        day.region || itinerary.title
+      );
+      
+      setReRollAlternatives(alternatives);
+    } catch (error) {
+      console.error('Error re-rolling activity:', error);
+      Alert.alert(t('common.error'), t('itinerary.reroll.error', { defaultValue: 'Failed to generate alternatives. Please try again.' }));
+      setReRollModalVisible(false);
+    } finally {
+      setReRollLoading(false);
+    }
+  };
+
+  const handleReRollSelect = async (selectedActivity: Activity) => {
+    if (!itinerary || !reRollTargetActivityId) return;
+
+    const updatedItinerary = JSON.parse(JSON.stringify(itinerary));
+    
+    for (const day of updatedItinerary.days) {
+      const idx = day.activities.findIndex((a: any) => a.id === reRollTargetActivityId);
+      if (idx !== -1) {
+        day.activities[idx] = selectedActivity;
+        break;
+      }
+    }
+
+    setItinerary(updatedItinerary);
+    await saveAndSyncItinerary(updatedItinerary);
+    
+    setReRollModalVisible(false);
+    setReRollTargetActivityId(null);
   };
 
   // Handle plugging time gap
@@ -581,7 +659,7 @@ export default function ItineraryScreen() {
              activeDay={activeDay}
              onEditActivity={setEditingActivityId}
              onRefreshMap={handleRefreshItinerary}
-             onNavigate={(loc, origin) => {
+             onNavigate={(loc: any, origin?: any) => {
                 const destLat = loc.latitude || 0;
                 const destLng = loc.longitude || 0;
                 const destination = (destLat !== 0 && destLng !== 0) ? `${destLat},${destLng}` : encodeURIComponent(loc.name || loc.address || '');
@@ -597,14 +675,15 @@ export default function ItineraryScreen() {
                 }
                 Linking.openURL(url);
              }}
-          />
+          /> 
           <View style={{ marginTop: spacing.xl }}>
             <TimelineView
               day={currentDayData}
               onMoveActivity={handleMoveActivity}
               onAddRecommendedActivity={handleAddRecommendedActivity}
               onEditActivity={setEditingActivityId}
-              onNavigate={(loc, origin) => {
+              onReRollActivity={handleReRollActivity}
+              onNavigate={(loc: any, origin?: any) => {
                 const destLat = loc.latitude || 0;
                 const destLng = loc.longitude || 0;
                 const destination = (destLat !== 0 && destLng !== 0) ? `${destLat},${destLng}` : encodeURIComponent(loc.name || loc.address || '');
@@ -619,7 +698,7 @@ export default function ItineraryScreen() {
                   }
                 }
                 Linking.openURL(url);
-              }}
+             }}
               onUpdateNote={handleUpdateNote}
             />
           </View>
@@ -652,6 +731,18 @@ export default function ItineraryScreen() {
         onSave={handleSaveActivity}
         onDelete={handleDeleteActivity}
       />
+
+      <ReRollModal
+        visible={reRollModalVisible}
+        isLoading={reRollLoading}
+        alternatives={reRollAlternatives}
+        onClose={() => {
+          setReRollModalVisible(false);
+          setReRollTargetActivityId(null);
+        }}
+        onSelect={handleReRollSelect}
+      />
+
     </SafeAreaView>
   );
 }

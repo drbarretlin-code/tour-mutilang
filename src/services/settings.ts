@@ -4,16 +4,31 @@ import { Platform } from 'react-native';
 
 const API_KEY_STORE_KEY = 'user_gemini_api_key';
 
+let sessionApiKey: string | null = null;
+
 export const settingsService = {
   /**
-   * Saves the Gemini API key securely on mobile, or falls back to AsyncStorage on web.
+   * Saves the Gemini API key.
+   * @param apiKey The API Key to save.
+   * @param persist If true, saves to secure local storage. If false, saves only in memory for this session.
    */
-  async saveApiKey(apiKey: string): Promise<void> {
+  async saveApiKey(apiKey: string, persist: boolean = true): Promise<void> {
     try {
-      if (Platform.OS === 'web') {
-        await AsyncStorage.setItem(API_KEY_STORE_KEY, apiKey);
+      sessionApiKey = apiKey;
+      
+      if (persist) {
+        if (Platform.OS === 'web') {
+          await AsyncStorage.setItem(API_KEY_STORE_KEY, apiKey);
+        } else {
+          await SecureStore.setItemAsync(API_KEY_STORE_KEY, apiKey);
+        }
       } else {
-        await SecureStore.setItemAsync(API_KEY_STORE_KEY, apiKey);
+        // Ensure any previously persisted key is cleared if user chooses session only
+        if (Platform.OS === 'web') {
+          await AsyncStorage.removeItem(API_KEY_STORE_KEY);
+        } else {
+          await SecureStore.deleteItemAsync(API_KEY_STORE_KEY);
+        }
       }
     } catch (e) {
       console.error('Failed to save API Key:', e);
@@ -22,9 +37,13 @@ export const settingsService = {
   },
 
   /**
-   * Retrieves the stored Gemini API key.
+   * Retrieves the stored Gemini API key. Checks session memory first, then persistent storage.
    */
   async getApiKey(): Promise<string | null> {
+    if (sessionApiKey) {
+      return sessionApiKey;
+    }
+
     try {
       if (Platform.OS === 'web') {
         return await AsyncStorage.getItem(API_KEY_STORE_KEY);
@@ -38,9 +57,10 @@ export const settingsService = {
   },
 
   /**
-   * Removes the stored Gemini API key.
+   * Removes the stored Gemini API key from both memory and persistent storage.
    */
   async clearApiKey(): Promise<void> {
+    sessionApiKey = null;
     try {
       if (Platform.OS === 'web') {
         await AsyncStorage.removeItem(API_KEY_STORE_KEY);

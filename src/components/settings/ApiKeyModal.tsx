@@ -28,7 +28,7 @@ export function ApiKeyModal({ visible, onClose, onSuccess }: ApiKeyModalProps) {
     if (!apiKey.trim()) return;
     setIsSaving(true);
     try {
-      await settingsService.saveApiKey(apiKey.trim());
+      await settingsService.saveApiKey(apiKey.trim(), true);
       onSuccess();
       onClose();
     } catch (e) {

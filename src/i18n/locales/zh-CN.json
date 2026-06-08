@@ -389,7 +389,15 @@
   "home": {
     "greetingMorning": "早安",
     "greetingAfternoon": "午安",
-    "greetingEvening": "晚安"
+    "greetingEvening": "晚安",
+    "apiKeySetupTitle": "設定您的 AI 引擎",
+    "apiKeySetupDesc": "為了提供個人化的專屬行程規劃，系統需要存取 Gemini AI。請輸入您的 API Key 來啟用智慧引擎。",
+    "apiKeyPlaceholder": "貼上您的 Gemini API Key (AIzaSy...)",
+    "apiKeySaveLocally": "儲存於本機裝置",
+    "apiKeySaveLocallyDesc": "若取消勾選，關閉網頁後將自動清除，不留存於記憶體。",
+    "getFreeApiKey": "👉 點此快速申請免費 Google Gemini API Key",
+    "saveAndStart": "儲存並開始規劃",
+    "myItineraries": "我的旅遊計畫"
   },
   "dashboard": {
     "untitledItinerary": "未命名行程"

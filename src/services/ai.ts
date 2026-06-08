@@ -3,7 +3,7 @@ import { Itinerary, ItineraryDay, Activity } from '../types/itinerary';
 import { PACEngine } from "./pac";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { settingsService } from './settings';
-import { verifyItineraryLinks } from '../utils/linkVerifier';
+import { verifyItineraryLinks, verifyUrlRAG } from '../utils/linkVerifier';
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=';
 
@@ -731,3 +731,104 @@ JSON 結構樣式：
 };
 
 export default aiService;
+
+export async function regenerateActivityAlternatives(
+  survey: TripSurvey,
+  currentActivity: Activity,
+  prevActivity: Activity | undefined,
+  nextActivity: Activity | undefined,
+  region: string
+): Promise<Activity[]> {
+  const apiKey = await settingsService.getApiKey();
+  if (!apiKey) throw new Error('MISSING_API_KEY');
+
+  const systemPrompt = `
+You are a National-Level Intelligence Investigator strictly adhering to RAG principles.
+The user wants to RE-ROLL (replace) an existing activity in their itinerary.
+You MUST provide exactly 3 high-quality alternative activities that fit the same time slot and logical route.
+CRITICAL RULES:
+1. Output ONLY a raw JSON array of 3 Activity objects. No markdown, no backticks.
+2. The JSON structure MUST match this interface exactly:
+[
+  {
+    "id": "generate-a-unique-uuid",
+    "startTime": "HH:mm",
+    "endTime": "HH:mm",
+    "title": "Exact Place Name",
+    "location": { "name": "...", "address": "...", "latitude": number, "longitude": number },
+    "type": "attraction"|"restaurant"|"cafe"|"shopping"|"spa"|"entertainment"|"hotel"|"transport"|"activity",
+    "notes": "Explain why this is a good alternative...",
+    "duration": number (minutes),
+    "rating": number (1-5),
+    "cost": { "amount": number, "currency": "..." },
+    "openingHours": "...",
+    "links": [ { "label": string, "url": string, "type": "info"|"booking" } ]
+  }
+]
+3. The new activities MUST logically fit geographically between the previous and next activities.
+4. The start and end times MUST fit the time window of the original activity being replaced.
+5. URL HALLUCINATION IS FORBIDDEN. Only provide real URLs or Google Search URLs.
+`;
+
+  const contextData = {
+    originalActivityToReplace: currentActivity,
+    previousActivity: prevActivity || "None (Start of day)",
+    nextActivity: nextActivity || "None (End of day)",
+    region: region,
+    userPreferences: {
+      budget: survey.budgetLevel,
+      travelStyle: survey.tripType,
+      interests: survey.interests,
+      dietary: survey.dietaryRestrictions
+    }
+  };
+
+  const response = await fetch(`${GEMINI_API_URL}${apiKey}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: systemPrompt }] },
+      contents: [{ role: 'user', parts: [{ text: JSON.stringify(contextData) }] }],
+      tools: [{ googleSearch: {} }],
+      generationConfig: {
+        response_mime_type: 'application/json',
+        temperature: 0.8 // slightly higher for variety
+      }
+    }),
+  });
+
+  if (!response.ok) throw new Error(`Gemini API returned status ${response.status}`);
+
+  const data = await response.json();
+  const textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  
+  if (!textOutput) throw new Error('Invalid response structure from Gemini API');
+
+  let alternatives: Activity[];
+  try {
+    alternatives = JSON.parse(textOutput);
+    if (!Array.isArray(alternatives) || alternatives.length === 0) {
+      throw new Error('Not an array');
+    }
+  } catch (e) {
+    throw new Error('Failed to parse Gemini JSON output for alternatives');
+  }
+
+  // Validating links for all alternatives
+  for (const alt of alternatives) {
+    if (alt.links && alt.links.length > 0) {
+      const validLinks = [];
+      for (const link of alt.links) {
+        const verification = await verifyUrlRAG(link.url, [alt.title, region]);
+        if (verification.isValid) {
+          validLinks.push(link);
+        } else if (verification.verifiedUrl) {
+          validLinks.push({ ...link, url: verification.verifiedUrl, label: `Search: ${alt.title}` });
+        }
+      }
+      alt.links = validLinks;
+    }
+  }
+
+  return alternatives.slice(0, 3);
+}

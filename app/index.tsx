@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, ActivityIndicator, FlatList, Text, TouchableOpacity, Alert, Platform, Image } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, StyleSheet, ActivityIndicator, FlatList, Text, TouchableOpacity, Alert, Platform, Image, TextInput, Switch, Linking } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../src/context/AuthContext';
@@ -7,6 +7,7 @@ import { useTheme } from '../src/context/ThemeContext';
 import { useSurvey } from '../src/context/SurveyContext';
 import { AuthForm } from '../src/components/auth/AuthForm';
 import { dbService } from '../src/services/db';
+import { settingsService } from '../src/services/settings';
 import { Itinerary } from '../src/types/itinerary';
 import { ItineraryCard } from '../src/components/dashboard/ItineraryCard';
 import { t } from '../src/i18n';
@@ -23,6 +24,19 @@ export default function HomeDashboard() {
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
   const [loadingList, setLoadingList] = useState(true);
 
+  // API Key State
+  const [hasApiKey, setHasApiKey] = useState(false);
+  const [apiKeyInput, setApiKeyInput] = useState('');
+  const [persistKey, setPersistKey] = useState(false); // Default to not persist
+  const [savingKey, setSavingKey] = useState(false);
+
+  // Check for API Key on mount
+  useEffect(() => {
+    settingsService.getApiKey().then(key => {
+      if (key) setHasApiKey(true);
+    });
+  }, []);
+
   // Fetch itineraries when the screen comes into focus
   useFocusEffect(
     useCallback(() => {
@@ -32,7 +46,6 @@ export default function HomeDashboard() {
         dbService.getUserItineraries(user.uid)
           .then(data => {
             if (isActive) {
-              // Sort by createdAt descending
               const sorted = data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
               setItineraries(sorted);
               setLoadingList(false);
@@ -58,6 +71,20 @@ export default function HomeDashboard() {
   if (!user) {
     return <AuthForm />;
   }
+
+  const handleSaveApiKey = async () => {
+    if (!apiKeyInput.trim()) return;
+    setSavingKey(true);
+    try {
+      await settingsService.saveApiKey(apiKeyInput.trim(), persistKey);
+      setHasApiKey(true);
+    } catch (e) {
+      console.error(e);
+      Alert.alert(t('common.error'), 'Failed to save API Key');
+    } finally {
+      setSavingKey(false);
+    }
+  };
 
   const handleItineraryPress = (it: Itinerary) => {
     setActiveItinerary(it);
@@ -123,6 +150,7 @@ export default function HomeDashboard() {
       t('home.confirmLogoutMessage'),
       async () => {
         try {
+          await settingsService.clearApiKey();
           await logout();
         } catch (err) {
           console.error(err);
@@ -132,20 +160,92 @@ export default function HomeDashboard() {
   };
 
   const handleCreateNew = () => {
-    // Reset active itinerary when creating a new plan
+    if (!hasApiKey) {
+      Alert.alert('API Key Required', t('home.apiKeySetupDesc'));
+      return;
+    }
     setActiveItinerary(null);
     router.push('/survey');
   };
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <Ionicons name="map-outline" size={64} color={colors.primary200} style={{ marginBottom: spacing.md }} />
-      <Text style={[typography.titleLarge, { color: colors.text, marginBottom: spacing.xs }]}>
+      <View style={[styles.emptyIconBox, { backgroundColor: colors.surface }]}>
+        <Ionicons name="compass-outline" size={48} color={colors.primary400} />
+      </View>
+      <Text style={[typography.titleLarge, { color: colors.text, marginBottom: spacing.xs, fontWeight: '700' }]}>
         {t('home.emptyStateTitle')}
       </Text>
-      <Text style={[typography.bodyMedium, { color: colors.textSecondary, textAlign: 'center', marginBottom: spacing.lg }]}>
+      <Text style={[typography.bodyMedium, { color: colors.textSecondary, textAlign: 'center', maxWidth: 280 }]}>
         {t('home.emptyStateSubtitle')}
       </Text>
+    </View>
+  );
+
+  const renderApiKeySetup = () => (
+    <View style={[styles.apiCard, shadows.sm, { backgroundColor: colors.surface, borderRadius: borderRadius.xl, borderColor: colors.border }]}>
+      <View style={styles.apiHeader}>
+        <Ionicons name="hardware-chip" size={28} color={colors.primary500} />
+        <Text style={[typography.titleLarge, { color: colors.text, marginLeft: 12, fontWeight: '800' }]}>
+          {t('home.apiKeySetupTitle', { defaultValue: '設定您的 AI 引擎' })}
+        </Text>
+      </View>
+      
+      <Text style={[typography.bodyMedium, { color: colors.textSecondary, marginBottom: 20, lineHeight: 22 }]}>
+        {t('home.apiKeySetupDesc', { defaultValue: '為了提供個人化的專屬行程規劃，系統需要存取 Gemini AI。請輸入您的 API Key 來啟用智慧引擎。' })}
+      </Text>
+
+      <TouchableOpacity onPress={() => Linking.openURL('https://aistudio.google.com/app/apikey')} style={styles.linkContainer}>
+        <Text style={[typography.labelMedium, { color: colors.primary600, fontWeight: '600' }]}>
+          {t('home.getFreeApiKey', { defaultValue: '👉 點此快速申請免費 Google Gemini API Key' })}
+        </Text>
+      </TouchableOpacity>
+
+      <View style={[styles.inputWrapper, { borderColor: colors.border, backgroundColor: colors.background, borderRadius: borderRadius.md }]}>
+        <Ionicons name="key" size={20} color={colors.textTertiary} style={{ marginRight: 12 }} />
+        <TextInput
+          style={[styles.input, typography.bodyLarge, { color: colors.text }]}
+          placeholder={t('home.apiKeyPlaceholder', { defaultValue: '貼上您的 Gemini API Key (AIzaSy...)' })}
+          placeholderTextColor={colors.textTertiary}
+          value={apiKeyInput}
+          onChangeText={setApiKeyInput}
+          autoCapitalize="none"
+          secureTextEntry
+        />
+      </View>
+
+      <View style={styles.switchContainer}>
+        <Switch
+          value={persistKey}
+          onValueChange={setPersistKey}
+          trackColor={{ false: colors.border, true: colors.primary400 }}
+          thumbColor={Platform.OS === 'ios' ? '#fff' : (persistKey ? colors.primary600 : '#f4f3f4')}
+        />
+        <View style={{ marginLeft: 12, flex: 1 }}>
+          <Text style={[typography.labelLarge, { color: colors.text, fontWeight: '600' }]}>
+            {t('home.apiKeySaveLocally', { defaultValue: '儲存於本機裝置' })}
+          </Text>
+          <Text style={[typography.bodySmall, { color: colors.textSecondary, marginTop: 2 }]}>
+            {t('home.apiKeySaveLocallyDesc', { defaultValue: '若取消勾選，關閉網頁後將自動清除，不留存於記憶體。' })}
+          </Text>
+        </View>
+      </View>
+
+      <TouchableOpacity 
+        style={[styles.saveBtn, { backgroundColor: apiKeyInput.trim() ? colors.primary500 : colors.border, borderRadius: borderRadius.md }]}
+        disabled={!apiKeyInput.trim() || savingKey}
+        onPress={handleSaveApiKey}
+        activeOpacity={0.8}
+      >
+        {savingKey ? <ActivityIndicator color="#fff" /> : (
+          <>
+            <Ionicons name="checkmark-circle" size={20} color="#fff" style={{ marginRight: 8 }} />
+            <Text style={[typography.labelLarge, { color: '#fff', fontWeight: '700' }]}>
+              {t('home.saveAndStart', { defaultValue: '儲存並開始規劃' })}
+            </Text>
+          </>
+        )}
+      </TouchableOpacity>
     </View>
   );
 
@@ -168,7 +268,7 @@ export default function HomeDashboard() {
             <Text style={[typography.labelMedium, { color: colors.textSecondary }]}>
               {getGreeting()},
             </Text>
-            <Text style={[typography.headlineMedium, { color: colors.text, fontWeight: '800' }]}>
+            <Text style={[typography.headlineSmall, { color: colors.text, fontWeight: '800' }]}>
               {displayName}
             </Text>
           </View>
@@ -181,66 +281,83 @@ export default function HomeDashboard() {
         </View>
       </View>
 
-      {/* Feature Entry: AI Batch Scheduler (Hero Banner) */}
-      <TouchableOpacity 
-        style={[styles.heroBanner, shadows.md, { backgroundColor: colors.primary500, borderRadius: 24 }]}
-        activeOpacity={0.9}
-        onPress={() => router.push('/batch-scheduler')}
-      >
-        <View style={styles.heroContent}>
-          <View style={[styles.heroIconBox, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
-            <Ionicons name="sparkles" size={28} color="#fff" />
+      <FlatList
+        data={itineraries}
+        extraData={locale}
+        keyExtractor={item => item.id}
+        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, paddingTop: 12 }}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          <View style={{ marginBottom: 32 }}>
+            {!hasApiKey ? (
+              renderApiKeySetup()
+            ) : (
+              <>
+                {/* Minimal Header Section when API is ready */}
+                <View style={styles.sectionHeader}>
+                  <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '800' }]}>
+                    {t('home.myItineraries', { defaultValue: '我的旅遊計畫' })}
+                  </Text>
+                  
+                  {/* Small Action Button */}
+                  {itineraries.length > 0 && (
+                    <TouchableOpacity 
+                      style={[styles.smallAddBtn, { backgroundColor: colors.primary50 }]}
+                      onPress={handleCreateNew}
+                    >
+                      <Ionicons name="add" size={16} color={colors.primary600} />
+                      <Text style={[typography.labelMedium, { color: colors.primary600, fontWeight: '700', marginLeft: 4 }]}>
+                        {t('home.newPlan')}
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+                
+                {/* Secondary Actions (Batch Scheduler) */}
+                <TouchableOpacity 
+                  style={[styles.miniBanner, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                  onPress={() => router.push('/batch-scheduler')}
+                >
+                  <View style={[styles.miniBannerIcon, { backgroundColor: colors.primary50 }]}>
+                    <Ionicons name="sparkles" size={18} color={colors.primary500} />
+                  </View>
+                  <Text style={[typography.labelLarge, { color: colors.text, flex: 1, fontWeight: '600' }]}>
+                    {t('home.aiBatchTitle', { defaultValue: 'AI Batch Scheduler' })}
+                  </Text>
+                  <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
+                </TouchableOpacity>
+              </>
+            )}
           </View>
-          <View style={styles.heroTextContainer}>
-            <Text style={[typography.titleLarge, { color: '#fff', fontWeight: '800', marginBottom: 4 }]}>
-              {t('home.aiBatchTitle')}
-            </Text>
-            <Text style={[typography.bodyMedium, { color: 'rgba(255,255,255,0.8)' }]} numberOfLines={2}>
-              {t('home.aiBatchSubtitle')}
-            </Text>
-          </View>
-        </View>
-        <Ionicons name="arrow-forward-circle" size={32} color="#fff" style={styles.heroActionIcon} />
-      </TouchableOpacity>
+        }
+        renderItem={({ item }) => (
+          <ItineraryCard 
+            itinerary={item} 
+            onPress={() => handleItineraryPress(item)} 
+            onEdit={() => handleEditSurveyPlan(item)}
+            onDelete={() => handleDeleteItinerary(item.id)}
+          />
+        )}
+        ListEmptyComponent={hasApiKey && !loadingList ? renderEmptyState() : null}
+      />
 
-      {/* List */}
-      {loadingList ? (
-        <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color={colors.primary500} />
-        </View>
-      ) : (
-        <FlatList
-          data={itineraries}
-          extraData={locale}
-          keyExtractor={item => item.id}
-          contentContainerStyle={itineraries.length === 0 ? styles.emptyListContent : { paddingBottom: 100, paddingTop: 16 }}
-          renderItem={({ item }) => (
-            <ItineraryCard 
-              itinerary={item} 
-              onPress={() => handleItineraryPress(item)} 
-              onEdit={() => handleEditSurveyPlan(item)}
-              onDelete={() => handleDeleteItinerary(item.id)}
-            />
-          )}
-          ListEmptyComponent={renderEmptyState}
-        />
+      {/* Main Floating Action Button */}
+      {hasApiKey && itineraries.length === 0 && !loadingList && (
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={handleCreateNew}
+          style={[
+            styles.fabMain,
+            shadows.lg,
+            { backgroundColor: colors.primary500, borderRadius: 9999 }
+          ]}
+        >
+          <Ionicons name="add" size={28} color="#fff" />
+          <Text style={[typography.titleMedium, { color: '#fff', marginLeft: 8, fontWeight: '700' }]}>
+            {t('home.newPlan')}
+          </Text>
+        </TouchableOpacity>
       )}
-
-      {/* FAB for Create New Plan */}
-      <TouchableOpacity
-        activeOpacity={0.9}
-        onPress={handleCreateNew}
-        style={[
-          styles.fab,
-          shadows.lg,
-          { backgroundColor: colors.primary500, borderRadius: 9999 }
-        ]}
-      >
-        <Ionicons name="add" size={28} color="#fff" />
-        <Text style={[typography.titleMedium, { color: '#fff', marginLeft: 8, fontWeight: '700' }]}>
-          {t('home.newPlan')}
-        </Text>
-      </TouchableOpacity>
 
     </View>
   );
@@ -260,18 +377,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: 60, // Safe area roughly
-    paddingBottom: 24,
+    paddingTop: 60,
+    paddingBottom: 20,
   },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 16,
   },
   logo: {
-    width: 48,
-    height: 48,
-    borderRadius: 16,
+    width: 44,
+    height: 44,
+    borderRadius: 14,
   },
   headerRight: {
     flexDirection: 'row',
@@ -281,52 +398,97 @@ const styles = StyleSheet.create({
   iconBtn: {
     padding: 8,
     borderRadius: 20,
-    backgroundColor: 'rgba(0,0,0,0.05)',
+    backgroundColor: 'rgba(0,0,0,0.03)',
   },
-  emptyListContent: {
+  apiCard: {
+    padding: 24,
+    borderWidth: 1,
+  },
+  apiHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  linkContainer: {
+    backgroundColor: 'rgba(59, 130, 246, 0.05)',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    height: 56,
+    marginBottom: 24,
+  },
+  input: {
     flex: 1,
+    height: '100%',
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 32,
+    backgroundColor: 'rgba(0,0,0,0.02)',
+    padding: 16,
+    borderRadius: 12,
+  },
+  saveBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
+    height: 56,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  smallAddBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  miniBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    marginBottom: 24,
+  },
+  miniBannerIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
   },
   emptyState: {
     alignItems: 'center',
-    paddingHorizontal: 40,
+    paddingVertical: 60,
   },
-  fab: {
+  emptyIconBox: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  fabMain: {
     position: 'absolute',
-    bottom: 32,
+    bottom: 40,
     alignSelf: 'center',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 14,
-  },
-  heroBanner: {
-    marginHorizontal: 16,
-    marginBottom: 24,
-    padding: 24,
-    position: 'relative',
-    overflow: 'hidden',
-  },
-  heroContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
-  heroIconBox: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  heroTextContainer: {
-    flex: 1,
-    paddingRight: 24,
-  },
-  heroActionIcon: {
-    position: 'absolute',
-    bottom: 24,
-    right: 24,
-    opacity: 0.9,
+    paddingHorizontal: 28,
+    paddingVertical: 16,
   },
 });
