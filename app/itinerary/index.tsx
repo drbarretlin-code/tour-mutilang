@@ -31,8 +31,33 @@ import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { generateItineraryHtml } from '../../src/utils/pdfGenerator';
 
+// Web-safe cache helpers: AsyncStorage on Web is unreliable, use localStorage directly
+const cacheGet = async (key: string): Promise<string | null> => {
+  if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+    try { return window.localStorage.getItem(key); } catch { return null; }
+  }
+  try { return await AsyncStorage.getItem(key); } catch { return null; }
+};
+const cacheSet = async (key: string, value: string): Promise<void> => {
+  if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+    try { window.localStorage.setItem(key, value); } catch {}
+    return;
+  }
+  try { await AsyncStorage.setItem(key, value); } catch {}
+};
+
+// Web-safe alert helper: Alert.alert may not work on Web
+const showAlert = (title: string, message: string) => {
+  if (Platform.OS === 'web' && typeof window !== 'undefined') {
+    window.alert(`${title}\n${message}`);
+  } else {
+    Alert.alert(title, message);
+  }
+};
+
 const OFFLINE_ITINERARY_KEY = '@trip_active_itinerary';
 const OFFLINE_SURVEY_KEY = '@trip_active_survey';
+
 
 type ViewMode = 'timeline' | 'map' | 'checklist' | 'expenses' | 'translator';
 
@@ -67,11 +92,13 @@ export default function ItineraryScreen() {
       try {
         if (contextItinerary) {
           setItinerary(contextItinerary);
-          await AsyncStorage.setItem(OFFLINE_ITINERARY_KEY, JSON.stringify(contextItinerary));
-          await AsyncStorage.setItem(OFFLINE_SURVEY_KEY, JSON.stringify(contextSurvey));
+          await cacheSet(OFFLINE_ITINERARY_KEY, JSON.stringify(contextItinerary));
+          await cacheSet(OFFLINE_SURVEY_KEY, JSON.stringify(contextSurvey));
+          console.log('[ItineraryScreen] Cached itinerary & survey from context.');
         } else {
-          const cachedItinerary = await AsyncStorage.getItem(OFFLINE_ITINERARY_KEY);
-          const cachedSurvey = await AsyncStorage.getItem(OFFLINE_SURVEY_KEY);
+          const cachedItinerary = await cacheGet(OFFLINE_ITINERARY_KEY);
+          const cachedSurvey = await cacheGet(OFFLINE_SURVEY_KEY);
+          console.log('[ItineraryScreen] Cache read:', !!cachedItinerary ? 'itinerary found' : 'no itinerary', !!cachedSurvey ? 'survey found' : 'no survey');
 
           if (cachedItinerary) {
             const parsedItinerary = JSON.parse(cachedItinerary) as Itinerary;
@@ -85,7 +112,7 @@ export default function ItineraryScreen() {
           }
         }
       } catch (error) {
-        console.error('Error loading itinerary data:', error);
+        console.error('[ItineraryScreen] Error loading itinerary data:', error);
       } finally {
         setLoading(false);
       }
@@ -254,7 +281,14 @@ export default function ItineraryScreen() {
 
 
   const handleReRollActivity = async (activityId: string) => {
-    if (!itinerary || !contextSurvey) return;
+    if (!itinerary) {
+      console.warn('[ReRoll] No itinerary available, aborting.');
+      return;
+    }
+    
+    // Use contextSurvey even if minimal -- regenerateActivityAlternatives can handle partial data
+    const surveyForReRoll = contextSurvey;
+    console.log('[ReRoll] Starting for activity:', activityId, 'Survey destinations:', surveyForReRoll?.destinations?.length ?? 0);
     
     // Find the target activity and its context
     let targetDayIndex = -1;
@@ -272,7 +306,10 @@ export default function ItineraryScreen() {
       }
     }
     
-    if (!targetActivity) return;
+    if (!targetActivity) {
+      console.warn('[ReRoll] Target activity not found:', activityId);
+      return;
+    }
 
     setReRollTargetActivityId(activityId);
     setReRollModalVisible(true);
@@ -284,18 +321,24 @@ export default function ItineraryScreen() {
       const prevActivity = targetActIndex > 0 ? day.activities[targetActIndex - 1] : undefined;
       const nextActivity = targetActIndex < day.activities.length - 1 ? day.activities[targetActIndex + 1] : undefined;
 
+      console.log('[ReRoll] Calling regenerateActivityAlternatives...');
       const alternatives = await regenerateActivityAlternatives(
-        contextSurvey,
+        surveyForReRoll,
         targetActivity,
         prevActivity,
         nextActivity,
         day.region || itinerary.title
       );
       
+      console.log('[ReRoll] Got', alternatives.length, 'alternatives');
       setReRollAlternatives(alternatives);
-    } catch (error) {
-      console.error('Error re-rolling activity:', error);
-      Alert.alert(t('common.error'), t('itinerary.reroll.error', { defaultValue: 'Failed to generate alternatives. Please try again.' }));
+    } catch (error: any) {
+      console.error('[ReRoll] Error:', error?.message || error);
+      const isMissingKey = error?.message === 'MISSING_API_KEY';
+      const msg = isMissingKey
+        ? '缺少 Gemini API Key。請先至首頁設定通道設定 API Key 以啟用智慧引擎。'
+        : t('itinerary.reroll.error', { defaultValue: '產生替代方案失敗，請稍後再試。' });
+      showAlert(t('common.error'), msg);
       setReRollModalVisible(false);
     } finally {
       setReRollLoading(false);
@@ -365,12 +408,12 @@ export default function ItineraryScreen() {
 
     setItinerary(updatedItinerary);
     await saveAndSyncItinerary(updatedItinerary);
-    Alert.alert(t('itinerary.aiRecommend.title'), t('itinerary.aiRecommend.msg'));
+    showAlert(t('itinerary.aiRecommend.title'), t('itinerary.aiRecommend.msg'));
   };
 
   const saveAndSyncItinerary = async (updatedItinerary: Itinerary) => {
     try {
-      await AsyncStorage.setItem(OFFLINE_ITINERARY_KEY, JSON.stringify(updatedItinerary));
+      await cacheSet(OFFLINE_ITINERARY_KEY, JSON.stringify(updatedItinerary));
       const user = auth.currentUser;
       if (user) {
         await dbService.saveItinerary(updatedItinerary);
@@ -423,12 +466,12 @@ export default function ItineraryScreen() {
             UTI: 'com.adobe.pdf'
           });
         } else {
-          Alert.alert(t('itinerary.exportSuccess'), t('itinerary.exportSuccessMsg', { uri }));
+          showAlert(t('itinerary.exportSuccess'), t('itinerary.exportSuccessMsg', { uri }));
         }
       }
     } catch (error) {
       console.error('PDF Export Error:', error);
-      Alert.alert(t('itinerary.exportFail'), t('itinerary.exportFailMsg'));
+      showAlert(t('itinerary.exportFail'), t('itinerary.exportFailMsg'));
     } finally {
       setLoading(false);
     }
@@ -637,7 +680,7 @@ export default function ItineraryScreen() {
                   if (Platform.OS === 'web') {
                     window.alert(`${t('itinerary.shareTitle')}\n${t('itinerary.shareMsg')}`);
                   } else {
-                    Alert.alert(t('itinerary.shareTitle'), t('itinerary.shareMsg'));
+                    showAlert(t('itinerary.shareTitle'), t('itinerary.shareMsg'));
                   }
                 }} style={{ padding: 8, marginHorizontal: 4 }}>
                   <Ionicons name="share-social" size={20} color={colors.textSecondary} />

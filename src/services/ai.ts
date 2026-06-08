@@ -699,10 +699,12 @@ JSON 結構樣式：
 
     try {
       const apiKey = await settingsService.getApiKey();
+      console.log('[getDestinationGuideInfo] API Key:', apiKey ? `found (first 8: ${apiKey.substring(0, 8)}...)` : 'NULL');
       if (!apiKey) {
         throw new Error('MISSING_API_KEY');
       }
 
+      console.log('[getDestinationGuideInfo] Calling Gemini API for:', country);
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -741,8 +743,13 @@ export async function regenerateActivityAlternatives(
   nextActivity: Activity | undefined,
   region: string
 ): Promise<Activity[]> {
+  console.log('[regenerateActivityAlternatives] Starting for:', currentActivity.title, 'region:', region);
   const apiKey = await settingsService.getApiKey();
-  if (!apiKey) throw new Error('MISSING_API_KEY');
+  if (!apiKey) {
+    console.error('[regenerateActivityAlternatives] MISSING_API_KEY: settingsService.getApiKey() returned null.');
+    throw new Error('MISSING_API_KEY');
+  }
+  console.log('[regenerateActivityAlternatives] API Key obtained (first 8 chars):', apiKey.substring(0, 8) + '...');
 
   const systemPrompt = `
 You are a National-Level Intelligence Investigator strictly adhering to RAG principles.

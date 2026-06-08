@@ -7,6 +7,21 @@ import { aiService } from '../../services/ai';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { t } from '../../i18n';
 
+// Web-safe cache helpers: bypass AsyncStorage on Web (unreliable) and use localStorage directly
+const cacheGet = async (key: string): Promise<string | null> => {
+  if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+    try { return window.localStorage.getItem(key); } catch { return null; }
+  }
+  try { return await AsyncStorage.getItem(key); } catch { return null; }
+};
+const cacheSet = async (key: string, value: string): Promise<void> => {
+  if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+    try { window.localStorage.setItem(key, value); } catch {}
+    return;
+  }
+  try { await AsyncStorage.setItem(key, value); } catch {}
+};
+
 interface Props {
   onNavigateToTranslator: () => void;
   countryName?: string;
@@ -31,13 +46,13 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
         ? survey.destinations[0].name 
         : '泰國'); // fallback
 
-      // 1. 嘗試從 Cache 讀取
+      // 1. 嘗試從 Cache 讀取 (Web 使用 localStorage，Native 使用 AsyncStorage)
       const cacheKey = `@guide_data_${country}`;
       let cached = null;
       try {
-        cached = await AsyncStorage.getItem(cacheKey);
+        cached = await cacheGet(cacheKey);
       } catch (e) {
-        console.warn('AsyncStorage get error', e);
+        console.warn('[DestinationGuide] Cache read error:', e);
       }
 
       let data = null;
@@ -45,19 +60,22 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
       if (cached) {
         try {
           data = JSON.parse(cached);
+          console.log('[DestinationGuide] Loaded from cache for:', country);
         } catch (e) {
-          console.warn('JSON parse error', e);
+          console.warn('[DestinationGuide] Cache JSON parse error:', e);
         }
       }
 
       if (!data) {
         // 2. 呼叫 AI 產生
+        console.log('[DestinationGuide] No cache, calling AI for:', country);
         data = await aiService.getDestinationGuideInfo(country);
         if (data) {
+          console.log('[DestinationGuide] AI returned data, caching...');
           try {
-            await AsyncStorage.setItem(cacheKey, JSON.stringify(data));
+            await cacheSet(cacheKey, JSON.stringify(data));
           } catch (e) {
-            console.warn('AsyncStorage set error', e);
+            console.warn('[DestinationGuide] Cache write error:', e);
           }
         }
       }

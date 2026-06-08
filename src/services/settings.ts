@@ -41,17 +41,26 @@ export const settingsService = {
    */
   async getApiKey(): Promise<string | null> {
     if (sessionApiKey) {
+      console.log('[settingsService.getApiKey] Using session API key (first 8):', sessionApiKey.substring(0, 8) + '...');
       return sessionApiKey;
     }
 
     try {
+      let storedKey: string | null = null;
       if (Platform.OS === 'web') {
-        return localStorage.getItem(API_KEY_STORE_KEY);
+        storedKey = localStorage.getItem(API_KEY_STORE_KEY);
+        console.log('[settingsService.getApiKey] Web localStorage:', storedKey ? `found (first 8: ${storedKey.substring(0, 8)}...)` : 'NOT FOUND');
       } else {
-        return await SecureStore.getItemAsync(API_KEY_STORE_KEY);
+        storedKey = await SecureStore.getItemAsync(API_KEY_STORE_KEY);
+        console.log('[settingsService.getApiKey] Native SecureStore:', storedKey ? 'found' : 'NOT FOUND');
       }
+      // Hydrate session cache for subsequent reads
+      if (storedKey) {
+        sessionApiKey = storedKey;
+      }
+      return storedKey;
     } catch (e) {
-      console.warn('Failed to retrieve API Key:', e);
+      console.warn('[settingsService.getApiKey] Failed to retrieve API Key:', e);
       return null;
     }
   },
