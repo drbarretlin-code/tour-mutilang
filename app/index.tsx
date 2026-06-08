@@ -258,120 +258,126 @@ export default function HomeDashboard() {
 
   const displayName = user?.email ? user.email.split('@')[0] : 'Traveler';
 
+  if (authLoading) {
+    return (
+      <View style={[styles.container, styles.centerContainer, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size="large" color={colors.primary500} />
+      </View>
+    );
+  }
+
+  if (!user) {
+    return (
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <AuthForm />
+      </View>
+    );
+  }
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      {authLoading ? (
-        <View key="state-loading" style={styles.centerContainer}>
-          <ActivityIndicator size="large" color={colors.primary500} />
-        </View>
-      ) : !user ? (
-        <View key="state-auth" style={{ flex: 1 }}>
-          <AuthForm />
-        </View>
-      ) : (
-        <View key="state-dashboard" style={{ flex: 1 }}>
-          {/* Header */}
-          <View style={[styles.header, { backgroundColor: colors.background }]}>
-            <View style={styles.headerLeft}>
-              <Image source={require('../assets/images/logo.png')} style={styles.logo} />
-              <View>
-                <Text style={[typography.labelMedium, { color: colors.textSecondary }]}>
-                  {getGreeting()},
-                </Text>
-                <Text style={[typography.headlineSmall, { color: colors.text, fontWeight: '800' }]}>
-                  {displayName}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.headerRight}>
-              <LanguagePicker />
-              <TouchableOpacity onPress={handleLogout} style={styles.iconBtn}>
-                <Ionicons name="log-out-outline" size={24} color={colors.textSecondary} />
-              </TouchableOpacity>
+      <View style={{ flex: 1 }}>
+        {/* Header */}
+        <View style={[styles.header, { backgroundColor: colors.background }]}>
+          <View style={styles.headerLeft}>
+            <Image source={require('../assets/images/logo.png')} style={styles.logo} />
+            <View>
+              <Text style={[typography.labelMedium, { color: colors.textSecondary }]}>
+                {getGreeting()},
+              </Text>
+              <Text style={[typography.headlineSmall, { color: colors.text, fontWeight: '800' }]}>
+                {displayName}
+              </Text>
             </View>
           </View>
-
-          <FlatList
-            data={itineraries}
-            extraData={locale}
-            keyExtractor={item => item.id}
-            contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, paddingTop: 12 }}
-            showsVerticalScrollIndicator={false}
-            ListHeaderComponent={
-              <View style={{ marginBottom: 32 }}>
-                {!hasApiKey ? (
-                  <View key="header-no-api">
-                    {renderApiKeySetup()}
-                  </View>
-                ) : (
-                  <View key="header-has-api">
-                    {/* Minimal Header Section when API is ready */}
-                    <View style={styles.sectionHeader}>
-                      <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '800' }]}>
-                        {t('home.myItineraries', { defaultValue: '我的旅遊計畫' })}
-                      </Text>
-                      
-                      {/* Small Action Button */}
-                      {itineraries.length > 0 ? (
-                        <TouchableOpacity 
-                          style={[styles.smallAddBtn, { backgroundColor: colors.primary50 }]}
-                          onPress={handleCreateNew}
-                        >
-                          <Ionicons name="add" size={16} color={colors.primary600} />
-                          <Text style={[typography.labelMedium, { color: colors.primary600, fontWeight: '700', marginLeft: 4 }]}>
-                            {t('home.newPlan')}
-                          </Text>
-                        </TouchableOpacity>
-                      ) : null}
-                    </View>
-                    
-                    {/* Secondary Actions (Batch Scheduler) */}
-                    <TouchableOpacity 
-                      style={[styles.miniBanner, { backgroundColor: colors.surface, borderColor: colors.border }]}
-                      onPress={() => router.push('/batch-scheduler')}
-                    >
-                      <View style={[styles.miniBannerIcon, { backgroundColor: colors.primary50 }]}>
-                        <Ionicons name="sparkles" size={18} color={colors.primary500} />
-                      </View>
-                      <Text style={[typography.labelLarge, { color: colors.text, flex: 1, fontWeight: '600' }]}>
-                        {t('home.aiBatchTitle', { defaultValue: 'AI Batch Scheduler' })}
-                      </Text>
-                      <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
-                    </TouchableOpacity>
-                  </View>
-                )}
-              </View>
-            }
-            renderItem={({ item }) => (
-              <ItineraryCard 
-                itinerary={item} 
-                onPress={() => handleItineraryPress(item)} 
-                onEdit={() => handleEditSurveyPlan(item)}
-                onDelete={() => handleDeleteItinerary(item.id)}
-              />
-            )}
-            ListEmptyComponent={hasApiKey && !loadingList ? renderEmptyState() : null}
-          />
-
-          {/* Main Floating Action Button */}
-          {hasApiKey && itineraries.length === 0 && !loadingList ? (
-            <TouchableOpacity
-              activeOpacity={0.9}
-              onPress={handleCreateNew}
-              style={[
-                styles.fabMain,
-                shadows.lg,
-                { backgroundColor: colors.primary500, borderRadius: 9999 }
-              ]}
-            >
-              <Ionicons name="add" size={28} color="#fff" />
-              <Text style={[typography.titleMedium, { color: '#fff', marginLeft: 8, fontWeight: '700' }]}>
-                {t('home.newPlan')}
-              </Text>
+          <View style={styles.headerRight}>
+            <LanguagePicker />
+            <TouchableOpacity onPress={handleLogout} style={styles.iconBtn}>
+              <Ionicons name="log-out-outline" size={24} color={colors.textSecondary} />
             </TouchableOpacity>
-          ) : null}
+          </View>
         </View>
-      )}
+
+        <FlatList
+          data={itineraries}
+          extraData={locale}
+          keyExtractor={item => item.id}
+          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, paddingTop: 12 }}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            <View style={{ marginBottom: 32 }}>
+              {!hasApiKey ? (
+                <View key="header-no-api">
+                  {renderApiKeySetup()}
+                </View>
+              ) : (
+                <View key="header-has-api">
+                  {/* Minimal Header Section when API is ready */}
+                  <View style={styles.sectionHeader}>
+                    <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '800' }]}>
+                      {t('home.myItineraries', { defaultValue: '我的旅遊計畫' })}
+                    </Text>
+                    
+                    {/* Small Action Button */}
+                    {itineraries.length > 0 ? (
+                      <TouchableOpacity 
+                        style={[styles.smallAddBtn, { backgroundColor: colors.primary50 }]}
+                        onPress={handleCreateNew}
+                      >
+                        <Ionicons name="add" size={16} color={colors.primary600} />
+                        <Text style={[typography.labelMedium, { color: colors.primary600, fontWeight: '700', marginLeft: 4 }]}>
+                          {t('home.newPlan')}
+                        </Text>
+                      </TouchableOpacity>
+                    ) : null}
+                  </View>
+                  
+                  {/* Secondary Actions (Batch Scheduler) */}
+                  <TouchableOpacity 
+                    style={[styles.miniBanner, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                    onPress={() => router.push('/batch-scheduler')}
+                  >
+                    <View style={[styles.miniBannerIcon, { backgroundColor: colors.primary50 }]}>
+                      <Ionicons name="sparkles" size={18} color={colors.primary500} />
+                    </View>
+                    <Text style={[typography.labelLarge, { color: colors.text, flex: 1, fontWeight: '600' }]}>
+                      {t('home.aiBatchTitle', { defaultValue: 'AI Batch Scheduler' })}
+                    </Text>
+                    <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          }
+          renderItem={({ item }) => (
+            <ItineraryCard 
+              itinerary={item} 
+              onPress={() => handleItineraryPress(item)} 
+              onEdit={() => handleEditSurveyPlan(item)}
+              onDelete={() => handleDeleteItinerary(item.id)}
+            />
+          )}
+          ListEmptyComponent={hasApiKey && !loadingList ? renderEmptyState() : null}
+        />
+
+        {/* Main Floating Action Button */}
+        {hasApiKey && itineraries.length === 0 && !loadingList ? (
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={handleCreateNew}
+            style={[
+              styles.fabMain,
+              shadows.lg,
+              { backgroundColor: colors.primary500, borderRadius: 9999 }
+            ]}
+          >
+            <Ionicons name="add" size={28} color="#fff" />
+            <Text style={[typography.titleMedium, { color: '#fff', marginLeft: 8, fontWeight: '700' }]}>
+              {t('home.newPlan')}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
     </View>
   );
 }
