@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator, FlatList, Text, TouchableOpacity, Alert, Platform, Image, TextInput, Switch, Linking } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, FlatList, Text, TouchableOpacity, Alert, Platform, Image, TextInput, Switch, Linking, ScrollView } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../src/context/AuthContext';
@@ -290,7 +290,7 @@ export default function HomeDashboard() {
           </View>
         </View>
 
-        <ScrollView 
+        <ScrollView
           contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120, paddingTop: 12 }}
           showsVerticalScrollIndicator={false}
         >
@@ -347,7 +347,6 @@ export default function HomeDashboard() {
             </View>
           </View>
 
-          {/* Mapped Itineraries */}
           {itineraries.map((item) => (
             <ItineraryCard 
               key={item.id}
