@@ -64,21 +64,12 @@ export default function HomeDashboard() {
     }, [user])
   );
 
-  if (authLoading || loadingApiKey) {
-    return (
-      <View key="loading-screen" style={[styles.centerContainer, { backgroundColor: colors.background, flex: 1 }]}>
-        <ActivityIndicator size="large" color={colors.primary500} />
-      </View>
-    );
-  }
+  // Derived display states - used to toggle visibility without changing DOM structure
+  const showLoading = authLoading || loadingApiKey;
+  const showAuth = !showLoading && !user;
+  const showDashboard = !showLoading && !!user;
 
-  if (!user) {
-    return (
-      <View key="auth-screen" style={[styles.container, { backgroundColor: colors.background }]}>
-        <AuthForm />
-      </View>
-    );
-  }
+  const displayName = user?.email ? user.email.split('@')[0] : 'Traveler';
 
   const handleSaveApiKey = async () => {
     if (!apiKeyInput.trim()) return;
@@ -205,7 +196,7 @@ export default function HomeDashboard() {
 
       <TouchableOpacity onPress={() => Linking.openURL('https://aistudio.google.com/app/apikey')} style={styles.linkContainer}>
         <Text style={[typography.labelMedium, { color: colors.primary600, fontWeight: '600' }]}>
-          {t('home.getFreeApiKey', { defaultValue: '👉 點此快速申請免費 Google Gemini API Key' })}
+          {t('home.getFreeApiKey', { defaultValue: '點此快速申請免費 Google Gemini API Key' })}
         </Text>
       </TouchableOpacity>
 
@@ -264,11 +255,24 @@ export default function HomeDashboard() {
     return t('home.greetingEvening', { defaultValue: 'Good Evening' });
   };
 
-  const displayName = user?.email ? user.email.split('@')[0] : 'Traveler';
-
+  // CRITICAL: This component returns a SINGLE, STRUCTURALLY STABLE tree.
+  // All three states (loading, auth, dashboard) are always mounted in the DOM.
+  // We toggle visibility with display:'none'/'flex' instead of conditional rendering.
+  // This prevents React 19 + react-native-web 0.21 insertBefore crashes.
   return (
-    <View key="main-dashboard-screen" style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={{ flex: 1 }}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      {/* === STATE 1: Loading Spinner === */}
+      <View style={[styles.centerContainer, { display: showLoading ? 'flex' : 'none' }]}>
+        <ActivityIndicator size="large" color={colors.primary500} />
+      </View>
+
+      {/* === STATE 2: Auth Form === */}
+      <View style={[styles.container, { display: showAuth ? 'flex' : 'none' }]}>
+        <AuthForm />
+      </View>
+
+      {/* === STATE 3: Dashboard === */}
+      <View style={{ flex: 1, display: showDashboard ? 'flex' : 'none' }}>
         {/* Header */}
         <View style={[styles.header, { backgroundColor: colors.background }]}>
           <View style={styles.headerLeft}>

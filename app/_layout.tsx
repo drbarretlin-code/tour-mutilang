@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
@@ -14,28 +13,27 @@ import { LanguageProvider } from '../src/context/LanguageContext';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [appIsReady, setAppIsReady] = useState(false);
-
   useEffect(() => {
     async function prepare() {
       try {
-        // Initialize localization
         await initLocale();
       } catch (e) {
         console.warn(e);
       } finally {
-        // Tell the application to render
-        setAppIsReady(true);
         await SplashScreen.hideAsync();
       }
     }
-
     prepare();
   }, []);
 
-  // CRITICAL: Never return null. React 19 + react-native-web crashes with
-  // insertBefore when reconciling null -> complex tree in Expo Router.
-  // Instead, always render the full tree and overlay a loading screen.
+  // CRITICAL: The DOM tree structure must be 100% stable from the very
+  // first render. No conditional returns, no ternaries that swap component
+  // types. React 19 + react-native-web 0.21 crashes with insertBefore
+  // when the tree shape changes after mount.
+  //
+  // <Stack> is always rendered. The screen content (app/index.tsx) handles
+  // its own loading/auth states internally with display:none, never by
+  // returning different component trees.
   return (
     <SafeAreaProvider>
       <LanguageProvider>
@@ -43,15 +41,9 @@ export default function RootLayout() {
           <ThemeProvider>
             <PACProvider>
               <SurveyProvider>
-                {appIsReady ? (
-                  <Stack screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name="index" />
-                  </Stack>
-                ) : (
-                  <View style={layoutStyles.loadingContainer}>
-                    <ActivityIndicator size="large" color="#3366FF" />
-                  </View>
-                )}
+                <Stack screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="index" />
+                </Stack>
               </SurveyProvider>
             </PACProvider>
           </ThemeProvider>
@@ -60,12 +52,3 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
-
-const layoutStyles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-  },
-});
