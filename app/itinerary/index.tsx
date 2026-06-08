@@ -90,25 +90,48 @@ export default function ItineraryScreen() {
   useEffect(() => {
     async function loadData() {
       try {
+        let currentIt: Itinerary | null = null;
+        let currentSurveyObj: TripSurvey | null = null;
+
         if (contextItinerary) {
+          currentIt = contextItinerary;
           setItinerary(contextItinerary);
           await cacheSet(OFFLINE_ITINERARY_KEY, JSON.stringify(contextItinerary));
-          await cacheSet(OFFLINE_SURVEY_KEY, JSON.stringify(contextSurvey));
-          console.log('[ItineraryScreen] Cached itinerary & survey from context.');
         } else {
           const cachedItinerary = await cacheGet(OFFLINE_ITINERARY_KEY);
-          const cachedSurvey = await cacheGet(OFFLINE_SURVEY_KEY);
-          console.log('[ItineraryScreen] Cache read:', !!cachedItinerary ? 'itinerary found' : 'no itinerary', !!cachedSurvey ? 'survey found' : 'no survey');
-
           if (cachedItinerary) {
-            const parsedItinerary = JSON.parse(cachedItinerary) as Itinerary;
-            setItinerary(parsedItinerary);
+            currentIt = JSON.parse(cachedItinerary) as Itinerary;
+            setItinerary(currentIt);
             setIsOffline(true);
+          }
+        }
 
-            if (cachedSurvey) {
-              const parsedSurvey = JSON.parse(cachedSurvey);
-              updateSurvey(parsedSurvey);
+        // 當我們有行程資料時，依據其 surveyId 去數據庫拉取真實的 Survey
+        if (currentIt && currentIt.surveyId) {
+          console.log('[ItineraryScreen] Fetching real survey from DB for ID:', currentIt.surveyId);
+          try {
+            const realSurvey = await dbService.getSurvey(currentIt.surveyId);
+            if (realSurvey) {
+              currentSurveyObj = realSurvey;
+              updateSurvey(realSurvey);
+              await cacheSet(OFFLINE_SURVEY_KEY, JSON.stringify(realSurvey));
+              console.log('[ItineraryScreen] Real survey loaded & cached.');
             }
+          } catch (dbErr) {
+            console.warn('[ItineraryScreen] DB survey fetch failed (might be offline):', dbErr);
+          }
+        }
+
+        // 如果 DB 載入失敗或離線，嘗試從本機快取恢復 Survey
+        if (!currentSurveyObj) {
+          const cachedSurvey = await cacheGet(OFFLINE_SURVEY_KEY);
+          if (cachedSurvey) {
+            const parsedSurvey = JSON.parse(cachedSurvey) as TripSurvey;
+            updateSurvey(parsedSurvey);
+            console.log('[ItineraryScreen] Survey restored from cache.');
+          } else if (contextSurvey) {
+            // 最差情況，寫入當前 contextSurvey
+            await cacheSet(OFFLINE_SURVEY_KEY, JSON.stringify(contextSurvey));
           }
         }
       } catch (error) {
@@ -538,7 +561,7 @@ export default function ItineraryScreen() {
 
       {viewMode === 'guide' && (
         <DestinationGuide 
-          countryName={contextItinerary?.days?.[0]?.region || '泰國'}
+          countryName={activeItinerary?.days?.[0]?.region || activeItinerary?.title || '泰國'}
           onNavigateToTranslator={() => Linking.openURL('https://acia-2.vercel.app')}
         />
       )}

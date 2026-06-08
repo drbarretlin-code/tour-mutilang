@@ -16,8 +16,6 @@ export interface ReRollModalProps {
 export function ReRollModal({ visible, isLoading, alternatives, onClose, onSelect }: ReRollModalProps) {
   const { colors, typography, spacing, borderRadius } = useTheme();
 
-  if (!visible) return null;
-
   const modalContent = (
     <View style={styles.overlay}>
       <View style={[styles.modalContainer, { backgroundColor: colors.background, borderRadius: borderRadius.lg }]}>
@@ -96,7 +94,7 @@ export function ReRollModal({ visible, isLoading, alternatives, onClose, onSelec
 
   if (Platform.OS === 'web') {
     return (
-      <View style={[StyleSheet.absoluteFill, { zIndex: 9999 }]}>
+      <View style={[StyleSheet.absoluteFill, { zIndex: 9999, display: visible ? 'flex' : 'none' }]}>
         {modalContent}
       </View>
     );

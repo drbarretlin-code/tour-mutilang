@@ -68,9 +68,11 @@ export function ActivityEditorModal({
     }
   }, [visible, activity, currentDayNumber]);
 
-  if (!activity || !itinerary) return null;
+  const hasData = !!activity && !!itinerary;
+  const isVisible = visible && hasData;
 
   const handleSave = async () => {
+    if (!activity || !itinerary) return;
     if (!title.trim()) {
       Alert.alert(t('common.error'), t('itinerary.activityEditor.errors.titleEmpty'));
       return;
@@ -129,6 +131,7 @@ export function ActivityEditorModal({
   };
 
   const handleDelete = () => {
+    if (!activity || !itinerary) return;
     if (Platform.OS === 'web') {
       if (window.confirm(t('itinerary.activityEditor.deleteConfirm.message'))) {
         onDelete(activity.id, currentDayNumber);
@@ -157,9 +160,7 @@ export function ActivityEditorModal({
 
   const currentTypeLabel = getActivityTypes().find(t => t.value === type)?.label || type;
 
-  if (!visible) return null;
-
-  const modalContent = (
+  const modalContent = hasData ? (
     <KeyboardAvoidingView 
       style={styles.overlay} 
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -363,18 +364,18 @@ export function ActivityEditorModal({
 
       </View>
     </KeyboardAvoidingView>
-  );
+  ) : <View style={{ width: 0, height: 0 }} />;
 
   if (Platform.OS === 'web') {
     return (
-      <View style={[StyleSheet.absoluteFill, { zIndex: 9999 }]}>
+      <View style={[StyleSheet.absoluteFill, { zIndex: 9999, display: isVisible ? 'flex' : 'none' }]}>
         {modalContent}
       </View>
     );
   }
 
   return (
-    <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
+    <Modal visible={isVisible} animationType="slide" transparent={true} onRequestClose={onClose}>
       {modalContent}
     </Modal>
   );
