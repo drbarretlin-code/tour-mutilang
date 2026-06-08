@@ -238,12 +238,12 @@ export default function HomeDashboard() {
         activeOpacity={0.8}
       >
         {savingKey ? <ActivityIndicator color="#fff" /> : (
-          <>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Ionicons name="checkmark-circle" size={20} color="#fff" style={{ marginRight: 8 }} />
             <Text style={[typography.labelLarge, { color: '#fff', fontWeight: '700' }]}>
               {t('home.saveAndStart', { defaultValue: '儲存並開始規劃' })}
             </Text>
-          </>
+          </View>
         )}
       </TouchableOpacity>
     </View>
@@ -292,7 +292,7 @@ export default function HomeDashboard() {
             {!hasApiKey ? (
               renderApiKeySetup()
             ) : (
-              <>
+              <View>
                 {/* Minimal Header Section when API is ready */}
                 <View style={styles.sectionHeader}>
                   <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '800' }]}>
@@ -326,7 +326,7 @@ export default function HomeDashboard() {
                   </Text>
                   <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
                 </TouchableOpacity>
-              </>
+              </View>
             )}
           </View>
         }
