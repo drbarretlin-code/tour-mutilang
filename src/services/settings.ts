@@ -18,14 +18,14 @@ export const settingsService = {
       
       if (persist) {
         if (Platform.OS === 'web') {
-          await AsyncStorage.setItem(API_KEY_STORE_KEY, apiKey);
+          localStorage.setItem(API_KEY_STORE_KEY, apiKey);
         } else {
           await SecureStore.setItemAsync(API_KEY_STORE_KEY, apiKey);
         }
       } else {
         // Ensure any previously persisted key is cleared if user chooses session only
         if (Platform.OS === 'web') {
-          await AsyncStorage.removeItem(API_KEY_STORE_KEY);
+          localStorage.removeItem(API_KEY_STORE_KEY);
         } else {
           await SecureStore.deleteItemAsync(API_KEY_STORE_KEY);
         }
@@ -46,7 +46,7 @@ export const settingsService = {
 
     try {
       if (Platform.OS === 'web') {
-        return await AsyncStorage.getItem(API_KEY_STORE_KEY);
+        return localStorage.getItem(API_KEY_STORE_KEY);
       } else {
         return await SecureStore.getItemAsync(API_KEY_STORE_KEY);
       }
@@ -63,7 +63,7 @@ export const settingsService = {
     sessionApiKey = null;
     try {
       if (Platform.OS === 'web') {
-        await AsyncStorage.removeItem(API_KEY_STORE_KEY);
+        localStorage.removeItem(API_KEY_STORE_KEY);
       } else {
         await SecureStore.deleteItemAsync(API_KEY_STORE_KEY);
       }

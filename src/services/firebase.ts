@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getFirestore } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
 import { getStorage } from 'firebase/storage';
+import { Platform } from 'react-native';
 
 // Standard Firebase config structure.
 // Users can configure this via environment variables or direct replacement.
@@ -20,18 +21,30 @@ const firebaseConfig = {
 // Initialize Firebase App
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Firebase Auth with AsyncStorage persistence for React Native
+// Initialize Firebase Auth with appropriate persistence per platform
 const auth = (() => {
-  const getReactNativePersistence = (FirebaseAuth as any).getReactNativePersistence;
   try {
-    if (getReactNativePersistence) {
+    if (Platform.OS === 'web') {
+      // On Web, use standard browser persistence (IndexedDB/LocalStorage)
       return FirebaseAuth.initializeAuth(app, {
-        persistence: getReactNativePersistence(AsyncStorage)
+        persistence: [
+          FirebaseAuth.indexedDBLocalPersistence,
+          FirebaseAuth.browserLocalPersistence,
+          FirebaseAuth.browserSessionPersistence
+        ]
       });
+    } else {
+      // On Native, use AsyncStorage persistence
+      const getReactNativePersistence = (FirebaseAuth as any).getReactNativePersistence;
+      if (getReactNativePersistence) {
+        return FirebaseAuth.initializeAuth(app, {
+          persistence: getReactNativePersistence(AsyncStorage)
+        });
+      }
     }
     return FirebaseAuth.getAuth(app);
   } catch (error) {
-    // If auth is already initialized
+    // If auth is already initialized or initializeAuth fails
     return FirebaseAuth.getAuth(app);
   }
 })();
