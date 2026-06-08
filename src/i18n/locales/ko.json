@@ -27,7 +27,8 @@
     "none": "None",
     "other": "Other",
     "done": "Done",
-    "skip": "Skip"
+    "skip": "Skip",
+    "days": "%{count} Days"
   },
   "auth": {
     "login": "Log In",
@@ -359,5 +360,13 @@
     "minTravelers": "At least 1 traveler is required",
     "minDestination": "At least 1 destination is required",
     "dateRange": "End date must be after start date"
+  },
+  "home": {
+    "greetingMorning": "Good Morning",
+    "greetingAfternoon": "Good Afternoon",
+    "greetingEvening": "Good Evening"
+  },
+  "dashboard": {
+    "untitledItinerary": "Untitled Itinerary"
   }
 }

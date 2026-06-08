@@ -27,7 +27,8 @@
     "none": "なし",
     "other": "その他",
     "done": "完了",
-    "skip": "スキップ"
+    "skip": "スキップ",
+    "days": "%{count} Days"
   },
   "auth": {
     "login": "ログイン",
@@ -359,5 +360,13 @@
     "minTravelers": "旅行者は 1 名以上必要です",
     "minDestination": "目的地は 1 つ以上必要です",
     "dateRange": "帰着日は出発日より後の日付にしてください"
+  },
+  "home": {
+    "greetingMorning": "Good Morning",
+    "greetingAfternoon": "Good Afternoon",
+    "greetingEvening": "Good Evening"
+  },
+  "dashboard": {
+    "untitledItinerary": "Untitled Itinerary"
   }
 }

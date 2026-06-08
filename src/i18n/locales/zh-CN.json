@@ -27,7 +27,8 @@
     "none": "无",
     "other": "其他",
     "done": "完成",
-    "skip": "跳过"
+    "skip": "跳过",
+    "days": "%{count} 天"
   },
   "auth": {
     "login": "登录",
@@ -359,5 +360,13 @@
     "minTravelers": "至少需要 1 位旅客",
     "minDestination": "至少需要 1 个目的地",
     "dateRange": "返程日期必须在出发日期之后"
+  },
+  "home": {
+    "greetingMorning": "早安",
+    "greetingAfternoon": "午安",
+    "greetingEvening": "晚安"
+  },
+  "dashboard": {
+    "untitledItinerary": "未命名行程"
   }
 }

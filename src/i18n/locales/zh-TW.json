@@ -16,7 +16,10 @@
     "confirmDeleteTitle": "刪除行程",
     "confirmDeleteMessage": "確定要刪除這個計畫嗎？刪除後將無法復原。",
     "confirmLogoutTitle": "登出",
-    "confirmLogoutMessage": "確定要登出嗎？"
+    "confirmLogoutMessage": "確定要登出嗎？",
+    "greetingMorning": "早安",
+    "greetingAfternoon": "午安",
+    "greetingEvening": "晚安"
   },
   "common": {
     "next": "下一步",
@@ -42,7 +45,8 @@
     "none": "無",
     "other": "其他",
     "done": "完成",
-    "skip": "略過"
+    "skip": "略過",
+    "days": "%{count} 天"
   },
   "auth": {
     "login": "登入",
@@ -699,5 +703,8 @@
     "invalidCredential": "電子信箱或密碼錯誤。",
     "invalidEmailFormat": "無效的電子信箱格式。",
     "guestLoginFailed": "匿名登入失敗，請稍後再試。"
+  },
+  "dashboard": {
+    "untitledItinerary": "未命名行程"
   }
 }
