@@ -20,27 +20,48 @@ export function MapFallbackView({ day, mapProvider }: MapFallbackViewProps) {
   const routePoints = activities.filter(act => act.location && act.location.name);
 
   // Trigger native map navigation via URL Scheme
-  const handleNavigate = async (act: Activity) => {
+  const handleNavigate = async (act: Activity, idx: number) => {
     if (!act.location) return;
     const { name, latitude, longitude } = act.location;
     const lat = latitude || 0;
     const lng = longitude || 0;
 
+    let originParam = '';
+    if (idx > 0 && routePoints[idx - 1].location) {
+      const pLat = routePoints[idx - 1].location!.latitude || 0;
+      const pLng = routePoints[idx - 1].location!.longitude || 0;
+      if (pLat !== 0 && pLng !== 0) {
+        originParam = `&origin=${pLat},${pLng}`;
+      }
+    }
+
     let url = '';
 
     switch (mapProvider) {
       case 'apple':
-        url = `maps://?q=${encodeURIComponent(name)}&daddr=${lat},${lng}`;
+        url = `maps://?q=${encodeURIComponent(name)}&daddr=${lat},${lng}${originParam ? originParam.replace('origin', 'saddr') : ''}`;
         break;
       case 'amap':
-        url = `androidamap://route/plan/?dlat=${lat}&dlon=${lng}&dname=${encodeURIComponent(name)}&dev=0&t=0`;
+        let aOrigin = '';
+        if (originParam) {
+           const pLat = routePoints[idx - 1].location!.latitude;
+           const pLng = routePoints[idx - 1].location!.longitude;
+           aOrigin = `&slat=${pLat}&slon=${pLng}`;
+        }
+        url = `androidamap://route/plan/?dlat=${lat}&dlon=${lng}&dname=${encodeURIComponent(name)}${aOrigin}&dev=0&t=0`;
         break;
       case 'baidu':
-        url = `baidumap://map/direction?destination=${lat},${lng}&mode=driving`;
+        let bOrigin = '';
+        if (originParam) {
+           const pLat = routePoints[idx - 1].location!.latitude;
+           const pLng = routePoints[idx - 1].location!.longitude;
+           bOrigin = `&origin=${pLat},${pLng}`;
+        }
+        url = `baidumap://map/direction?destination=${lat},${lng}${bOrigin}&mode=driving`;
         break;
       case 'google':
       default:
-        url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+        url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}${originParam}`;
         break;
     }
 
@@ -50,13 +71,13 @@ export function MapFallbackView({ day, mapProvider }: MapFallbackViewProps) {
         await Linking.openURL(url);
       } else {
         // Fallback to Web Google Maps which works everywhere (iOS, Android, Web)
-        const webUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+        const webUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}${originParam}`;
         await Linking.openURL(webUrl);
       }
     } catch (error) {
       console.error('Error opening map URL:', error);
       Alert.alert(t('common.error'), t('itinerary.mapFallbackView.errors.openFailed'));
-      const fallbackUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+      const fallbackUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}${originParam}`;
       Linking.openURL(fallbackUrl);
     }
   };
@@ -89,7 +110,7 @@ export function MapFallbackView({ day, mapProvider }: MapFallbackViewProps) {
                 return (
                   <View key={pt.id} style={styles.nodeWrapper}>
                     <TouchableOpacity
-                      onPress={() => handleNavigate(pt)}
+                      onPress={() => handleNavigate(pt, idx)}
                       style={StyleSheet.flatten([
                         styles.nodeCircle,
                         {
