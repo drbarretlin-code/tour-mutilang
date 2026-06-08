@@ -26,6 +26,7 @@ export default function HomeDashboard() {
 
   // API Key State
   const [hasApiKey, setHasApiKey] = useState(false);
+  const [loadingApiKey, setLoadingApiKey] = useState(true);
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [persistKey, setPersistKey] = useState(false); // Default to not persist
   const [savingKey, setSavingKey] = useState(false);
@@ -34,6 +35,9 @@ export default function HomeDashboard() {
   useEffect(() => {
     settingsService.getApiKey().then(key => {
       if (key) setHasApiKey(true);
+      setLoadingApiKey(false);
+    }).catch(() => {
+      setLoadingApiKey(false);
     });
   }, []);
 
@@ -60,9 +64,9 @@ export default function HomeDashboard() {
     }, [user])
   );
 
-  if (authLoading) {
+  if (authLoading || loadingApiKey) {
     return (
-      <View style={[styles.centerContainer, { backgroundColor: colors.background }]}>
+      <View style={[styles.centerContainer, { backgroundColor: colors.background, flex: 1 }]}>
         <ActivityIndicator size="large" color={colors.primary500} />
       </View>
     );
