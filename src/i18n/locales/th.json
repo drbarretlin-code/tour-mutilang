@@ -335,6 +335,31 @@
       "actLocName": "Street food & Cafes",
       "actLocAddr": "Within walking distance",
       "actNotes": "Try the local cold drinks."
+    },
+    "destinationGuide": {
+      "loading": "Compiling your exclusive local guide...",
+      "exchange": {
+        "title": "%{currencyName}/TWD Exchange Assistant",
+        "subtitle": "Calculate today's budget (Current rate: 1 TWD = %{rate} %{code})",
+        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
+        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
+        "inputTwd": "Enter TWD",
+        "inputLocal": "Enter %{name} (%{code})",
+        "resultLabel": "Result (%{code})",
+        "twdLabel": "TWD"
+      },
+      "guide": {
+        "title": "💡 Practical Spending Guide (%{code}/TWD)",
+        "quickSelect": "Quick Select:"
+      },
+      "emergency": {
+        "title": "📞 Emergency Contacts"
+      },
+      "phrases": {
+        "title": "☕ Useful Phrases",
+        "translator": "1. Two-way Voice Translator",
+        "openTool": "Open Tool"
+      }
     }
   },
   "settings": {

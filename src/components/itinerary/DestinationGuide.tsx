@@ -9,9 +9,10 @@ import { t } from '../../i18n';
 
 interface Props {
   onNavigateToTranslator: () => void;
+  countryName?: string;
 }
 
-export function DestinationGuide({ onNavigateToTranslator }: Props) {
+export function DestinationGuide({ onNavigateToTranslator, countryName }: Props) {
   const { colors, typography, spacing, borderRadius, shadows } = useTheme();
   const { survey } = useSurvey();
   
@@ -26,9 +27,9 @@ export function DestinationGuide({ onNavigateToTranslator }: Props) {
     try {
       setLoading(true);
       setErrorMsg('');
-      const country = survey.destinations && survey.destinations.length > 0 
+      const country = countryName || (survey.destinations && survey.destinations.length > 0 
         ? survey.destinations[0].name 
-        : '泰國'; // fallback
+        : '泰國'); // fallback
 
       // 1. 嘗試從 Cache 讀取
       const cacheKey = `@guide_data_${country}`;
@@ -91,7 +92,7 @@ export function DestinationGuide({ onNavigateToTranslator }: Props) {
 
   useEffect(() => {
     loadGuideData();
-  }, [survey.destinations]);
+  }, [countryName, survey.destinations]);
 
   if (loading) {
     return (

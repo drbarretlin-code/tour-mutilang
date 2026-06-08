@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { Activity, Itinerary } from '../../types/itinerary';
 import { t } from '../../i18n';
+import { verifyUrlRAG } from '../../utils/linkVerifier';
 
 const getActivityTypes = () => [
   { value: 'attraction', label: t('itinerary.activityEditor.types.attraction') },
@@ -46,6 +47,7 @@ export function ActivityEditorModal({
   const [notes, setNotes] = useState('');
   const [targetDay, setTargetDay] = useState<number>(1);
   const [links, setLinks] = useState<{ url: string; label: string; type: any }[]>([]);
+  const [isVerifying, setIsVerifying] = useState(false);
   
   // Fake custom drop-down states to replace missing picker
   const [showTypeMenu, setShowTypeMenu] = useState(false);
@@ -68,12 +70,40 @@ export function ActivityEditorModal({
 
   if (!activity || !itinerary) return null;
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!title.trim()) {
       Alert.alert(t('common.error'), t('itinerary.activityEditor.errors.titleEmpty'));
       return;
     }
     
+    setIsVerifying(true);
+    
+    // Validate Links using RAG Verifier
+    const validLinks = [];
+    let hasInvalidLinks = false;
+    
+    for (const link of links) {
+      if (link.url.trim() === '') continue;
+      
+      const verification = await verifyUrlRAG(link.url, [title, (itinerary.days.find(d => d.dayNumber === targetDay)?.region || '')]);
+      if (verification.isValid) {
+        validLinks.push(link);
+      } else {
+        hasInvalidLinks = true;
+        if (verification.verifiedUrl) {
+          validLinks.push({ ...link, url: verification.verifiedUrl, label: `Search: ${title}` });
+        }
+      }
+    }
+    
+    if (hasInvalidLinks) {
+      if (Platform.OS === 'web') {
+        window.alert(t('itinerary.activityEditor.errors.linkInvalid', { defaultValue: 'Some links were invalid and have been automatically replaced with safe search links.' }));
+      } else {
+        Alert.alert(t('common.warning'), t('itinerary.activityEditor.errors.linkInvalid', { defaultValue: 'Some links were invalid and have been automatically replaced with safe search links.' }));
+      }
+    }
+
     // Deep copy and assign
     const updatedActivity: Activity = JSON.parse(JSON.stringify(activity));
     updatedActivity.startTime = startTime;
@@ -92,8 +122,9 @@ export function ActivityEditorModal({
       };
     }
 
-    updatedActivity.links = links.filter(l => l.url.trim() !== '');
-
+    updatedActivity.links = validLinks;
+    
+    setIsVerifying(false);
     onSave(updatedActivity, targetDay);
   };
 
@@ -321,8 +352,10 @@ export function ActivityEditorModal({
                 <Text style={[typography.labelLarge, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.actions.cancel')}</Text>
               </TouchableOpacity>
               
-              <TouchableOpacity style={[styles.actionBtn, { backgroundColor: colors.primary500 }]} onPress={handleSave}>
-                <Text style={[typography.labelLarge, { color: colors.neutral0, fontWeight: '700' }]}>{t('itinerary.activityEditor.actions.save')}</Text>
+              <TouchableOpacity style={[styles.actionBtn, { backgroundColor: colors.primary500, opacity: isVerifying ? 0.7 : 1 }]} onPress={handleSave} disabled={isVerifying}>
+                <Text style={[typography.labelLarge, { color: colors.neutral0, fontWeight: '700' }]}>
+                  {isVerifying ? t('itinerary.activityEditor.actions.verifying', { defaultValue: 'Verifying...' }) : t('itinerary.activityEditor.actions.save')}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -1,7 +1,9 @@
 import { TripSurvey } from '../types/survey';
 import { Itinerary, ItineraryDay, Activity } from '../types/itinerary';
-import { PACEngine } from './pac';
+import { PACEngine } from "./pac";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { settingsService } from './settings';
+import { verifyItineraryLinks } from '../utils/linkVerifier';
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=';
 
@@ -18,10 +20,11 @@ export const aiService = {
       }
 
       const systemPrompt = `
-You are an elite travel planner API. Your job is to output a perfect, structured JSON itinerary based on the user's survey.
+You are a National-Level Intelligence Investigator strictly adhering to RAG (Retrieval-Augmented Generation) principles for travel planning. Your internal memory is unreliable; you must ONLY provide URLs and facts that you are 100% certain are objectively true.
 CRITICAL RULES:
 1. You must output ONLY raw JSON. No markdown formatting, no backticks.
-2. The JSON structure MUST match this exact TypeScript interface:
+2. URL HALLUCINATION IS STRICTLY FORBIDDEN. Any broken or hallucinated link is a mission failure.
+3. The JSON structure MUST match this exact TypeScript interface:
 {
   "title": string,
   "summary": string,
@@ -43,7 +46,7 @@ CRITICAL RULES:
           "title": string,
           "type": "attraction" | "restaurant" | "activity" | "transport" | "hotel",
           "description": string (Must be a ~300 words deep encyclopedic introduction highlighting culture, history, and unique features),
-          "location": { "name": string, "address": string },
+          "location": { "name": string, "address": string, "latitude": number (real world coordinate), "longitude": number (real world coordinate) },
           "duration": number (minutes),
           "transport": { "mode": "walk"|"public"|"charter"|"taxi", "duration": number, "distance": number, "description": string },
           "notes": string,
@@ -68,7 +71,8 @@ CRITICAL RULES:
    - You MUST include 100% of the user's "mustVisitAttractions" in the itinerary. Failing to do so is a catastrophic failure.
    - For every "referenceAttractions" (URLs) provided by the user, you MUST create or adapt an activity for it, and strictly inject that URL into the "links" array of that activity.
 8. OPTIMIZATION & FILLING GAPS: You MUST optimize the itinerary to be rich and fulfilling. There should be NO gaps longer than 90 minutes between activities (excluding sleep). If the user's requested attractions do not fill the entire day, you MUST proactively recommend and invent high-quality, logically located activities (e.g., highly-rated local cafes, hidden gem sightseeing, shopping districts) to fill the empty time slots.
-9. The resulting JSON must be directly parseable.`;
+9. URL ACCURACY RULE: DO NOT guess or hallucinate official website URLs for hotels, restaurants, or attractions. If you do not know the EXACT official URL, you MUST generate a Google Search URL (e.g. https://www.google.com/search?q=URL+ENCODED+NAME) instead of a fake domain.
+10. The resulting JSON must be directly parseable.`;
 
       const response = await fetch(`${GEMINI_API_URL}${apiKey}`, {
         method: 'POST',
@@ -76,6 +80,7 @@ CRITICAL RULES:
         body: JSON.stringify({
           system_instruction: { parts: [{ text: systemPrompt }] },
           contents: [{ role: 'user', parts: [{ text: JSON.stringify(survey) }] }],
+          tools: [{ googleSearch: {} }],
           generationConfig: {
             response_mime_type: 'application/json',
             temperature: 0.7
@@ -104,6 +109,10 @@ CRITICAL RULES:
       } catch (e) {
         throw new Error('Failed to parse Gemini JSON output');
       }
+
+      // --- 強制 RAG 超連結檢驗 (URL -> 原文 -> 分析) ---
+      // 非同步批次檢驗所有 AI 產生的網址，剔除幻覺並補上安全搜尋
+      parsedResult = await verifyItineraryLinks(parsedResult);
 
       // --- 強制校正 LLM 行程起訖點 (Post-processing Guard) ---
       if (parsedResult.days && parsedResult.days.length > 0) {

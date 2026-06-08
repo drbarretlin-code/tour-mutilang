@@ -330,7 +330,7 @@ export default function BatchSchedulerScreen() {
                             <Text style={[typography.labelMedium, { color: colors.text, fontWeight: '700', marginBottom: 8 }]}>
                               選擇欲安插的天數：
                             </Text>
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 16 }}>
+                            <ScrollView horizontal showsHorizontalScrollIndicator={Platform.OS === 'web'} style={{ marginBottom: 16 }}>
                               {activeItinerary.days.map((d, dIdx) => (
                             <TouchableOpacity 
                               key={d.dayNumber}

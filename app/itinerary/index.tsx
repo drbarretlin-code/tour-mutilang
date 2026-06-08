@@ -429,6 +429,7 @@ export default function ItineraryScreen() {
 
       {viewMode === 'guide' && (
         <DestinationGuide 
+          countryName={contextItinerary?.days?.[0]?.region || '泰國'}
           onNavigateToTranslator={() => Linking.openURL('https://acia-2.vercel.app')}
         />
       )}
@@ -505,7 +506,7 @@ export default function ItineraryScreen() {
           {/* 2. Days Selector Tab (Only show for timeline/map view modes) */}
           {isDailyView && (
             <View style={[styles.daysTabContainer, { borderBottomColor: colors.divider, borderBottomWidth: 1 }]}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: spacing.md, paddingVertical: spacing.sm }}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={Platform.OS === 'web'} contentContainerStyle={{ paddingHorizontal: spacing.md, paddingVertical: spacing.sm }}>
                 {itinerary.days.map((d) => {
                   const isSelected = d.dayNumber === activeDay;
                   return (
@@ -533,7 +534,7 @@ export default function ItineraryScreen() {
 
           {/* 3. View Switch Tab (5-Tab scrollable bar) */}
           <View style={[styles.viewModeContainer, { borderBottomColor: colors.divider, borderBottomWidth: 1 }]}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.modeScrollContent}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={Platform.OS === 'web'} contentContainerStyle={styles.modeScrollContent}>
               {[
                 { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
                 { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
@@ -580,10 +581,20 @@ export default function ItineraryScreen() {
              activeDay={activeDay}
              onEditActivity={setEditingActivityId}
              onRefreshMap={handleRefreshItinerary}
-             onNavigate={(loc) => {
-                const lat = loc.latitude || 0;
-                const lng = loc.longitude || 0;
-                const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+             onNavigate={(loc, origin) => {
+                const destLat = loc.latitude || 0;
+                const destLng = loc.longitude || 0;
+                const destination = (destLat !== 0 && destLng !== 0) ? `${destLat},${destLng}` : encodeURIComponent(loc.name || loc.address || '');
+                let url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+                
+                if (origin) {
+                  const origLat = origin.latitude || 0;
+                  const origLng = origin.longitude || 0;
+                  const originParam = (origLat !== 0 && origLng !== 0) ? `${origLat},${origLng}` : encodeURIComponent(origin.name || origin.address || '');
+                  if (originParam) {
+                    url += `&origin=${originParam}`;
+                  }
+                }
                 Linking.openURL(url);
              }}
           />
@@ -593,10 +604,20 @@ export default function ItineraryScreen() {
               onMoveActivity={handleMoveActivity}
               onAddRecommendedActivity={handleAddRecommendedActivity}
               onEditActivity={setEditingActivityId}
-              onNavigate={(loc) => {
-                const lat = loc.latitude || 0;
-                const lng = loc.longitude || 0;
-                const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+              onNavigate={(loc, origin) => {
+                const destLat = loc.latitude || 0;
+                const destLng = loc.longitude || 0;
+                const destination = (destLat !== 0 && destLng !== 0) ? `${destLat},${destLng}` : encodeURIComponent(loc.name || loc.address || '');
+                let url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+                
+                if (origin) {
+                  const origLat = origin.latitude || 0;
+                  const origLng = origin.longitude || 0;
+                  const originParam = (origLat !== 0 && origLng !== 0) ? `${origLat},${origLng}` : encodeURIComponent(origin.name || origin.address || '');
+                  if (originParam) {
+                    url += `&origin=${originParam}`;
+                  }
+                }
                 Linking.openURL(url);
               }}
               onUpdateNote={handleUpdateNote}

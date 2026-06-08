@@ -10,7 +10,7 @@ interface TimelineViewProps {
   day: ItineraryDay;
   onMoveActivity: (activityId: string, direction: 'up' | 'down') => void;
   onAddRecommendedActivity: (gapStartIndex: number) => void;
-  onNavigate: (location: NonNullable<Activity['location']>) => void;
+  onNavigate: (location: NonNullable<Activity['location']>, origin?: NonNullable<Activity['location']>) => void;
   onUpdateNote?: (activityId: string, note: string) => void;
   onEditActivity: (activityId: string) => void;
 }
@@ -167,7 +167,7 @@ export function TimelineView({
                       <View style={{ marginTop: 12, backgroundColor: '#F1F5F9', borderRadius: 8, overflow: 'hidden', padding: 8 }}>
                         <Image 
                           source={require('../../../assets/images/airport_terminal_map.png')} 
-                          style={{ width: '100%', height: 250, resizeMode: 'contain' }} 
+                          style={{ width: '100%', height: 450, resizeMode: 'contain' }} 
                         />
                         <Text style={[typography.caption, { color: '#64748B', textAlign: 'center', marginTop: 8 }]}>{t('itinerary.timelineView.endOfDay.airportMapHint')}</Text>
                       </View>
@@ -224,7 +224,7 @@ export function TimelineView({
                     <Ionicons name="pencil" size={18} color="#3B82F6" />
                   </TouchableOpacity>
                   {!!act.location && (
-                    <TouchableOpacity onPress={() => onNavigate(act.location!)} style={{ padding: 4 }}>
+                    <TouchableOpacity onPress={() => onNavigate(act.location!, isFirst ? undefined : activities[index - 1]?.location)} style={{ padding: 4 }}>
                       <Ionicons name="open-outline" size={18} color="#94A3B8" />
                     </TouchableOpacity>
                   )}
@@ -238,7 +238,7 @@ export function TimelineView({
                   <View style={{ marginTop: 12, backgroundColor: '#F1F5F9', borderRadius: 8, overflow: 'hidden', padding: 8 }}>
                     <Image 
                       source={require('../../../assets/images/airport_terminal_map.png')} 
-                      style={{ width: '100%', height: 250, resizeMode: 'contain' }} 
+                      style={{ width: '100%', height: 450, resizeMode: 'contain' }} 
                     />
                     <Text style={[typography.caption, { color: '#64748B', textAlign: 'center', marginTop: 8 }]}>{t('itinerary.timelineView.endOfDay.airportMapHint')}</Text>
                   </View>
@@ -256,7 +256,7 @@ export function TimelineView({
                 <View style={[styles.actionBtnRow, { marginTop: 16 }]}>
                   <TouchableOpacity 
                     style={[styles.actionBtn, { borderColor: '#10B981', backgroundColor: '#ECFDF5' }]}
-                    onPress={() => onNavigate(act.location || { latitude: 0, longitude: 0, address: '', name: act.title })}
+                    onPress={() => onNavigate(act.location || { latitude: 0, longitude: 0, address: '', name: act.title }, isFirst ? undefined : activities[index - 1]?.location)}
                   >
                     <Ionicons name="navigate-circle-outline" size={16} color="#059669" style={{ marginRight: 4 }} />
                     <Text style={[typography.caption, { color: '#059669', fontWeight: '700' }]}>{t('itinerary.timelineView.activity.navigate')}</Text>
@@ -276,6 +276,14 @@ export function TimelineView({
                   >
                     <Ionicons name="ticket-outline" size={14} color="#64748B" style={{ marginRight: 4 }} />
                     <Text style={[typography.caption, { color: '#475569', fontWeight: '600' }]}>KKday {day.region || ''}{t('itinerary.timelineView.activity.charter')}</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity 
+                    style={[styles.actionBtn, { borderColor: '#DBEAFE', backgroundColor: '#EFF6FF' }]}
+                    onPress={() => handleOpenUrl(`https://www.google.com/search?q=${encodeURIComponent(act.title + ' ' + (day.region || ''))}`)}
+                  >
+                    <Ionicons name="search-outline" size={14} color="#2563EB" style={{ marginRight: 4 }} />
+                    <Text style={[typography.caption, { color: '#2563EB', fontWeight: '600' }]}>{t('itinerary.timelineView.activity.googleSearch', { defaultValue: 'Google 搜尋' })}</Text>
                   </TouchableOpacity>
                   
                   {act.links && act.links.map((link, idx) => (

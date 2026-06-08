@@ -335,6 +335,31 @@
       "actLocName": "特色小吃與咖啡廳",
       "actLocAddr": "景點步行區域內",
       "actNotes": "推薦試試當地特色冷飲。"
+    },
+    "destinationGuide": {
+      "loading": "正在為您編譯當地專屬指南...",
+      "exchange": {
+        "title": "%{currencyName}/台幣 匯率換算助手",
+        "subtitle": "即時試算今日花費與預算（當前匯率約 1 TWD = %{rate} %{code}）",
+        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
+        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
+        "inputTwd": "輸入台幣 (TWD)",
+        "inputLocal": "輸入%{name} (%{code})",
+        "resultLabel": "換算結果 (%{code})",
+        "twdLabel": "TWD 台幣"
+      },
+      "guide": {
+        "title": "💡 旅遊消費實用指南 (%{code}/TWD 概念)",
+        "quickSelect": "快速試算金額點選："
+      },
+      "emergency": {
+        "title": "📞 緊急聯絡資訊"
+      },
+      "phrases": {
+        "title": "☕ 實用語通",
+        "translator": "1. 雙向語音翻譯網頁",
+        "openTool": "開啟工具"
+      }
     }
   },
   "settings": {
