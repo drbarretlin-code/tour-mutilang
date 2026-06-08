@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { Itinerary } from '../../types/itinerary';
+import { t } from '../../i18n';
 
 interface Props {
   itinerary: Itinerary;
