@@ -56,7 +56,7 @@ export class SafeErrorBoundary extends Component<Props, State> {
       );
     }
 
-    return this.state.children;
+    return this.props.children;
   }
 }
 
