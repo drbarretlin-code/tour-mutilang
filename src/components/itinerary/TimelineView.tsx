@@ -261,25 +261,30 @@ export function TimelineView({
                     <Text style={[typography.caption, { color: '#059669', fontWeight: '700' }]}>{t('itinerary.timelineView.activity.navigate')}</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity 
-                    style={[styles.actionBtn, { borderColor: '#CBD5E1', backgroundColor: '#F8FAFC' }]}
-                    onPress={() => handleOpenUrl(`https://www.klook.com/zh-TW/search/result/?query=${encodeURIComponent(act.title)}`)}
-                  >
-                    <Ionicons name="ticket-outline" size={14} color="#64748B" style={{ marginRight: 4 }} />
-                    <Text style={[typography.caption, { color: '#475569', fontWeight: '600' }]}>Klook {day.region || ''}{t('itinerary.timelineView.activity.charter')}</Text>
-                  </TouchableOpacity>
+                  {/* dynamic booking recommendation */}
+                  {(act.bookingRecommended || ['attraction', 'activity'].includes(act.type)) && (
+                    <>
+                      <TouchableOpacity 
+                        style={[styles.actionBtn, { borderColor: '#FF5B00', backgroundColor: '#FFF0E5' }]}
+                        onPress={() => handleOpenUrl(`https://www.klook.com/zh-TW/search/result/?query=${encodeURIComponent(act.localTitle || act.title)}`)}
+                      >
+                        <Ionicons name="ticket" size={14} color="#FF5B00" style={{ marginRight: 4 }} />
+                        <Text style={[typography.caption, { color: '#FF5B00', fontWeight: '700' }]}>Klook 找票券</Text>
+                      </TouchableOpacity>
 
-                  <TouchableOpacity 
-                    style={[styles.actionBtn, { borderColor: '#CBD5E1', backgroundColor: '#F8FAFC' }]}
-                    onPress={() => handleOpenUrl(`https://www.kkday.com/zh-tw/product/productlist?word=${encodeURIComponent(act.title)}`)}
-                  >
-                    <Ionicons name="ticket-outline" size={14} color="#64748B" style={{ marginRight: 4 }} />
-                    <Text style={[typography.caption, { color: '#475569', fontWeight: '600' }]}>KKday {day.region || ''}{t('itinerary.timelineView.activity.charter')}</Text>
-                  </TouchableOpacity>
+                      <TouchableOpacity 
+                        style={[styles.actionBtn, { borderColor: '#26C2D6', backgroundColor: '#E0FAFD' }]}
+                        onPress={() => handleOpenUrl(`https://www.kkday.com/zh-tw/product/productlist?word=${encodeURIComponent(act.localTitle || act.title)}`)}
+                      >
+                        <Ionicons name="ticket" size={14} color="#26C2D6" style={{ marginRight: 4 }} />
+                        <Text style={[typography.caption, { color: '#26C2D6', fontWeight: '700' }]}>KKday 找體驗</Text>
+                      </TouchableOpacity>
+                    </>
+                  )}
 
                   <TouchableOpacity 
                     style={[styles.actionBtn, { borderColor: '#DBEAFE', backgroundColor: '#EFF6FF' }]}
-                    onPress={() => handleOpenUrl(`https://www.google.com/search?q=${encodeURIComponent(act.title + ' ' + (day.region || ''))}`)}
+                    onPress={() => handleOpenUrl(`https://www.google.com/search?q=${encodeURIComponent((act.localTitle || act.title) + ' ' + (day.region || ''))}`)}
                   >
                     <Ionicons name="search-outline" size={14} color="#2563EB" style={{ marginRight: 4 }} />
                     <Text style={[typography.caption, { color: '#2563EB', fontWeight: '600' }]}>{t('itinerary.timelineView.activity.googleSearch', { defaultValue: 'Google 搜尋' })}</Text>

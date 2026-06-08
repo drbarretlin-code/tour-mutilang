@@ -17,6 +17,7 @@ import { ActivityEditorModal } from '../../src/components/itinerary/ActivityEdit
 import { ReRollModal } from '../../src/components/itinerary/ReRollModal';
 import { Card } from '../../src/components/common/Card';
 import { Button } from '../../src/components/common/Button';
+import { AffiliateWidget } from '../../src/components/common/AffiliateWidget';
 import { t } from '../../src/i18n';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -701,6 +702,9 @@ export default function ItineraryScreen() {
              }}
               onUpdateNote={handleUpdateNote}
             />
+          </View>
+          <View style={{ marginTop: spacing.lg }}>
+            <AffiliateWidget region={currentDayData?.region || itinerary.title} />
           </View>
         </ScrollView>
       ) : (

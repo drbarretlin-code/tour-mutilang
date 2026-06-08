@@ -51,6 +51,7 @@ export interface Activity {
   links: ActivityLink[];
   notes: string;
   isMustVisit: boolean;
+  bookingRecommended?: boolean;
   photoUrl?: string;
 }
 

@@ -46,6 +46,8 @@ CRITICAL RULES:
           "title": string,
           "type": "attraction" | "restaurant" | "activity" | "transport" | "hotel",
           "description": string (Must be a ~300 words deep encyclopedic introduction highlighting culture, history, and unique features),
+          "localTitle": string (CRITICAL: The exact official name in the destination's local language. MUST be accurate for booking searches),
+          "bookingRecommended": boolean (Set to true if this is a paid attraction, theme park, or guided tour that can be booked on Klook/KKday),
           "location": { "name": string, "address": string, "latitude": number (real world coordinate), "longitude": number (real world coordinate) },
           "duration": number (minutes),
           "transport": { "mode": "walk"|"public"|"charter"|"taxi", "duration": number, "distance": number, "description": string },
