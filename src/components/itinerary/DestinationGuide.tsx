@@ -20,56 +20,101 @@ export function DestinationGuide({ onNavigateToTranslator }: Props) {
   const [exchangeRate, setExchangeRate] = useState<number>(1);
   const [exchangeMode, setExchangeMode] = useState<'TWD_TO_LOCAL' | 'LOCAL_TO_TWD'>('TWD_TO_LOCAL');
   const [amountStr, setAmountStr] = useState('1000');
+  const [errorMsg, setErrorMsg] = useState('');
 
-  useEffect(() => {
-    const fetchGuideData = async () => {
+  const loadGuideData = async () => {
+    try {
+      setLoading(true);
+      setErrorMsg('');
+      const country = survey.destinations && survey.destinations.length > 0 
+        ? survey.destinations[0].name 
+        : '泰國'; // fallback
+
+      // 1. 嘗試從 Cache 讀取
+      const cacheKey = `@guide_data_${country}`;
+      let cached = null;
       try {
-        setLoading(true);
-        const country = survey.destinations && survey.destinations.length > 0 
-          ? survey.destinations[0].name 
-          : '泰國'; // fallback
+        cached = await AsyncStorage.getItem(cacheKey);
+      } catch (e) {
+        console.warn('AsyncStorage get error', e);
+      }
 
-        // 1. 嘗試從 Cache 讀取
-        const cacheKey = `@guide_data_${country}`;
-        const cached = await AsyncStorage.getItem(cacheKey);
-        let data = null;
+      let data = null;
 
-        if (cached) {
+      if (cached) {
+        try {
           data = JSON.parse(cached);
-        } else {
-          // 2. 呼叫 AI 產生
-          data = await aiService.getDestinationGuideInfo(country);
-          await AsyncStorage.setItem(cacheKey, JSON.stringify(data));
+        } catch (e) {
+          console.warn('JSON parse error', e);
         }
+      }
+
+      if (!data) {
+        // 2. 呼叫 AI 產生
+        data = await aiService.getDestinationGuideInfo(country);
+        if (data) {
+          try {
+            await AsyncStorage.setItem(cacheKey, JSON.stringify(data));
+          } catch (e) {
+            console.warn('AsyncStorage set error', e);
+          }
+        }
+      }
+
+      if (data) {
         setGuideData(data);
 
-        // 3. 獲取真實匯率
-        const rateRes = await fetch('https://api.exchangerate-api.com/v4/latest/TWD');
-        const rateData = await rateRes.json();
-        
-        // 從 rateData.rates 中取出目標貨幣的匯率
-        // 如果是 TWD -> TWD (例如去台灣玩)，匯率就是 1
-        const targetRate = data.currencyCode && rateData.rates[data.currencyCode] 
-          ? rateData.rates[data.currencyCode] 
-          : 1;
-        
-        setExchangeRate(targetRate);
-
-      } catch (error) {
-        console.error('Failed to fetch guide data', error);
-      } finally {
-        setLoading(false);
+        // 3. 獲取真實匯率 (獨立 Try-Catch 避免影響畫面顯示)
+        try {
+          const rateRes = await fetch('https://api.exchangerate-api.com/v4/latest/TWD');
+          if (rateRes.ok) {
+            const rateData = await rateRes.json();
+            const targetRate = data.currencyCode && rateData.rates[data.currencyCode] 
+              ? rateData.rates[data.currencyCode] 
+              : 1;
+            setExchangeRate(targetRate);
+          }
+        } catch (error) {
+          console.warn('Failed to fetch exchange rate', error);
+        }
+      } else {
+        setErrorMsg('無法從 AI 獲取當地指南資料。');
       }
-    };
 
-    fetchGuideData();
+    } catch (error) {
+      console.error('Failed to load guide data', error);
+      setErrorMsg('載入當地指南時發生非預期的錯誤。');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadGuideData();
   }, [survey.destinations]);
 
-  if (loading || !guideData) {
+  if (loading) {
     return (
       <View style={[styles.container, { justifyContent: 'center', alignItems: 'center', minHeight: 400 }]}>
         <ActivityIndicator size="large" color={colors.primary500} />
         <Text style={[typography.bodyMedium, { color: colors.textSecondary, marginTop: 16 }]}>{t('itinerary.destinationGuide.loading')}</Text>
+      </View>
+    );
+  }
+
+  if (errorMsg || !guideData) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center', minHeight: 400 }]}>
+        <Ionicons name="alert-circle-outline" size={48} color={colors.textTertiary} />
+        <Text style={[typography.bodyMedium, { color: colors.textSecondary, marginTop: 16, textAlign: 'center' }]}>
+          {errorMsg || '目前沒有可用資料'}
+        </Text>
+        <TouchableOpacity 
+          style={{ marginTop: 24, paddingHorizontal: 20, paddingVertical: 10, backgroundColor: colors.primary50, borderRadius: borderRadius.md }}
+          onPress={loadGuideData}
+        >
+          <Text style={[typography.labelMedium, { color: colors.primary700, fontWeight: '700' }]}>重試</Text>
+        </TouchableOpacity>
       </View>
     );
   }
