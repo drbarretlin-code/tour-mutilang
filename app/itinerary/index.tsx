@@ -569,27 +569,82 @@ export default function ItineraryScreen() {
 
       {/* Navigation Panel Content */}
       {isNavExpanded && (
-        <View style={{ backgroundColor: colors.surface }}>
-          {/* 2. Days Selector Tab (Only show for timeline/map view modes) */}
+        <View style={{ backgroundColor: colors.surface, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderBottomColor: colors.divider, borderBottomWidth: 1, zIndex: 10 }}>
+          
+          {/* Top Row: View Modes + Action Icons */}
+          <View style={{ flexDirection: isLargeScreen ? 'row' : 'column', alignItems: isLargeScreen ? 'center' : 'stretch', gap: spacing.md }}>
+            
+            {/* 1. View Switch Tab (5-Tab scrollable bar) */}
+            <View style={{ flex: isLargeScreen ? 1 : undefined }}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: 'center', paddingRight: spacing.lg }}>
+                {[
+                  { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
+                  { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
+                  { code: 'checklist', label: t('itinerary.tabs.checklist'), icon: 'checkbox-outline' },
+                  { code: 'expenses', label: t('itinerary.tabs.expenses'), icon: 'wallet-outline' },
+                  { code: 'translator', label: t('itinerary.tabs.translator'), icon: 'language-outline' },
+                ].map((mode) => {
+                  const isSelected = viewMode === mode.code;
+                  return (
+                    <TouchableOpacity
+                      key={mode.code}
+                      onPress={() => setViewMode(mode.code as any)}
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        backgroundColor: isSelected ? colors.primary500 : colors.backgroundSecondary,
+                        paddingHorizontal: spacing.md,
+                        paddingVertical: spacing.sm,
+                        borderRadius: borderRadius.full,
+                        marginRight: spacing.sm,
+                      }}
+                    >
+                      <Ionicons name={mode.icon as any} size={16} color={isSelected ? '#fff' : colors.textSecondary} />
+                      <Text style={[typography.labelMedium, { color: isSelected ? '#fff' : colors.textSecondary, marginLeft: 6, fontWeight: '700' }]}>
+                        {mode.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
+            </View>
+
+            {/* 2. Functional Action Panel (Icons) */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: isLargeScreen ? 'auto' : 'flex-end', backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.full, padding: 4 }}>
+              {!isOffline && (
+                <TouchableOpacity onPress={handleRefreshItinerary} style={{ padding: 8, marginHorizontal: 4 }}>
+                  <Ionicons name="sync" size={20} color={colors.textSecondary} />
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity onPress={handleExportPDF} style={{ padding: 8, marginHorizontal: 4 }}>
+                <Ionicons name="document-text" size={20} color={colors.textSecondary} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => Alert.alert(t('itinerary.shareTitle'), t('itinerary.shareMsg'))} style={{ padding: 8, marginHorizontal: 4 }}>
+                <Ionicons name="share-social" size={20} color={colors.textSecondary} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* 3. Days Selector Tab (Only show for timeline/map view modes) */}
           {isDailyView && (
-            <View style={[styles.daysTabContainer, { borderBottomColor: colors.divider, borderBottomWidth: 1 }]}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={Platform.OS === 'web'} contentContainerStyle={{ paddingHorizontal: spacing.md, paddingVertical: spacing.sm }}>
+            <View style={{ marginTop: spacing.md, paddingTop: spacing.sm, borderTopColor: colors.divider, borderTopWidth: 1 }}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={Platform.OS === 'web'} contentContainerStyle={{ paddingBottom: spacing.xs }}>
                 {itinerary.days.map((d) => {
                   const isSelected = d.dayNumber === activeDay;
                   return (
                     <TouchableOpacity
                       key={d.dayNumber}
                       onPress={() => setActiveDay(d.dayNumber)}
-                      style={[
-                        styles.dayTab,
-                        {
-                          backgroundColor: isSelected ? colors.primary500 : colors.backgroundSecondary,
-                          borderRadius: borderRadius.sm,
-                          marginRight: spacing.xs,
-                        }
-                      ]}
+                      style={{
+                        paddingHorizontal: 20,
+                        paddingVertical: 10,
+                        backgroundColor: isSelected ? colors.primary50 : 'transparent',
+                        borderBottomWidth: 3,
+                        borderBottomColor: isSelected ? colors.primary500 : 'transparent',
+                        marginRight: spacing.sm,
+                      }}
                     >
-                      <Text style={[typography.labelMedium, { color: isSelected ? colors.neutral0 : colors.text, fontWeight: '600' }]}>
+                      <Text style={[typography.labelLarge, { color: isSelected ? colors.primary600 : colors.text, fontWeight: isSelected ? '800' : '600' }]}>
                         Day {d.dayNumber}
                       </Text>
                     </TouchableOpacity>
@@ -598,56 +653,6 @@ export default function ItineraryScreen() {
               </ScrollView>
             </View>
           )}
-
-          {/* 3. View Switch Tab (5-Tab scrollable bar) + Action Panel */}
-          <View style={[styles.viewModeContainer, { borderBottomColor: colors.divider, borderBottomWidth: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={Platform.OS === 'web'} contentContainerStyle={styles.modeScrollContent}>
-              {[
-                { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
-                { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
-                { code: 'checklist', label: t('itinerary.tabs.checklist'), icon: 'checkbox-outline' },
-                { code: 'expenses', label: t('itinerary.tabs.expenses'), icon: 'wallet-outline' },
-                { code: 'translator', label: t('itinerary.tabs.translator'), icon: 'language-outline' },
-              ].map((mode) => {
-                const isSelected = viewMode === mode.code;
-                return (
-                  <TouchableOpacity
-                    key={mode.code}
-                    onPress={() => setViewMode(mode.code as any)}
-                    style={[
-                      styles.modeButton,
-                      {
-                        backgroundColor: isSelected ? colors.primary50 : 'transparent',
-                        borderBottomWidth: 2,
-                        borderBottomColor: isSelected ? colors.primary500 : 'transparent',
-                        paddingHorizontal: spacing.md,
-                      }
-                    ]}
-                  >
-                    <Ionicons name={mode.icon as any} size={16} color={isSelected ? colors.primary500 : colors.textSecondary} />
-                    <Text style={[typography.labelMedium, { color: isSelected ? colors.primary500 : colors.textSecondary, marginLeft: 6, fontWeight: '600' }]}>
-                      {mode.label}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
-            </ScrollView>
-            
-            {/* Functional Action Panel */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.sm, borderLeftWidth: 1, borderLeftColor: colors.divider, height: '100%' }}>
-              {!isOffline && (
-                <TouchableOpacity onPress={handleRefreshItinerary} style={{ padding: 8 }}>
-                  <Ionicons name="refresh" size={20} color={colors.primary500} />
-                </TouchableOpacity>
-              )}
-              <TouchableOpacity onPress={handleExportPDF} style={{ padding: 8 }}>
-                <Ionicons name="document-text-outline" size={20} color={colors.primary500} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => Alert.alert(t('itinerary.shareTitle'), t('itinerary.shareMsg'))} style={{ padding: 8 }}>
-                <Ionicons name="share-social-outline" size={20} color={colors.textSecondary} />
-              </TouchableOpacity>
-            </View>
-          </View>
         </View>
       )}
 

@@ -131,10 +131,12 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.1)',
   },
   timelineContainer: {
-    height: 160, // Ensure enough height for the cards
+    minHeight: 180, // Increased to ensure scrollbar is visible
+    paddingBottom: 8,
   },
   scrollContent: {
-    paddingVertical: 10,
+    paddingTop: 10,
+    paddingBottom: 24, // Added bottom padding to prevent scrollbar clipping
     paddingHorizontal: 10,
     alignItems: 'center',
   },
