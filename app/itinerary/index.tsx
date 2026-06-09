@@ -588,6 +588,9 @@ export default function ItineraryScreen() {
     try {
       const latestItinerary = await dbService.getItinerary(itinerary.id);
       if (latestItinerary) {
+        if (contextSurvey) {
+          aiService.healItineraryCoordinates(latestItinerary, contextSurvey);
+        }
         setItinerary(latestItinerary);
       }
     } catch (err) {

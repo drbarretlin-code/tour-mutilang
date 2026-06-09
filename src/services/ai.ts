@@ -10,8 +10,130 @@ import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=';
 
 function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
+  if (!itinerary) return;
   const defaultDest = survey.destinations?.[0] || { name: '台北', latitude: 25.0330, longitude: 121.5654 };
+  const currency = survey.currency || 'TWD';
   
+  // 1. 航班時間對齊自癒
+  if (itinerary.days && itinerary.days.length > 0) {
+    const days = itinerary.days;
+    const firstDay = days[0];
+    const lastDay = days[days.length - 1];
+    const destName = firstDay.region || defaultDest.name || '當地';
+
+    const outgoingFlight = survey.flights?.find(f => !f.isReturn);
+    const returnFlight = survey.flights?.find(f => f.isReturn);
+
+    // 去程對齊自癒
+    if (firstDay.activities && firstDay.activities.length > 0) {
+      const arrTime = outgoingFlight ? outgoingFlight.arrivalTime : '08:30';
+      const arrEndTime = addMinutesToTime(arrTime, 90);
+      const firstAct = firstDay.activities[0];
+
+      if (!firstAct.title.includes('機場') && !firstAct.title.toLowerCase().includes('airport')) {
+        firstDay.activities.unshift({
+          id: `act-day1-start-forced-heal`,
+          order: 0,
+          startTime: arrTime,
+          endTime: arrEndTime,
+          title: outgoingFlight ? `抵達當地機場 (${outgoingFlight.flightNumber})` : '抵達當地機場',
+          type: 'transport',
+          description: '順利抵達當地機場，完成通關手續並領取行李。建議您先在機場購買當地的網卡或兌換部分當地貨幣，為接下來的旅程做好準備。',
+          location: { name: `${destName}國際機場`, address: `${destName}機場航廈`, latitude: defaultDest.latitude || 0, longitude: defaultDest.longitude || 0 },
+          duration: 90,
+          transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘機場接送專車直達市區。' },
+          links: [{ label: 'Klook 機場接送預訂', url: 'https://www.klook.com/', type: 'booking' }],
+          notes: '請備妥入境文件與護照。',
+          photoUrl: 'local-asset://airport_map',
+          cost: { amount: 0, currency },
+          openingHours: '24小時開放'
+        });
+      } else {
+        firstAct.photoUrl = 'local-asset://airport_map';
+        firstAct.startTime = arrTime;
+        firstAct.endTime = arrEndTime;
+        firstAct.duration = 90;
+        if (outgoingFlight) {
+          firstAct.title = `抵達當地機場 (${outgoingFlight.flightNumber})`;
+        }
+      }
+
+      // 重新對齊第一天後續所有景點的時間順序
+      firstDay.activities.forEach((a: any, idx: number) => a.order = idx);
+      for (let idx = 1; idx < firstDay.activities.length; idx++) {
+        const prev = firstDay.activities[idx - 1];
+        const curr = firstDay.activities[idx];
+        const transDuration = prev.transport?.duration || 15;
+        const earliestStart = addMinutesToTime(prev.endTime, transDuration);
+        if (curr.startTime < earliestStart) {
+          const duration = curr.duration || 60;
+          curr.startTime = earliestStart;
+          curr.endTime = addMinutesToTime(earliestStart, duration);
+        }
+      }
+    }
+
+    // 回程對齊自癒
+    if (lastDay.activities && lastDay.activities.length > 0) {
+      const depTime = returnFlight ? returnFlight.departureTime : '18:00';
+      const airportStart = subMinutesFromTime(depTime, 150);
+      let lastAct = lastDay.activities[lastDay.activities.length - 1];
+
+      if (!lastAct.title.includes('機場') && !lastAct.title.toLowerCase().includes('airport')) {
+        lastDay.activities.push({
+          id: `act-day${days.length}-end-forced-heal`,
+          order: lastDay.activities.length,
+          startTime: airportStart,
+          endTime: depTime,
+          title: returnFlight ? `抵達機場準備返航 (${returnFlight.flightNumber})` : '抵達機場準備返國',
+          type: 'transport',
+          description: '帶著滿滿的美好回憶，抵達機場準備搭機返國。建議您預留足夠的時間辦理退稅手續，並在免稅店做最後的採購。',
+          location: { name: `${destName}國際機場`, address: `${destName}機場航廈`, latitude: defaultDest.latitude || 0, longitude: defaultDest.longitude || 0 },
+          duration: 150,
+          transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘包車前往機場。' },
+          links: [{ label: '當地推薦安全叫車 App', url: 'https://www.grab.com/', type: 'info' }],
+          notes: returnFlight ? `航班時間：${depTime}。請務必再三確認護照與隨身行李是否帶齊。` : '請提早2-3小時抵達機場。',
+          photoUrl: 'local-asset://airport_map',
+          cost: { amount: 0, currency },
+          openingHours: '24小時開放'
+        });
+      } else {
+        lastAct.photoUrl = 'local-asset://airport_map';
+        lastAct.startTime = airportStart;
+        lastAct.endTime = depTime;
+        lastAct.duration = 150;
+        if (returnFlight) {
+          lastAct.title = `抵達機場準備返航 (${returnFlight.flightNumber})`;
+          lastAct.notes = `航班時間：${depTime}。請務必再三確認護照與隨身行李是否帶齊。`;
+        }
+      }
+
+      // 由後往前推算最後一天的活動時間，防止與返航機場時間衝突
+      let targetEnd = airportStart;
+      const remainingActivities = lastDay.activities.slice(0, -1);
+      for (let idx = remainingActivities.length - 1; idx >= 0; idx--) {
+        const act = remainingActivities[idx];
+        const transDuration = act.transport?.duration || 15;
+        const latestEnd = subMinutesFromTime(targetEnd, transDuration);
+        if (act.endTime > latestEnd) {
+          act.endTime = latestEnd;
+          const duration = act.duration || 60;
+          act.startTime = subMinutesFromTime(latestEnd, duration);
+        }
+        targetEnd = act.startTime;
+      }
+
+      // 重新排序並過濾掉時間太早的中間活動
+      const validActs = lastDay.activities.filter((act, idx) => {
+        if (idx === 0 || idx === lastDay.activities.length - 1) return true;
+        return act.startTime >= '07:30';
+      });
+      validActs.forEach((a: any, idx: number) => a.order = idx);
+      lastDay.activities = validActs;
+    }
+  }
+
+  // 2. 經緯度座標自癒
   const cityCoords: Record<string, { lat: number; lng: number }> = {};
   if (Array.isArray(SUGGESTED_DESTINATIONS)) {
     SUGGESTED_DESTINATIONS.forEach(d => {

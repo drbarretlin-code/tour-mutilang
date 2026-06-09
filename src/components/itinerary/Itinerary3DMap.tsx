@@ -106,20 +106,36 @@ export function Itinerary3DMap({ itinerary, activeDay, height = 300 }: Itinerary
       minLng -= 0.0025;
     }
 
+    const centerLat = (minLat + maxLat) / 2;
+    const centerLng = (minLng + maxLng) / 2;
+
     const latSpan = maxLat - minLat;
     const lngSpan = maxLng - minLng;
-    
-    // Add 15% margin padding
-    const marginLatMax = maxLat + latSpan * 0.15;
-    const marginLatMin = minLat - latSpan * 0.15;
-    const marginLngMax = maxLng + lngSpan * 0.15;
-    const marginLngMin = minLng - lngSpan * 0.15;
 
-    // Source 1: OpenStreetMap Static Map (de)
-    const osmUrl = `https://staticmap.openstreetmap.de/staticmap.php?bbox=${marginLngMin},${marginLatMin},${marginLngMax},${marginLatMax}&size=650x450&maptype=mapnik`;
-    
-    // Source 2: Yandex Static Map
-    const yandexUrl = `https://static-maps.yandex.ru/1.x/?l=map&size=650,450&bbox=${marginLngMin},${marginLatMin}~${marginLngMax},${marginLatMax}`;
+    const containerRatio = viewWidth / viewHeight;
+    const latDistanceFactor = Math.cos(centerLat * Math.PI / 180);
+
+    let targetLngSpan = lngSpan;
+    let targetLatSpan = latSpan;
+
+    const currentRatio = (lngSpan * latDistanceFactor) / latSpan;
+
+    if (currentRatio > containerRatio) {
+      targetLatSpan = (lngSpan * latDistanceFactor) / containerRatio;
+    } else {
+      targetLngSpan = (latSpan * containerRatio) / latDistanceFactor;
+    }
+
+    const marginLatMax = centerLat + targetLatSpan * 0.625;
+    const marginLatMin = centerLat - targetLatSpan * 0.625;
+    const marginLngMax = centerLng + targetLngSpan * 0.625;
+    const marginLngMin = centerLng - targetLngSpan * 0.625;
+
+    const requestWidth = 650;
+    const requestHeight = Math.round(650 / containerRatio);
+
+    const osmUrl = `https://staticmap.openstreetmap.de/staticmap.php?bbox=${marginLngMin},${marginLatMin},${marginLngMax},${marginLatMax}&size=${requestWidth}x${requestHeight}&maptype=mapnik`;
+    const yandexUrl = `https://static-maps.yandex.ru/1.x/?l=map&size=${requestWidth},${requestHeight}&bbox=${marginLngMin},${marginLatMin}~${marginLngMax},${marginLatMax}`;
 
     mapImageUrls = [osmUrl, yandexUrl];
 
@@ -284,7 +300,6 @@ const styles = StyleSheet.create({
   mapImage: {
     width: '100%',
     height: '100%',
-    transform: [{ scale: 1.1 }], // Slight zoom for depth effect
   },
   gradient: {
     position: 'absolute',
