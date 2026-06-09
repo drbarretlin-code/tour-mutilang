@@ -12,7 +12,23 @@ const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/
 
 function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
   if (!itinerary) return;
-  const defaultDest = survey.destinations?.[0] || { name: '台北', latitude: 25.0330, longitude: 121.5654 };
+
+  let defaultDest = { name: '台北', latitude: 25.0330, longitude: 121.5654 };
+  const firstSurveyDest = survey.destinations?.[0];
+  if (firstSurveyDest) {
+    const matched = SUGGESTED_DESTINATIONS.find(d => 
+      d.name === firstSurveyDest.name || 
+      d.name_en?.toLowerCase() === firstSurveyDest.name?.toLowerCase() ||
+      d.name_zh_tw === firstSurveyDest.name ||
+      d.name_zh_cn === firstSurveyDest.name
+    );
+    if (matched) {
+      defaultDest = { name: matched.name, latitude: matched.latitude, longitude: matched.longitude };
+    } else if (firstSurveyDest.latitude && firstSurveyDest.longitude) {
+      defaultDest = { name: firstSurveyDest.name, latitude: firstSurveyDest.latitude, longitude: firstSurveyDest.longitude };
+    }
+  }
+
   const currency = survey.currency || 'TWD';
   
   // 1. 航班時間對齊自癒
@@ -138,11 +154,11 @@ function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
   const cityCoords: Record<string, { lat: number; lng: number }> = {};
   if (Array.isArray(SUGGESTED_DESTINATIONS)) {
     SUGGESTED_DESTINATIONS.forEach(d => {
-      if (d && d.name) {
-        cityCoords[d.name.toLowerCase()] = { lat: d.latitude, lng: d.longitude };
-        if (d.name_en) {
-          cityCoords[d.name_en.toLowerCase()] = { lat: d.latitude, lng: d.longitude };
-        }
+      if (d) {
+        if (d.name) cityCoords[d.name.toLowerCase()] = { lat: d.latitude, lng: d.longitude };
+        if (d.name_en) cityCoords[d.name_en.toLowerCase()] = { lat: d.latitude, lng: d.longitude };
+        if (d.name_zh_tw) cityCoords[d.name_zh_tw.toLowerCase()] = { lat: d.latitude, lng: d.longitude };
+        if (d.name_zh_cn) cityCoords[d.name_zh_cn.toLowerCase()] = { lat: d.latitude, lng: d.longitude };
       }
     });
   }
@@ -151,6 +167,9 @@ function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
     survey.destinations.forEach(d => {
       if (d && d.name && d.latitude && d.longitude) {
         cityCoords[d.name.toLowerCase()] = { lat: d.latitude, lng: d.longitude };
+        if (d.country) {
+          cityCoords[d.country.toLowerCase()] = { lat: d.latitude, lng: d.longitude };
+        }
       }
     });
   }

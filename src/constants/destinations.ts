@@ -184,6 +184,18 @@ export const SUGGESTED_DESTINATIONS: SuggestedDestination[] = [
     latitude: 12.9236,
     longitude: 100.8824
   },
+  {
+    name: '羅勇',
+    country: '泰國',
+    name_en: 'Rayong',
+    name_zh_tw: '羅勇',
+    name_zh_cn: '罗勇',
+    country_en: 'Thailand',
+    country_zh_tw: '泰國',
+    country_zh_cn: '泰国',
+    latitude: 12.6817,
+    longitude: 101.2813
+  },
   // Vietnam
   {
     name: '胡志明市',
