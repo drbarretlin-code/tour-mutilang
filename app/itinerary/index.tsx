@@ -23,6 +23,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Itinerary, Activity } from '../../src/types/itinerary';
 import { dbService } from '../../src/services/db';
+import { aiService } from '../../src/services/ai';
 import { syncService } from '../../src/services/sync';
 import { regenerateActivityAlternatives } from '../../src/services/ai';
 import { auth } from '../../src/services/firebase';
@@ -128,11 +129,21 @@ export default function ItineraryScreen() {
           if (cachedSurvey) {
             const parsedSurvey = JSON.parse(cachedSurvey) as TripSurvey;
             updateSurvey(parsedSurvey);
+            currentSurveyObj = parsedSurvey;
             console.log('[ItineraryScreen] Survey restored from cache.');
           } else if (contextSurvey) {
             // 最差情況，寫入當前 contextSurvey
+            currentSurveyObj = contextSurvey;
             await cacheSet(OFFLINE_SURVEY_KEY, JSON.stringify(contextSurvey));
           }
+        }
+
+        // 對已載入的行程進行座標自癒 (Coordinate Healing)
+        if (currentIt && currentSurveyObj) {
+          console.log('[ItineraryScreen] Healing coordinates for loaded itinerary...');
+          aiService.healItineraryCoordinates(currentIt, currentSurveyObj);
+          setItinerary({ ...currentIt });
+          await cacheSet(OFFLINE_ITINERARY_KEY, JSON.stringify(currentIt));
         }
       } catch (error) {
         console.error('[ItineraryScreen] Error loading itinerary data:', error);
@@ -150,6 +161,9 @@ export default function ItineraryScreen() {
 
     const unsubscribe = syncService.subscribeToItinerary(itinerary.id, (updatedItinerary) => {
       if (updatedItinerary && (!itineraryRef.current || updatedItinerary.updatedAt !== itineraryRef.current.updatedAt)) {
+        if (contextSurvey) {
+          aiService.healItineraryCoordinates(updatedItinerary, contextSurvey);
+        }
         setItinerary(updatedItinerary);
       }
     });

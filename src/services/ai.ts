@@ -114,6 +114,9 @@ function getFallbackGuideInfo(country: string): any {
 }
 
 export const aiService = {
+  healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
+    healItineraryCoordinates(itinerary, survey);
+  },
   /**
    * Submits the survey to the backend AI to generate a complete travel itinerary.
    * @param survey The complete survey data gathered from the user
