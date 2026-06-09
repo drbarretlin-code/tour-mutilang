@@ -12,6 +12,7 @@ import {
 import { db } from './firebase';
 import { TripSurvey } from '../types/survey';
 import { Itinerary } from '../types/itinerary';
+import { PACEngine } from './pac';
 
 export function cleanUndefined(obj: any): any {
   if (obj === null || obj === undefined) {
@@ -92,14 +93,24 @@ export const dbService = {
   // ─── Itinerary CRUD ───
 
   async saveItinerary(itinerary: Itinerary): Promise<void> {
-    try {
+    const action = async () => {
       const docRef = doc(db, 'itineraries', itinerary.id);
       const cleaned = cleanUndefined(itinerary);
       await setDoc(docRef, cleaned);
-    } catch (error) {
-      console.error('Firestore saveItinerary error:', error);
-      throw error;
+    };
+
+    if (PACEngine.getState().network === 'offline') {
+      PACEngine.enqueuePendingTask(`firestore_save_${itinerary.id}`, action);
+      return;
     }
+
+    await PACEngine.executeWithHealing(
+      action,
+      () => {
+        PACEngine.enqueuePendingTask(`retry_firestore_save_${itinerary.id}`, action);
+      },
+      'saveItinerary'
+    );
   },
 
   async getItinerary(itineraryId: string): Promise<Itinerary | null> {

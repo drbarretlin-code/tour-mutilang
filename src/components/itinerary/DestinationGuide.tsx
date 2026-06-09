@@ -6,6 +6,7 @@ import { useSurvey } from '../../context/SurveyContext';
 import { aiService } from '../../services/ai';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { t } from '../../i18n';
+import { usePAC } from '../../context/PACContext';
 
 // Web-safe cache helpers: bypass AsyncStorage on Web (unreliable) and use localStorage directly
 const cacheGet = async (key: string): Promise<string | null> => {
@@ -30,6 +31,7 @@ interface Props {
 export function DestinationGuide({ onNavigateToTranslator, countryName }: Props) {
   const { colors, typography, spacing, borderRadius, shadows } = useTheme();
   const { survey } = useSurvey();
+  const { pacState } = usePAC();
   
   const [loading, setLoading] = useState(true);
   const [guideData, setGuideData] = useState<any>(null);
@@ -184,6 +186,29 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
   return (
     <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
       
+      {/* 離線狀態/本地預設指南提示 Banner */}
+      {(pacState.network !== 'online' || guideData?.isFallback) && (
+        <View style={[
+          styles.offlineBanner,
+          { 
+            backgroundColor: colors.warning50,
+            borderColor: colors.warning200,
+            borderRadius: borderRadius.md,
+            marginBottom: spacing.md,
+            padding: spacing.md
+          }
+        ]}>
+          <View style={styles.offlineBannerContent}>
+            <Ionicons name="cloud-offline-outline" size={18} color={colors.warning800} style={{ marginRight: 8 }} />
+            <Text style={[typography.bodyMedium, { color: colors.warning800, fontWeight: '600', flex: 1 }]}>
+              {pacState.network !== 'online'
+                ? '離線模式：目前為您顯示已暫存之當地指南。'
+                : '連線降級：目前為您顯示本地預設指南。'}
+            </Text>
+          </View>
+        </View>
+      )}
+
       {/* 1. Exchange Rate Calculator Card */}
       <View style={[styles.card, shadows.sm, { backgroundColor: colors.surface, borderRadius: borderRadius.lg, padding: spacing.lg }]}>
         <View style={styles.cardHeader}>
@@ -456,5 +481,12 @@ const styles = StyleSheet.create({
   openToolBtn: {
     paddingHorizontal: 16,
     paddingVertical: 8,
+  },
+  offlineBanner: {
+    borderWidth: 1,
+  },
+  offlineBannerContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

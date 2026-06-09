@@ -144,6 +144,10 @@ export default function ItineraryScreen() {
           aiService.healItineraryCoordinates(currentIt, currentSurveyObj);
           setItinerary({ ...currentIt });
           await cacheSet(OFFLINE_ITINERARY_KEY, JSON.stringify(currentIt));
+          
+          // Auto-recovery of PACEngine status on successful client-side load
+          const PACEngine = require('../../src/services/pac').default;
+          PACEngine.resetHealingState();
         }
       } catch (error) {
         console.error('[ItineraryScreen] Error loading itinerary data:', error);

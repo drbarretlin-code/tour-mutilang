@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Linking, Image, TextInput, Pl
 import { useTheme } from '../../context/ThemeContext';
 import { Card } from '../common/Card';
 import { ItineraryDay, Activity } from '../../types/itinerary';
-import { t } from '../../i18n';
+import i18n, { t } from '../../i18n';
 import { Ionicons } from '@expo/vector-icons';
 
 function getRouteDistance(transport: any): number {
@@ -180,15 +180,14 @@ export function TimelineView({
 
         let gapMinutes = 0;
         let showGapRecommendation = false;
-        if (!isLast) {
-          const nextAct = activities[index + 1];
-          if (nextAct) {
-            const thisEnd = parseTimeToMinutes(act.endTime);
-            const nextStart = parseTimeToMinutes(nextAct.startTime);
-            gapMinutes = nextStart - thisEnd;
-            if (gapMinutes >= 120) {
-              showGapRecommendation = true;
-            }
+        const nextAct = !isLast ? activities[index + 1] : null;
+        const nextTransport = nextAct ? nextAct.transport : null;
+        if (!isLast && nextAct) {
+          const thisEnd = parseTimeToMinutes(act.endTime);
+          const nextStart = parseTimeToMinutes(nextAct.startTime);
+          gapMinutes = nextStart - thisEnd;
+          if (gapMinutes >= 120) {
+            showGapRecommendation = true;
           }
         }
 
@@ -305,12 +304,75 @@ export function TimelineView({
                 )}
 
                 {/* 3. Transport Guideline */}
-                <View style={[styles.transitGuideRow, { marginTop: 12 }]}>
-                  <Ionicons name="car" size={16} color="#DC2626" />
-                  <Text style={[typography.caption, { color: '#475569', marginLeft: 6, flex: 1 }]}>
-                    {t('itinerary.timelineView.activity.transitGuide', { gap: Math.max(10, gapMinutes - act.duration) })}
-                  </Text>
-                </View>
+                {!isLast && (() => {
+                  const transitDuration = nextTransport && nextTransport.duration 
+                    ? nextTransport.duration 
+                    : Math.max(10, gapMinutes);
+                  const transitDistance = nextTransport ? getRouteDistance(nextTransport) : 0;
+                  const transitDistStr = transitDistance > 0 ? `${transitDistance.toFixed(1)} km` : '';
+                  const transitMode = nextTransport ? nextTransport.mode : 'drive';
+
+                  const locale = i18n.locale || 'zh-TW';
+                  const isEn = !locale.startsWith('zh');
+
+                  let transitText = '';
+                  let transitIconName: any = 'car';
+                  let transitIconColor = '#DC2626';
+
+                  const prefix = isEn ? 'Transport Guide: ' : '交通指引：';
+                  const estLabel = isEn ? 'estimated' : '預估時間';
+                  const minLabel = isEn ? 'mins' : '分鐘';
+                  const distLabel = isEn ? 'distance approx.' : '距離約';
+
+                  if (nextTransport && nextTransport.description) {
+                    transitText = isEn 
+                      ? `${prefix}${nextTransport.description}, ${estLabel} ${transitDuration} ${minLabel}.`
+                      : `${prefix}${nextTransport.description}，${estLabel} ${transitDuration} ${minLabel}。`;
+                    
+                    if (transitMode === 'walk') {
+                      transitIconName = 'walk';
+                      transitIconColor = '#10B981';
+                    } else if (transitMode === 'public') {
+                      transitIconName = 'bus';
+                      transitIconColor = '#3B82F6';
+                    }
+                  } else {
+                    const distPart = transitDistStr 
+                      ? (isEn ? `, ${distLabel} ${transitDistStr}` : `，${distLabel} ${transitDistStr}`) 
+                      : '';
+
+                    if (transitMode === 'walk') {
+                      transitIconName = 'walk';
+                      transitIconColor = '#10B981';
+                      transitText = isEn
+                        ? `${prefix}Walk recommended to the next stop${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
+                        : `${prefix}前往下一站距離較近，建議步行前往${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
+                    } else if (transitMode === 'public') {
+                      transitIconName = 'bus';
+                      transitIconColor = '#3B82F6';
+                      transitText = isEn
+                        ? `${prefix}Public transit is convenient, metro/bus recommended${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
+                        : `${prefix}前往下一站大眾運輸便利，建議搭乘地鐵、公車或輕軌前往${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
+                    } else {
+                      transitIconName = 'car';
+                      transitIconColor = '#DC2626';
+                      transitText = isEn
+                        ? `${prefix}Public transit is limited, charter/taxi/Grab recommended${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
+                        : `${prefix}前往下一站大眾運輸不便，建議搭乘包車、計程車或使用 Bolt/Grab 叫車${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
+                    }
+                  }
+
+                  if (!transitText) return null;
+
+                  return (
+                    <View style={[styles.transitGuideRow, { marginTop: 12 }]}>
+                      <Ionicons name={transitIconName} size={16} color={transitIconColor} />
+                      <Text style={[typography.caption, { color: '#475569', marginLeft: 6, flex: 1 }]}>
+                        {transitText}
+                      </Text>
+                    </View>
+                  );
+                })()}
 
                 {/* 4. Action Buttons (Nav & Booking) */}
                 <View style={[styles.actionBtnRow, { marginTop: 16 }]}>

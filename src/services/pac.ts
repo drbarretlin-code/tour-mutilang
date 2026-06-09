@@ -1,4 +1,5 @@
 import { Platform } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 
 export type PACNetworkState = 'online' | 'offline' | 'weak';
 export type PACHealingState = 'stable' | 'healing' | 'degraded';
@@ -27,52 +28,129 @@ class ProjectAutonomicCore {
   private pendingQueue: { id: string; action: () => Promise<void> }[] = [];
   private debounceTimers: Record<string, any> = {};
   private clickCooldowns: Record<string, number> = {};
+  private pingRetryTimer: any = null;
+  private pingRetryDelay = 5000;
 
   constructor() {
     this.initNetworkMonitoring();
   }
 
-  // 1. Initialize Network Monitor (100% Cross-Platform Compatible)
+  // 1. Initialize Network Monitor using NetInfo and light pings
   private initNetworkMonitoring() {
+    // Web environment support fallback
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       this.state.network = window.navigator.onLine ? 'online' : 'offline';
-      window.addEventListener('online', () => this.updateNetworkState('online'));
+      window.addEventListener('online', () => {
+        this.performPingVerification();
+      });
       window.addEventListener('offline', () => this.updateNetworkState('offline'));
-    } else {
-      // For iOS/Android/Desktop: Perform periodic heartbeat checks to avoid complex native dependency issues.
-      // Zero Cost & 100% Reliable
-      this.startNativeHeartbeat();
+    }
+
+    // Subscribe to native and web network state changes via NetInfo
+    NetInfo.addEventListener((state) => {
+      const isConnected = !!state.isConnected;
+      if (isConnected) {
+        this.performPingVerification();
+      } else {
+        this.updateNetworkState('offline');
+      }
+    });
+
+    // Initialize state on app startup
+    NetInfo.fetch().then((state) => {
+      const isConnected = !!state.isConnected;
+      if (isConnected) {
+        this.performPingVerification();
+      } else {
+        this.updateNetworkState('offline');
+      }
+    });
+  }
+
+  private async performPingVerification() {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 秒超時限制
+
+      // 發起輕量級的 HEAD 請求驗證外網連通性
+      const response = await fetch('https://www.google.com', {
+        method: 'HEAD',
+        cache: 'no-cache',
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (response.ok) {
+        if (this.state.network !== 'online') {
+          this.updateNetworkState('online');
+        }
+        if (this.state.healing === 'degraded' && this.pendingQueue.length === 0) {
+          this.state.healing = 'stable';
+          this.state.lastError = null;
+          this.notify();
+        }
+      } else {
+        if (this.state.network !== 'weak') {
+          this.updateNetworkState('weak');
+        }
+      }
+    } catch (e) {
+      // 請求超時或異常，判定為無網際網路連線（如受限 Wi-Fi）
+      if (this.state.network !== 'offline') {
+        this.updateNetworkState('offline');
+      }
     }
   }
 
-  private async startNativeHeartbeat() {
-    setInterval(async () => {
-      try {
-        // Perform a quick HEAD fetch to a reliable public host
-        const response = await fetch('https://www.google.com', { method: 'HEAD', cache: 'no-cache' });
-        if (response.ok) {
-          if (this.state.network !== 'online') {
-            this.updateNetworkState('online');
-          }
-        } else {
-          if (this.state.network !== 'weak') {
-            this.updateNetworkState('weak');
-          }
-        }
-      } catch (e) {
-        if (this.state.network !== 'offline') {
-          this.updateNetworkState('offline');
-        }
+  private startPingRetryLoop() {
+    if (this.pingRetryTimer) return;
+
+    const run = async () => {
+      if (this.state.network === 'online') {
+        this.pingRetryTimer = null;
+        this.pingRetryDelay = 5000;
+        return;
       }
-    }, 10000); // Heartbeat check every 10 seconds
+
+      await this.performPingVerification();
+
+      if (this.getState().network !== 'online') {
+        // 指數退避重試，最大間隔為 60 秒
+        this.pingRetryDelay = Math.min(this.pingRetryDelay * 2, 60000);
+        this.pingRetryTimer = setTimeout(run, this.pingRetryDelay);
+      } else {
+        this.pingRetryTimer = null;
+        this.pingRetryDelay = 5000;
+      }
+    };
+
+    this.pingRetryTimer = setTimeout(run, this.pingRetryDelay);
+  }
+
+  public resetHealingState() {
+    this.state.healing = 'stable';
+    this.state.lastError = null;
+    this.notify();
   }
 
   private updateNetworkState(network: PACNetworkState) {
     this.state.network = network;
     this.notify();
-    if (network === 'online' && this.pendingQueue.length > 0) {
-      // Automatically drain the pending sync task queue when network is restored (Self-Healing)
-      this.drainPendingQueue();
+
+    if (network === 'online') {
+      if (this.pingRetryTimer) {
+        clearTimeout(this.pingRetryTimer);
+        this.pingRetryTimer = null;
+      }
+      this.pingRetryDelay = 5000;
+
+      if (this.pendingQueue.length > 0) {
+        // 網路復原時自動執行排程佇列（自我修復）
+        this.drainPendingQueue();
+      }
+    } else if (this.pendingQueue.length > 0) {
+      this.startPingRetryLoop();
     }
   }
 
@@ -167,6 +245,10 @@ class ProjectAutonomicCore {
 
     this.state.pendingTasksCount = this.pendingQueue.length;
     this.notify();
+
+    if (this.state.network !== 'online') {
+      this.startPingRetryLoop();
+    }
   }
 
   private async drainPendingQueue() {
