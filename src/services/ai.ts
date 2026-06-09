@@ -125,7 +125,7 @@ function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
       }
 
       // 重新排序並過濾掉時間太早的中間活動
-      const validActs = lastDay.activities.filter((act, idx) => {
+      const validActs = lastDay.activities.filter((act: any, idx: number) => {
         if (idx === 0 || idx === lastDay.activities.length - 1) return true;
         return act.startTime >= '07:30';
       });
@@ -412,8 +412,8 @@ CRITICAL RULES:
 4. TRANSPORT RULE: The transport.duration and transport.distance MUST be realistically estimated based on the actual road travel route (not straight-line distance) from the previous activity's location. DO NOT use static values. The distance must be in meters. If transport is 'public' or 'walk', provide EXTREMELY detailed routing in transport.description. If transport is 'charter' (包車), you MUST add a safe booking link (e.g. Klook/KKday) to the activity's "links" array, and add safety tips in transport.description.
 5. AIRPORT MAP RULE: For the "Arrive at Airport" and "Arrive at Airport for Departure" activities, you MUST set the "photoUrl" field to exactly "local-asset://airport_map".
 6. FLIGHT ALIGNMENT RULE: If the user provides flight information in "flights" (where isReturn = false for outgoing, isReturn = true for return):
-   - Outgoing Flight: Day 1's FIRST activity "Arrive at Airport" (order 0) MUST have its startTime aligned to the flight's arrivalTime. The activity title MUST be "Arrive at Airport (${flightNumber})" and duration set to 90 minutes. Subsequent activities on Day 1 MUST begin after this airport clearance.
-   - Return Flight: The Final Day's LAST activity "Arrive at Airport for Departure" MUST end at the flight's departureTime. Its startTime MUST be set to 2.5 hours before the departureTime (duration: 150 minutes). The activity title MUST be "Arrive at Airport for Departure (${flightNumber})". All previous Final Day activities MUST end by this time.
+   - Outgoing Flight: Day 1's FIRST activity "Arrive at Airport" (order 0) MUST have its startTime aligned to the flight's arrivalTime. The activity title MUST be "Arrive at Airport (\${flightNumber})" and duration set to 90 minutes. Subsequent activities on Day 1 MUST begin after this airport clearance.
+   - Return Flight: The Final Day's LAST activity "Arrive at Airport for Departure" MUST end at the flight's departureTime. Its startTime MUST be set to 2.5 hours before the departureTime (duration: 150 minutes). The activity title MUST be "Arrive at Airport for Departure (\${flightNumber})". All previous Final Day activities MUST end by this time.
 7. LOGICAL TIMING: Pay strict attention to typical business hours. Night Markets MUST be in the evening.
 8. USER INPUT & COMPREHENSIVENESS: 
    - You MUST include 100% of the user's "mustVisitAttractions" in the itinerary. Failing to do so is a catastrophic failure.
@@ -588,7 +588,7 @@ CRITICAL RULES:
           }
 
           // 重新排序並過濾掉時間太早的中間活動 (例如 07:30 以前的中間景點活動)
-          const validActs = lastDay.activities.filter((act, idx) => {
+          const validActs = lastDay.activities.filter((act: any, idx: number) => {
             if (idx === 0 || idx === lastDay.activities.length - 1) return true;
             return act.startTime >= '07:30';
           });
@@ -1274,32 +1274,59 @@ export async function regenerateActivityAlternatives(
   }
   console.log('[regenerateActivityAlternatives] API Key obtained (first 8 chars):', apiKey.substring(0, 8) + '...');
 
+  const locale = survey.locale || 'zh-TW';
   const systemPrompt = `
-You are a National-Level Intelligence Investigator strictly adhering to RAG principles.
+You are a National-Level Intelligence Investigator strictly adhering to RAG (Retrieval-Augmented Generation) principles for travel planning.
 The user wants to RE-ROLL (replace) an existing activity in their itinerary.
 You MUST provide exactly 3 high-quality alternative activities that fit the same time slot and logical route.
+
+==================================================
+CRITICAL TOUR PLAN SPECIFICATIONS AND BUSINESS RULES:
+You MUST strictly align all travel planning decisions with the following rules documented in our project guidelines:
+${TOUR_PLAN_RULES}
+==================================================
+
 CRITICAL RULES:
-1. Output ONLY a raw JSON array of 3 Activity objects. No markdown, no backticks.
-2. The JSON structure MUST match this interface exactly:
+1. Output ONLY a raw JSON array of 3 Activity objects. No markdown formatting, no backticks.
+2. The JSON structure MUST match this exact TypeScript interface:
 [
   {
-    "id": "generate-a-unique-uuid",
-    "startTime": "HH:mm",
-    "endTime": "HH:mm",
-    "title": "Exact Place Name",
-    "location": { "name": "...", "address": "...", "latitude": number, "longitude": number },
-    "type": "attraction"|"restaurant"|"cafe"|"shopping"|"spa"|"entertainment"|"hotel"|"transport"|"activity",
-    "notes": "Explain why this is a good alternative...",
+    "id": string (unique UUID e.g. "generate-a-unique-uuid"),
+    "startTime": "HH:MM" (24-hour time),
+    "endTime": "HH:MM" (24-hour time),
+    "title": string (Place Name),
+    "localTitle": string (CRITICAL: The exact official name in the destination's local language. MUST be accurate for booking/map searches),
+    "type": "attraction" | "restaurant" | "cafe" | "shopping" | "spa" | "entertainment" | "hotel" | "transport" | "activity",
+    "description": string (Must be a ~200 words deep introduction highlighting culture, history, and unique features),
+    "location": { "name": string, "address": string, "latitude": number, "longitude": number },
     "duration": number (minutes),
     "rating": number (1-5),
-    "cost": { "amount": number, "currency": "..." },
-    "openingHours": "...",
-    "links": [ { "label": string, "url": string, "type": "info"|"booking" } ]
+    "cost": { "amount": number, "currency": string },
+    "openingHours": string,
+    "links": [ { "label": string, "url": string, "type": "info" | "booking" } ],
+    "notes": string (Explain why this is a good alternative and fits the user's plan),
+    "transport": { 
+      "mode": "walk" | "public" | "charter" | "taxi", 
+      "duration": number (minutes to travel to the next activity), 
+      "distance": number (meters to travel to the next activity), 
+      "description": string (Detailed routing details from this alternative activity to the next activity)
+    }
   }
 ]
-3. The new activities MUST logically fit geographically between the previous and next activities.
-4. The start and end times MUST fit the time window of the original activity being replaced.
-5. URL HALLUCINATION IS FORBIDDEN. Only provide real URLs or Google Search URLs.
+3. GEOGRAPHIC & ROUTE LOGIC: The new activities MUST logically fit geographically between the previous activity and the next activity.
+4. TIME WINDOW: The start and end times MUST fit the time window of the original activity being replaced.
+5. transport ESTIMATION: You MUST realistically estimate the transport duration, distance (in meters), and mode from this alternative activity to the next activity. Do NOT use static default values.
+6. URL HALLUCINATION IS FORBIDDEN. Only provide real official URLs or Google Search URLs.
+7. OUTPUT LANGUAGE RULE: You MUST output all textual fields in the JSON (such as "title", "description", "notes", and transport descriptions) in the language corresponding to the user's locale: "${locale}".
+   - If locale is "zh-TW" or "zh-CN", use Traditional/Simplified Chinese.
+   - If locale is "ja", use Japanese.
+   - If locale is "th", use Thai.
+   - If locale is "ko", use Korean.
+   - If locale is "vi", use Vietnamese.
+   - If locale is "ms", use Malay.
+   - If locale is "es", use Spanish.
+   - If locale is "pt", use Portuguese.
+   - Default to English if the locale is unrecognized.
 `;
 
   const contextData = {

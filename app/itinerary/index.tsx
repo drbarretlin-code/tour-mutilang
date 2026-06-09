@@ -22,6 +22,7 @@ import { t } from '../../src/i18n';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Itinerary, Activity } from '../../src/types/itinerary';
+import { TripSurvey } from '../../src/types/survey';
 import { dbService } from '../../src/services/db';
 import { aiService } from '../../src/services/ai';
 import { syncService } from '../../src/services/sync';
@@ -525,8 +526,9 @@ export default function ItineraryScreen() {
     title: '',
     createdAt: '',
     updatedAt: '',
-    status: 'draft',
+    status: 'ready',
     days: [],
+    emergencyContacts: [],
     currency: 'TWD',
     totalEstimatedCost: { amount: 0, currency: 'TWD' }
   };
@@ -613,7 +615,7 @@ export default function ItineraryScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       
       {/* === STATE 1: Loading Spinner === */}
-      <View style={[styles.centerContainer, { display: showLoading ? 'flex' : 'none', minHeight: 400, justifyContent: 'center', alignItems: 'center' }]}>
+      <View style={[styles.loadingContainer, { display: showLoading ? 'flex' : 'none', minHeight: 400, justifyContent: 'center', alignItems: 'center' }]}>
         <ActivityIndicator size="large" color={colors.primary500} />
         <Text style={[typography.titleMedium, { color: colors.text, marginTop: spacing.md }]}>
           {t('survey.generating')}

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Itinerary } from '../../types/itinerary';
+import { Itinerary, Activity } from '../../types/itinerary';
 import { Itinerary3DMap } from './Itinerary3DMap';
 import { HorizontalActivityCard } from './HorizontalActivityCard';
 import { t } from '../../i18n';
@@ -197,7 +197,7 @@ export const CombinedItineraryView: React.FC<Props> = ({ itinerary, activeDay, o
                       onEdit={onEditActivity}
                       onPress={() => {
                         if (pt.location && onNavigate) {
-                          onNavigate(pt.location, index > 0 ? points[index - 1].location : undefined);
+                          onNavigate(pt.location);
                         }
                       }}
                     />
