@@ -3,6 +3,32 @@
     "name": "Tour Plan",
     "tagline": "智慧旅程，轻松规划"
   },
+  "home": {
+    "title": "我的计画",
+    "emptyStateTitle": "尚未建立任何行程",
+    "emptyStateSubtitle": "点击下方按钮，让 AI 为您规划完美的专属旅程。",
+    "aiBatchTitle": "🤖 AI 智慧批次排程助手",
+    "aiBatchSubtitle": "贴入多个网址，快速产生专属分析与排程建议",
+    "newPlan": "新计划",
+    "errorNotFound": "找不到对应的计画资料，可能已被移除。",
+    "errorLoadFailed": "载入失败，请稍后再试。",
+    "errorDeleteFailed": "删除失败，请稍后再试。",
+    "confirmDeleteTitle": "删除行程",
+    "confirmDeleteMessage": "确定要删除这个计画吗？删除后将无法复原。",
+    "confirmLogoutTitle": "登出",
+    "confirmLogoutMessage": "确定要登出吗？",
+    "greetingMorning": "早上好",
+    "greetingAfternoon": "下午好",
+    "greetingEvening": "晚上好",
+    "apiKeySetupTitle": "设定您的 AI 引擎",
+    "apiKeySetupDesc": "为了提供个人化的专属行程规划，系统需要存取 Gemini AI。请输入您的 API Key 来启用智慧引擎。",
+    "apiKeyPlaceholder": "贴上您的 Gemini API Key (AIzaSy...)",
+    "apiKeySaveLocally": "储存于本机装置",
+    "apiKeySaveLocallyDesc": "若取消勾选，关闭网页后将自动清除，不留存于记忆体。",
+    "getFreeApiKey": "👉 点此快速申请免费 Google Gemini API Key",
+    "saveAndStart": "储存并开始规划",
+    "myItineraries": "我的旅游计画"
+  },
   "common": {
     "next": "下一步",
     "back": "返回",
@@ -38,7 +64,15 @@
     "password": "密码",
     "forgotPassword": "忘记密码",
     "welcomeBack": "欢迎回来",
-    "createAccount": "创建账号"
+    "createAccount": "创建账号",
+    "passwordPlaceholder": "请输入密码",
+    "confirmPassword": "确认密码",
+    "confirmPasswordPlaceholder": "请再次输入密码",
+    "noAccount": "还没有帐号吗？",
+    "hasAccount": "已经有帐号了？",
+    "or": "或",
+    "guestLogin": "以访客身份直接开始",
+    "registerSuccess": "帐号建立成功！已为您自动登入。"
   },
   "survey": {
     "title": "规划你的旅程",
@@ -239,18 +273,329 @@
       "required": "必填信息",
       "recommended": "建议填写",
       "optional": "选填项目"
+    },
+    "actions": {
+      "confirmDiscardTitle": "确认舍弃草稿",
+      "confirmDiscardMessage": "您确定要舍弃目前的行程草稿并重新开始规划吗？此动作无法复原。",
+      "saveSuccessTitle": "储存成功",
+      "saveSuccessMessage": "您的问卷资料已安全储存于本地端。您可以随时关闭应用程式，下次进入将自动恢复编修状态。",
+      "cancelEditWebConfirm": "请问您要放弃这次的修改并回到原行程，还是将目前的修改另存为一份全新的行程？\n\n[确定] 放弃修改，回到原行程\n[取消] 另存为新计画并继续",
+      "convertedTitle": "已转换",
+      "convertedMessage": "目前的修改将会另存为全新行程，不会覆盖旧有计画。请继续完成设定并产生！",
+      "cancelEditTitle": "取消编修",
+      "cancelEditMessage": "请问您要放弃这次的修改，还是将目前的修改另存为一份全新的行程？",
+      "discardAndReturn": "放弃修改，回到原行程",
+      "saveAsNew": "另存为新计画",
+      "continueEditing": "继续编修",
+      "saveDraft": "储存草稿",
+      "restart": "重新填写",
+      "loginOrRegister": "登入/注册"
+    },
+    "summary": {
+      "title": "我的专属旅程亮点",
+      "progress": "AI 智慧规划进度",
+      "notSelectedHint": "未选取（请在第一步设定）",
+      "dateTo": "至",
+      "notSelected": "未选取",
+      "notSet": "未设定",
+      "adults": "成人",
+      "children": "儿童",
+      "guestMode": "访客模式（资料存于本地）",
+      "loggedInAs": "已登入："
     }
   },
   "itinerary": {
     "title": "我的行程",
     "day": "第 {{number}} 天",
     "overview": "总览",
-    "dailySummary": "每日摘要",
+    "dailySummary": {
+      "weather": {
+        "sunny": "晴朗炎热",
+        "cloudy": "多云时晴",
+        "rainy": "局部阵雨",
+        "partlySunny": "午后雷阵雨",
+        "rainProb": "降雨机率 %{prob}"
+      },
+      "advice": {
+        "sunny": "建议着轻便透气衣物，并注意防晒。",
+        "cloudy": "着舒适便服，适合户外活动。",
+        "rainy": "请携带雨具，穿着防雨鞋类。",
+        "partlySunny": "建议随身携带折叠伞，下午防范骤雨。"
+      }
+    },
     "estimatedCost": "预估费用",
     "walkingDistance": "步行距离",
     "weather": "天气预报",
     "timeline": "时间轴视图",
     "mapView": "地图视图",
+    "timelineView": {
+      "types": {
+        "transport": "✈️ 交通 / 抵达",
+        "meal": "🍽️ 用餐",
+        "hotel": "🏨 住宿",
+        "attraction": "🏛️ 景点参观",
+        "default": "📍 活动"
+      },
+      "alerts": {
+        "grabWebHint": "💡 提示：Grab 没有提供「网页版」叫车服务喔！必须使用手机 App。\n\n即将为您打开 Grab 官网提供下载资讯。",
+        "boltWebHint": "💡 提示：Bolt 主要提供手机 App 叫车服务。\n\n即将为您打开 Bolt 官网提供下载资讯。",
+        "cannotOpenTitle": "无法开启",
+        "cannotOpenMessage": "无法开启此连结，可能是您的装置没有安装对应的 App 或浏览器设定阻挡。",
+        "errorTitle": "发生错误",
+        "errorMessage": "无法开启连结。"
+      },
+      "endOfDay": {
+        "title": "🌙 结束今日行程：准备返回住宿地",
+        "transportAdvice": "建议交通方式：搭乘 Grab / Bolt，这段车程大约需要 15 分钟。",
+        "shuttleGuideTitle": "🚗 住宿接驳指南：",
+        "shuttleGuideDesc": "饭店若无接驳系统，请使用 Bolt 或 Grab 叫车。前往预设住宿地（%{hotelName}）。",
+        "yourHotel": "您的饭店",
+        "tonightStay": "今晚住宿：%{hotelName}",
+        "airportMapHint": "机场入出境大厅平面图参考",
+        "openGrab": "点此开启 Grab",
+        "openBolt": "点此开启 Bolt"
+      },
+      "activity": {
+        "region": "区域：%{region}",
+        "thisRegion": "该区域",
+        "transitGuide": "交通指引：前往下一站大众运输不便，本路段无明确地铁，强烈建议搭乘包车或使用 Bolt/Grab 单程叫车，预估车程 %{gap} 分钟。",
+        "navigate": "导航到地图",
+        "charter": "包车",
+        "notesLabel": "传送调整｜笔记",
+        "notesPlaceholder": "例如：司机大哥电话、确认营业时间..."
+      }
+    },
+    "mapFallbackView": {
+      "errors": {
+        "openFailed": "无法载入地图导航，将尝试在浏览器中开启。"
+      },
+      "title": "今日路线网络拓扑图",
+      "empty": "今日行程无景点位置资料。"
+    },
+    "combinedView": {
+      "title": "🗺️ Day %{day} 行程路线与时程资讯图表",
+      "subtitle": "互动式 3D 立体路线轨迹图，即时反应行程异动",
+      "refresh": "一键更新图表"
+    },
+    "horizontalCard": {
+      "types": {
+        "activity": "景点",
+        "dining": "美食",
+        "shopping": "购物",
+        "experience": "体验"
+      }
+    },
+    "activityEditor": {
+      "title": "编辑行程项目",
+      "types": {
+        "attraction": "景点",
+        "restaurant": "食飨",
+        "cafe": "咖啡厅 / 下午茶",
+        "shopping": "血拼",
+        "spa": "SPA / 按摩",
+        "entertainment": "娱乐",
+        "hotel": "住宿",
+        "transport": "移动",
+        "activity": "体验"
+      },
+      "errors": {
+        "titleEmpty": "行程名称不能为空"
+      },
+      "deleteConfirm": {
+        "title": "删除项目",
+        "message": "确定要删除这个项目吗？"
+      },
+      "fields": {
+        "time": "时间 (例如 10:00)",
+        "type": "项目类型",
+        "title": "行程名称",
+        "titlePlaceholder": "请输入行程名称",
+        "location": "地理位置 (区域)",
+        "locationPlaceholder": "例如: 芭达雅",
+        "day": "排定天数 (移动行程)",
+        "notes": "详细说明 (交通或集合备注)",
+        "notesPlaceholder": "输入任何提醒事项或笔记...",
+        "links": "参考网址 (选填)"
+      },
+      "links": {
+        "map": "地图:",
+        "mapPlaceholder": "Google Maps 网址",
+        "info": "介绍:",
+        "infoPlaceholder": "部落格或官方网站",
+        "booking": "交通:",
+        "bookingPlaceholder": "Klook 或包车预订"
+      },
+      "actions": {
+        "delete": "删除此项目",
+        "cancel": "取消",
+        "save": "储存变更"
+      }
+    },
+    "destinationGuide": {
+      "loading": "正在为您编译当地专属指南...",
+      "exchange": {
+        "title": "%{currencyName}/台币 汇率换算助手",
+        "subtitle": "即时试算今日花费与预算（当前汇率约 1 TWD = %{rate} %{code}）",
+        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
+        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
+        "inputTwd": "输入台币 (TWD)",
+        "inputLocal": "输入%{name} (%{code})",
+        "resultLabel": "换算结果 (%{code})",
+        "twdLabel": "TWD 台币"
+      },
+      "guide": {
+        "title": "💡 旅游消费实用指南 (%{code}/TWD 概念)",
+        "quickSelect": "快速试算金额点选："
+      },
+      "emergency": {
+        "title": "📞 紧急联络资讯"
+      },
+      "phrases": {
+        "title": "☕ 实用语通",
+        "translator": "1. 双向语音翻译网页",
+        "openTool": "开启工具"
+      }
+    },
+    "expenseSplitter": {
+      "me": "我",
+      "companionN": "旅伴 %{n}",
+      "errors": {
+        "companionExists": "此旅伴名字已存在！",
+        "cannotRemoveCreator": "无法移除帐号建立者。",
+        "emptyTitle": "请输入费用项目名称！",
+        "invalidAmount": "请输入有效的金额！",
+        "noSplitters": "请至少选择一位分摊费用的旅伴！"
+      },
+      "summary": {
+        "title": "旅程花费总览",
+        "budgetLevel": "预算层级：%{level}"
+      },
+      "companions": {
+        "title": "分帐旅伴名单 (%{count} 人)",
+        "addPlaceholder": "新增其他旅伴名字...",
+        "addBtn": "新增"
+      },
+      "settlement": {
+        "title": "清偿结算建议",
+        "allSettled": "目前所有帐目已结清，无须转帐！"
+      },
+      "expenses": {
+        "title": "花费明细记录 (%{count} 笔)",
+        "addBtn": "记一笔",
+        "detail": "付款人：%{paidBy} | 分摊：%{count} 人"
+      },
+      "modal": {
+        "title": "新增费用记录",
+        "fields": {
+          "titleLabel": "项目名称",
+          "titlePlaceholder": "例如：泰式晚餐、地铁票、阿贡火山一日游",
+          "amountLabel": "花费金额 (%{currency})",
+          "amountPlaceholder": "请输入金额",
+          "paidByLabel": "付款人",
+          "splitWithLabel": "费用分摊人 (可多选)"
+        }
+      }
+    },
+    "packingChecklist": {
+      "items": {
+        "doc1": "护照与护照影本",
+        "doc2": "电子机票 / 登机证",
+        "doc3": "订房平台确认凭证",
+        "doc4": "海外旅游平安保险单",
+        "ess1": "手机与充电线",
+        "ess2": "充电宝",
+        "ess3": "万国转接插头",
+        "ess4": "外币现金与信用卡",
+        "ess5": "个人常备药品",
+        "ess6": "盥洗用品与保养品",
+        "clo1": "换洗衣物与睡衣",
+        "clo2": "舒适好走的鞋子",
+        "clo3": "遮阳帽与墨镜",
+        "child1": "儿童常备感冒药 / 体温计",
+        "child2": "儿童湿纸巾与零食",
+        "driver1": "国际驾照与国内驾照正本",
+        "driver2": "手机车用支架",
+        "water1": "泳衣、泳帽与泳镜",
+        "water2": "手机防尘防水袋",
+        "nat1": "防蚊液与驱蚊贴片",
+        "nat2": "防泼水外套 / 登山便鞋"
+      },
+      "progress": {
+        "title": "行前行李收拾进度",
+        "subtitle": "已收拾 %{checkedCount} / %{totalCount} 件物品"
+      },
+      "custom": {
+        "title": "新增自订打包项目",
+        "placeholder": "例如：感冒药、相机脚架..."
+      },
+      "categories": {
+        "docs": "必备证件与文件",
+        "essential": "个人生活必备品",
+        "clothing": "服饰与随身穿着",
+        "custom": "自订收拾清单"
+      }
+    },
+    "travelTranslator": {
+      "tabs": {
+        "live": "线上 AI 即时翻译",
+        "handbook": "离线常用语速查"
+      },
+      "langs": {
+        "english": "英文",
+        "japanese": "日文",
+        "korean": "朝鲜语",
+        "thai": "泰文",
+        "vietnamese": "越南文"
+      },
+      "live": {
+        "targetLabel": "目标翻译语言",
+        "placeholder": "请输入想对外国人说的话... (例如：请问点这道菜要等多久？)",
+        "translateBtn": "开始 AI 翻译",
+        "resultLabel": "翻译结果"
+      },
+      "categories": {
+        "general": "日常问候",
+        "dining": "餐厅点餐",
+        "transport": "交通指引",
+        "emergency": "紧急状况"
+      },
+      "errors": {
+        "translationFailed": "翻译发生错误，请稍后再试。"
+      },
+      "phrases": {
+        "mockPrefix": "[模拟翻译 - %{lang}]",
+        "englishRef": "英语对照：%{text}",
+        "general": {
+          "0": "你好",
+          "1": "谢谢",
+          "2": "不好意思 / 请问",
+          "3": "这个多少钱？"
+        },
+        "dining": {
+          "0": "我想看菜单",
+          "1": "请给我水",
+          "2": "请问这道菜有含花生吗？",
+          "3": "请帮我结帐"
+        },
+        "transport": {
+          "0": "地铁站在哪里？",
+          "1": "我想去这个地方",
+          "2": "厕所在哪里？"
+        },
+        "emergency": {
+          "0": "请帮我叫救护车！",
+          "1": "我的护照掉了！",
+          "2": "警察局在哪？"
+        }
+      }
+    },
+    "apiKeyModal": {
+      "title": "解锁 AI 智慧引擎",
+      "description": "为了提供您个人化的行程规划且无须订阅费用，本应用程式采用 BYOK 架构。请免费申请 Google Gemini API 金钥并贴于下方。您的金钥将被安全地加密储存于您的设备中。",
+      "linkText": "前往 Google AI Studio 申请免费金钥",
+      "cancelBtn": "取消 (使用离线范本)",
+      "saveBtn": "储存并生成"
+    },
     "activity": {
       "startTime": "开始时间",
       "endTime": "结束时间",
@@ -304,62 +649,37 @@
     "aiSuggestion": "AI 为你的空闲时间推荐附近景点",
     "offlineReady": "支持离线浏览",
     "tabs": {
-      "timeline": "行程總覽",
-      "guide": "當地指南",
-      "checklist": "行前清單",
-      "expenses": "費用分帳",
-      "translator": "旅遊翻譯"
+      "timeline": "行程总览",
+      "guide": "当地指南",
+      "checklist": "行前清单",
+      "expenses": "费用分帐",
+      "translator": "旅游翻译"
     },
     "map": {
-      "title": "全行程 3D 立體景觀圖"
+      "title": "全行程 3D 立体景观图"
     },
     "nav": {
-      "collapse": "收起選單面板",
-      "expand": "展開視圖與天數選單"
+      "collapse": "收起选单面板",
+      "expand": "展开视图与天数选单"
     },
-    "offline": "離線瀏覽模式",
-    "noData": "無行程資料",
-    "backHome": "返回首頁",
+    "offline": "离线浏览模式",
+    "noData": "无行程资料",
+    "backHome": "返回首页",
     "shareTitle": "分享行程",
-    "shareMsg": "行程連結已複製到剪貼簿！",
-    "exportTitle": "匯出行程 PDF",
-    "exportSuccess": "匯出成功",
-    "exportSuccessMsg": "PDF 已產生至：%{uri}",
-    "exportFail": "匯出失敗",
-    "exportFailMsg": "無法產生 PDF 檔案。",
+    "shareMsg": "行程连结已复制到剪贴簿！",
+    "exportTitle": "汇出行程 PDF",
+    "exportSuccess": "汇出成功",
+    "exportSuccessMsg": "PDF 已产生至：%{uri}",
+    "exportFail": "汇出失败",
+    "exportFailMsg": "无法产生 PDF 档案。",
     "aiRecommend": {
-      "title": "AI 推薦",
-      "msg": "已為您自動填補行程空檔並更新路線！",
-      "actTitle": "AI 推薦：精選在地美食品嚐",
-      "actDesc": "為您推薦周邊高人氣美食餐廳，適合在行程空檔放鬆享用。",
-      "actLocName": "特色小吃與咖啡廳",
-      "actLocAddr": "景點步行區域內",
-      "actNotes": "推薦試試當地特色冷飲。"
-    },
-    "destinationGuide": {
-      "loading": "正在為您編譯當地專屬指南...",
-      "exchange": {
-        "title": "%{currencyName}/台幣 匯率換算助手",
-        "subtitle": "即時試算今日花費與預算（當前匯率約 1 TWD = %{rate} %{code}）",
-        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
-        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
-        "inputTwd": "輸入台幣 (TWD)",
-        "inputLocal": "輸入%{name} (%{code})",
-        "resultLabel": "換算結果 (%{code})",
-        "twdLabel": "TWD 台幣"
-      },
-      "guide": {
-        "title": "💡 旅遊消費實用指南 (%{code}/TWD 概念)",
-        "quickSelect": "快速試算金額點選："
-      },
-      "emergency": {
-        "title": "📞 緊急聯絡資訊"
-      },
-      "phrases": {
-        "title": "☕ 實用語通",
-        "translator": "1. 雙向語音翻譯網頁",
-        "openTool": "開啟工具"
-      }
+      "title": "AI 推荐",
+      "msg": "已为您自动填补行程空档并更新路线！",
+      "actTitle": "AI 推荐：精选在地美食品尝",
+      "actDesc": "为您推荐周边高人气美食餐厅，适合在行程空档放松享用。",
+      "actLocName": "特色小吃与咖啡厅",
+      "actLocAddr": "景点步行区域内",
+      "actNotes": "推荐试试当地特色冷饮。"
     }
   },
   "settings": {
@@ -384,20 +704,13 @@
     "unsupportedFormat": "不支持的文件格式",
     "minTravelers": "至少需要 1 位旅客",
     "minDestination": "至少需要 1 个目的地",
-    "dateRange": "返程日期必须在出发日期之后"
-  },
-  "home": {
-    "greetingMorning": "早安",
-    "greetingAfternoon": "午安",
-    "greetingEvening": "晚安",
-    "apiKeySetupTitle": "設定您的 AI 引擎",
-    "apiKeySetupDesc": "為了提供個人化的專屬行程規劃，系統需要存取 Gemini AI。請輸入您的 API Key 來啟用智慧引擎。",
-    "apiKeyPlaceholder": "貼上您的 Gemini API Key (AIzaSy...)",
-    "apiKeySaveLocally": "儲存於本機裝置",
-    "apiKeySaveLocallyDesc": "若取消勾選，關閉網頁後將自動清除，不留存於記憶體。",
-    "getFreeApiKey": "👉 點此快速申請免費 Google Gemini API Key",
-    "saveAndStart": "儲存並開始規劃",
-    "myItineraries": "我的旅遊計畫"
+    "dateRange": "返程日期必须在出发日期之后",
+    "passwordMinLength": "密码长度必须大于 6 位字元",
+    "passwordMismatch": "两次输入的密码不一致",
+    "emailInUse": "此电子信箱已被注册。",
+    "invalidCredential": "电子信箱或密码错误。",
+    "invalidEmailFormat": "无效的电子信箱格式。",
+    "guestLoginFailed": "匿名登入失败，请稍后再试。"
   },
   "dashboard": {
     "untitledItinerary": "未命名行程"

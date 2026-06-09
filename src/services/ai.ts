@@ -4,8 +4,114 @@ import { PACEngine } from "./pac";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { settingsService } from './settings';
 import { verifyItineraryLinks, verifyUrlRAG } from '../utils/linkVerifier';
+import i18n from '../i18n';
+import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=';
+
+function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
+  const defaultDest = survey.destinations?.[0] || { name: '台北', latitude: 25.0330, longitude: 121.5654 };
+  
+  const cityCoords: Record<string, { lat: number; lng: number }> = {};
+  if (Array.isArray(SUGGESTED_DESTINATIONS)) {
+    SUGGESTED_DESTINATIONS.forEach(d => {
+      if (d && d.name) {
+        cityCoords[d.name.toLowerCase()] = { lat: d.latitude, lng: d.longitude };
+        if (d.name_en) {
+          cityCoords[d.name_en.toLowerCase()] = { lat: d.latitude, lng: d.longitude };
+        }
+      }
+    });
+  }
+
+  if (Array.isArray(survey.destinations)) {
+    survey.destinations.forEach(d => {
+      if (d && d.name && d.latitude && d.longitude) {
+        cityCoords[d.name.toLowerCase()] = { lat: d.latitude, lng: d.longitude };
+      }
+    });
+  }
+
+  itinerary.days?.forEach((day: any) => {
+    const regionName = (day.region || defaultDest.name || '').toLowerCase();
+    let baseLat = defaultDest.latitude || 25.0330;
+    let baseLng = defaultDest.longitude || 121.5654;
+
+    for (const key of Object.keys(cityCoords)) {
+      if (regionName.includes(key) || key.includes(regionName)) {
+        baseLat = cityCoords[key].lat;
+        baseLng = cityCoords[key].lng;
+        break;
+      }
+    }
+
+    day.activities?.forEach((act: any, idx: number) => {
+      if (!act.location) {
+        act.location = { name: act.title, address: act.title };
+      }
+      
+      const lat = parseFloat(act.location.latitude);
+      const lng = parseFloat(act.location.longitude);
+      
+      if (isNaN(lat) || lat === 0 || isNaN(lng) || lng === 0) {
+        const offsetLat = (Math.sin(idx + 1) * 0.008);
+        const offsetLng = (Math.cos(idx + 1) * 0.008);
+        act.location.latitude = baseLat + offsetLat;
+        act.location.longitude = baseLng + offsetLng;
+        console.log(`[Coordinate Healing] Healed coordinate for "${act.title}" to (${act.location.latitude.toFixed(4)}, ${act.location.longitude.toFixed(4)})`);
+      } else {
+        act.location.latitude = lat;
+        act.location.longitude = lng;
+      }
+    });
+  });
+}
+
+function getFallbackGuideInfo(country: string): any {
+  const isJapan = country.includes('日') || country.toLowerCase().includes('japan') || country.toLowerCase().includes('tokyo') || country.toLowerCase().includes('東京');
+  
+  if (isJapan) {
+    return {
+      currencyCode: "JPY",
+      currencyName: "日圓",
+      emergencyContacts: [
+        { title: "警察局 (報案)", subTitle: "24小時免費服務", phone: "110" },
+        { title: "消防/救護車 (急救)", subTitle: "24小時免費服務", phone: "119" },
+        { title: "外國人熱線 (諮詢)", subTitle: "東京都外籍諮詢", phone: "03-5320-7744" }
+      ],
+      usefulPhrases: [
+        { local: "Konnichiwa", zh: "你好", isHighlight: false },
+        { local: "Arigatou gozaimasu", zh: "謝謝", isHighlight: false },
+        { local: "Kore wa ikura desu ka?", zh: "這多少錢？", isHighlight: true }
+      ],
+      guideItems: [
+        { item: "拉麵一碗", priceRange: "800 - 1200 JPY" },
+        { item: "便利商店飯糰", priceRange: "130 - 200 JPY" },
+        { item: "地鐵一日券", priceRange: "800 JPY" }
+      ]
+    };
+  }
+  
+  return {
+    currencyCode: "THB",
+    currencyName: "泰銖",
+    emergencyContacts: [
+      { title: "觀光警察", subTitle: "中英文與24小時服務", phone: "1155" },
+      { title: "報警與緊急求助", subTitle: "24小時免費服務", phone: "191" },
+      { title: "救護車與火警", subTitle: "24小時免費服務", phone: "199" }
+    ],
+    usefulPhrases: [
+      { local: "Sawasdee krub/ka", zh: "你好", isHighlight: false },
+      { local: "Khob khun krub/ka", zh: "謝謝", isHighlight: false },
+      { local: "Nee tao rai?", zh: "這多少錢？", isHighlight: true }
+    ],
+    guideItems: [
+      { item: "路邊攤泰式炒河粉", priceRange: "50 - 80 THB" },
+      { item: "椰子水 (一粒)", priceRange: "40 - 60 THB" },
+      { item: "泰式古法按摩 (1小時)", priceRange: "250 - 400 THB" }
+    ]
+  };
+}
 
 export const aiService = {
   /**
@@ -13,6 +119,10 @@ export const aiService = {
    * @param survey The complete survey data gathered from the user
    */
   async generateItinerary(survey: TripSurvey): Promise<Itinerary> {
+    // 強制將 survey.locale 對齊至當前 App 實體運作中的語系設定，避免語系未同步造成的英文行程
+    const appLocale = i18n.locale || survey.locale || 'zh-TW';
+    const alignedSurvey = { ...survey, locale: appLocale };
+
     const fetchItineraryAction = async (): Promise<Itinerary> => {
       const apiKey = await settingsService.getApiKey();
       if (!apiKey) {
@@ -66,22 +176,36 @@ CRITICAL RULES:
 - Day 1: The FIRST activity (order 0) MUST be "Arrive at Airport" (type: "transport"). The LAST activity MUST be "Return to Hotel" (type: "hotel").
 - Middle Days: The FIRST activity MUST be "Depart from Hotel" (type: "hotel"). The LAST activity MUST be "Return to Hotel" (type: "hotel").
 - Final Day: The FIRST activity MUST be "Depart from Hotel" (type: "hotel"). The LAST activity MUST be "Arrive at Airport for Departure" (type: "transport").
-4. TRANSPORT RULE: The transport.duration MUST be realistically estimated based on the actual geographic distance from the previous activity's location. DO NOT use a static 10 minutes for everything. If transport is 'public' or 'walk', provide EXTREMELY detailed routing in transport.description. If transport is 'charter' (包車), you MUST add a safe booking link (e.g. Klook/KKday) to the activity's "links" array, and add safety tips in transport.description.
+4. TRANSPORT RULE: The transport.duration and transport.distance MUST be realistically estimated based on the actual road travel route (not straight-line distance) from the previous activity's location. DO NOT use static values. The distance must be in meters. If transport is 'public' or 'walk', provide EXTREMELY detailed routing in transport.description. If transport is 'charter' (包車), you MUST add a safe booking link (e.g. Klook/KKday) to the activity's "links" array, and add safety tips in transport.description.
 5. AIRPORT MAP RULE: For the "Arrive at Airport" and "Arrive at Airport for Departure" activities, you MUST set the "photoUrl" field to exactly "local-asset://airport_map".
-6. LOGICAL TIMING: Pay strict attention to typical business hours. Night Markets MUST be in the evening.
-7. USER INPUT & COMPREHENSIVENESS: 
+6. FLIGHT ALIGNMENT RULE: If the user provides flight information in "flights" (where isReturn = false for outgoing, isReturn = true for return):
+   - Outgoing Flight: Day 1's FIRST activity "Arrive at Airport" (order 0) MUST have its startTime aligned to the flight's arrivalTime. The activity title MUST be "Arrive at Airport (${flightNumber})" and duration set to 90 minutes. Subsequent activities on Day 1 MUST begin after this airport clearance.
+   - Return Flight: The Final Day's LAST activity "Arrive at Airport for Departure" MUST end at the flight's departureTime. Its startTime MUST be set to 2.5 hours before the departureTime (duration: 150 minutes). The activity title MUST be "Arrive at Airport for Departure (${flightNumber})". All previous Final Day activities MUST end by this time.
+7. LOGICAL TIMING: Pay strict attention to typical business hours. Night Markets MUST be in the evening.
+8. USER INPUT & COMPREHENSIVENESS: 
    - You MUST include 100% of the user's "mustVisitAttractions" in the itinerary. Failing to do so is a catastrophic failure.
    - For every "referenceAttractions" (URLs) provided by the user, you MUST create or adapt an activity for it, and strictly inject that URL into the "links" array of that activity.
-8. OPTIMIZATION & FILLING GAPS: You MUST optimize the itinerary to be rich and fulfilling. There should be NO gaps longer than 90 minutes between activities (excluding sleep). If the user's requested attractions do not fill the entire day, you MUST proactively recommend and invent high-quality, logically located activities (e.g., highly-rated local cafes, hidden gem sightseeing, shopping districts) to fill the empty time slots.
-9. URL ACCURACY RULE: DO NOT guess or hallucinate official website URLs for hotels, restaurants, or attractions. If you do not know the EXACT official URL, you MUST generate a Google Search URL (e.g. https://www.google.com/search?q=URL+ENCODED+NAME) instead of a fake domain.
-10. The resulting JSON must be directly parseable.`;
+9. OPTIMIZATION & FILLING GAPS: You MUST optimize the itinerary to be rich and fulfilling. There should be NO gaps longer than 90 minutes between activities (excluding sleep). If the user's requested attractions do not fill the entire day, you MUST proactively recommend and invent high-quality, logically located activities (e.g., highly-rated local cafes, hidden gem sightseeing, shopping districts) to fill the empty time slots.
+10. URL ACCURACY RULE: DO NOT guess or hallucinate official website URLs for hotels, restaurants, or attractions. If you do not know the EXACT official URL, you MUST generate a Google Search URL (e.g. https://www.google.com/search?q=URL+ENCODED+NAME) instead of a fake domain.
+11. The resulting JSON must be directly parseable.
+12. OUTPUT LANGUAGE RULE: You MUST output all textual fields in the JSON (such as "title", "summary", "description", "notes", and transport descriptions) in the language corresponding to the user's "locale" property in the survey data.
+- If locale is "zh-TW" or "zh-CN", use Traditional/Simplified Chinese.
+- If locale is "ja", use Japanese.
+- If locale is "th", use Thai.
+- If locale is "ko", use Korean.
+- If locale is "vi", use Vietnamese.
+- If locale is "ms", use Malay.
+- If locale is "es", use Spanish.
+- If locale is "pt", use Portuguese.
+- Default to English if the locale is unrecognized.
+13. COORDINATE RULE: You MUST provide realistic real-world geographic coordinates (latitude and longitude) for every activity's "location" object. Under no circumstances should latitude or longitude be 0 or omitted, as they are directly used for rendering the dynamic route maps and calculate distances. If you don't know the exact coordinates of a specific spot, estimate them based on its parent city/region.`;
 
       const response = await fetch(`${GEMINI_API_URL}${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           system_instruction: { parts: [{ text: systemPrompt }] },
-          contents: [{ role: 'user', parts: [{ text: JSON.stringify(survey) }] }],
+          contents: [{ role: 'user', parts: [{ text: JSON.stringify(alignedSurvey) }] }],
           tools: [{ googleSearch: {} }],
           generationConfig: {
             response_mime_type: 'application/json',
@@ -116,6 +240,9 @@ CRITICAL RULES:
       // 非同步批次檢驗所有 AI 產生的網址，剔除幻覺並補上安全搜尋
       parsedResult = await verifyItineraryLinks(parsedResult);
 
+      // --- 強制校正 LLM 經緯度座標 (Proactive Healing) ---
+      healItineraryCoordinates(parsedResult, alignedSurvey);
+
       // --- 強制校正 LLM 行程起訖點 (Post-processing Guard) ---
       if (parsedResult.days && parsedResult.days.length > 0) {
         const days = parsedResult.days;
@@ -124,16 +251,22 @@ CRITICAL RULES:
         const destName = firstDay.region || survey.destinations[0]?.name || '當地';
         const currency = survey.currency || 'TWD';
 
-        // 檢查第一天第一站
+        const outgoingFlight = survey.flights?.find(f => !f.isReturn);
+        const returnFlight = survey.flights?.find(f => f.isReturn);
+
+        // 檢查第一天第一站 (去程對齊)
         if (firstDay.activities && firstDay.activities.length > 0) {
+          const arrTime = outgoingFlight ? outgoingFlight.arrivalTime : '08:30';
+          const arrEndTime = addMinutesToTime(arrTime, 90);
           const firstAct = firstDay.activities[0];
+
           if (!firstAct.title.includes('機場') && !firstAct.title.toLowerCase().includes('airport')) {
             firstDay.activities.unshift({
               id: `act-day1-start-forced`,
               order: 0,
-              startTime: '08:30',
-              endTime: '10:00',
-              title: '抵達當地機場',
+              startTime: arrTime,
+              endTime: arrEndTime,
+              title: outgoingFlight ? `抵達當地機場 (${outgoingFlight.flightNumber})` : '抵達當地機場',
               type: 'transport',
               description: '順利抵達當地機場，完成通關手續並領取行李。建議您先在機場購買當地的網卡或兌換部分當地貨幣，為接下來的旅程做好準備。',
               location: { name: `${destName}國際機場`, address: `${destName}機場航廈` },
@@ -145,36 +278,90 @@ CRITICAL RULES:
               cost: { amount: 0, currency },
               openingHours: '24小時開放'
             });
-            firstDay.activities.forEach((a: any, idx: number) => a.order = idx);
           } else {
-             firstAct.photoUrl = 'local-asset://airport_map';
+            firstAct.photoUrl = 'local-asset://airport_map';
+            firstAct.startTime = arrTime;
+            firstAct.endTime = arrEndTime;
+            firstAct.duration = 90;
+            if (outgoingFlight) {
+              firstAct.title = `抵達當地機場 (${outgoingFlight.flightNumber})`;
+            }
+          }
+
+          // 重新排序與順延時間
+          firstDay.activities.forEach((a: any, idx: number) => a.order = idx);
+          for (let idx = 1; idx < firstDay.activities.length; idx++) {
+            const prev = firstDay.activities[idx - 1];
+            const curr = firstDay.activities[idx];
+            const transDuration = prev.transport?.duration || 15;
+            const earliestStart = addMinutesToTime(prev.endTime, transDuration);
+            if (curr.startTime < earliestStart) {
+              const duration = curr.duration || 60;
+              curr.startTime = earliestStart;
+              curr.endTime = addMinutesToTime(earliestStart, duration);
+            }
           }
         }
 
-        // 檢查最後一天最後一站
+        // 檢查最後一天最後一站 (回程對齊)
         if (lastDay.activities && lastDay.activities.length > 0) {
-          const lastAct = lastDay.activities[lastDay.activities.length - 1];
+          const depTime = returnFlight ? returnFlight.departureTime : '18:00';
+          const airportStart = subMinutesFromTime(depTime, 150);
+          let lastAct = lastDay.activities[lastDay.activities.length - 1];
+
           if (!lastAct.title.includes('機場') && !lastAct.title.toLowerCase().includes('airport')) {
             lastDay.activities.push({
               id: `act-day${days.length}-end-forced`,
               order: lastDay.activities.length,
-              startTime: '18:00',
-              endTime: '20:00',
-              title: '抵達機場準備返國',
+              startTime: airportStart,
+              endTime: depTime,
+              title: returnFlight ? `抵達機場準備返航 (${returnFlight.flightNumber})` : '抵達機場準備返國',
               type: 'transport',
               description: '帶著滿滿的美好回憶，抵達機場準備搭機返國。建議您預留足夠的時間辦理退稅手續，並在免稅店做最後的採購。',
               location: { name: `${destName}國際機場`, address: `${destName}機場航廈` },
-              duration: 120,
+              duration: 150,
               transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘包車前往機場。' },
               links: [{ label: '當地推薦安全叫車 App', url: 'https://www.grab.com/', type: 'info' }],
-              notes: '請提早2-3小時抵達機場。',
+              notes: returnFlight ? `航班時間：${depTime}。請務必再三確認護照與隨身行李是否帶齊。` : '請提早2-3小時抵達機場。',
               photoUrl: 'local-asset://airport_map',
               cost: { amount: 0, currency },
               openingHours: '24小時開放'
             });
           } else {
-             lastAct.photoUrl = 'local-asset://airport_map';
+            lastAct.photoUrl = 'local-asset://airport_map';
+            lastAct.startTime = airportStart;
+            lastAct.endTime = depTime;
+            lastAct.duration = 150;
+            if (returnFlight) {
+              lastAct.title = `抵達機場準備返航 (${returnFlight.flightNumber})`;
+              lastAct.notes = `航班時間：${depTime}。請務必再三確認護照與隨身行李是否帶齊。`;
+            }
           }
+
+          // 由後往前推算最後一天的活動時間，防止與返航機場時間衝突
+          let targetEnd = airportStart;
+          const remainingActivities = lastDay.activities.slice(0, -1);
+          
+          for (let idx = remainingActivities.length - 1; idx >= 0; idx--) {
+            const act = remainingActivities[idx];
+            const transDuration = act.transport?.duration || 15;
+            const latestEnd = subMinutesFromTime(targetEnd, transDuration);
+            if (act.endTime > latestEnd) {
+              act.endTime = latestEnd;
+              const duration = act.duration || 60;
+              act.startTime = subMinutesFromTime(latestEnd, duration);
+            }
+            targetEnd = act.startTime;
+          }
+
+          // 重新排序並過濾掉時間太早的中間活動 (例如 07:30 以前的中間景點活動)
+          const validActs = lastDay.activities.filter((act, idx) => {
+            if (idx === 0 || idx === lastDay.activities.length - 1) return true;
+            return act.startTime >= '07:30';
+          });
+          
+          validActs.forEach((a: any, idx: number) => a.order = idx);
+          lastDay.activities = validActs;
         }
       }
       // ---------------------------------------------------
@@ -230,7 +417,7 @@ CRITICAL RULES:
     };
 
     const fallbackAction = (): Itinerary => {
-      return this.generateFallbackItinerary(survey);
+      return this.generateFallbackItinerary(alignedSurvey);
     };
 
     return PACEngine.executeWithHealing(
@@ -254,6 +441,9 @@ CRITICAL RULES:
     const mainDest = survey?.destinations?.[0]?.name || '台北';
     const country = survey?.destinations?.[0]?.country || '台灣';
     const currency = survey?.currency || 'TWD';
+
+    const outgoingFlight = survey?.flights?.find(f => !f.isReturn);
+    const returnFlight = survey?.flights?.find(f => f.isReturn);
 
     // Image & description templates based on popular destinations
     const getDestTemplates = (dest: string) => {
@@ -535,6 +725,77 @@ CRITICAL RULES:
         });
       }
 
+      // Fallback 航班時間對齊校正
+      if (i === 0) {
+        // 第一天 forward correction
+        const arrTime = outgoingFlight ? outgoingFlight.arrivalTime : '08:30';
+        const arrEndTime = addMinutesToTime(arrTime, 90);
+        const firstAct = activities[0];
+        if (firstAct) {
+          firstAct.startTime = arrTime;
+          firstAct.endTime = arrEndTime;
+          firstAct.duration = 90;
+          if (outgoingFlight) {
+            firstAct.title = `抵達當地機場 (${outgoingFlight.flightNumber})`;
+          }
+        }
+
+        // 後續活動順延
+        for (let idx = 1; idx < activities.length; idx++) {
+          const prev = activities[idx - 1];
+          const curr = activities[idx];
+          const transDuration = prev.transport?.duration || 15;
+          const earliestStart = addMinutesToTime(prev.endTime, transDuration);
+          if (curr.startTime < earliestStart) {
+            const duration = curr.duration || 60;
+            curr.startTime = earliestStart;
+            curr.endTime = addMinutesToTime(earliestStart, duration);
+          }
+        }
+      } else if (i === dayCount - 1) {
+        // 最後一天 backward correction
+        const depTime = returnFlight ? returnFlight.departureTime : '18:00';
+        const airportStart = subMinutesFromTime(depTime, 150);
+        const lastAct = activities[activities.length - 1];
+        if (lastAct) {
+          lastAct.startTime = airportStart;
+          lastAct.endTime = depTime;
+          lastAct.duration = 150;
+          if (returnFlight) {
+            lastAct.title = `抵達機場準備返航 (${returnFlight.flightNumber})`;
+            lastAct.notes = `航班時間：${depTime}。請務必再三確認護照與隨身行李是否帶齊。`;
+          }
+        }
+
+        // 前序活動前推
+        let targetEnd = airportStart;
+        const remainingActivities = activities.slice(0, -1);
+        for (let idx = remainingActivities.length - 1; idx >= 0; idx--) {
+          const act = remainingActivities[idx];
+          const transDuration = act.transport?.duration || 15;
+          const latestEnd = subMinutesFromTime(targetEnd, transDuration);
+          if (act.endTime > latestEnd) {
+            act.endTime = latestEnd;
+            const duration = act.duration || 60;
+            act.startTime = subMinutesFromTime(latestEnd, duration);
+          }
+          targetEnd = act.startTime;
+        }
+
+        // 過濾時間太早的中間活動
+        const filteredActs = activities.filter((act, idx) => {
+          if (idx === 0 || idx === activities.length - 1) return true;
+          return act.startTime >= '07:30';
+        });
+
+        filteredActs.forEach((a, idx) => {
+          a.order = idx;
+        });
+
+        activities.length = 0;
+        activities.push(...filteredActs);
+      }
+
       days.push({
         dayNumber: i + 1,
         date: dateStr,
@@ -567,7 +828,7 @@ CRITICAL RULES:
       });
     }
 
-    return {
+    const generatedItinerary: Itinerary = {
       id: `itinerary-${Date.now().toString(36)}`,
       surveyId: survey.id,
       userId: survey.userId,
@@ -586,6 +847,9 @@ CRITICAL RULES:
       },
       currency
     };
+
+    healItineraryCoordinates(generatedItinerary, survey);
+    return generatedItinerary;
   },
 
   async analyzeBatchUrls(urlsText: string, itinerary?: Itinerary | null): Promise<any> {
@@ -645,7 +909,7 @@ JSON 結構樣式：
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0.2,
-            responseMimeType: "application/json",
+            response_mime_type: "application/json",
           }
         }),
       });
@@ -672,15 +936,32 @@ JSON 結構樣式：
    * Generates dynamic destination guide info (currency, emergency contacts, local phrases)
    */
   async getDestinationGuideInfo(country: string): Promise<any> {
+    const locale = i18n.locale || 'zh-TW';
+    const langNames: Record<string, string> = {
+      'zh-TW': '繁體中文 (Traditional Chinese)',
+      'zh-CN': '簡體中文 (Simplified Chinese)',
+      'en': 'English',
+      'ja': '日本語 (Japanese)',
+      'ko': '韓國語 (Korean)',
+      'th': '泰語 (Thai)',
+      'vi': '越南語 (Vietnamese)',
+      'ms': '馬來語 (Malay)',
+      'es': '西班牙語 (Spanish)',
+      'pt': '葡萄牙語 (Portuguese)'
+    };
+    const targetLang = langNames[locale] || 'Traditional Chinese';
+
     const prompt = `您是一位專業的在地導遊。使用者準備前往「${country}」旅遊。
-請根據這個國家，整理出以下實用旅遊資訊，並以嚴格的 JSON 格式回傳，不含任何 markdown 標記。
+請根據這個國家，整理出以下實用旅遊資訊。
+請特別注意，所有的文字內容（例如常用短語的 translation 對照 zh 欄位、消費項目 item 的名稱、emergencyContacts 的 title 和 subTitle）必須使用「${targetLang}」來呈現。
+請以嚴格的 JSON 格式回傳，不含任何 markdown 標記。
 
 要求：
 1. currencyCode: 當地官方貨幣的 3 碼 ISO 代碼 (如 JPY, THB, KRW)。如果是台灣，回傳 TWD。
 2. currencyName: 當地貨幣的中文名稱 (如 日圓, 泰銖, 韓元)。
-3. emergencyContacts: 陣列，提供 3 到 4 組最重要的緊急聯絡電話。欄位包含 title (如 旅遊警察), subTitle (如 24小時英文服務), phone (如 110)。(請務必包含急救、報警，若有駐地外館更好)。
-4. usefulPhrases: 陣列，提供 3 句最實用的在地問候或結帳用語。欄位包含 local (當地拼音或寫法), zh (中文對照), isHighlight (boolean, 將結帳或最重要的設為 true)。
-5. guideItems: 陣列，提供 3 到 4 項當地具代表性的平民美食或按摩等服務的「預估價格」。欄位包含 item (如 路邊攤拉麵), priceRange (如 ~ 800 - 1000 ¥)。
+3. emergencyContacts: 陣列，提供 3 到 4 組最重要的緊急聯絡電話。欄位包含 title (使用 ${targetLang} 描述，如 觀光警察), subTitle (使用 ${targetLang} 描述，如 24小時英文服務), phone (如 1155)。
+4. usefulPhrases: 陣列，提供 3 句最實用的在地問候或結帳用語。欄位包含 local (當地拼音或寫法), zh (使用 ${targetLang} 呈現對照翻譯), isHighlight (boolean, 將結帳或最重要的設為 true)。
+5. guideItems: 陣列，提供 3 到 4 項當地具代表性的平民美食或按摩等服務的「預估價格」。欄位包含 item (使用 ${targetLang} 描述，如 路邊攤拉麵), priceRange (如 ~ 800 - 1000 ¥)。
 
 請以如下的 JSON 格式輸出：
 {
@@ -712,7 +993,7 @@ JSON 結構樣式：
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             temperature: 0.1,
-            responseMimeType: "application/json",
+            response_mime_type: "application/json",
           }
         }),
       });
@@ -725,11 +1006,15 @@ JSON 結構樣式：
       let textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text;
       if (!textOutput) throw new Error('No response content from Gemini');
       
-      textOutput = textOutput.replace(/```json\n/g, '').replace(/```/g, '').trim();
+      const jsonStart = textOutput.indexOf('{');
+      const jsonEnd = textOutput.lastIndexOf('}');
+      if (jsonStart !== -1 && jsonEnd !== -1) {
+        textOutput = textOutput.substring(jsonStart, jsonEnd + 1);
+      }
       return JSON.parse(textOutput);
     } catch (error) {
-      console.error('getDestinationGuideInfo error:', error);
-      throw error;
+      console.error('getDestinationGuideInfo error, returning fallback:', error);
+      return getFallbackGuideInfo(country);
     }
   }
 };
@@ -841,3 +1126,23 @@ CRITICAL RULES:
 
   return alternatives.slice(0, 3);
 }
+
+function addMinutesToTime(timeStr: string, minutes: number): string {
+  if (!timeStr) return '08:00';
+  const [h, m] = timeStr.split(':').map(Number);
+  const totalMin = (h || 0) * 60 + (m || 0) + minutes;
+  const newH = Math.floor(totalMin / 60) % 24;
+  const newM = totalMin % 60;
+  return `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
+}
+
+function subMinutesFromTime(timeStr: string, minutes: number): string {
+  if (!timeStr) return '18:00';
+  const [h, m] = timeStr.split(':').map(Number);
+  let totalMin = (h || 0) * 60 + (m || 0) - minutes;
+  if (totalMin < 0) totalMin = 0; // Prevent negative times
+  const newH = Math.floor(totalMin / 60) % 24;
+  const newM = totalMin % 60;
+  return `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`;
+}
+

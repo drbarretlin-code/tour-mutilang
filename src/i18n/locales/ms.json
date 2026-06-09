@@ -1,405 +1,718 @@
 {
   "app": {
     "name": "Tour Plan",
-    "tagline": "Smart trips, effortless planning"
+    "tagline": "Perjalanan pintar, perancangan mudah"
+  },
+  "home": {
+    "title": "rancangan saya",
+    "emptyStateTitle": "Tiada jadual perjalanan telah dibuat lagi",
+    "emptyStateSubtitle": "Klik butang di bawah dan biarkan AI merancang perjalanan yang sempurna untuk anda.",
+    "aiBatchTitle": "🤖Pembantu penjadualan kumpulan pintar AI",
+    "aiBatchSubtitle": "Tampalkan berbilang URL untuk menjana analisis eksklusif dan cadangan penjadualan dengan cepat",
+    "newPlan": "rancangan baru",
+    "errorNotFound": "Maklumat projek yang sepadan tidak dapat ditemui. Ia mungkin telah dikeluarkan.",
+    "errorLoadFailed": "Gagal memuatkan, sila cuba lagi kemudian.",
+    "errorDeleteFailed": "Pemadaman gagal, sila cuba lagi kemudian.",
+    "confirmDeleteTitle": "Padam perjalanan",
+    "confirmDeleteMessage": "Adakah anda pasti mahu memadamkan projek ini? Setelah dipadamkan, ia tidak boleh dipulihkan.",
+    "confirmLogoutTitle": "Log keluar",
+    "confirmLogoutMessage": "Adakah anda pasti mahu log keluar?",
+    "greetingMorning": "selamat pagi",
+    "greetingAfternoon": "selamat tengahari",
+    "greetingEvening": "selamat petang",
+    "apiKeySetupTitle": "Sediakan enjin AI anda",
+    "apiKeySetupDesc": "Untuk menyediakan perancangan jadual perjalanan yang diperibadikan dan eksklusif, sistem perlu mengakses Gemini AI. Sila masukkan Kunci API anda untuk mendayakan enjin pintar.",
+    "apiKeyPlaceholder": "Tampalkan Kunci API Gemini anda (AIzaSy...)",
+    "apiKeySaveLocally": "Simpan ke peranti tempatan",
+    "apiKeySaveLocallyDesc": "Jika tidak ditanda, ia akan dipadam secara automatik selepas menutup halaman web dan tidak akan disimpan dalam ingatan.",
+    "getFreeApiKey": "👉 Klik di sini untuk memohon dengan pantas Kunci API Google Gemini secara percuma",
+    "saveAndStart": "Simpan dan mula merancang",
+    "myItineraries": "Rancangan perjalanan saya"
   },
   "common": {
-    "next": "Next",
-    "back": "Back",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "add": "Add",
-    "confirm": "Confirm",
-    "required": "Required",
-    "optional": "Optional",
-    "loading": "Loading",
-    "error": "Error",
-    "success": "Success",
-    "search": "Search",
-    "select": "Select",
-    "submit": "Submit",
-    "reset": "Reset",
-    "close": "Close",
-    "yes": "Yes",
-    "no": "No",
-    "none": "None",
-    "other": "Other",
-    "done": "Done",
-    "skip": "Skip",
-    "days": "%{count} Days"
+    "next": "Langkah seterusnya",
+    "back": "kembali",
+    "save": "kedai",
+    "cancel": "Batal",
+    "delete": "padam",
+    "edit": "edit",
+    "add": "baru",
+    "confirm": "mengesahkan",
+    "required": "Diperlukan",
+    "optional": "Pilihan",
+    "loading": "memuatkan",
+    "error": "kesilapan",
+    "success": "kejayaan",
+    "search": "cari",
+    "select": "pilih",
+    "submit": "hantar keluar",
+    "reset": "set semula",
+    "close": "penutupan",
+    "yes": "ya",
+    "no": "tidak",
+    "none": "tiada",
+    "other": "lain",
+    "done": "Selesai",
+    "skip": "ponteng",
+    "days": "%{count} hari"
   },
   "auth": {
-    "login": "Log In",
-    "logout": "Log Out",
-    "register": "Sign Up",
-    "email": "Email",
-    "password": "Password",
-    "forgotPassword": "Forgot Password",
-    "welcomeBack": "Welcome Back",
-    "createAccount": "Create Account"
+    "login": "Log masuk",
+    "logout": "Log keluar",
+    "register": "mendaftar",
+    "email": "E-mel",
+    "password": "kata laluan",
+    "forgotPassword": "lupa kata laluan",
+    "welcomeBack": "selamat kembali",
+    "createAccount": "Buat akaun",
+    "passwordPlaceholder": "Sila masukkan kata laluan",
+    "confirmPassword": "Sahkan Kata Laluan",
+    "confirmPasswordPlaceholder": "Sila masukkan kata laluan sekali lagi",
+    "noAccount": "Belum mempunyai akaun?",
+    "hasAccount": "Sudah mempunyai akaun?",
+    "or": "atau",
+    "guestLogin": "Mulakan secara langsung sebagai tetamu",
+    "registerSuccess": "Akaun berjaya dibuat! Anda telah log masuk secara automatik."
   },
   "survey": {
-    "title": "Plan Your Trip",
-    "subtitle": "Tell us about your dream trip",
+    "title": "Rancang perjalanan anda",
+    "subtitle": "Beritahu kami tentang perjalanan ideal anda",
     "sections": {
-      "basics": "Basic Information",
-      "budget": "Budget & Spending",
-      "transport": "Transportation",
-      "style": "Travel Style & Interests",
-      "accommodation": "Accommodation",
-      "attractions": "Attractions & Activities",
-      "special": "Special Requirements"
+      "basics": "Maklumat asas",
+      "budget": "Belanjawan dan Perbelanjaan",
+      "transport": "Pengangkutan",
+      "style": "Gaya perjalanan dan minat",
+      "accommodation": "tinggal",
+      "attractions": "Tarikan & Aktiviti",
+      "special": "keperluan khas"
     },
     "dates": {
-      "label": "Travel Dates",
-      "start": "Start Date",
-      "end": "End Date",
-      "flexible": "Flexible Dates",
-      "flexibleHint": "Allow +/- 1-3 days for better options",
-      "selectDates": "Select your travel dates",
-      "duration": "Duration",
-      "days": "days",
-      "nights": "nights"
+      "label": "Tarikh perjalanan",
+      "start": "Tarikh berlepas",
+      "end": "Tarikh pulang",
+      "flexible": "Tarikh fleksibel",
+      "flexibleHint": "Biarkan 1 hingga 3 hari sebelum dan selepas untuk mendapatkan lebih banyak pilihan",
+      "selectDates": "Pilih tarikh perjalanan anda",
+      "duration": "Hari-hari perjalanan",
+      "days": "langit",
+      "nights": "Malam"
     },
     "destination": {
-      "label": "Destination",
-      "placeholder": "Search for a city or country",
-      "addMore": "Add another destination",
-      "remove": "Remove destination",
-      "multiCity": "Multi-city trip",
-      "dragToReorder": "Drag to reorder"
+      "label": "destinasi",
+      "placeholder": "Cari bandar atau negara",
+      "addMore": "Tambah destinasi tambahan",
+      "remove": "Alih keluar destinasi",
+      "multiCity": "Jadual perjalanan berbilang bandar",
+      "dragToReorder": "Seret untuk menyusun semula"
     },
     "travelers": {
-      "label": "Number of Travelers",
-      "adults": "Adults",
-      "children": "Children",
-      "childAge": "Child age",
-      "infants": "Infants",
-      "seniors": "Seniors"
+      "label": "Bilangan penumpang",
+      "adults": "dewasa",
+      "children": "anak",
+      "childAge": "umur kanak-kanak",
+      "infants": "bayi",
+      "seniors": "Warga emas"
     },
     "tripType": {
-      "label": "Trip Type",
-      "family": "Family",
-      "couple": "Couple",
-      "solo": "Solo",
-      "friends": "Friends",
-      "business": "Business",
-      "honeymoon": "Honeymoon"
+      "label": "jenis perjalanan",
+      "family": "perjalanan keluarga",
+      "couple": "Perjalanan pasangan",
+      "solo": "mengembara sendirian",
+      "friends": "rakan melancong",
+      "business": "perjalanan perniagaan",
+      "honeymoon": "perjalanan bulan madu"
     },
     "departure": {
-      "label": "Departure City",
-      "placeholder": "Where are you departing from?"
+      "label": "Bandar berlepas",
+      "placeholder": "Di mana anda bermula?"
     },
     "budget": {
-      "label": "Total Budget",
-      "economy": "Economy",
-      "moderate": "Moderate",
-      "luxury": "Luxury",
-      "unlimited": "No Limit",
-      "dailyMeals": "Daily Meal Budget (per person)",
-      "currency": "Preferred Currency"
+      "label": "jumlah bajet",
+      "economy": "Jimat",
+      "moderate": "sederhana",
+      "luxury": "kemewahan",
+      "unlimited": "Tiada had belanjawan",
+      "dailyMeals": "Belanjawan makan harian (setiap orang)",
+      "currency": "Mata wang pilihan"
     },
     "transport": {
-      "label": "Local Transportation Preference",
-      "public": "Public Transit",
-      "taxi": "Taxi / Ride-hailing (Grab, Uber)",
-      "rental": "Rental Car",
-      "charter": "Private Charter",
-      "walking": "Walking",
-      "drivingLicense": "Do you have an international driving license?",
+      "label": "Pilihan pengangkutan tempatan",
+      "public": "pengangkutan massa",
+      "taxi": "Perkhidmatan teksi/hailing (Grab, Uber)",
+      "rental": "kereta sewa",
+      "charter": "Sewa kereta",
+      "walking": "berjalan kaki",
+      "drivingLicense": "Adakah anda memegang lesen memandu antarabangsa?",
       "flightInfo": {
-        "label": "Flight Information",
-        "flightNumber": "Flight Number",
-        "departure": "Departure Time",
-        "arrival": "Arrival Time",
-        "addFlight": "Add flight info"
+        "label": "Maklumat penerbangan",
+        "flightNumber": "nombor penerbangan",
+        "departure": "Masa berlepas",
+        "arrival": "Masa ketibaan",
+        "addFlight": "Tambah maklumat penerbangan"
       }
     },
     "interests": {
-      "label": "Interests & Activities",
-      "culture": "Culture & History",
-      "nature": "Nature & Outdoors",
-      "food": "Food & Dining",
-      "shopping": "Shopping",
-      "nightlife": "Nightlife",
-      "water": "Water Activities",
-      "family": "Family-friendly",
-      "photo": "Photography Spots",
-      "temple": "Temples & Religious Sites",
-      "spa": "Spa & Massage",
-      "themepark": "Theme Parks",
-      "art": "Art & Exhibitions",
-      "market": "Local Markets"
+      "label": "Minat dan Aktiviti",
+      "culture": "Budaya dan Sejarah",
+      "nature": "alam & luar",
+      "food": "Makanan & Makan",
+      "shopping": "Membeli-belah",
+      "nightlife": "kehidupan malam",
+      "water": "Sukan air",
+      "family": "Mesra ibu bapa-anak",
+      "photo": "tempat fotografi",
+      "temple": "Kuil dan Tarikan Keagamaan",
+      "spa": "Spa & Urutan",
+      "themepark": "taman tema",
+      "art": "Seni dan Pameran",
+      "market": "pasaran tempatan"
     },
     "pace": {
-      "label": "Travel Pace",
-      "packed": "Packed & Busy",
-      "balanced": "Balanced",
-      "relaxed": "Relaxed & Easy"
+      "label": "irama perjalanan",
+      "packed": "Padat dan substansial",
+      "balanced": "Imbangan sederhana",
+      "relaxed": "Bertenang"
     },
     "schedule": {
-      "label": "Morning Preference",
-      "earlyBird": "Early Bird (before 7:00)",
-      "normal": "Normal (around 9:00)",
-      "lateRiser": "Late Riser (after 10:00)"
+      "label": "keutamaan pagi",
+      "earlyBird": "Bangun awal (sebelum 7:00)",
+      "normal": "Jenis umum (sekitar 9:00)",
+      "lateRiser": "Bangun lewat (selepas 10:00)"
     },
     "dietary": {
-      "label": "Dietary Restrictions",
-      "vegetarian": "Vegetarian",
+      "label": "sekatan pemakanan",
+      "vegetarian": "diet vegetarian",
       "vegan": "Vegan",
-      "halal": "Halal",
-      "allergies": "Allergies",
-      "peanut": "Peanut allergy",
-      "seafood": "Seafood allergy",
-      "noRestriction": "No restrictions"
+      "halal": "Muslim",
+      "allergies": "alahan",
+      "peanut": "alahan kacang",
+      "seafood": "alahan makanan laut",
+      "noRestriction": "Tidak terhad"
     },
     "accommodation": {
       "platform": {
-        "label": "Booking Platform",
-        "customUrl": "Other booking website URL"
+        "label": "Platform tempahan",
+        "customUrl": "URL tapak web tempahan lain"
       },
       "type": {
-        "label": "Accommodation Type",
-        "hotel": "Hotel",
-        "homestay": "Homestay / B&B",
-        "hostel": "Hostel",
-        "resort": "Resort",
-        "apartment": "Apartment"
+        "label": "Jenis penginapan",
+        "hotel": "hotel",
+        "homestay": "Homestay",
+        "hostel": "asrama belia",
+        "resort": "Tempat peranginan",
+        "apartment": "pangsapuri"
       },
       "location": {
-        "label": "Preferred Location",
-        "cityCenter": "City Center",
-        "nearAttractions": "Near Attractions",
-        "quiet": "Quiet Residential Area",
-        "beachfront": "Beachfront"
+        "label": "Lokasi pilihan",
+        "cityCenter": "pusat bandar",
+        "nearAttractions": "Tempat tarikan berdekatan",
+        "quiet": "Kawasan perumahan yang sunyi",
+        "beachfront": "Barisan pertama pantai"
       },
       "amenities": {
-        "label": "Required Amenities",
-        "pool": "Swimming Pool",
-        "gym": "Gym",
-        "breakfast": "Free Breakfast",
-        "kitchen": "Kitchen",
-        "laundry": "Laundry",
-        "parking": "Parking"
+        "label": "Kemudahan yang diperlukan",
+        "pool": "kolam renang",
+        "gym": "gim",
+        "breakfast": "sarapan percuma",
+        "kitchen": "dapur",
+        "laundry": "peralatan dobi",
+        "parking": "TEMPAT PARKING"
       }
     },
     "attractions": {
       "reference": {
-        "label": "Reference Attractions",
-        "hint": "Share places you're interested in. AI will consider these when planning.",
-        "addUrl": "Add URL",
-        "addPhoto": "Add Photo",
-        "addFile": "Add File",
-        "urlPlaceholder": "Paste a link to an attraction..."
+        "label": "Tarikan rujukan",
+        "hint": "Kongsi tarikan yang menarik minat anda dan AI akan mengambil kiranya semasa merancang.",
+        "addUrl": "Tambah URL baharu",
+        "addPhoto": "Tambah foto",
+        "addFile": "Tambah fail baharu",
+        "urlPlaceholder": "Siarkan pautan ke tarikan..."
       },
       "mustVisit": {
-        "label": "Must-Visit Attractions",
-        "hint": "These will be included in your itinerary.",
-        "specifyDate": "Specify preferred date",
-        "specifyTime": "Specify preferred time"
+        "label": "Mesti melawat tarikan",
+        "hint": "Tarikan ini akan dimasukkan dalam jadual perjalanan anda.",
+        "specifyDate": "Nyatakan tarikh pilihan",
+        "specifyTime": "Nyatakan masa pilihan"
       }
     },
     "map": {
-      "label": "Map Provider",
-      "apple": "Apple Maps",
-      "google": "Google Maps",
-      "amap": "Amap (Gaode)",
-      "baidu": "Baidu Maps"
+      "label": "perkhidmatan peta",
+      "apple": "Peta Apple",
+      "google": "Peta Google",
+      "amap": "Peta Gaode",
+      "baidu": "Peta Baidu"
     },
     "accessibility": {
-      "label": "Accessibility Needs",
-      "wheelchair": "Wheelchair Access",
-      "stroller": "Stroller Friendly",
-      "mobility": "Limited Mobility"
+      "label": "Keperluan kebolehcapaian",
+      "wheelchair": "boleh diakses kerusi roda",
+      "stroller": "Mesra kereta sorong",
+      "mobility": "Mobiliti berkurangan"
     },
     "visa": {
-      "label": "Visa Requirements",
-      "nationality": "Passport Nationality",
-      "hint": "We'll check if you need a visa"
+      "label": "Keperluan visa",
+      "nationality": "kewarganegaraan pasport",
+      "hint": "Kami akan mengesahkan sama ada anda memerlukan visa"
     },
     "insurance": {
-      "label": "Travel Insurance",
-      "have": "Already covered",
-      "need": "Need recommendations",
-      "skip": "Skip for now"
+      "label": "insurans perjalanan",
+      "have": "Diinsuranskan",
+      "need": "Perlukan cadangan",
+      "skip": "Ponteng dulu"
     },
     "notes": {
-      "label": "Additional Notes",
-      "placeholder": "Any other preferences or requirements..."
+      "label": "Teguran",
+      "placeholder": "Keutamaan atau keperluan lain..."
     },
     "language": {
-      "label": "App Language",
-      "hint": "Choose your preferred language"
+      "label": "bahasa aplikasi",
+      "hint": "Pilih bahasa pilihan anda"
     },
-    "generateTrip": "Generate My Trip",
-    "generating": "AI is planning your perfect trip...",
+    "generateTrip": "menjana jadual perjalanan saya",
+    "generating": "AI sedang merancang perjalanan yang sempurna untuk anda...",
     "tierLabels": {
-      "required": "Required Information",
-      "recommended": "Recommended",
-      "optional": "Optional Details"
+      "required": "Maklumat yang diperlukan",
+      "recommended": "Adalah disyorkan untuk mengisi",
+      "optional": "Item pilihan"
+    },
+    "actions": {
+      "confirmDiscardTitle": "Sahkan buang draf",
+      "confirmDiscardMessage": "Adakah anda pasti mahu membuang draf jadual perjalanan semasa anda dan mula merancang semula? Tindakan ini tidak boleh dibuat asal.",
+      "saveSuccessTitle": "Berjaya disimpan",
+      "saveSuccessMessage": "Data soal selidik anda telah disimpan dengan selamat secara setempat. Anda boleh menutup aplikasi pada bila-bila masa dan ia akan menyambung semula keadaan penyuntingan secara automatik apabila anda memasukkannya.",
+      "cancelEditWebConfirm": "Adakah anda ingin meninggalkan pengubahsuaian ini dan kembali ke jadual perjalanan asal, atau menyimpan pengubahsuaian semasa sebagai jadual perjalanan baharu?\n\n[OK] Tinggalkan pengubahsuaian dan kembali ke jadual perjalanan asal\n[Batal] Simpan sebagai pelan baharu dan teruskan",
+      "convertedTitle": "Ditukar",
+      "convertedMessage": "Pengubahsuaian semasa akan disimpan sebagai jadual perjalanan baharu dan tidak akan menimpa pelan lama. Sila teruskan melengkapkan tetapan dan jana!",
+      "cancelEditTitle": "Batalkan suntingan",
+      "cancelEditMessage": "Adakah anda ingin meninggalkan pengubahsuaian ini atau menyimpan pengubahsuaian semasa sebagai jadual perjalanan baharu?",
+      "discardAndReturn": "Buang pengubahsuaian dan kembali ke jadual perjalanan asal",
+      "saveAsNew": "Simpan sebagai projek baharu",
+      "continueEditing": "Teruskan mengedit",
+      "saveDraft": "Simpan draf",
+      "restart": "Isi semula",
+      "loginOrRegister": "Log masuk/Daftar"
+    },
+    "summary": {
+      "title": "Sorotan perjalanan eksklusif saya",
+      "progress": "Kemajuan perancangan pintar AI",
+      "notSelectedHint": "Tidak dipilih (sila tetapkan pada langkah pertama)",
+      "dateTo": "kepada",
+      "notSelected": "Tidak dipilih",
+      "notSet": "Tidak ditetapkan",
+      "adults": "dewasa",
+      "children": "anak",
+      "guestMode": "Mod tetamu (data disimpan secara setempat)",
+      "loggedInAs": "Sudah log masuk:"
     }
   },
   "itinerary": {
-    "title": "My Itinerary",
-    "day": "Day {{number}}",
-    "overview": "Overview",
-    "dailySummary": "Daily Summary",
-    "estimatedCost": "Estimated Cost",
-    "walkingDistance": "Walking Distance",
-    "weather": "Weather Forecast",
-    "timeline": "Timeline View",
-    "mapView": "Map View",
+    "title": "jadual perjalanan saya",
+    "day": "Hari {{number}}",
+    "overview": "Gambaran keseluruhan",
+    "dailySummary": {
+      "weather": {
+        "sunny": "cerah dan panas",
+        "cloudy": "Mendung dan cerah",
+        "rainy": "Pancuran air terpencil",
+        "partlySunny": "Hujan petir petang",
+        "rainProb": "Peluang hujan %{prob}"
+      },
+      "advice": {
+        "sunny": "Adalah disyorkan untuk memakai pakaian bernafas ringan dan memberi perhatian kepada perlindungan matahari.",
+        "cloudy": "Pakai pakaian kasual yang selesa sesuai untuk aktiviti luar.",
+        "rainy": "Sila bawa peralatan hujan dan pakai kasut kalis hujan.",
+        "partlySunny": "Adalah disyorkan untuk membawa payung lipat bersama anda untuk melindungi diri anda daripada mandi pada sebelah petang."
+      }
+    },
+    "estimatedCost": "Anggaran kos",
+    "walkingDistance": "jarak berjalan kaki",
+    "weather": "ramalan cuaca",
+    "timeline": "Paparan garis masa",
+    "mapView": "Paparan peta",
+    "timelineView": {
+      "types": {
+        "transport": "✈️Pengangkutan/Ketibaan",
+        "meal": "🍽️Makan",
+        "hotel": "🏨 Penginapan",
+        "attraction": "🏛️ Lawatan tarikan",
+        "default": "📍 Aktiviti"
+      },
+      "alerts": {
+        "grabWebHint": "💡 Petua: Grab tidak menyediakan \"versi web\" perkhidmatan ride-hailing! Mesti menggunakan aplikasi mudah alih.\n\nLaman web rasmi Grab akan dibuka untuk anda tidak lama lagi untuk memberikan maklumat muat turun.",
+        "boltWebHint": "💡 Petua: Bolt terutamanya menyediakan perkhidmatan panggilan naik apl mudah alih.\n\nLaman web rasmi Bolt akan dibuka untuk anda tidak lama lagi untuk memberikan maklumat muat turun.",
+        "cannotOpenTitle": "Tidak dapat dibuka",
+        "cannotOpenMessage": "Pautan ini tidak boleh dibuka. Mungkin apl yang sepadan tidak dipasang pada peranti anda atau tetapan penyemak imbas menyekatnya.",
+        "errorTitle": "Ralat berlaku",
+        "errorMessage": "Tidak dapat membuka pautan."
+      },
+      "endOfDay": {
+        "title": "🌙 Tamat jadual perjalanan hari ini: bersedia untuk kembali ke penginapan anda",
+        "transportAdvice": "Pengangkutan yang disyorkan: Ambil Grab/Bolt, perjalanan mengambil masa lebih kurang 15 minit.",
+        "shuttleGuideTitle": "🚗 Panduan pemindahan penginapan:",
+        "shuttleGuideDesc": "Jika hotel tidak mempunyai sistem pengangkutan ulang-alik, sila gunakan Bolt atau Grab untuk menghubungi teksi. Pergi ke penginapan lalai (%{hotelName}).",
+        "yourHotel": "hotel anda",
+        "tonightStay": "Penginapan malam ini: %{hotelName}",
+        "airportMapHint": "Rujukan pelan lantai dewan ketibaan dan pelepasan lapangan terbang",
+        "openGrab": "Klik di sini untuk memulakan Grab",
+        "openBolt": "Klik di sini untuk membuka Bolt"
+      },
+      "activity": {
+        "region": "Kawasan:%{region}",
+        "thisRegion": "kawasan itu",
+        "transitGuide": "Panduan pengangkutan: Pengangkutan awam sukar untuk sampai ke perhentian seterusnya. Tiada kereta bawah tanah yang jelas di bahagian ini. Adalah sangat disyorkan untuk menaiki kereta sewa atau menggunakan Bolt/Grab untuk menghubungi teksi sehala. Anggaran masa perjalanan ialah %{gap} minit.",
+        "navigate": "Navigasi ke peta",
+        "charter": "Sewa kereta",
+        "notesLabel": "Pelarasan penghantaran｜Nota",
+        "notesPlaceholder": "Contohnya: nombor telefon pemandu, pengesahan waktu perniagaan..."
+      }
+    },
+    "mapFallbackView": {
+      "errors": {
+        "openFailed": "Tidak dapat memuatkan navigasi peta, akan cuba membukanya dalam penyemak imbas."
+      },
+      "title": "Peta topologi rangkaian laluan hari ini",
+      "empty": "Tiada maklumat lokasi untuk tarikan dalam jadual perjalanan hari ini."
+    },
+    "combinedView": {
+      "title": "🗺️ Hari %{day} laluan jadual perjalanan dan carta maklumat jadual",
+      "subtitle": "Peta laluan 3D interaktif, tindak balas masa nyata kepada perubahan dalam jadual perjalanan",
+      "refresh": "Kemas kini carta dengan satu klik"
+    },
+    "horizontalCard": {
+      "types": {
+        "activity": "Tarikan",
+        "dining": "makanan gourmet",
+        "shopping": "Membeli-belah",
+        "experience": "pengalaman"
+      }
+    },
+    "activityEditor": {
+      "title": "Edit jadual perjalanan",
+      "types": {
+        "attraction": "Tarikan",
+        "restaurant": "Makanan",
+        "cafe": "Kafe / Minum Petang",
+        "shopping": "membeli belah",
+        "spa": "SPA/Urut",
+        "entertainment": "hiburan",
+        "hotel": "tinggal",
+        "transport": "bergerak",
+        "activity": "pengalaman"
+      },
+      "errors": {
+        "titleEmpty": "Nama perjalanan tidak boleh kosong"
+      },
+      "deleteConfirm": {
+        "title": "Padamkan projek",
+        "message": "Adakah anda pasti mahu memadamkan item ini?"
+      },
+      "fields": {
+        "time": "masa (cth. 10:00)",
+        "type": "Jenis projek",
+        "title": "Nama jadual perjalanan",
+        "titlePlaceholder": "Sila masukkan nama jadual perjalanan",
+        "location": "Lokasi geografi (wilayah)",
+        "locationPlaceholder": "Contohnya: Pattaya",
+        "day": "Hari Dijadualkan (Perjalanan Mudah Alih)",
+        "notes": "Arahan terperinci (nota pengangkutan atau pengumpulan)",
+        "notesPlaceholder": "Masukkan sebarang peringatan atau nota...",
+        "links": "URL Rujukan (pilihan)"
+      },
+      "links": {
+        "map": "peta:",
+        "mapPlaceholder": "URL Peta Google",
+        "info": "memperkenalkan:",
+        "infoPlaceholder": "Blog atau laman web rasmi",
+        "booking": "pengangkutan:",
+        "bookingPlaceholder": "Klook atau tempahan kereta sewa"
+      },
+      "actions": {
+        "delete": "Padamkan item ini",
+        "cancel": "Batal",
+        "save": "Simpan perubahan"
+      }
+    },
+    "destinationGuide": {
+      "loading": "Menyusun panduan eksklusif tempatan untuk anda...",
+      "exchange": {
+        "title": "%{currencyName}/Pembantu Penukaran Kadar Pertukaran Dolar Taiwan",
+        "subtitle": "Kira perbelanjaan dan belanjawan hari ini dengan serta-merta (kadar pertukaran semasa ialah kira-kira 1 TWD = %{rate} %{code})",
+        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
+        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
+        "inputTwd": "Masukkan Dolar Taiwan (TWD)",
+        "inputLocal": "Masukkan%{name} (%{code})",
+        "resultLabel": "Hasil penukaran (%{code})",
+        "twdLabel": "TWD Dolar Taiwan"
+      },
+      "guide": {
+        "title": "💡 Panduan Praktikal untuk Penggunaan Perjalanan (%{code}/Konsep TWD)",
+        "quickSelect": "Klik untuk mengira jumlah dengan cepat:"
+      },
+      "emergency": {
+        "title": "📞Maklumat hubungan kecemasan"
+      },
+      "phrases": {
+        "title": "☕ Panduan bahasa praktikal",
+        "translator": "1. Halaman web terjemahan suara dua hala",
+        "openTool": "Buka alat"
+      }
+    },
+    "expenseSplitter": {
+      "me": "saya",
+      "companionN": "Teman perjalanan %{n}",
+      "errors": {
+        "companionExists": "Nama teman perjalanan ini sudah wujud!",
+        "cannotRemoveCreator": "Tidak dapat mengalih keluar pencipta akaun.",
+        "emptyTitle": "Sila masukkan nama item perbelanjaan!",
+        "invalidAmount": "Sila masukkan jumlah yang sah!",
+        "noSplitters": "Sila pilih sekurang-kurangnya seorang teman perjalanan untuk berkongsi kos!"
+      },
+      "summary": {
+        "title": "Gambaran Keseluruhan Kos Perjalanan",
+        "budgetLevel": "Tahap belanjawan: %{level}"
+      },
+      "companions": {
+        "title": "Pisahkan senarai teman perjalanan (%{count} orang)",
+        "addPlaceholder": "Tambahkan nama teman perjalanan lain...",
+        "addBtn": "baru"
+      },
+      "settlement": {
+        "title": "Nasihat penyelesaian",
+        "allSettled": "Semua akaun telah diselesaikan setakat ini, tiada pemindahan diperlukan!"
+      },
+      "expenses": {
+        "title": "Rekod butiran perbelanjaan (%{count} item)",
+        "addBtn": "Buat nota",
+        "detail": "Pembayar: %{paidBy} | Kongsi: %{count} orang"
+      },
+      "modal": {
+        "title": "Tambah rekod perbelanjaan",
+        "fields": {
+          "titleLabel": "Nama projek",
+          "titlePlaceholder": "Contohnya: makan malam Thai, tiket kereta api bawah tanah, lawatan sehari ke Gunung Agung",
+          "amountLabel": "Jumlah yang dibelanjakan (%{currency})",
+          "amountPlaceholder": "Sila masukkan jumlah",
+          "paidByLabel": "Pembayar",
+          "splitWithLabel": "Pembahagian kos (berbilang pilihan tersedia)"
+        }
+      }
+    },
+    "packingChecklist": {
+      "items": {
+        "doc1": "Salinan pasport dan pasport",
+        "doc2": "Tiket elektronik/pas masuk",
+        "doc3": "Baucar pengesahan platform tempahan",
+        "doc4": "Polisi insurans keselamatan perjalanan luar negara",
+        "ess1": "Telefon bimbit dan kabel pengecasan",
+        "ess2": "bank kuasa",
+        "ess3": "Palam penyesuai universal",
+        "ess4": "Wang tunai mata wang asing dan kad kredit",
+        "ess5": "Ubat peribadi",
+        "ess6": "Peralatan mandian dan produk penjagaan kulit",
+        "clo1": "Tukar pakaian dan baju tidur",
+        "clo2": "Kasut yang selesa dan mudah untuk berjalan",
+        "clo3": "Topi matahari dan cermin mata hitam",
+        "child1": "Ubat selsema/termometer untuk kanak-kanak",
+        "child2": "Tisu basah dan makanan ringan kanak-kanak",
+        "driver1": "Lesen memandu antarabangsa asal dan lesen memandu domestik",
+        "driver2": "Pemegang kereta telefon bimbit",
+        "water1": "Pakaian renang, topi dan cermin mata",
+        "water2": "Beg kalis habuk dan kalis air telefon bimbit",
+        "nat1": "Losyen ubat nyamuk dan tampalan ubat nyamuk",
+        "nat2": "Jaket kalis air/kasut hiking"
+      },
+      "progress": {
+        "title": "Kemajuan pembungkusan sebelum berlepas",
+        "subtitle": "%{checkedCount} / %{totalCount} item dikumpul"
+      },
+      "custom": {
+        "title": "Tambah item pembungkusan tersuai",
+        "placeholder": "Contohnya: ubat selsema, tripod kamera..."
+      },
+      "categories": {
+        "docs": "Sijil dan dokumen yang diperlukan",
+        "essential": "Keperluan peribadi",
+        "clothing": "Pakaian dan Pemakaian",
+        "custom": "Senarai pembungkusan tersuai"
+      }
+    },
+    "travelTranslator": {
+      "tabs": {
+        "live": "Terjemahan segera AI dalam talian",
+        "handbook": "Carian pantas luar talian bagi frasa yang kerap digunakan"
+      },
+      "langs": {
+        "english": "Inggeris",
+        "japanese": "Jepun",
+        "korean": "bahasa korea",
+        "thai": "Thai",
+        "vietnamese": "bahasa Vietnam"
+      },
+      "live": {
+        "targetLabel": "bahasa terjemahan sasaran",
+        "placeholder": "Sila masukkan apa yang anda ingin katakan kepada warga asing... (Contohnya: Berapa lama masa yang diambil untuk memesan hidangan ini?)",
+        "translateBtn": "Mulakan terjemahan AI",
+        "resultLabel": "Hasil terjemahan"
+      },
+      "categories": {
+        "general": "salam harian",
+        "dining": "Pesanan restoran",
+        "transport": "Panduan lalu lintas",
+        "emergency": "kecemasan"
+      },
+      "errors": {
+        "translationFailed": "Ralat berlaku dalam terjemahan, sila cuba sebentar lagi."
+      },
+      "phrases": {
+        "mockPrefix": "[Terjemahan Simulasi - %{lang}]",
+        "englishRef": "Perbandingan bahasa Inggeris: %{text}",
+        "general": {
+          "0": "Hello",
+          "1": "Terima kasih",
+          "2": "Maaf / Maafkan saya",
+          "3": "Berapa kos ini?"
+        },
+        "dining": {
+          "0": "Saya nak tengok menu",
+          "1": "tolong beri saya air",
+          "2": "Adakah hidangan ini mengandungi kacang?",
+          "3": "Tolong bantu saya menyemak"
+        },
+        "transport": {
+          "0": "Di manakah stesen kereta api bawah tanah?",
+          "1": "Saya mahu pergi ke tempat ini",
+          "2": "mana bilik air?"
+        },
+        "emergency": {
+          "0": "Sila hubungi ambulans untuk saya!",
+          "1": "Saya kehilangan pasport saya!",
+          "2": "Di manakah balai polis?"
+        }
+      }
+    },
+    "apiKeyModal": {
+      "title": "Buka kunci enjin perisikan AI",
+      "description": "Untuk memberi anda perancangan jadual perjalanan yang diperibadikan tanpa yuran langganan, aplikasi ini menggunakan seni bina BYOK. Sila mohon kunci API Google Gemini secara percuma dan siarkan di bawah. Kunci anda akan disulitkan dengan selamat dan disimpan pada peranti anda.",
+      "linkText": "Pergi ke Google AI Studio untuk memohon kunci percuma",
+      "cancelBtn": "Batal (gunakan templat luar talian)",
+      "saveBtn": "Simpan dan jana"
+    },
     "activity": {
-      "startTime": "Start Time",
-      "endTime": "End Time",
-      "duration": "Duration",
-      "cost": "Cost",
-      "transport": "Getting There",
-      "travelTime": "Travel Time",
-      "openHours": "Opening Hours",
-      "closedDay": "Closed on",
-      "rating": "Rating",
-      "navigate": "Navigate",
-      "bookTicket": "Book Ticket",
-      "moreInfo": "More Info",
-      "notes": "Notes",
+      "startTime": "masa mula",
+      "endTime": "masa akhir",
+      "duration": "masa tinggal",
+      "cost": "kos",
+      "transport": "Pengangkutan",
+      "travelTime": "masa pengangkutan",
+      "openHours": "Waktu perniagaan",
+      "closedDay": "cuti umum",
+      "rating": "skor",
+      "navigate": "navigasi",
+      "bookTicket": "Tempah tiket",
+      "moreInfo": "Maklumat lanjut",
+      "notes": "Teguran",
       "type": {
-        "attraction": "Attraction",
-        "restaurant": "Restaurant",
-        "shopping": "Shopping",
-        "transport": "Transportation",
-        "hotel": "Hotel",
-        "activity": "Activity"
+        "attraction": "Tarikan",
+        "restaurant": "Ruang makan",
+        "shopping": "Membeli-belah",
+        "transport": "pengangkutan",
+        "hotel": "hotel",
+        "activity": "Aktiviti"
       }
     },
     "hotel": {
-      "label": "Today's Hotel",
-      "checkIn": "Check-in",
-      "checkOut": "Check-out",
-      "contact": "Contact",
-      "bookingLink": "Booking Link"
+      "label": "Penginapan hari ini",
+      "checkIn": "Daftar masuk",
+      "checkOut": "daftar keluar",
+      "contact": "Maklumat hubungan",
+      "bookingLink": "Pautan tempahan"
     },
     "emergency": {
-      "label": "Emergency Contacts",
-      "police": "Police",
-      "ambulance": "Ambulance",
-      "embassy": "Embassy/Consulate",
-      "tourist": "Tourist Police"
+      "label": "Hubungan kecemasan",
+      "police": "polis",
+      "ambulance": "ambulans",
+      "embassy": "Kedutaan/Konsulat",
+      "tourist": "polis pelancong"
     },
     "tips": {
-      "label": "Local Tips",
-      "tipping": "Tipping Etiquette",
-      "customs": "Local Customs",
-      "wifi": "Wi-Fi / SIM Card Info"
+      "label": "Langkah kecil di atas tanah",
+      "tipping": "Etika Memberi Tip",
+      "customs": "adat resam tempatan",
+      "wifi": "Maklumat kad Wi-Fi/SIM"
     },
     "export": {
-      "label": "Export",
-      "pdf": "Export as PDF",
-      "share": "Share Link",
-      "image": "Save as Image"
+      "label": "hantar",
+      "pdf": "Eksport ke PDF",
+      "share": "Kongsi pautan",
+      "image": "Simpan sebagai gambar"
     },
-    "dragHint": "Hold and drag to reorder",
-    "aiSuggestion": "AI suggests nearby attractions for your free time",
-    "offlineReady": "Available offline",
+    "dragHint": "Tekan lama dan seret untuk menyusun semula",
+    "aiSuggestion": "AI mengesyorkan tarikan berdekatan untuk masa lapang anda",
+    "offlineReady": "Menyokong penyemakan imbas luar talian",
     "tabs": {
-      "timeline": "Timeline",
-      "guide": "Local Guide",
-      "checklist": "Checklist",
-      "expenses": "Expenses",
-      "translator": "Translator"
+      "timeline": "Gambaran Keseluruhan Jadual Perjalanan",
+      "guide": "pemandu tempatan",
+      "checklist": "Senarai semak sebelum berlepas",
+      "expenses": "lejar perbelanjaan",
+      "translator": "terjemahan perjalanan"
     },
     "map": {
-      "title": "Full Route 3D Map"
+      "title": "Peta landskap 3D perjalanan penuh"
     },
     "nav": {
-      "collapse": "Collapse Navigation",
-      "expand": "Expand Navigation"
+      "collapse": "Runtuhkan panel menu",
+      "expand": "Kembangkan paparan dan menu hari"
     },
-    "offline": "Offline Mode",
-    "noData": "No itinerary data found",
-    "backHome": "Back to Home",
-    "shareTitle": "Share Itinerary",
-    "shareMsg": "Itinerary link copied to clipboard!",
-    "exportTitle": "Export Itinerary PDF",
-    "exportSuccess": "Export Successful",
-    "exportSuccessMsg": "PDF generated at: %{uri}",
-    "exportFail": "Export Failed",
-    "exportFailMsg": "Failed to generate PDF file.",
+    "offline": "Mod penyemakan imbas luar talian",
+    "noData": "Tiada maklumat jadual perjalanan",
+    "backHome": "Kembali ke laman utama",
+    "shareTitle": "Kongsi jadual perjalanan",
+    "shareMsg": "Pautan jadual perjalanan telah disalin ke papan keratan!",
+    "exportTitle": "Eksport jadual perjalanan PDF",
+    "exportSuccess": "Hantar dengan jayanya",
+    "exportSuccessMsg": "PDF dijana kepada: %{uri}",
+    "exportFail": "Eksport gagal",
+    "exportFailMsg": "Tidak dapat menjana fail PDF.",
     "aiRecommend": {
-      "title": "AI Recommendation",
-      "msg": "Automatically filled gap with nearby spots!",
-      "actTitle": "AI Recommended: Local Delicacies",
-      "actDesc": "Recommended popular restaurants nearby.",
-      "actLocName": "Street food & Cafes",
-      "actLocAddr": "Within walking distance",
-      "actNotes": "Try the local cold drinks."
-    },
-    "destinationGuide": {
-      "loading": "Compiling your exclusive local guide...",
-      "exchange": {
-        "title": "%{currencyName}/TWD Exchange Assistant",
-        "subtitle": "Calculate today's budget (Current rate: 1 TWD = %{rate} %{code})",
-        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
-        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
-        "inputTwd": "Enter TWD",
-        "inputLocal": "Enter %{name} (%{code})",
-        "resultLabel": "Result (%{code})",
-        "twdLabel": "TWD"
-      },
-      "guide": {
-        "title": "💡 Practical Spending Guide (%{code}/TWD)",
-        "quickSelect": "Quick Select:"
-      },
-      "emergency": {
-        "title": "📞 Emergency Contacts"
-      },
-      "phrases": {
-        "title": "☕ Useful Phrases",
-        "translator": "1. Two-way Voice Translator",
-        "openTool": "Open Tool"
-      }
+      "title": "Syor AI",
+      "msg": "Jurang jadual perjalanan telah diisi secara automatik dan laluan dikemas kini untuk anda!",
+      "actTitle": "Syor AI: Rasa makanan tempatan terpilih",
+      "actDesc": "Kami mengesyorkan restoran gourmet yang popular di kawasan sekitar, sesuai untuk bersantai dan menikmati masa lapang anda.",
+      "actLocName": "Makanan ringan dan kafe istimewa",
+      "actLocAddr": "Dalam kawasan pejalan kaki tarikan",
+      "actNotes": "Adalah disyorkan untuk mencuba minuman sejuk istimewa tempatan."
     }
   },
   "settings": {
-    "title": "Settings",
-    "language": "Language",
-    "darkMode": "Dark Mode",
-    "notifications": "Notifications",
-    "about": "About",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "version": "Version"
+    "title": "sediakan",
+    "language": "bahasa",
+    "darkMode": "mod gelap",
+    "notifications": "maklumkan",
+    "about": "kira-kira",
+    "privacy": "dasar privasi",
+    "terms": "Syarat Perkhidmatan",
+    "version": "Versi"
   },
   "errors": {
-    "required": "This field is required",
-    "invalidDate": "Invalid date selection",
-    "invalidUrl": "Please enter a valid URL",
+    "required": "Medan ini diperlukan",
+    "invalidDate": "Pemilihan tarikh tidak sah",
+    "invalidUrl": "Sila masukkan URL yang sah",
     "invalidEmail": "Format e-mel tidak sah",
-    "networkError": "Network error. Please try again.",
-    "serverError": "Server error. Please try again later.",
-    "uploadFailed": "File upload failed",
-    "fileTooLarge": "File is too large (max 10MB)",
-    "unsupportedFormat": "Unsupported file format",
-    "minTravelers": "At least 1 traveler is required",
-    "minDestination": "At least 1 destination is required",
-    "dateRange": "End date must be after start date"
-  },
-  "home": {
-    "greetingMorning": "Good Morning",
-    "greetingAfternoon": "Good Afternoon",
-    "greetingEvening": "Good Evening",
-    "apiKeySetupTitle": "Setup Your AI Engine",
-    "apiKeySetupDesc": "To provide personalized itinerary planning, the system requires access to Gemini AI. Please enter your API Key to enable the smart engine.",
-    "apiKeyPlaceholder": "Paste your Gemini API Key (AIzaSy...)",
-    "apiKeySaveLocally": "Save to local device",
-    "apiKeySaveLocallyDesc": "If unchecked, it will be cleared upon exit and not saved in memory.",
-    "getFreeApiKey": "👉 Click here to get a free Google Gemini API Key",
-    "saveAndStart": "Save & Start Planning",
-    "myItineraries": "My Itineraries"
+    "networkError": "Ralat rangkaian, sila cuba lagi kemudian.",
+    "serverError": "Ralat pelayan, sila cuba lagi kemudian.",
+    "uploadFailed": "Muat naik fail gagal",
+    "fileTooLarge": "Fail terlalu besar (maksimum 10MB)",
+    "unsupportedFormat": "Format fail tidak disokong",
+    "minTravelers": "Memerlukan sekurang-kurangnya 1 pengembara",
+    "minDestination": "Sekurang-kurangnya 1 destinasi diperlukan",
+    "dateRange": "Tarikh pulang mesti selepas tarikh berlepas",
+    "passwordMinLength": "Kata laluan mestilah lebih panjang daripada 6 aksara",
+    "passwordMismatch": "Kata laluan yang dimasukkan dua kali tidak konsisten",
+    "emailInUse": "Alamat e-mel ini telah pun didaftarkan.",
+    "invalidCredential": "E-mel atau kata laluan yang salah.",
+    "invalidEmailFormat": "Format e-mel tidak sah.",
+    "guestLoginFailed": "Log masuk tanpa nama gagal, sila cuba sebentar lagi."
   },
   "dashboard": {
-    "untitledItinerary": "Untitled Itinerary"
+    "untitledItinerary": "Jadual perjalanan tanpa nama"
   }
 }

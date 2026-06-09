@@ -6,6 +6,28 @@ import { ItineraryDay, Activity } from '../../types/itinerary';
 import { t } from '../../i18n';
 import { Ionicons } from '@expo/vector-icons';
 
+function getRouteDistance(transport: any): number {
+  const t = transport || { mode: 'drive', duration: 10 };
+  if (t.distance > 0) {
+    return t.distance / 1000;
+  }
+  
+  // Route distance estimation based on travel duration and transport mode
+  const duration = t.duration || 10; // default 10 mins
+  const mode = t.mode || 'drive';
+  
+  let speedKmh = 40; // Default drive speed
+  if (mode === 'walk') {
+    speedKmh = 4.5;
+  } else if (mode === 'public') {
+    speedKmh = 20;
+  } else if (mode === 'taxi' || mode === 'charter' || mode === 'drive') {
+    speedKmh = 40;
+  }
+  
+  return (duration / 60) * speedKmh; // distance in km
+}
+
 interface TimelineViewProps {
   day: ItineraryDay;
   onMoveActivity: (activityId: string, direction: 'up' | 'down') => void;
@@ -26,6 +48,45 @@ export function TimelineView({
   onReRollActivity,
 }: TimelineViewProps) {
   const { colors, spacing, borderRadius, typography, shadows } = useTheme();
+
+  const renderVerticalTransitBadge = (transport: any) => {
+    const tData = transport || { mode: 'drive', duration: 10 };
+    const distKm = getRouteDistance(tData);
+    const distStr = `${distKm.toFixed(1)} km`;
+    
+    let iconName: any = 'car-outline';
+    let modeLabel = t('itinerary.timelineView.transport.mode.drive', { defaultValue: '乘車' });
+    let themeColor = '#6366F1'; // Indigo for drive
+    let bgColor = '#EEF2FF';
+    
+    if (tData.mode === 'walk') {
+      iconName = 'walk-outline';
+      modeLabel = t('itinerary.timelineView.transport.mode.walk', { defaultValue: '步行' });
+      themeColor = '#10B981'; // Green for walk
+      bgColor = '#ECFDF5';
+    } else if (tData.mode === 'public') {
+      iconName = 'bus-outline';
+      modeLabel = t('itinerary.timelineView.transport.mode.public', { defaultValue: '大眾運輸' });
+      themeColor = '#3B82F6'; // Blue for public
+      bgColor = '#EFF6FF';
+    } else if (tData.mode === 'taxi' || tData.mode === 'charter') {
+      iconName = 'car-sport-outline';
+      modeLabel = tData.mode === 'taxi' 
+        ? t('itinerary.timelineView.transport.mode.taxi', { defaultValue: '計程車' })
+        : t('itinerary.timelineView.transport.mode.charter', { defaultValue: '包車' });
+      themeColor = '#F59E0B'; // Amber
+      bgColor = '#FFFBEB';
+    }
+
+    return (
+      <View style={[styles.verticalTransitBadge, { backgroundColor: bgColor, borderColor: themeColor + '30' }]}>
+        <Ionicons name={iconName} size={13} color={themeColor} />
+        <Text style={[styles.verticalTransitText, { color: themeColor }]}>
+          {modeLabel} • {tData.duration || 10} {t('common.minutes', { defaultValue: '分鐘' })} • {distStr}
+        </Text>
+      </View>
+    );
+  };
 
   // Local state to track notes input before saving
   const [localNotes, setLocalNotes] = useState<Record<string, string>>({});
@@ -338,9 +399,10 @@ export function TimelineView({
               </View>
 
               {/* Transit indicator if next activity is coming */}
-              {!showGapRecommendation && (
-                <View style={styles.shortTransitRow}>
-                  <View style={[styles.transitVerticalLine, { backgroundColor: '#E2E8F0' }]} />
+              {!showGapRecommendation && !isLast && (
+                <View style={styles.verticalTransitContainer}>
+                  <View style={[styles.transitVerticalLine, { backgroundColor: '#E2E8F0', height: 48 }]} />
+                  {renderVerticalTransitBadge(activities[index + 1].transport)}
                 </View>
               )}
             </View>
@@ -468,5 +530,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 6,
     flex: 1,
+  },
+  verticalTransitContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 48,
+    position: 'relative',
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  verticalTransitBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    marginLeft: 16,
+    gap: 4,
+  },
+  verticalTransitText: {
+    fontSize: 11,
+    fontWeight: 'bold',
   },
 });

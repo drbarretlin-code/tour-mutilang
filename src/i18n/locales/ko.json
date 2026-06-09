@@ -1,405 +1,718 @@
 {
   "app": {
     "name": "Tour Plan",
-    "tagline": "Smart trips, effortless planning"
+    "tagline": "스마트한 여행, 손쉬운 계획"
+  },
+  "home": {
+    "title": "내 계획",
+    "emptyStateTitle": "아직 생성된 여행 일정이 없습니다.",
+    "emptyStateSubtitle": "아래 버튼을 클릭하면 AI가 귀하에게 딱 맞는 여행을 계획해 드립니다.",
+    "aiBatchTitle": "🤖AI 스마트 배치 예약 도우미",
+    "aiBatchSubtitle": "여러 URL을 붙여넣어 독점적인 분석 및 일정 제안을 빠르게 생성하세요.",
+    "newPlan": "새로운 계획",
+    "errorNotFound": "해당 프로젝트 정보를 찾을 수 없습니다. 제거되었을 수도 있습니다.",
+    "errorLoadFailed": "로드하지 못했습니다. 나중에 다시 시도해 주세요.",
+    "errorDeleteFailed": "삭제하지 못했습니다. 나중에 다시 시도해 주세요.",
+    "confirmDeleteTitle": "여행 삭제",
+    "confirmDeleteMessage": "이 프로젝트를 삭제하시겠습니까? 삭제한 후에는 복원할 수 없습니다.",
+    "confirmLogoutTitle": "로그아웃",
+    "confirmLogoutMessage": "정말로 로그아웃하시겠습니까?",
+    "greetingMorning": "좋은 아침이에요",
+    "greetingAfternoon": "좋은 오후에요",
+    "greetingEvening": "좋은 저녁이에요",
+    "apiKeySetupTitle": "AI 엔진 설정",
+    "apiKeySetupDesc": "개인화되고 독점적인 여행 일정 계획을 제공하려면 시스템이 Gemini AI에 액세스해야 합니다. 스마트 엔진을 활성화하려면 API 키를 입력하세요.",
+    "apiKeyPlaceholder": "Gemini API 키(AIzaSy...)를 붙여넣으세요.",
+    "apiKeySaveLocally": "로컬 장치에 저장",
+    "apiKeySaveLocallyDesc": "체크를 해제하면 웹페이지 종료 후 자동으로 지워져 메모리에 남지 않습니다.",
+    "getFreeApiKey": "👉 무료 Google Gemini API 키를 빠르게 신청하려면 여기를 클릭하세요.",
+    "saveAndStart": "저장하고 계획을 시작하세요",
+    "myItineraries": "내 여행 계획"
   },
   "common": {
-    "next": "Next",
-    "back": "Back",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "add": "Add",
-    "confirm": "Confirm",
-    "required": "Required",
-    "optional": "Optional",
-    "loading": "Loading",
-    "error": "Error",
-    "success": "Success",
-    "search": "Search",
-    "select": "Select",
-    "submit": "Submit",
-    "reset": "Reset",
-    "close": "Close",
-    "yes": "Yes",
-    "no": "No",
-    "none": "None",
-    "other": "Other",
-    "done": "Done",
-    "skip": "Skip",
-    "days": "%{count} Days"
+    "next": "다음 단계",
+    "back": "반품",
+    "save": "가게",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "편집하다",
+    "add": "새로운",
+    "confirm": "확인하다",
+    "required": "필수의",
+    "optional": "선택 과목",
+    "loading": "로드 중",
+    "error": "실수",
+    "success": "성공",
+    "search": "찾다",
+    "select": "선택하다",
+    "submit": "보내다",
+    "reset": "다시 놓기",
+    "close": "폐쇄",
+    "yes": "예",
+    "no": "아니요",
+    "none": "없음",
+    "other": "다른",
+    "done": "마치다",
+    "skip": "건너뛰다",
+    "days": "_%{count}일"
   },
   "auth": {
-    "login": "Log In",
-    "logout": "Log Out",
-    "register": "Sign Up",
-    "email": "Email",
-    "password": "Password",
-    "forgotPassword": "Forgot Password",
-    "welcomeBack": "Welcome Back",
-    "createAccount": "Create Account"
+    "login": "로그인",
+    "logout": "로그아웃",
+    "register": "등록하다",
+    "email": "이메일",
+    "password": "비밀번호",
+    "forgotPassword": "비밀번호를 잊어버려",
+    "welcomeBack": "돌아온 것을 환영합니다",
+    "createAccount": "계정 만들기",
+    "passwordPlaceholder": "비밀번호를 입력해주세요",
+    "confirmPassword": "비밀번호 확인",
+    "confirmPasswordPlaceholder": "비밀번호를 다시 입력해주세요",
+    "noAccount": "아직 계정이 없나요?",
+    "hasAccount": "이미 계정이 있나요?",
+    "or": "또는",
+    "guestLogin": "게스트로 직접 시작하기",
+    "registerSuccess": "계정이 성공적으로 생성되었습니다! 자동으로 로그인되었습니다."
   },
   "survey": {
-    "title": "Plan Your Trip",
-    "subtitle": "Tell us about your dream trip",
+    "title": "여행 계획하기",
+    "subtitle": "당신의 이상적인 여행을 알려주세요",
     "sections": {
-      "basics": "Basic Information",
-      "budget": "Budget & Spending",
-      "transport": "Transportation",
-      "style": "Travel Style & Interests",
-      "accommodation": "Accommodation",
-      "attractions": "Attractions & Activities",
-      "special": "Special Requirements"
+      "basics": "기본정보",
+      "budget": "예산 및 지출",
+      "transport": "운송",
+      "style": "여행 스타일과 관심분야",
+      "accommodation": "머무르다",
+      "attractions": "명소 및 활동",
+      "special": "특별한 요구"
     },
     "dates": {
-      "label": "Travel Dates",
-      "start": "Start Date",
-      "end": "End Date",
-      "flexible": "Flexible Dates",
-      "flexibleHint": "Allow +/- 1-3 days for better options",
-      "selectDates": "Select your travel dates",
-      "duration": "Duration",
-      "days": "days",
-      "nights": "nights"
+      "label": "여행 날짜",
+      "start": "출발일",
+      "end": "귀국일",
+      "flexible": "유연한 날짜",
+      "flexibleHint": "더 많은 옵션을 선택하려면 전후 1~3일을 허용하세요.",
+      "selectDates": "여행 날짜를 선택하세요",
+      "duration": "여행일수",
+      "days": "하늘",
+      "nights": "밤"
     },
     "destination": {
-      "label": "Destination",
-      "placeholder": "Search for a city or country",
-      "addMore": "Add another destination",
-      "remove": "Remove destination",
-      "multiCity": "Multi-city trip",
-      "dragToReorder": "Drag to reorder"
+      "label": "목적지",
+      "placeholder": "도시 또는 국가 검색",
+      "addMore": "추가 목적지 추가",
+      "remove": "목적지 삭제",
+      "multiCity": "다구간 여정",
+      "dragToReorder": "드래그하여 재정렬하세요."
     },
     "travelers": {
-      "label": "Number of Travelers",
-      "adults": "Adults",
-      "children": "Children",
-      "childAge": "Child age",
-      "infants": "Infants",
-      "seniors": "Seniors"
+      "label": "승객 수",
+      "adults": "성인",
+      "children": "어린이",
+      "childAge": "어린이 연령",
+      "infants": "유아",
+      "seniors": "연세가 드신"
     },
     "tripType": {
-      "label": "Trip Type",
-      "family": "Family",
-      "couple": "Couple",
-      "solo": "Solo",
-      "friends": "Friends",
-      "business": "Business",
-      "honeymoon": "Honeymoon"
+      "label": "여행 유형",
+      "family": "가족 여행",
+      "couple": "커플 여행",
+      "solo": "혼자 여행",
+      "friends": "여행하는 친구들",
+      "business": "출장",
+      "honeymoon": "신혼여행"
     },
     "departure": {
-      "label": "Departure City",
-      "placeholder": "Where are you departing from?"
+      "label": "출발 도시",
+      "placeholder": "어디서부터 시작하나요?"
     },
     "budget": {
-      "label": "Total Budget",
-      "economy": "Economy",
-      "moderate": "Moderate",
-      "luxury": "Luxury",
-      "unlimited": "No Limit",
-      "dailyMeals": "Daily Meal Budget (per person)",
-      "currency": "Preferred Currency"
+      "label": "총예산",
+      "economy": "경제적",
+      "moderate": "중간",
+      "luxury": "사치",
+      "unlimited": "예산 제한 없음",
+      "dailyMeals": "일일 식사예산(1인당)",
+      "currency": "선호하는 통화"
     },
     "transport": {
-      "label": "Local Transportation Preference",
-      "public": "Public Transit",
-      "taxi": "Taxi / Ride-hailing (Grab, Uber)",
-      "rental": "Rental Car",
-      "charter": "Private Charter",
-      "walking": "Walking",
-      "drivingLicense": "Do you have an international driving license?",
+      "label": "지역 교통 환경 설정",
+      "public": "대중교통",
+      "taxi": "택시/차량 호출 서비스(그랩, Uber)",
+      "rental": "자동차 렌트",
+      "charter": "자동차를 전세",
+      "walking": "걷다",
+      "drivingLicense": "국제 운전 면허증을 소지하고 계십니까?",
       "flightInfo": {
-        "label": "Flight Information",
-        "flightNumber": "Flight Number",
-        "departure": "Departure Time",
-        "arrival": "Arrival Time",
-        "addFlight": "Add flight info"
+        "label": "항공편 정보",
+        "flightNumber": "항공편 번호",
+        "departure": "출발 시간",
+        "arrival": "도착 시간",
+        "addFlight": "항공편 정보 추가"
       }
     },
     "interests": {
-      "label": "Interests & Activities",
-      "culture": "Culture & History",
-      "nature": "Nature & Outdoors",
-      "food": "Food & Dining",
-      "shopping": "Shopping",
-      "nightlife": "Nightlife",
-      "water": "Water Activities",
-      "family": "Family-friendly",
-      "photo": "Photography Spots",
-      "temple": "Temples & Religious Sites",
-      "spa": "Spa & Massage",
-      "themepark": "Theme Parks",
-      "art": "Art & Exhibitions",
-      "market": "Local Markets"
+      "label": "관심분야 및 활동",
+      "culture": "문화와 역사",
+      "nature": "자연과 야외",
+      "food": "음식 및 식사",
+      "shopping": "쇼핑",
+      "nightlife": "밤의 유흥",
+      "water": "수상 스포츠",
+      "family": "부모와 자식 친화적",
+      "photo": "사진 촬영 장소",
+      "temple": "사원과 종교 명소",
+      "spa": "스파 & 마사지",
+      "themepark": "테마파크",
+      "art": "예술과 전시회",
+      "market": "현지 시장"
     },
     "pace": {
-      "label": "Travel Pace",
-      "packed": "Packed & Busy",
-      "balanced": "Balanced",
-      "relaxed": "Relaxed & Easy"
+      "label": "여행 리듬",
+      "packed": "콤팩트하고 실질적인",
+      "balanced": "적당한 균형",
+      "relaxed": "안심하다"
     },
     "schedule": {
-      "label": "Morning Preference",
-      "earlyBird": "Early Bird (before 7:00)",
-      "normal": "Normal (around 9:00)",
-      "lateRiser": "Late Riser (after 10:00)"
+      "label": "아침 선호",
+      "earlyBird": "일찍 일어나기(7시 이전)",
+      "normal": "일반형(9시경)",
+      "lateRiser": "늦게 일어나는 사람(10시 이후)"
     },
     "dietary": {
-      "label": "Dietary Restrictions",
-      "vegetarian": "Vegetarian",
-      "vegan": "Vegan",
-      "halal": "Halal",
-      "allergies": "Allergies",
-      "peanut": "Peanut allergy",
-      "seafood": "Seafood allergy",
-      "noRestriction": "No restrictions"
+      "label": "식이 제한",
+      "vegetarian": "채식",
+      "vegan": "비건",
+      "halal": "무슬림",
+      "allergies": "알레르기",
+      "peanut": "땅콩 알레르기",
+      "seafood": "해산물 알레르기",
+      "noRestriction": "제한 없는"
     },
     "accommodation": {
       "platform": {
-        "label": "Booking Platform",
-        "customUrl": "Other booking website URL"
+        "label": "예약 플랫폼",
+        "customUrl": "기타 예약 웹사이트 URL"
       },
       "type": {
-        "label": "Accommodation Type",
-        "hotel": "Hotel",
-        "homestay": "Homestay / B&B",
-        "hostel": "Hostel",
-        "resort": "Resort",
-        "apartment": "Apartment"
+        "label": "숙박 형태",
+        "hotel": "호텔",
+        "homestay": "홈스테이",
+        "hostel": "유스 호스텔",
+        "resort": "의지",
+        "apartment": "아파트"
       },
       "location": {
-        "label": "Preferred Location",
-        "cityCenter": "City Center",
-        "nearAttractions": "Near Attractions",
-        "quiet": "Quiet Residential Area",
-        "beachfront": "Beachfront"
+        "label": "선호하는 위치",
+        "cityCenter": "도심",
+        "nearAttractions": "주변 관광지",
+        "quiet": "조용한 주거 지역",
+        "beachfront": "해변의 첫 번째 줄"
       },
       "amenities": {
-        "label": "Required Amenities",
-        "pool": "Swimming Pool",
-        "gym": "Gym",
-        "breakfast": "Free Breakfast",
-        "kitchen": "Kitchen",
-        "laundry": "Laundry",
-        "parking": "Parking"
+        "label": "필요한 시설",
+        "pool": "수영장",
+        "gym": "체육관",
+        "breakfast": "무료 아침 식사",
+        "kitchen": "주방",
+        "laundry": "세탁 장비",
+        "parking": "주차장"
       }
     },
     "attractions": {
       "reference": {
-        "label": "Reference Attractions",
-        "hint": "Share places you're interested in. AI will consider these when planning.",
-        "addUrl": "Add URL",
-        "addPhoto": "Add Photo",
-        "addFile": "Add File",
-        "urlPlaceholder": "Paste a link to an attraction..."
+        "label": "참고 명소",
+        "hint": "관심 있는 명소를 공유하면 AI가 이를 고려하여 계획을 세울 것입니다.",
+        "addUrl": "새 URL 추가",
+        "addPhoto": "사진 추가",
+        "addFile": "새 파일 추가",
+        "urlPlaceholder": "명소 링크를 게시하세요..."
       },
       "mustVisit": {
-        "label": "Must-Visit Attractions",
-        "hint": "These will be included in your itinerary.",
-        "specifyDate": "Specify preferred date",
-        "specifyTime": "Specify preferred time"
+        "label": "명소를 방문해야합니다",
+        "hint": "이러한 명소는 여행 일정에 포함됩니다.",
+        "specifyDate": "원하는 날짜를 지정하세요",
+        "specifyTime": "선호하는 시간을 지정하세요"
       }
     },
     "map": {
-      "label": "Map Provider",
-      "apple": "Apple Maps",
-      "google": "Google Maps",
-      "amap": "Amap (Gaode)",
-      "baidu": "Baidu Maps"
+      "label": "지도 서비스",
+      "apple": "애플 지도",
+      "google": "구글 지도",
+      "amap": "Gaode 지도",
+      "baidu": "바이두 지도"
     },
     "accessibility": {
-      "label": "Accessibility Needs",
-      "wheelchair": "Wheelchair Access",
-      "stroller": "Stroller Friendly",
-      "mobility": "Limited Mobility"
+      "label": "접근성 요구 사항",
+      "wheelchair": "휠체어 이용 가능",
+      "stroller": "유모차 친화적",
+      "mobility": "이동성 감소"
     },
     "visa": {
-      "label": "Visa Requirements",
-      "nationality": "Passport Nationality",
-      "hint": "We'll check if you need a visa"
+      "label": "비자 요건",
+      "nationality": "여권 국적",
+      "hint": "비자가 필요한지 확인해드리겠습니다"
     },
     "insurance": {
-      "label": "Travel Insurance",
-      "have": "Already covered",
-      "need": "Need recommendations",
-      "skip": "Skip for now"
+      "label": "여행 보험",
+      "have": "보험",
+      "need": "추천이 필요함",
+      "skip": "먼저 건너뛰기"
     },
     "notes": {
-      "label": "Additional Notes",
-      "placeholder": "Any other preferences or requirements..."
+      "label": "주목",
+      "placeholder": "기타 선호사항이나 필요사항..."
     },
     "language": {
-      "label": "App Language",
-      "hint": "Choose your preferred language"
+      "label": "응용 언어",
+      "hint": "선호하는 언어를 선택하세요"
     },
-    "generateTrip": "Generate My Trip",
-    "generating": "AI is planning your perfect trip...",
+    "generateTrip": "내 여행 일정 생성",
+    "generating": "AI가 당신을 위한 완벽한 여행을 계획하고 있습니다.",
     "tierLabels": {
-      "required": "Required Information",
-      "recommended": "Recommended",
-      "optional": "Optional Details"
+      "required": "필수정보",
+      "recommended": "채워넣는 것이 좋습니다",
+      "optional": "선택항목"
+    },
+    "actions": {
+      "confirmDiscardTitle": "초안 삭제 확인",
+      "confirmDiscardMessage": "현재 일정 초안을 취소하고 다시 계획을 시작하시겠습니까? 이 작업은 취소할 수 없습니다.",
+      "saveSuccessTitle": "성공적으로 저장되었습니다",
+      "saveSuccessMessage": "귀하의 설문지 데이터는 로컬에 안전하게 저장되었습니다. 언제든지 애플리케이션을 닫을 수 있으며 다음에 애플리케이션을 입력하면 자동으로 편집 상태가 다시 시작됩니다.",
+      "cancelEditWebConfirm": "이 수정 사항을 취소하고 원래 여행 일정으로 돌아가시겠습니까, 아니면 현재 수정 사항을 새로운 여행 일정으로 저장하시겠습니까?\n\n[OK] 수정을 취소하고 원래 여행 일정으로 돌아갑니다.\n[취소] 새 요금제로 저장하고 계속하기",
+      "convertedTitle": "변환됨",
+      "convertedMessage": "현재 수정 사항은 새 여행 일정으로 저장되며 이전 계획을 덮어쓰지 않습니다. 계속해서 설정을 완료하고 생성해주세요!",
+      "cancelEditTitle": "편집 취소",
+      "cancelEditMessage": "이 수정 사항을 취소하시겠습니까, 아니면 현재 수정 사항을 새 여행 일정으로 저장하시겠습니까?",
+      "discardAndReturn": "수정 사항을 취소하고 원래 여행 일정으로 돌아갑니다.",
+      "saveAsNew": "새 프로젝트로 저장",
+      "continueEditing": "계속 편집",
+      "saveDraft": "초안 저장",
+      "restart": "다시 메우다",
+      "loginOrRegister": "로그인/회원가입"
+    },
+    "summary": {
+      "title": "나의 특별한 여행 하이라이트",
+      "progress": "AI 스마트 기획 진행",
+      "notSelectedHint": "선택되지 않음(첫 번째 단계에서 설정하세요)",
+      "dateTo": "에게",
+      "notSelected": "선택되지 않음",
+      "notSet": "설정되지 않음",
+      "adults": "성인",
+      "children": "어린이",
+      "guestMode": "게스트 모드(데이터가 로컬에 저장됨)",
+      "loggedInAs": "이미 로그인되어 있습니다:"
     }
   },
   "itinerary": {
-    "title": "My Itinerary",
-    "day": "Day {{number}}",
-    "overview": "Overview",
-    "dailySummary": "Daily Summary",
-    "estimatedCost": "Estimated Cost",
-    "walkingDistance": "Walking Distance",
-    "weather": "Weather Forecast",
-    "timeline": "Timeline View",
-    "mapView": "Map View",
+    "title": "내 여행 일정",
+    "day": "일 {{number}}",
+    "overview": "개요",
+    "dailySummary": {
+      "weather": {
+        "sunny": "화창하고 덥다",
+        "cloudy": "흐리고 맑음",
+        "rainy": "격리된 샤워실",
+        "partlySunny": "오후에 천둥번개를 동반한 소나기",
+        "rainProb": "강수 확률 %{prob}"
+      },
+      "advice": {
+        "sunny": "가볍고 통기성이 좋은 옷을 입고 자외선 차단에 주의하는 것이 좋습니다.",
+        "cloudy": "야외 활동에 적합한 편안한 캐주얼 복장을 착용하세요.",
+        "rainy": "비옷을 지참하고 방수 신발을 착용하십시오.",
+        "partlySunny": "오후에 내리는 소나기로부터 몸을 보호하기 위해 접이식 우산을 가지고 다니는 것이 좋습니다."
+      }
+    },
+    "estimatedCost": "예상 비용",
+    "walkingDistance": "도보 거리",
+    "weather": "일기 예보",
+    "timeline": "타임라인 보기",
+    "mapView": "지도 보기",
+    "timelineView": {
+      "types": {
+        "transport": "✈️교통/도착",
+        "meal": "🍽️식사",
+        "hotel": "🏨 숙소",
+        "attraction": "🏛️ 명소 방문",
+        "default": "📍 활동"
+      },
+      "alerts": {
+        "grabWebHint": "💡 팁: Grab은 차량 호출 서비스의 \"웹 버전\"을 제공하지 않습니다! 모바일 앱을 사용해야 합니다.\n\n다운로드 정보를 제공하기 위해 공식 Grab 웹사이트가 곧 오픈될 예정입니다.",
+        "boltWebHint": "💡 팁: Bolt는 주로 모바일 앱 차량 호출 서비스를 제공합니다.\n\n다운로드 정보를 제공하기 위해 Bolt 공식 웹사이트가 곧 오픈될 예정입니다.",
+        "cannotOpenTitle": "열 수 없습니다",
+        "cannotOpenMessage": "이 링크를 열 수 없습니다. 해당 앱이 기기에 설치되어 있지 않거나 브라우저 설정에서 차단하고 있을 수 있습니다.",
+        "errorTitle": "오류가 발생했습니다",
+        "errorMessage": "링크를 열 수 없습니다."
+      },
+      "endOfDay": {
+        "title": "🌙 오늘 일정 마무리: 숙소로 돌아갈 준비",
+        "transportAdvice": "추천 교통수단: 그랩/볼트(Grab/Bolt)를 타고 약 15분 정도 소요됩니다.",
+        "shuttleGuideTitle": "🚗 숙소 이동 안내:",
+        "shuttleGuideDesc": "호텔에 셔틀 시스템이 없는 경우 Bolt 또는 Grab을 이용해 택시를 부르시기 바랍니다. 기본 숙소(%{hotelName})로 이동합니다.",
+        "yourHotel": "당신의 호텔",
+        "tonightStay": "오늘 밤 숙박: %{hotelName}",
+        "airportMapHint": "공항 출국장 평면도 참고",
+        "openGrab": "그랩을 시작하려면 여기를 클릭하세요",
+        "openBolt": "Bolt를 열려면 여기를 클릭하세요"
+      },
+      "activity": {
+        "region": "지역:%{region}",
+        "thisRegion": "지역",
+        "transitGuide": "교통안내 : 다음 정류장까지 대중교통이 불편합니다. 이 구간에는 명확한 지하철이 없습니다. 편도 택시를 부르려면 전세 차량을 이용하거나 Bolt/Grab을 이용하시는 것이 좋습니다. 예상 이동 시간은 %{gap}분입니다.",
+        "navigate": "지도로 이동",
+        "charter": "자동차를 전세",
+        "notesLabel": "전송 조정 │주의 사항",
+        "notesPlaceholder": "예: 운전기사 전화번호, 영업시간 확인..."
+      }
+    },
+    "mapFallbackView": {
+      "errors": {
+        "openFailed": "지도 내비게이션을 로드할 수 없습니다. 브라우저에서 열려고 합니다."
+      },
+      "title": "오늘의 노선망 토폴로지 맵",
+      "empty": "오늘 일정에는 관광지 위치정보가 없습니다."
+    },
+    "combinedView": {
+      "title": "🗺️ 하루 %{day} 일정 경로 및 일정 정보 차트",
+      "subtitle": "인터랙티브 3D 노선도, 여정 변경에 대한 실시간 대응",
+      "refresh": "한 번의 클릭으로 차트 업데이트"
+    },
+    "horizontalCard": {
+      "types": {
+        "activity": "관광명소",
+        "dining": "맛있는 음식",
+        "shopping": "쇼핑",
+        "experience": "경험"
+      }
+    },
+    "activityEditor": {
+      "title": "여행 일정 수정",
+      "types": {
+        "attraction": "관광명소",
+        "restaurant": "음식",
+        "cafe": "카페 / 애프터눈 티",
+        "shopping": "쇼핑",
+        "spa": "스파/마사지",
+        "entertainment": "오락",
+        "hotel": "머무르다",
+        "transport": "이동하다",
+        "activity": "경험"
+      },
+      "errors": {
+        "titleEmpty": "여행 이름은 비워둘 수 없습니다."
+      },
+      "deleteConfirm": {
+        "title": "프로젝트 삭제",
+        "message": "이 항목을 삭제하시겠습니까?"
+      },
+      "fields": {
+        "time": "시간(예: 10:00)",
+        "type": "프로젝트 유형",
+        "title": "여정명",
+        "titlePlaceholder": "여행일정명을 입력해주세요",
+        "location": "지리적 위치(지역)",
+        "locationPlaceholder": "예: 파타야",
+        "day": "예정일(모바일 여행)",
+        "notes": "자세한 지침(운송 또는 메모 수집)",
+        "notesPlaceholder": "알림이나 메모를 입력하세요...",
+        "links": "참조 URL(선택사항)"
+      },
+      "links": {
+        "map": "지도:",
+        "mapPlaceholder": "구글 지도 URL",
+        "info": "소개하다:",
+        "infoPlaceholder": "블로그 또는 공식 홈페이지",
+        "booking": "운송:",
+        "bookingPlaceholder": "클룩 또는 전세 차량 예약"
+      },
+      "actions": {
+        "delete": "이 항목 삭제",
+        "cancel": "취소",
+        "save": "변경사항 저장"
+      }
+    },
+    "destinationGuide": {
+      "loading": "당신을 위한 지역 독점 가이드를 편집 중입니다...",
+      "exchange": {
+        "title": "_%{currencyName}/대만 달러 환율 환산 도우미",
+        "subtitle": "오늘의 지출과 예산을 즉시 계산해 보세요. (현재 환율은 약 1TWD = %{rate} %{code})",
+        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
+        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
+        "inputTwd": "대만 달러(TWD)를 입력하세요.",
+        "inputLocal": "%{name}(%{code})을 입력하세요.",
+        "resultLabel": "변환 결과(%{code})",
+        "twdLabel": "TWD 대만 달러"
+      },
+      "guide": {
+        "title": "💡 여행 소비 실용 가이드 (%{code}/TWD 개념)",
+        "quickSelect": "금액을 빠르게 계산하려면 클릭하세요."
+      },
+      "emergency": {
+        "title": "📞긴급연락처"
+      },
+      "phrases": {
+        "title": "🔥 실용어학 가이드",
+        "translator": "1. 양방향 음성번역 웹페이지",
+        "openTool": "도구 열기"
+      }
+    },
+    "expenseSplitter": {
+      "me": "나",
+      "companionN": "여행 동반자 %{n}",
+      "errors": {
+        "companionExists": "이 여행 동반자의 이름이 이미 존재합니다!",
+        "cannotRemoveCreator": "계정 생성자를 삭제할 수 없습니다.",
+        "emptyTitle": "비용항목명을 입력해주세요!",
+        "invalidAmount": "올바른 금액을 입력하세요!",
+        "noSplitters": "비용을 분담할 여행 동반자를 한 명 이상 선택하세요!"
+      },
+      "summary": {
+        "title": "여행 비용 개요",
+        "budgetLevel": "예산 수준: %{level}"
+      },
+      "companions": {
+        "title": "분할 여행 동반자 목록(%{count}명)",
+        "addPlaceholder": "다른 여행 동반자 이름 추가...",
+        "addBtn": "새로운"
+      },
+      "settlement": {
+        "title": "정착 조언",
+        "allSettled": "지금까지 모든 계좌가 정산되었으므로 이체가 필요하지 않습니다!"
+      },
+      "expenses": {
+        "title": "지출 내역 기록(%{count} 항목)",
+        "addBtn": "메모하기",
+        "detail": "지불인: %{paidBy} | 공유: %{count}명"
+      },
+      "modal": {
+        "title": "지출 기록 추가",
+        "fields": {
+          "titleLabel": "프로젝트 이름",
+          "titlePlaceholder": "예: 태국식 저녁 식사, 지하철 티켓, 아궁 산 당일 여행",
+          "amountLabel": "지출 금액(%{currency})",
+          "amountPlaceholder": "금액을 입력해주세요.",
+          "paidByLabel": "지불인",
+          "splitWithLabel": "비용 공유자(복수 선택 가능)"
+        }
+      }
+    },
+    "packingChecklist": {
+      "items": {
+        "doc1": "여권 및 여권사본",
+        "doc2": "전자 항공권/탑승권",
+        "doc3": "예약 플랫폼 확인 바우처",
+        "doc4": "해외여행 안전보험",
+        "ess1": "휴대폰 및 충전 케이블",
+        "ess2": "전원 은행",
+        "ess3": "범용 어댑터 플러그",
+        "ess4": "외화현금 및 신용카드",
+        "ess5": "개인용 의약품",
+        "ess6": "세면도구 및 스킨케어 제품",
+        "clo1": "갈아입을 옷과 잠옷",
+        "clo2": "편안하고 걷기 쉬운 신발",
+        "clo3": "태양 모자와 선글라스",
+        "child1": "어린이용 감기약/체온계",
+        "child2": "어린이용 물티슈 및 간식",
+        "driver1": "국제운전면허증 원본 및 국내운전면허증 원본",
+        "driver2": "휴대폰 자동차 홀더",
+        "water1": "수영복, 모자, 고글",
+        "water2": "휴대폰 방진 및 방수 가방",
+        "nat1": "모기 구충제 로션 및 모기 구충제 패치",
+        "nat2": "발수 재킷/등산화"
+      },
+      "progress": {
+        "title": "출발 전 짐 꾸리기 진행",
+        "subtitle": "_%{checkedCount} / %{totalCount} 수집된 항목"
+      },
+      "custom": {
+        "title": "맞춤 포장 항목 추가",
+        "placeholder": "예: 감기약, 카메라 삼각대..."
+      },
+      "categories": {
+        "docs": "필요한 인증서 및 서류",
+        "essential": "개인 필수품",
+        "clothing": "의류 및 착용",
+        "custom": "맞춤형 포장 목록"
+      }
+    },
+    "travelTranslator": {
+      "tabs": {
+        "live": "온라인 AI 즉석 번역",
+        "handbook": "자주 사용하는 문구의 오프라인 빠른 조회"
+      },
+      "langs": {
+        "english": "영어",
+        "japanese": "일본어",
+        "korean": "한국어",
+        "thai": "태국어",
+        "vietnamese": "베트남 사람"
+      },
+      "live": {
+        "targetLabel": "대상 번역 언어",
+        "placeholder": "외국인에게 하고 싶은 말을 입력해주세요... (예: 이 요리를 주문하는 데 얼마나 걸리나요?)",
+        "translateBtn": "AI 번역 시작",
+        "resultLabel": "번역 결과"
+      },
+      "categories": {
+        "general": "매일 인사",
+        "dining": "레스토랑 주문",
+        "transport": "교통안내",
+        "emergency": "비상"
+      },
+      "errors": {
+        "translationFailed": "번역 중에 오류가 발생했습니다. 나중에 다시 시도해 주세요."
+      },
+      "phrases": {
+        "mockPrefix": "[모의 번역 - %{lang}]",
+        "englishRef": "영어 비교: %{text}",
+        "general": {
+          "0": "안녕하세요",
+          "1": "감사해요",
+          "2": "죄송합니다/실례합니다",
+          "3": "비용은 얼마인가요?"
+        },
+        "dining": {
+          "0": "메뉴 보고싶다",
+          "1": "물 좀 주세요",
+          "2": "이 요리에 땅콩이 들어있나요?",
+          "3": "체크아웃을 도와주세요"
+        },
+        "transport": {
+          "0": "지하철역은 어디에 있나요?",
+          "1": "나는 이곳에 가고 싶다.",
+          "2": "화장실은 어디에 있나요?"
+        },
+        "emergency": {
+          "0": "구급차를 불러주세요!",
+          "1": "여권을 잃어버렸어요!",
+          "2": "경찰서는 어디에 있나요?"
+        }
+      }
+    },
+    "apiKeyModal": {
+      "title": "AI 인텔리전스 엔진 잠금 해제",
+      "description": "가입비 없이 개인화된 여행 일정 계획을 제공하기 위해 이 애플리케이션은 BYOK 아키텍처를 사용합니다. Google Gemini API 키를 무료로 신청하고 아래에 게시해 주세요. 귀하의 키는 안전하게 암호화되어 장치에 저장됩니다.",
+      "linkText": "Google AI Studio로 이동하여 무료 키를 신청하세요.",
+      "cancelBtn": "취소(오프라인 템플릿 사용)",
+      "saveBtn": "저장 및 생성"
+    },
     "activity": {
-      "startTime": "Start Time",
-      "endTime": "End Time",
-      "duration": "Duration",
-      "cost": "Cost",
-      "transport": "Getting There",
-      "travelTime": "Travel Time",
-      "openHours": "Opening Hours",
-      "closedDay": "Closed on",
-      "rating": "Rating",
-      "navigate": "Navigate",
-      "bookTicket": "Book Ticket",
-      "moreInfo": "More Info",
-      "notes": "Notes",
+      "startTime": "시작 시간",
+      "endTime": "종료 시간",
+      "duration": "체류 시간",
+      "cost": "비용",
+      "transport": "운송",
+      "travelTime": "운송 시간",
+      "openHours": "영업시간",
+      "closedDay": "공휴일",
+      "rating": "점수",
+      "navigate": "항해",
+      "bookTicket": "티켓 예약",
+      "moreInfo": "추가 정보",
+      "notes": "주목",
       "type": {
-        "attraction": "Attraction",
-        "restaurant": "Restaurant",
-        "shopping": "Shopping",
-        "transport": "Transportation",
-        "hotel": "Hotel",
-        "activity": "Activity"
+        "attraction": "관광명소",
+        "restaurant": "식당",
+        "shopping": "쇼핑",
+        "transport": "운송",
+        "hotel": "호텔",
+        "activity": "활동"
       }
     },
     "hotel": {
-      "label": "Today's Hotel",
-      "checkIn": "Check-in",
-      "checkOut": "Check-out",
-      "contact": "Contact",
-      "bookingLink": "Booking Link"
+      "label": "오늘의 숙소",
+      "checkIn": "체크인",
+      "checkOut": "확인해 보세요",
+      "contact": "연락처 정보",
+      "bookingLink": "예약 링크"
     },
     "emergency": {
-      "label": "Emergency Contacts",
-      "police": "Police",
-      "ambulance": "Ambulance",
-      "embassy": "Embassy/Consulate",
-      "tourist": "Tourist Police"
+      "label": "비상연락처",
+      "police": "경찰",
+      "ambulance": "구급차",
+      "embassy": "대사관/영사관",
+      "tourist": "관광 경찰"
     },
     "tips": {
-      "label": "Local Tips",
-      "tipping": "Tipping Etiquette",
-      "customs": "Local Customs",
-      "wifi": "Wi-Fi / SIM Card Info"
+      "label": "땅 위의 작은 발걸음",
+      "tipping": "팁 에티켓",
+      "customs": "지역 관습",
+      "wifi": "Wi-Fi/SIM 카드 정보"
     },
     "export": {
-      "label": "Export",
-      "pdf": "Export as PDF",
-      "share": "Share Link",
-      "image": "Save as Image"
+      "label": "송금하다",
+      "pdf": "PDF로 내보내기",
+      "share": "링크 공유",
+      "image": "그림으로 저장"
     },
-    "dragHint": "Hold and drag to reorder",
-    "aiSuggestion": "AI suggests nearby attractions for your free time",
-    "offlineReady": "Available offline",
+    "dragHint": "재정렬하려면 길게 누르고 드래그하세요.",
+    "aiSuggestion": "AI가 여가 시간에 주변 명소를 추천해 줍니다.",
+    "offlineReady": "오프라인 브라우징 지원",
     "tabs": {
-      "timeline": "Timeline",
-      "guide": "Local Guide",
-      "checklist": "Checklist",
-      "expenses": "Expenses",
-      "translator": "Translator"
+      "timeline": "여행 일정 개요",
+      "guide": "현지 가이드",
+      "checklist": "출발 전 체크리스트",
+      "expenses": "지출 장부",
+      "translator": "여행 번역"
     },
     "map": {
-      "title": "Full Route 3D Map"
+      "title": "전체 여행 3D 풍경 지도"
     },
     "nav": {
-      "collapse": "Collapse Navigation",
-      "expand": "Expand Navigation"
+      "collapse": "메뉴 패널 접기",
+      "expand": "보기 및 요일 메뉴 펼치기"
     },
-    "offline": "Offline Mode",
-    "noData": "No itinerary data found",
-    "backHome": "Back to Home",
-    "shareTitle": "Share Itinerary",
-    "shareMsg": "Itinerary link copied to clipboard!",
-    "exportTitle": "Export Itinerary PDF",
-    "exportSuccess": "Export Successful",
-    "exportSuccessMsg": "PDF generated at: %{uri}",
-    "exportFail": "Export Failed",
-    "exportFailMsg": "Failed to generate PDF file.",
+    "offline": "오프라인 탐색 모드",
+    "noData": "여행정보가 없습니다.",
+    "backHome": "홈페이지로 돌아가기",
+    "shareTitle": "여행 일정 공유",
+    "shareMsg": "여행일정 링크가 클립보드에 복사되었습니다!",
+    "exportTitle": "여행일정 PDF 내보내기",
+    "exportSuccess": "송금 성공",
+    "exportSuccessMsg": "PDF가 생성됨: %{uri}",
+    "exportFail": "내보내기 실패",
+    "exportFailMsg": "PDF 파일을 생성할 수 없습니다.",
     "aiRecommend": {
-      "title": "AI Recommendation",
-      "msg": "Automatically filled gap with nearby spots!",
-      "actTitle": "AI Recommended: Local Delicacies",
-      "actDesc": "Recommended popular restaurants nearby.",
-      "actLocName": "Street food & Cafes",
-      "actLocAddr": "Within walking distance",
-      "actNotes": "Try the local cold drinks."
-    },
-    "destinationGuide": {
-      "loading": "Compiling your exclusive local guide...",
-      "exchange": {
-        "title": "%{currencyName}/TWD Exchange Assistant",
-        "subtitle": "Calculate today's budget (Current rate: 1 TWD = %{rate} %{code})",
-        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
-        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
-        "inputTwd": "Enter TWD",
-        "inputLocal": "Enter %{name} (%{code})",
-        "resultLabel": "Result (%{code})",
-        "twdLabel": "TWD"
-      },
-      "guide": {
-        "title": "💡 Practical Spending Guide (%{code}/TWD)",
-        "quickSelect": "Quick Select:"
-      },
-      "emergency": {
-        "title": "📞 Emergency Contacts"
-      },
-      "phrases": {
-        "title": "☕ Useful Phrases",
-        "translator": "1. Two-way Voice Translator",
-        "openTool": "Open Tool"
-      }
+      "title": "AI 추천",
+      "msg": "여정 공백이 자동으로 채워지고 경로가 업데이트됩니다!",
+      "actTitle": "AI 추천: 엄선된 현지 음식 시식",
+      "actDesc": "여가 시간에 휴식을 취하며 즐기기에 적합한 주변 지역의 인기 맛집을 추천해 드립니다.",
+      "actLocName": "특선 스낵과 카페",
+      "actLocAddr": "관광지 도보권내",
+      "actNotes": "지역 특산품인 시원한 음료를 맛보는 것을 추천합니다."
     }
   },
   "settings": {
-    "title": "Settings",
-    "language": "Language",
-    "darkMode": "Dark Mode",
-    "notifications": "Notifications",
-    "about": "About",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "version": "Version"
+    "title": "설정",
+    "language": "언어",
+    "darkMode": "다크 모드",
+    "notifications": "통지하다",
+    "about": "~에 대한",
+    "privacy": "개인 정보 보호 정책",
+    "terms": "서비스 약관",
+    "version": "버전"
   },
   "errors": {
-    "required": "This field is required",
-    "invalidDate": "Invalid date selection",
-    "invalidUrl": "Please enter a valid URL",
+    "required": "이 필드는 필수입니다",
+    "invalidDate": "잘못된 날짜 선택",
+    "invalidUrl": "유효한 URL을 입력하세요.",
     "invalidEmail": "유효하지 않은 이메일 형식",
-    "networkError": "Network error. Please try again.",
-    "serverError": "Server error. Please try again later.",
-    "uploadFailed": "File upload failed",
-    "fileTooLarge": "File is too large (max 10MB)",
-    "unsupportedFormat": "Unsupported file format",
-    "minTravelers": "At least 1 traveler is required",
-    "minDestination": "At least 1 destination is required",
-    "dateRange": "End date must be after start date"
-  },
-  "home": {
-    "greetingMorning": "Good Morning",
-    "greetingAfternoon": "Good Afternoon",
-    "greetingEvening": "Good Evening",
-    "apiKeySetupTitle": "Setup Your AI Engine",
-    "apiKeySetupDesc": "To provide personalized itinerary planning, the system requires access to Gemini AI. Please enter your API Key to enable the smart engine.",
-    "apiKeyPlaceholder": "Paste your Gemini API Key (AIzaSy...)",
-    "apiKeySaveLocally": "Save to local device",
-    "apiKeySaveLocallyDesc": "If unchecked, it will be cleared upon exit and not saved in memory.",
-    "getFreeApiKey": "👉 Click here to get a free Google Gemini API Key",
-    "saveAndStart": "Save & Start Planning",
-    "myItineraries": "My Itineraries"
+    "networkError": "네트워크 오류가 발생했습니다. 나중에 다시 시도해 주세요.",
+    "serverError": "서버 오류입니다. 나중에 다시 시도해 주세요.",
+    "uploadFailed": "파일 업로드 실패",
+    "fileTooLarge": "파일이 너무 큼(최대 10MB)",
+    "unsupportedFormat": "지원되지 않는 파일 형식",
+    "minTravelers": "최소 1명의 여행자가 필요합니다.",
+    "minDestination": "목적지가 1개 이상 필요합니다.",
+    "dateRange": "귀국일은 ​​출발일 이후여야 합니다.",
+    "passwordMinLength": "비밀번호는 6자보다 길어야 합니다.",
+    "passwordMismatch": "두 번 입력한 비밀번호가 일치하지 않습니다.",
+    "emailInUse": "이 이메일 주소는 이미 등록되어 있습니다.",
+    "invalidCredential": "이메일이나 비밀번호가 잘못되었습니다.",
+    "invalidEmailFormat": "이메일 형식이 잘못되었습니다.",
+    "guestLoginFailed": "익명 로그인에 실패했습니다. 나중에 다시 시도해 주세요."
   },
   "dashboard": {
-    "untitledItinerary": "Untitled Itinerary"
+    "untitledItinerary": "이름 없는 여행 일정"
   }
 }

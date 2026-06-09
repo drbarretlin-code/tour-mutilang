@@ -1,405 +1,718 @@
 {
   "app": {
     "name": "Tour Plan",
-    "tagline": "Smart trips, effortless planning"
+    "tagline": "Viaje inteligente, planificación sencilla"
+  },
+  "home": {
+    "title": "mi plan",
+    "emptyStateTitle": "Aún no se han creado itinerarios",
+    "emptyStateSubtitle": "Haga clic en el botón a continuación y deje que AI planifique el viaje perfecto para usted.",
+    "aiBatchTitle": "🤖Asistente de programación de lotes inteligente con IA",
+    "aiBatchSubtitle": "Pegue varias URL para generar rápidamente análisis exclusivos y sugerencias de programación",
+    "newPlan": "nuevo plan",
+    "errorNotFound": "No se puede encontrar la información del proyecto correspondiente. Es posible que lo hayan eliminado.",
+    "errorLoadFailed": "Error al cargar, inténtalo de nuevo más tarde.",
+    "errorDeleteFailed": "La eliminación falló, inténtalo de nuevo más tarde.",
+    "confirmDeleteTitle": "Eliminar viaje",
+    "confirmDeleteMessage": "¿Estás seguro de que deseas eliminar este proyecto? Una vez eliminado, no se puede restaurar.",
+    "confirmLogoutTitle": "desconectar",
+    "confirmLogoutMessage": "¿Está seguro de que desea cerrar sesión?",
+    "greetingMorning": "Buen día",
+    "greetingAfternoon": "buenas tardes",
+    "greetingEvening": "Buenas noches",
+    "apiKeySetupTitle": "Configura tu motor de IA",
+    "apiKeySetupDesc": "Para proporcionar una planificación de itinerarios personalizada y exclusiva, el sistema necesita acceder a Gemini AI. Ingrese su clave API para habilitar el motor inteligente.",
+    "apiKeyPlaceholder": "Pegue su clave API de Gemini (AIzaSy...)",
+    "apiKeySaveLocally": "Guardar en dispositivo local",
+    "apiKeySaveLocallyDesc": "Si no está marcada, se borrará automáticamente después de cerrar la página web y no se conservará en la memoria.",
+    "getFreeApiKey": "👉 Haga clic aquí para solicitar rápidamente una clave API de Google Gemini gratuita",
+    "saveAndStart": "Guardar y empezar a planificar",
+    "myItineraries": "mis planes de viaje"
   },
   "common": {
-    "next": "Next",
-    "back": "Back",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "add": "Add",
-    "confirm": "Confirm",
-    "required": "Required",
-    "optional": "Optional",
-    "loading": "Loading",
-    "error": "Error",
-    "success": "Success",
-    "search": "Search",
-    "select": "Select",
-    "submit": "Submit",
-    "reset": "Reset",
-    "close": "Close",
-    "yes": "Yes",
+    "next": "Siguiente paso",
+    "back": "devolver",
+    "save": "almacenar",
+    "cancel": "Cancelar",
+    "delete": "borrar",
+    "edit": "editar",
+    "add": "Nuevo",
+    "confirm": "confirmar",
+    "required": "Requerido",
+    "optional": "Opcional",
+    "loading": "cargando",
+    "error": "error",
+    "success": "éxito",
+    "search": "buscar",
+    "select": "elegir",
+    "submit": "mandar",
+    "reset": "reiniciar",
+    "close": "cierre",
+    "yes": "Sí",
     "no": "No",
-    "none": "None",
-    "other": "Other",
-    "done": "Done",
-    "skip": "Skip",
-    "days": "%{count} Days"
+    "none": "ninguno",
+    "other": "otro",
+    "done": "Finalizar",
+    "skip": "saltar",
+    "days": "%{count} días"
   },
   "auth": {
-    "login": "Log In",
-    "logout": "Log Out",
-    "register": "Sign Up",
-    "email": "Email",
-    "password": "Password",
-    "forgotPassword": "Forgot Password",
-    "welcomeBack": "Welcome Back",
-    "createAccount": "Create Account"
+    "login": "Acceso",
+    "logout": "desconectar",
+    "register": "registro",
+    "email": "Correo electrónico",
+    "password": "contraseña",
+    "forgotPassword": "olvida la contraseña",
+    "welcomeBack": "bienvenido de nuevo",
+    "createAccount": "Crear una cuenta",
+    "passwordPlaceholder": "Por favor ingrese la contraseña",
+    "confirmPassword": "confirmar Contraseña",
+    "confirmPasswordPlaceholder": "Por favor ingrese la contraseña nuevamente",
+    "noAccount": "¿Aún no tienes una cuenta?",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "or": "o",
+    "guestLogin": "Comience directamente como invitado",
+    "registerSuccess": "¡Cuenta creada exitosamente! Has iniciado sesión automáticamente."
   },
   "survey": {
-    "title": "Plan Your Trip",
-    "subtitle": "Tell us about your dream trip",
+    "title": "Planifica tu viaje",
+    "subtitle": "Cuéntanos tu viaje ideal",
     "sections": {
-      "basics": "Basic Information",
-      "budget": "Budget & Spending",
-      "transport": "Transportation",
-      "style": "Travel Style & Interests",
-      "accommodation": "Accommodation",
-      "attractions": "Attractions & Activities",
-      "special": "Special Requirements"
+      "basics": "Información básica",
+      "budget": "Presupuesto y gasto",
+      "transport": "Transporte",
+      "style": "Estilo de viaje e intereses.",
+      "accommodation": "permanecer",
+      "attractions": "Atracciones y actividades",
+      "special": "necesidades especiales"
     },
     "dates": {
-      "label": "Travel Dates",
-      "start": "Start Date",
-      "end": "End Date",
-      "flexible": "Flexible Dates",
-      "flexibleHint": "Allow +/- 1-3 days for better options",
-      "selectDates": "Select your travel dates",
-      "duration": "Duration",
-      "days": "days",
-      "nights": "nights"
+      "label": "Fecha de viaje",
+      "start": "Fecha de salida",
+      "end": "fecha de regreso",
+      "flexible": "Fechas flexibles",
+      "flexibleHint": "Espere de 1 a 3 días antes y después para más opciones",
+      "selectDates": "Elige tus fechas de viaje",
+      "duration": "Días de viaje",
+      "days": "cielo",
+      "nights": "Noche"
     },
     "destination": {
-      "label": "Destination",
-      "placeholder": "Search for a city or country",
-      "addMore": "Add another destination",
-      "remove": "Remove destination",
-      "multiCity": "Multi-city trip",
-      "dragToReorder": "Drag to reorder"
+      "label": "destino",
+      "placeholder": "Buscar una ciudad o país",
+      "addMore": "Agregar destinos adicionales",
+      "remove": "Eliminar destino",
+      "multiCity": "Itinerario multiciudad",
+      "dragToReorder": "Arrastra para reordenar"
     },
     "travelers": {
-      "label": "Number of Travelers",
-      "adults": "Adults",
-      "children": "Children",
-      "childAge": "Child age",
-      "infants": "Infants",
-      "seniors": "Seniors"
+      "label": "Número de pasajeros",
+      "adults": "adulto",
+      "children": "niño",
+      "childAge": "edad del niño",
+      "infants": "infantes",
+      "seniors": "Anciano"
     },
     "tripType": {
-      "label": "Trip Type",
-      "family": "Family",
-      "couple": "Couple",
-      "solo": "Solo",
-      "friends": "Friends",
-      "business": "Business",
-      "honeymoon": "Honeymoon"
+      "label": "tipo de viaje",
+      "family": "viaje familiar",
+      "couple": "viaje en pareja",
+      "solo": "viajando solo",
+      "friends": "amigos viajando",
+      "business": "viaje de negocios",
+      "honeymoon": "viaje de luna de miel"
     },
     "departure": {
-      "label": "Departure City",
-      "placeholder": "Where are you departing from?"
+      "label": "Ciudad de salida",
+      "placeholder": "¿Por dónde empiezas?"
     },
     "budget": {
-      "label": "Total Budget",
-      "economy": "Economy",
-      "moderate": "Moderate",
-      "luxury": "Luxury",
-      "unlimited": "No Limit",
-      "dailyMeals": "Daily Meal Budget (per person)",
-      "currency": "Preferred Currency"
+      "label": "presupuesto total",
+      "economy": "Económico",
+      "moderate": "medio",
+      "luxury": "lujo",
+      "unlimited": "Sin límite de presupuesto",
+      "dailyMeals": "Presupuesto diario de comida (por persona)",
+      "currency": "Moneda preferida"
     },
     "transport": {
-      "label": "Local Transportation Preference",
-      "public": "Public Transit",
-      "taxi": "Taxi / Ride-hailing (Grab, Uber)",
-      "rental": "Rental Car",
-      "charter": "Private Charter",
-      "walking": "Walking",
-      "drivingLicense": "Do you have an international driving license?",
+      "label": "Preferencias de transporte local",
+      "public": "transporte masivo",
+      "taxi": "Servicios de taxi/viaje compartido (Grab, Uber)",
+      "rental": "alquiler de coches",
+      "charter": "Alquilar un coche",
+      "walking": "caminar",
+      "drivingLicense": "¿Tiene usted un permiso de conducir internacional?",
       "flightInfo": {
-        "label": "Flight Information",
-        "flightNumber": "Flight Number",
-        "departure": "Departure Time",
-        "arrival": "Arrival Time",
-        "addFlight": "Add flight info"
+        "label": "Información de vuelo",
+        "flightNumber": "número de vuelo",
+        "departure": "Hora de salida",
+        "arrival": "Hora de llegada",
+        "addFlight": "Agregar información de vuelo"
       }
     },
     "interests": {
-      "label": "Interests & Activities",
-      "culture": "Culture & History",
-      "nature": "Nature & Outdoors",
-      "food": "Food & Dining",
-      "shopping": "Shopping",
-      "nightlife": "Nightlife",
-      "water": "Water Activities",
-      "family": "Family-friendly",
-      "photo": "Photography Spots",
-      "temple": "Temples & Religious Sites",
-      "spa": "Spa & Massage",
-      "themepark": "Theme Parks",
-      "art": "Art & Exhibitions",
-      "market": "Local Markets"
+      "label": "Intereses y actividades",
+      "culture": "Cultura e Historia",
+      "nature": "naturaleza y aire libre",
+      "food": "Comida y comedor",
+      "shopping": "Compras",
+      "nightlife": "vida nocturna",
+      "water": "deportes acuáticos",
+      "family": "Apto para padres e hijos",
+      "photo": "lugares para fotografiar",
+      "temple": "Templos y atracciones religiosas",
+      "spa": "Spa y masaje",
+      "themepark": "parque temático",
+      "art": "Arte y Exposiciones",
+      "market": "mercado local"
     },
     "pace": {
-      "label": "Travel Pace",
-      "packed": "Packed & Busy",
-      "balanced": "Balanced",
-      "relaxed": "Relaxed & Easy"
+      "label": "ritmo de viaje",
+      "packed": "Compacto y sustancial",
+      "balanced": "saldo moderado",
+      "relaxed": "Relajarse"
     },
     "schedule": {
-      "label": "Morning Preference",
-      "earlyBird": "Early Bird (before 7:00)",
-      "normal": "Normal (around 9:00)",
-      "lateRiser": "Late Riser (after 10:00)"
+      "label": "preferencia matutina",
+      "earlyBird": "Madrugador (antes de las 7:00)",
+      "normal": "Tipo general (alrededor de las 9:00)",
+      "lateRiser": "Madrugador (después de las 10:00)"
     },
     "dietary": {
-      "label": "Dietary Restrictions",
-      "vegetarian": "Vegetarian",
-      "vegan": "Vegan",
-      "halal": "Halal",
-      "allergies": "Allergies",
-      "peanut": "Peanut allergy",
-      "seafood": "Seafood allergy",
-      "noRestriction": "No restrictions"
+      "label": "restricciones dietéticas",
+      "vegetarian": "dieta vegetariana",
+      "vegan": "vegano",
+      "halal": "musulmán",
+      "allergies": "alergia",
+      "peanut": "alergia al maní",
+      "seafood": "alergia a los mariscos",
+      "noRestriction": "Ilimitado"
     },
     "accommodation": {
       "platform": {
-        "label": "Booking Platform",
-        "customUrl": "Other booking website URL"
+        "label": "Plataforma de reservas",
+        "customUrl": "Otras URL de sitios web de reservas"
       },
       "type": {
-        "label": "Accommodation Type",
-        "hotel": "Hotel",
-        "homestay": "Homestay / B&B",
-        "hostel": "Hostel",
-        "resort": "Resort",
-        "apartment": "Apartment"
+        "label": "Tipo de alojamiento",
+        "hotel": "hotel",
+        "homestay": "Casa de familia",
+        "hostel": "albergue juvenil",
+        "resort": "Complejo",
+        "apartment": "departamento"
       },
       "location": {
-        "label": "Preferred Location",
-        "cityCenter": "City Center",
-        "nearAttractions": "Near Attractions",
-        "quiet": "Quiet Residential Area",
-        "beachfront": "Beachfront"
+        "label": "Ubicación preferida",
+        "cityCenter": "centro de la ciudad",
+        "nearAttractions": "Atracciones cercanas",
+        "quiet": "Zona residencial tranquila",
+        "beachfront": "Primera fila de playa"
       },
       "amenities": {
-        "label": "Required Amenities",
-        "pool": "Swimming Pool",
-        "gym": "Gym",
-        "breakfast": "Free Breakfast",
-        "kitchen": "Kitchen",
-        "laundry": "Laundry",
-        "parking": "Parking"
+        "label": "Instalaciones necesarias",
+        "pool": "piscina",
+        "gym": "Gimnasia",
+        "breakfast": "desayuno gratis",
+        "kitchen": "cocina",
+        "laundry": "equipo de lavandería",
+        "parking": "ESTACIONAMIENTO"
       }
     },
     "attractions": {
       "reference": {
-        "label": "Reference Attractions",
-        "hint": "Share places you're interested in. AI will consider these when planning.",
-        "addUrl": "Add URL",
-        "addPhoto": "Add Photo",
-        "addFile": "Add File",
-        "urlPlaceholder": "Paste a link to an attraction..."
+        "label": "Atracciones de referencia",
+        "hint": "Comparte atracciones que te interesen y la IA las tendrá en cuenta a la hora de planificar.",
+        "addUrl": "Agregar nueva URL",
+        "addPhoto": "Añadir foto",
+        "addFile": "Agregar nuevo archivo",
+        "urlPlaceholder": "Publica un enlace a la atracción..."
       },
       "mustVisit": {
-        "label": "Must-Visit Attractions",
-        "hint": "These will be included in your itinerary.",
-        "specifyDate": "Specify preferred date",
-        "specifyTime": "Specify preferred time"
+        "label": "Debes visitar atracciones",
+        "hint": "Estas atracciones estarán incluidas en su itinerario.",
+        "specifyDate": "Especificar fecha preferida",
+        "specifyTime": "Especificar horario preferido"
       }
     },
     "map": {
-      "label": "Map Provider",
-      "apple": "Apple Maps",
-      "google": "Google Maps",
-      "amap": "Amap (Gaode)",
-      "baidu": "Baidu Maps"
+      "label": "servicio de mapas",
+      "apple": "Mapas de Apple",
+      "google": "mapas de google",
+      "amap": "mapa de Gaodé",
+      "baidu": "mapa de Baidu"
     },
     "accessibility": {
-      "label": "Accessibility Needs",
-      "wheelchair": "Wheelchair Access",
-      "stroller": "Stroller Friendly",
-      "mobility": "Limited Mobility"
+      "label": "Necesidades de accesibilidad",
+      "wheelchair": "accesible en silla de ruedas",
+      "stroller": "Apto para cochecitos",
+      "mobility": "Movilidad reducida"
     },
     "visa": {
-      "label": "Visa Requirements",
-      "nationality": "Passport Nationality",
-      "hint": "We'll check if you need a visa"
+      "label": "Requisitos de visa",
+      "nationality": "nacionalidad del pasaporte",
+      "hint": "Le confirmaremos si necesita una visa."
     },
     "insurance": {
-      "label": "Travel Insurance",
-      "have": "Already covered",
-      "need": "Need recommendations",
-      "skip": "Skip for now"
+      "label": "seguro de viaje",
+      "have": "Asegurado",
+      "need": "Necesito recomendación",
+      "skip": "Saltar primero"
     },
     "notes": {
-      "label": "Additional Notes",
-      "placeholder": "Any other preferences or requirements..."
+      "label": "Observación",
+      "placeholder": "Otras preferencias o necesidades..."
     },
     "language": {
-      "label": "App Language",
-      "hint": "Choose your preferred language"
+      "label": "idioma de aplicación",
+      "hint": "Elige tu idioma preferido"
     },
-    "generateTrip": "Generate My Trip",
-    "generating": "AI is planning your perfect trip...",
+    "generateTrip": "generar mi itinerario",
+    "generating": "La IA está planeando el viaje perfecto para ti...",
     "tierLabels": {
-      "required": "Required Information",
-      "recommended": "Recommended",
-      "optional": "Optional Details"
+      "required": "Información requerida",
+      "recommended": "Se recomienda completar",
+      "optional": "Artículos opcionales"
+    },
+    "actions": {
+      "confirmDiscardTitle": "Confirmar descartar borrador",
+      "confirmDiscardMessage": "¿Está seguro de que desea descartar su borrador de itinerario actual y comenzar a planificar nuevamente? Esta acción no se puede deshacer.",
+      "saveSuccessTitle": "Guardado exitosamente",
+      "saveSuccessMessage": "Los datos de su cuestionario se han almacenado localmente de forma segura. Puede cerrar la aplicación en cualquier momento y automáticamente reanudará el estado de edición la próxima vez que ingrese.",
+      "cancelEditWebConfirm": "¿Le gustaría abandonar esta modificación y volver al itinerario original, o guardar la modificación actual como un itinerario completamente nuevo?\n\n[OK] Abandonar modificaciones y volver al itinerario original\n[Cancelar] Guardar como nuevo plan y continuar",
+      "convertedTitle": "Convertido",
+      "convertedMessage": "Las modificaciones actuales se guardarán como un itinerario nuevo y no sobrescribirán los planes antiguos. ¡Continúe completando la configuración y generando!",
+      "cancelEditTitle": "Cancelar edición",
+      "cancelEditMessage": "¿Le gustaría abandonar esta modificación o guardar la modificación actual como un nuevo itinerario?",
+      "discardAndReturn": "Descartar modificaciones y regresar al itinerario original.",
+      "saveAsNew": "Guardar como nuevo proyecto",
+      "continueEditing": "Continuar editando",
+      "saveDraft": "Guardar borrador",
+      "restart": "Rellenar",
+      "loginOrRegister": "Iniciar sesión/Registrarse"
+    },
+    "summary": {
+      "title": "Lo más destacado de mi viaje exclusivo",
+      "progress": "Progreso de la planificación inteligente de IA",
+      "notSelectedHint": "No seleccionado (configúrelo en el primer paso)",
+      "dateTo": "a",
+      "notSelected": "No seleccionado",
+      "notSet": "No establecido",
+      "adults": "adulto",
+      "children": "niño",
+      "guestMode": "Modo invitado (los datos se almacenan localmente)",
+      "loggedInAs": "Ya has iniciado sesión:"
     }
   },
   "itinerary": {
-    "title": "My Itinerary",
-    "day": "Day {{number}}",
-    "overview": "Overview",
-    "dailySummary": "Daily Summary",
-    "estimatedCost": "Estimated Cost",
-    "walkingDistance": "Walking Distance",
-    "weather": "Weather Forecast",
-    "timeline": "Timeline View",
-    "mapView": "Map View",
+    "title": "mi itinerario",
+    "day": "Día {{number}}",
+    "overview": "Descripción general",
+    "dailySummary": {
+      "weather": {
+        "sunny": "soleado y caluroso",
+        "cloudy": "Nublado y soleado",
+        "rainy": "Lluvias aisladas",
+        "partlySunny": "Tormentas por la tarde",
+        "rainProb": "Probabilidad de lluvia %{prob}"
+      },
+      "advice": {
+        "sunny": "Se recomienda llevar ropa ligera y transpirable y prestar atención a la protección solar.",
+        "cloudy": "Use ropa informal cómoda y adecuada para actividades al aire libre.",
+        "rainy": "Por favor traiga ropa para la lluvia y use calzado impermeable.",
+        "partlySunny": "Se recomienda llevar consigo un paraguas plegable para protegerse de los chubascos de la tarde."
+      }
+    },
+    "estimatedCost": "Costo estimado",
+    "walkingDistance": "distancia a pie",
+    "weather": "pronóstico del tiempo",
+    "timeline": "Vista de línea de tiempo",
+    "mapView": "Vista de mapa",
+    "timelineView": {
+      "types": {
+        "transport": "✈️Transporte/Llegada",
+        "meal": "🍽️Cenar",
+        "hotel": "🏨 Alojamiento",
+        "attraction": "🏛️ Visita a la atracción",
+        "default": "📍 Actividades"
+      },
+      "alerts": {
+        "grabWebHint": "💡 Consejo: ¡Grab no proporciona una \"versión web\" de servicios de transporte compartido! Debe utilizar la aplicación móvil.\n\nEl sitio web oficial de Grab se abrirá pronto para brindarle información de descarga.",
+        "boltWebHint": "💡 Consejo: Bolt ofrece principalmente servicios de transporte compartido mediante aplicaciones móviles.\n\nEl sitio web oficial de Bolt se abrirá pronto para brindarle información de descarga.",
+        "cannotOpenTitle": "No se puede abrir",
+        "cannotOpenMessage": "Este enlace no se puede abrir. Puede ser que la aplicación correspondiente no esté instalada en su dispositivo o que la configuración del navegador la esté bloqueando.",
+        "errorTitle": "Se produjo un error",
+        "errorMessage": "No se puede abrir el enlace."
+      },
+      "endOfDay": {
+        "title": "🌙 Fin del itinerario de hoy: prepárate para regresar a tu alojamiento",
+        "transportAdvice": "Transporte recomendado: Tomar Grab/Bolt, el trayecto dura aproximadamente 15 minutos.",
+        "shuttleGuideTitle": "🚗 Guía de traslado de alojamiento:",
+        "shuttleGuideDesc": "Si el hotel no dispone de un sistema de transporte, utilice Bolt o Grab para llamar a un taxi. Vaya al alojamiento predeterminado (%{hotelName}).",
+        "yourHotel": "tu hotel",
+        "tonightStay": "Alojamiento esta noche: %{hotelName}",
+        "airportMapHint": "Referencia del plano de planta de la sala de llegadas y salidas del aeropuerto",
+        "openGrab": "Haga clic aquí para iniciar Grab",
+        "openBolt": "Haga clic aquí para abrir Bolt"
+      },
+      "activity": {
+        "region": "Área:%{region}",
+        "thisRegion": "el área",
+        "transitGuide": "Orientación sobre transporte: el transporte público es inconveniente para llegar a la siguiente parada. No hay metro claro en este tramo. Se recomienda encarecidamente alquilar un coche o utilizar Bolt/Grab para llamar a un taxi de ida. El tiempo estimado de viaje es de %{gap} minutos.",
+        "navigate": "Navegar al mapa",
+        "charter": "Alquilar un coche",
+        "notesLabel": "Ajuste de la transmisión｜Notas",
+        "notesPlaceholder": "Por ejemplo: teléfono del conductor, confirmación del horario comercial…"
+      }
+    },
+    "mapFallbackView": {
+      "errors": {
+        "openFailed": "No se puede cargar el mapa de navegación, intentaré abrirlo en el navegador."
+      },
+      "title": "Mapa topológico de la red de rutas actual",
+      "empty": "No hay información de ubicación de las atracciones en el itinerario de hoy."
+    },
+    "combinedView": {
+      "title": "🗺️ Día %{day} itinerario ruta y tabla de información de horarios",
+      "subtitle": "Mapa de ruta interactivo en 3D, respuesta en tiempo real a cambios de itinerario",
+      "refresh": "Actualizar gráficos con un clic"
+    },
+    "horizontalCard": {
+      "types": {
+        "activity": "Atracciones",
+        "dining": "comida gourmet",
+        "shopping": "Compras",
+        "experience": "experiencia"
+      }
+    },
+    "activityEditor": {
+      "title": "Editar itinerario",
+      "types": {
+        "attraction": "Atracciones",
+        "restaurant": "Alimento",
+        "cafe": "Café / Té de la tarde",
+        "shopping": "compras",
+        "spa": "SPA/Masaje",
+        "entertainment": "entretenimiento",
+        "hotel": "permanecer",
+        "transport": "mover",
+        "activity": "experiencia"
+      },
+      "errors": {
+        "titleEmpty": "El nombre del viaje no puede estar vacío"
+      },
+      "deleteConfirm": {
+        "title": "Eliminar proyecto",
+        "message": "¿Está seguro de que desea eliminar este elemento?"
+      },
+      "fields": {
+        "time": "hora (por ejemplo, 10:00)",
+        "type": "Tipo de proyecto",
+        "title": "Nombre del itinerario",
+        "titlePlaceholder": "Por favor ingrese el nombre del itinerario",
+        "location": "Ubicación geográfica (región)",
+        "locationPlaceholder": "Por ejemplo: Pattaya",
+        "day": "Días Programados (Viaje Móvil)",
+        "notes": "Instrucciones detalladas (notas de transporte o recolección)",
+        "notesPlaceholder": "Ingrese cualquier recordatorio o nota...",
+        "links": "URL de referencia (opcional)"
+      },
+      "links": {
+        "map": "mapa:",
+        "mapPlaceholder": "URL de Google Maps",
+        "info": "introducir:",
+        "infoPlaceholder": "Blog o sitio web oficial",
+        "booking": "transporte:",
+        "bookingPlaceholder": "Klook o reserva de coche chárter"
+      },
+      "actions": {
+        "delete": "Eliminar este elemento",
+        "cancel": "Cancelar",
+        "save": "Guardar cambios"
+      }
+    },
+    "destinationGuide": {
+      "loading": "Compilando una guía local exclusiva para ti...",
+      "exchange": {
+        "title": "%{currencyName}/Asistente de conversión del tipo de cambio del dólar taiwanés",
+        "subtitle": "Calcule instantáneamente los gastos y el presupuesto de hoy (el tipo de cambio actual es de aproximadamente 1 TWD = %{rate} %{code})",
+        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
+        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
+        "inputTwd": "Ingrese dólar taiwanés (TWD)",
+        "inputLocal": "Ingrese%{name} (%{code})",
+        "resultLabel": "Resultado de la conversión (%{code})",
+        "twdLabel": "TWD Dólar Taiwán"
+      },
+      "guide": {
+        "title": "💡 Guía Práctica de Consumo en Viajes (%{code}/Concepto TWD)",
+        "quickSelect": "Haga clic para calcular rápidamente el importe:"
+      },
+      "emergency": {
+        "title": "📞Información de contacto de emergencia"
+      },
+      "phrases": {
+        "title": "☕ Guía práctica de idiomas",
+        "translator": "1. Página web de traducción de voz bidireccional",
+        "openTool": "Abrir herramienta"
+      }
+    },
+    "expenseSplitter": {
+      "me": "I",
+      "companionN": "Compañero de viaje %{n}",
+      "errors": {
+        "companionExists": "¡El nombre de este compañero de viaje ya existe!",
+        "cannotRemoveCreator": "No se puede eliminar el creador de la cuenta.",
+        "emptyTitle": "¡Ingrese el nombre del elemento de gasto!",
+        "invalidAmount": "¡Ingrese una cantidad válida!",
+        "noSplitters": "¡Elija al menos un compañero de viaje con quien compartir el costo!"
+      },
+      "summary": {
+        "title": "Resumen de costos de viaje",
+        "budgetLevel": "Nivel de presupuesto: %{level}"
+      },
+      "companions": {
+        "title": "Lista dividida de compañeros de viaje (%{count} personas)",
+        "addPlaceholder": "Añadir otros nombres de compañeros de viaje...",
+        "addBtn": "Nuevo"
+      },
+      "settlement": {
+        "title": "Asesoramiento de liquidación",
+        "allSettled": "Todas las cuentas se han liquidado hasta ahora, ¡no se requiere transferencia!"
+      },
+      "expenses": {
+        "title": "Registro de detalles de gastos (%{count} artículos)",
+        "addBtn": "Toma nota",
+        "detail": "Pagador: %{paidBy} | Compartir: %{count} persona"
+      },
+      "modal": {
+        "title": "Agregar registro de gastos",
+        "fields": {
+          "titleLabel": "Nombre del proyecto",
+          "titlePlaceholder": "Por ejemplo: cena tailandesa, billete de metro, excursión de un día al Monte Agung",
+          "amountLabel": "Monto gastado (%{currency})",
+          "amountPlaceholder": "Por favor ingrese la cantidad",
+          "paidByLabel": "Pagador",
+          "splitWithLabel": "Costo compartido (múltiples opciones disponibles)"
+        }
+      }
+    },
+    "packingChecklist": {
+      "items": {
+        "doc1": "Pasaporte y copia del pasaporte",
+        "doc2": "Billete electrónico/tarjeta de embarque",
+        "doc3": "Bono de confirmación de la plataforma de reservas",
+        "doc4": "Póliza de seguro de seguridad en viajes al extranjero",
+        "ess1": "Teléfono móvil y cable de carga.",
+        "ess2": "banco de energía",
+        "ess3": "Enchufe adaptador universal",
+        "ess4": "Efectivo en moneda extranjera y tarjeta de crédito.",
+        "ess5": "Medicamentos personales",
+        "ess6": "Artículos de tocador y productos para el cuidado de la piel.",
+        "clo1": "Cambio de ropa y pijama.",
+        "clo2": "Zapatos cómodos y fáciles de caminar.",
+        "clo3": "Sombrero para el sol y gafas de sol.",
+        "child1": "Medicina para el resfriado/termómetro para niños.",
+        "child2": "Toallitas húmedas y snacks infantiles",
+        "driver1": "Licencia de conducir internacional original y licencia de conducir nacional",
+        "driver2": "Soporte para teléfono móvil en el coche",
+        "water1": "Bañadores, gorras y gafas.",
+        "water2": "Bolsa impermeable y a prueba de polvo para teléfono móvil",
+        "nat1": "Loción repelente de mosquitos y parches repelentes de mosquitos.",
+        "nat2": "Chaqueta/zapatos de senderismo repelentes al agua."
+      },
+      "progress": {
+        "title": "Progreso del embalaje antes de la salida.",
+        "subtitle": "%{checkedCount} / %{totalCount} artículos recolectados"
+      },
+      "custom": {
+        "title": "Agregar artículos de embalaje personalizados",
+        "placeholder": "Por ejemplo: medicina para el resfriado, trípode de cámara..."
+      },
+      "categories": {
+        "docs": "Certificados y documentos necesarios.",
+        "essential": "Elementos esenciales personales",
+        "clothing": "Ropa y uso",
+        "custom": "Lista de embalaje personalizada"
+      }
+    },
+    "travelTranslator": {
+      "tabs": {
+        "live": "Traducción instantánea en línea con IA",
+        "handbook": "Búsqueda rápida sin conexión de frases utilizadas con frecuencia"
+      },
+      "langs": {
+        "english": "Inglés",
+        "japanese": "japonés",
+        "korean": "idioma coreano",
+        "thai": "tailandés",
+        "vietnamese": "vietnamita"
+      },
+      "live": {
+        "targetLabel": "idioma de traducción de destino",
+        "placeholder": "Por favor ingresa lo que quieres decirle a los extranjeros... (Por ejemplo: ¿Cuánto tiempo tomará ordenar este plato?)",
+        "translateBtn": "Iniciar la traducción AI",
+        "resultLabel": "Resultados de traducción"
+      },
+      "categories": {
+        "general": "saludos diarios",
+        "dining": "Pedidos en restaurantes",
+        "transport": "Guía de tráfico",
+        "emergency": "emergencia"
+      },
+      "errors": {
+        "translationFailed": "Se produjo un error en la traducción, inténtelo nuevamente más tarde."
+      },
+      "phrases": {
+        "mockPrefix": "[Traducción simulada - %{lang}]",
+        "englishRef": "Comparación en inglés: %{text}",
+        "general": {
+          "0": "Hola",
+          "1": "Gracias",
+          "2": "Lo siento / Disculpe",
+          "3": "¿Cuánto cuesta esto?"
+        },
+        "dining": {
+          "0": "quiero ver el menú",
+          "1": "por favor dame agua",
+          "2": "¿Este plato contiene maní?",
+          "3": "Por favor ayúdame a revisar"
+        },
+        "transport": {
+          "0": "¿Dónde está la estación de metro?",
+          "1": "quiero ir a este lugar",
+          "2": "¿Dónde está el baño?"
+        },
+        "emergency": {
+          "0": "¡Por favor llame a una ambulancia por mí!",
+          "1": "¡Perdí mi pasaporte!",
+          "2": "¿Dónde está la comisaría?"
+        }
+      }
+    },
+    "apiKeyModal": {
+      "title": "Desbloquea el motor de inteligencia AI",
+      "description": "Para brindarle una planificación de itinerario personalizada sin tarifas de suscripción, esta aplicación utiliza una arquitectura BYOK. Solicite una clave API de Google Gemini de forma gratuita y publíquela a continuación. Sus claves se cifrarán y almacenarán de forma segura en su dispositivo.",
+      "linkText": "Vaya a Google AI Studio para solicitar una clave gratuita",
+      "cancelBtn": "Cancelar (usar plantilla sin conexión)",
+      "saveBtn": "Guardar y generar"
+    },
     "activity": {
-      "startTime": "Start Time",
-      "endTime": "End Time",
-      "duration": "Duration",
-      "cost": "Cost",
-      "transport": "Getting There",
-      "travelTime": "Travel Time",
-      "openHours": "Opening Hours",
-      "closedDay": "Closed on",
-      "rating": "Rating",
-      "navigate": "Navigate",
-      "bookTicket": "Book Ticket",
-      "moreInfo": "More Info",
-      "notes": "Notes",
+      "startTime": "hora de inicio",
+      "endTime": "tiempo final",
+      "duration": "tiempo de residencia",
+      "cost": "costo",
+      "transport": "Transporte",
+      "travelTime": "tiempo de transporte",
+      "openHours": "Horario comercial",
+      "closedDay": "día festivo",
+      "rating": "puntaje",
+      "navigate": "navegación",
+      "bookTicket": "reservar entradas",
+      "moreInfo": "Más información",
+      "notes": "Observación",
       "type": {
-        "attraction": "Attraction",
-        "restaurant": "Restaurant",
-        "shopping": "Shopping",
-        "transport": "Transportation",
-        "hotel": "Hotel",
-        "activity": "Activity"
+        "attraction": "Atracciones",
+        "restaurant": "Comedor",
+        "shopping": "Compras",
+        "transport": "transporte",
+        "hotel": "hotel",
+        "activity": "Actividad"
       }
     },
     "hotel": {
-      "label": "Today's Hotel",
-      "checkIn": "Check-in",
-      "checkOut": "Check-out",
-      "contact": "Contact",
-      "bookingLink": "Booking Link"
+      "label": "alojamiento de hoy",
+      "checkIn": "Registrarse",
+      "checkOut": "verificar",
+      "contact": "Información del contacto",
+      "bookingLink": "Enlace de reserva"
     },
     "emergency": {
-      "label": "Emergency Contacts",
-      "police": "Police",
-      "ambulance": "Ambulance",
-      "embassy": "Embassy/Consulate",
-      "tourist": "Tourist Police"
+      "label": "Contacto de emergencia",
+      "police": "policía",
+      "ambulance": "ambulancia",
+      "embassy": "Embajada/Consulado",
+      "tourist": "policia turistica"
     },
     "tips": {
-      "label": "Local Tips",
-      "tipping": "Tipping Etiquette",
-      "customs": "Local Customs",
-      "wifi": "Wi-Fi / SIM Card Info"
+      "label": "Pequeños pasos en el suelo",
+      "tipping": "Etiqueta de propinas",
+      "customs": "costumbres locales",
+      "wifi": "Información de Wi-Fi/tarjeta SIM"
     },
     "export": {
-      "label": "Export",
-      "pdf": "Export as PDF",
-      "share": "Share Link",
-      "image": "Save as Image"
+      "label": "remitir",
+      "pdf": "Exportar a PDF",
+      "share": "Compartir enlace",
+      "image": "guardar como imagen"
     },
-    "dragHint": "Hold and drag to reorder",
-    "aiSuggestion": "AI suggests nearby attractions for your free time",
-    "offlineReady": "Available offline",
+    "dragHint": "Mantenga presionado y arrastre para reordenar",
+    "aiSuggestion": "AI recomienda atracciones cercanas para tu tiempo libre",
+    "offlineReady": "Admite navegación sin conexión",
     "tabs": {
-      "timeline": "Timeline",
-      "guide": "Local Guide",
-      "checklist": "Checklist",
-      "expenses": "Expenses",
-      "translator": "Translator"
+      "timeline": "Resumen del itinerario",
+      "guide": "guía local",
+      "checklist": "Lista de verificación previa a la salida",
+      "expenses": "libro mayor de gastos",
+      "translator": "traducción de viajes"
     },
     "map": {
-      "title": "Full Route 3D Map"
+      "title": "Mapa paisajístico 3D del viaje completo"
     },
     "nav": {
-      "collapse": "Collapse Navigation",
-      "expand": "Expand Navigation"
+      "collapse": "Contraer panel de menú",
+      "expand": "Ampliar vista y menú de días"
     },
-    "offline": "Offline Mode",
-    "noData": "No itinerary data found",
-    "backHome": "Back to Home",
-    "shareTitle": "Share Itinerary",
-    "shareMsg": "Itinerary link copied to clipboard!",
-    "exportTitle": "Export Itinerary PDF",
-    "exportSuccess": "Export Successful",
-    "exportSuccessMsg": "PDF generated at: %{uri}",
-    "exportFail": "Export Failed",
-    "exportFailMsg": "Failed to generate PDF file.",
+    "offline": "Modo de navegación sin conexión",
+    "noData": "Sin información de itinerario",
+    "backHome": "Volver a la página de inicio",
+    "shareTitle": "Compartir itinerario",
+    "shareMsg": "¡El enlace del itinerario ha sido copiado en el portapapeles!",
+    "exportTitle": "Exportar itinerario en PDF",
+    "exportSuccess": "Remitir exitosamente",
+    "exportSuccessMsg": "PDF generado a: %{uri}",
+    "exportFail": "Exportación fallida",
+    "exportFailMsg": "No se puede generar el archivo PDF.",
     "aiRecommend": {
-      "title": "AI Recommendation",
-      "msg": "Automatically filled gap with nearby spots!",
-      "actTitle": "AI Recommended: Local Delicacies",
-      "actDesc": "Recommended popular restaurants nearby.",
-      "actLocName": "Street food & Cafes",
-      "actLocAddr": "Within walking distance",
-      "actNotes": "Try the local cold drinks."
-    },
-    "destinationGuide": {
-      "loading": "Compiling your exclusive local guide...",
-      "exchange": {
-        "title": "%{currencyName}/TWD Exchange Assistant",
-        "subtitle": "Calculate today's budget (Current rate: 1 TWD = %{rate} %{code})",
-        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
-        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
-        "inputTwd": "Enter TWD",
-        "inputLocal": "Enter %{name} (%{code})",
-        "resultLabel": "Result (%{code})",
-        "twdLabel": "TWD"
-      },
-      "guide": {
-        "title": "💡 Practical Spending Guide (%{code}/TWD)",
-        "quickSelect": "Quick Select:"
-      },
-      "emergency": {
-        "title": "📞 Emergency Contacts"
-      },
-      "phrases": {
-        "title": "☕ Useful Phrases",
-        "translator": "1. Two-way Voice Translator",
-        "openTool": "Open Tool"
-      }
+      "title": "Recomendación de IA",
+      "msg": "¡Los espacios en el itinerario se han llenado automáticamente y la ruta se ha actualizado para usted!",
+      "actTitle": "Recomendación de AI: degustación de comida local seleccionada",
+      "actDesc": "Recomendamos restaurantes gourmet populares en los alrededores, adecuados para relajarse y disfrutar durante su tiempo libre.",
+      "actLocName": "Aperitivos y cafeterías especiales",
+      "actLocAddr": "Dentro del área para caminar de las atracciones.",
+      "actNotes": "Se recomienda probar las bebidas frías especiales locales."
     }
   },
   "settings": {
-    "title": "Settings",
-    "language": "Language",
-    "darkMode": "Dark Mode",
-    "notifications": "Notifications",
-    "about": "About",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "version": "Version"
+    "title": "configuración",
+    "language": "idioma",
+    "darkMode": "modo oscuro",
+    "notifications": "notificar",
+    "about": "acerca de",
+    "privacy": "política de privacidad",
+    "terms": "Términos de servicio",
+    "version": "Versión"
   },
   "errors": {
-    "required": "This field is required",
-    "invalidDate": "Invalid date selection",
-    "invalidUrl": "Please enter a valid URL",
+    "required": "Este campo es obligatorio",
+    "invalidDate": "Selección de fecha no válida",
+    "invalidUrl": "Por favor ingresa una URL válida",
     "invalidEmail": "Formato de correo electrónico no válido",
-    "networkError": "Network error. Please try again.",
-    "serverError": "Server error. Please try again later.",
-    "uploadFailed": "File upload failed",
-    "fileTooLarge": "File is too large (max 10MB)",
-    "unsupportedFormat": "Unsupported file format",
-    "minTravelers": "At least 1 traveler is required",
-    "minDestination": "At least 1 destination is required",
-    "dateRange": "End date must be after start date"
-  },
-  "home": {
-    "greetingMorning": "Good Morning",
-    "greetingAfternoon": "Good Afternoon",
-    "greetingEvening": "Good Evening",
-    "apiKeySetupTitle": "Setup Your AI Engine",
-    "apiKeySetupDesc": "To provide personalized itinerary planning, the system requires access to Gemini AI. Please enter your API Key to enable the smart engine.",
-    "apiKeyPlaceholder": "Paste your Gemini API Key (AIzaSy...)",
-    "apiKeySaveLocally": "Save to local device",
-    "apiKeySaveLocallyDesc": "If unchecked, it will be cleared upon exit and not saved in memory.",
-    "getFreeApiKey": "👉 Click here to get a free Google Gemini API Key",
-    "saveAndStart": "Save & Start Planning",
-    "myItineraries": "My Itineraries"
+    "networkError": "Error de red, inténtalo de nuevo más tarde.",
+    "serverError": "Error del servidor, inténtalo de nuevo más tarde.",
+    "uploadFailed": "Error al subir el archivo",
+    "fileTooLarge": "Archivo demasiado grande (máximo 10 MB)",
+    "unsupportedFormat": "Formato de archivo no compatible",
+    "minTravelers": "Requiere al menos 1 viajero",
+    "minDestination": "Se requiere al menos 1 destino",
+    "dateRange": "La fecha de regreso debe ser posterior a la fecha de salida.",
+    "passwordMinLength": "La contraseña debe tener más de 6 caracteres.",
+    "passwordMismatch": "Las contraseñas ingresadas dos veces son inconsistentes",
+    "emailInUse": "Esta dirección de correo electrónico ya está registrada.",
+    "invalidCredential": "Correo electrónico o contraseña incorrectos.",
+    "invalidEmailFormat": "Formato de correo electrónico no válido.",
+    "guestLoginFailed": "Error al iniciar sesión de forma anónima, inténtelo de nuevo más tarde."
   },
   "dashboard": {
-    "untitledItinerary": "Untitled Itinerary"
+    "untitledItinerary": "Itinerario sin nombre"
   }
 }

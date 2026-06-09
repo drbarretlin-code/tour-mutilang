@@ -1,405 +1,718 @@
 {
   "app": {
     "name": "Tour Plan",
-    "tagline": "Smart trips, effortless planning"
+    "tagline": "การเดินทางที่ชาญฉลาด การวางแผนที่ง่ายดาย"
+  },
+  "home": {
+    "title": "แผนของฉัน",
+    "emptyStateTitle": "ยังไม่มีการสร้างกำหนดการเดินทาง",
+    "emptyStateSubtitle": "คลิกปุ่มด้านล่างแล้วปล่อยให้ AI วางแผนการเดินทางที่สมบูรณ์แบบสำหรับคุณ",
+    "aiBatchTitle": "🤖AI ผู้ช่วยตั้งเวลาอัจฉริยะ",
+    "aiBatchSubtitle": "วาง URL หลายรายการเพื่อสร้างการวิเคราะห์พิเศษและคำแนะนำการกำหนดเวลาอย่างรวดเร็ว",
+    "newPlan": "แผนใหม่",
+    "errorNotFound": "ไม่พบข้อมูลโครงการที่เกี่ยวข้อง มันอาจจะถูกลบออก",
+    "errorLoadFailed": "การโหลดล้มเหลว โปรดลองอีกครั้งในภายหลัง",
+    "errorDeleteFailed": "การลบล้มเหลว โปรดลองอีกครั้งในภายหลัง",
+    "confirmDeleteTitle": "ลบการเดินทาง",
+    "confirmDeleteMessage": "คุณแน่ใจหรือไม่ว่าต้องการลบโครงการนี้ เมื่อลบแล้วจะไม่สามารถกู้คืนได้",
+    "confirmLogoutTitle": "ออกจากระบบ",
+    "confirmLogoutMessage": "คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?",
+    "greetingMorning": "สวัสดีตอนเช้า",
+    "greetingAfternoon": "สวัสดีตอนบ่าย",
+    "greetingEvening": "สวัสดีตอนเย็น",
+    "apiKeySetupTitle": "ตั้งค่าเอ็นจิ้น AI ของคุณ",
+    "apiKeySetupDesc": "เพื่อการวางแผนการเดินทางที่เป็นส่วนตัวและพิเศษเฉพาะ ระบบจำเป็นต้องเข้าถึง Gemini AI โปรดป้อนคีย์ API ของคุณเพื่อเปิดใช้งานเครื่องมืออัจฉริยะ",
+    "apiKeyPlaceholder": "วางคีย์ Gemini API ของคุณ (AIzaSy...)",
+    "apiKeySaveLocally": "บันทึกลงในอุปกรณ์ภายในเครื่อง",
+    "apiKeySaveLocallyDesc": "หากไม่ทำเครื่องหมายจะถูกล้างโดยอัตโนมัติหลังจากปิดหน้าเว็บและจะไม่ถูกเก็บไว้ในหน่วยความจำ",
+    "getFreeApiKey": "👉 คลิกที่นี่เพื่อสมัครคีย์ Google Gemini API ฟรีอย่างรวดเร็ว",
+    "saveAndStart": "บันทึกและเริ่มวางแผน",
+    "myItineraries": "แผนการเดินทางของฉัน"
   },
   "common": {
-    "next": "Next",
-    "back": "Back",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "add": "Add",
-    "confirm": "Confirm",
-    "required": "Required",
-    "optional": "Optional",
-    "loading": "Loading",
-    "error": "Error",
-    "success": "Success",
-    "search": "Search",
-    "select": "Select",
-    "submit": "Submit",
-    "reset": "Reset",
-    "close": "Close",
-    "yes": "Yes",
-    "no": "No",
-    "none": "None",
-    "other": "Other",
-    "done": "Done",
-    "skip": "Skip",
-    "days": "%{count} Days"
+    "next": "ขั้นตอนต่อไป",
+    "back": "กลับ",
+    "save": "เก็บ",
+    "cancel": "ยกเลิก",
+    "delete": "ลบ",
+    "edit": "แก้ไข",
+    "add": "ใหม่",
+    "confirm": "ยืนยัน",
+    "required": "ที่จำเป็น",
+    "optional": "ไม่จำเป็น",
+    "loading": "กำลังโหลด",
+    "error": "ความผิดพลาด",
+    "success": "ความสำเร็จ",
+    "search": "ค้นหา",
+    "select": "เลือก",
+    "submit": "ส่งออกไป",
+    "reset": "รีเซ็ต",
+    "close": "ปิด",
+    "yes": "ใช่",
+    "no": "เลขที่",
+    "none": "ไม่มี",
+    "other": "อื่น",
+    "done": "เสร็จ",
+    "skip": "ข้าม",
+    "days": "%{count} วัน"
   },
   "auth": {
-    "login": "Log In",
-    "logout": "Log Out",
-    "register": "Sign Up",
-    "email": "Email",
-    "password": "Password",
-    "forgotPassword": "Forgot Password",
-    "welcomeBack": "Welcome Back",
-    "createAccount": "Create Account"
+    "login": "เข้าสู่ระบบ",
+    "logout": "ออกจากระบบ",
+    "register": "ลงทะเบียน",
+    "email": "อีเมล",
+    "password": "รหัสผ่าน",
+    "forgotPassword": "ลืมรหัสผ่าน",
+    "welcomeBack": "ยินดีต้อนรับกลับมา",
+    "createAccount": "สร้างบัญชี",
+    "passwordPlaceholder": "กรุณากรอกรหัสผ่าน",
+    "confirmPassword": "ยืนยันรหัสผ่าน",
+    "confirmPasswordPlaceholder": "กรุณากรอกรหัสผ่านอีกครั้ง",
+    "noAccount": "ยังไม่มีบัญชี?",
+    "hasAccount": "มีบัญชีอยู่แล้ว?",
+    "or": "หรือ",
+    "guestLogin": "เริ่มต้นโดยตรงในฐานะแขก",
+    "registerSuccess": "สร้างบัญชีสำเร็จแล้ว! คุณเข้าสู่ระบบโดยอัตโนมัติ"
   },
   "survey": {
-    "title": "Plan Your Trip",
-    "subtitle": "Tell us about your dream trip",
+    "title": "วางแผนการเดินทางของคุณ",
+    "subtitle": "บอกเราเกี่ยวกับการเดินทางในอุดมคติของคุณ",
     "sections": {
-      "basics": "Basic Information",
-      "budget": "Budget & Spending",
-      "transport": "Transportation",
-      "style": "Travel Style & Interests",
-      "accommodation": "Accommodation",
-      "attractions": "Attractions & Activities",
-      "special": "Special Requirements"
+      "basics": "ข้อมูลพื้นฐาน",
+      "budget": "งบประมาณและการใช้จ่าย",
+      "transport": "การขนส่ง",
+      "style": "รูปแบบการเดินทางและความสนใจ",
+      "accommodation": "อยู่",
+      "attractions": "สถานที่ท่องเที่ยวและกิจกรรม",
+      "special": "ความต้องการพิเศษ"
     },
     "dates": {
-      "label": "Travel Dates",
-      "start": "Start Date",
-      "end": "End Date",
-      "flexible": "Flexible Dates",
-      "flexibleHint": "Allow +/- 1-3 days for better options",
-      "selectDates": "Select your travel dates",
-      "duration": "Duration",
-      "days": "days",
-      "nights": "nights"
+      "label": "วันเดินทาง",
+      "start": "วันที่ออกเดินทาง",
+      "end": "วันที่เดินทางกลับ",
+      "flexible": "วันที่ยืดหยุ่นได้",
+      "flexibleHint": "รอ 1 ถึง 3 วันก่อนและหลังเพื่อดูตัวเลือกเพิ่มเติม",
+      "selectDates": "เลือกวันเดินทางของคุณ",
+      "duration": "วันเดินทาง",
+      "days": "ท้องฟ้า",
+      "nights": "กลางคืน"
     },
     "destination": {
-      "label": "Destination",
-      "placeholder": "Search for a city or country",
-      "addMore": "Add another destination",
-      "remove": "Remove destination",
-      "multiCity": "Multi-city trip",
-      "dragToReorder": "Drag to reorder"
+      "label": "ปลายทาง",
+      "placeholder": "ค้นหาเมืองหรือประเทศ",
+      "addMore": "เพิ่มจุดหมายปลายทางเพิ่มเติม",
+      "remove": "ลบปลายทาง",
+      "multiCity": "แผนการเดินทางหลายเมือง",
+      "dragToReorder": "ลากเพื่อเรียงลำดับใหม่"
     },
     "travelers": {
-      "label": "Number of Travelers",
-      "adults": "Adults",
-      "children": "Children",
-      "childAge": "Child age",
-      "infants": "Infants",
-      "seniors": "Seniors"
+      "label": "จำนวนผู้โดยสาร",
+      "adults": "ผู้ใหญ่",
+      "children": "เด็ก",
+      "childAge": "อายุของเด็ก",
+      "infants": "ทารก",
+      "seniors": "ผู้สูงอายุ"
     },
     "tripType": {
-      "label": "Trip Type",
-      "family": "Family",
-      "couple": "Couple",
-      "solo": "Solo",
-      "friends": "Friends",
-      "business": "Business",
-      "honeymoon": "Honeymoon"
+      "label": "ประเภทการเดินทาง",
+      "family": "การเดินทางของครอบครัว",
+      "couple": "คู่รักเดินทาง",
+      "solo": "เดินทางคนเดียว",
+      "friends": "เพื่อนเดินทาง",
+      "business": "การเดินทางเพื่อธุรกิจ",
+      "honeymoon": "ทริปฮันนีมูน"
     },
     "departure": {
-      "label": "Departure City",
-      "placeholder": "Where are you departing from?"
+      "label": "เมืองต้นทาง",
+      "placeholder": "คุณจะเริ่มต้นที่ไหน?"
     },
     "budget": {
-      "label": "Total Budget",
-      "economy": "Economy",
-      "moderate": "Moderate",
-      "luxury": "Luxury",
-      "unlimited": "No Limit",
-      "dailyMeals": "Daily Meal Budget (per person)",
-      "currency": "Preferred Currency"
+      "label": "งบประมาณทั้งหมด",
+      "economy": "ประหยัด",
+      "moderate": "ปานกลาง",
+      "luxury": "หรูหรา",
+      "unlimited": "ไม่จำกัดงบประมาณ",
+      "dailyMeals": "งบประมาณค่าอาหารประจำวัน (ต่อท่าน)",
+      "currency": "สกุลเงินที่ต้องการ"
     },
     "transport": {
-      "label": "Local Transportation Preference",
-      "public": "Public Transit",
-      "taxi": "Taxi / Ride-hailing (Grab, Uber)",
-      "rental": "Rental Car",
-      "charter": "Private Charter",
-      "walking": "Walking",
-      "drivingLicense": "Do you have an international driving license?",
+      "label": "การตั้งค่าการขนส่งในท้องถิ่น",
+      "public": "การขนส่งมวลชน",
+      "taxi": "บริการแท็กซี่/เรียกรถ (Grab, Uber)",
+      "rental": "รถเช่า",
+      "charter": "เช่ารถ",
+      "walking": "เดิน",
+      "drivingLicense": "คุณมีใบอนุญาตขับขี่สากลหรือไม่?",
       "flightInfo": {
-        "label": "Flight Information",
-        "flightNumber": "Flight Number",
-        "departure": "Departure Time",
-        "arrival": "Arrival Time",
-        "addFlight": "Add flight info"
+        "label": "ข้อมูลเที่ยวบิน",
+        "flightNumber": "หมายเลขเที่ยวบิน",
+        "departure": "เวลาออกเดินทาง",
+        "arrival": "เวลามาถึง",
+        "addFlight": "เพิ่มข้อมูลเที่ยวบิน"
       }
     },
     "interests": {
-      "label": "Interests & Activities",
-      "culture": "Culture & History",
-      "nature": "Nature & Outdoors",
-      "food": "Food & Dining",
-      "shopping": "Shopping",
-      "nightlife": "Nightlife",
-      "water": "Water Activities",
-      "family": "Family-friendly",
-      "photo": "Photography Spots",
-      "temple": "Temples & Religious Sites",
-      "spa": "Spa & Massage",
-      "themepark": "Theme Parks",
-      "art": "Art & Exhibitions",
-      "market": "Local Markets"
+      "label": "ความสนใจและกิจกรรม",
+      "culture": "วัฒนธรรมและประวัติศาสตร์",
+      "nature": "ธรรมชาติและกลางแจ้ง",
+      "food": "อาหารและการรับประทานอาหาร",
+      "shopping": "ช้อปปิ้ง",
+      "nightlife": "สถานบันเทิงยามค่ำคืน",
+      "water": "กีฬาทางน้ำ",
+      "family": "เป็นมิตรกับพ่อแม่ลูก",
+      "photo": "จุดถ่ายรูป",
+      "temple": "วัดและสถานที่ท่องเที่ยวทางศาสนา",
+      "spa": "สปาและนวด",
+      "themepark": "สวนสนุก",
+      "art": "ศิลปะและนิทรรศการ",
+      "market": "ตลาดท้องถิ่น"
     },
     "pace": {
-      "label": "Travel Pace",
-      "packed": "Packed & Busy",
-      "balanced": "Balanced",
-      "relaxed": "Relaxed & Easy"
+      "label": "จังหวะการเดินทาง",
+      "packed": "กะทัดรัดและเป็นรูปธรรม",
+      "balanced": "ความสมดุลปานกลาง",
+      "relaxed": "ผ่อนคลาย"
     },
     "schedule": {
-      "label": "Morning Preference",
-      "earlyBird": "Early Bird (before 7:00)",
-      "normal": "Normal (around 9:00)",
-      "lateRiser": "Late Riser (after 10:00)"
+      "label": "การตั้งค่าตอนเช้า",
+      "earlyBird": "ตื่นเช้า (ก่อน 07.00 น.)",
+      "normal": "ประเภททั่วไป (ประมาณ 9.00 น.)",
+      "lateRiser": "ตื่นสาย (หลัง 10.00 น.)"
     },
     "dietary": {
-      "label": "Dietary Restrictions",
-      "vegetarian": "Vegetarian",
-      "vegan": "Vegan",
-      "halal": "Halal",
-      "allergies": "Allergies",
-      "peanut": "Peanut allergy",
-      "seafood": "Seafood allergy",
-      "noRestriction": "No restrictions"
+      "label": "ข้อ จำกัด ด้านอาหาร",
+      "vegetarian": "อาหารมังสวิรัติ",
+      "vegan": "วีแกน",
+      "halal": "มุสลิม",
+      "allergies": "โรคภูมิแพ้",
+      "peanut": "แพ้ถั่วลิสง",
+      "seafood": "แพ้อาหารทะเล",
+      "noRestriction": "ไม่จำกัด"
     },
     "accommodation": {
       "platform": {
-        "label": "Booking Platform",
-        "customUrl": "Other booking website URL"
+        "label": "แพลตฟอร์มการจอง",
+        "customUrl": "URL เว็บไซต์การจองอื่นๆ"
       },
       "type": {
-        "label": "Accommodation Type",
-        "hotel": "Hotel",
-        "homestay": "Homestay / B&B",
-        "hostel": "Hostel",
-        "resort": "Resort",
-        "apartment": "Apartment"
+        "label": "ประเภทที่พัก",
+        "hotel": "โรงแรม",
+        "homestay": "โฮมสเตย์",
+        "hostel": "หอพักเยาวชน",
+        "resort": "รีสอร์ท",
+        "apartment": "อพาร์ทเมนต์"
       },
       "location": {
-        "label": "Preferred Location",
-        "cityCenter": "City Center",
-        "nearAttractions": "Near Attractions",
-        "quiet": "Quiet Residential Area",
-        "beachfront": "Beachfront"
+        "label": "สถานที่ที่ต้องการ",
+        "cityCenter": "ใจกลางเมือง",
+        "nearAttractions": "สถานที่ท่องเที่ยวใกล้เคียง",
+        "quiet": "พื้นที่อยู่อาศัยที่เงียบสงบ",
+        "beachfront": "ชายหาดแถวแรก"
       },
       "amenities": {
-        "label": "Required Amenities",
-        "pool": "Swimming Pool",
-        "gym": "Gym",
-        "breakfast": "Free Breakfast",
-        "kitchen": "Kitchen",
-        "laundry": "Laundry",
-        "parking": "Parking"
+        "label": "สิ่งอำนวยความสะดวกที่จำเป็น",
+        "pool": "สระว่ายน้ำ",
+        "gym": "โรงยิม",
+        "breakfast": "อาหารเช้าฟรี",
+        "kitchen": "ครัว",
+        "laundry": "อุปกรณ์ซักรีด",
+        "parking": "ที่จอดรถ"
       }
     },
     "attractions": {
       "reference": {
-        "label": "Reference Attractions",
-        "hint": "Share places you're interested in. AI will consider these when planning.",
-        "addUrl": "Add URL",
-        "addPhoto": "Add Photo",
-        "addFile": "Add File",
-        "urlPlaceholder": "Paste a link to an attraction..."
+        "label": "อ้างอิงสถานที่ท่องเที่ยว",
+        "hint": "แบ่งปันสถานที่ท่องเที่ยวที่คุณสนใจและ AI จะนำมาพิจารณาในการวางแผน",
+        "addUrl": "เพิ่ม URL ใหม่",
+        "addPhoto": "เพิ่มรูปภาพ",
+        "addFile": "เพิ่มไฟล์ใหม่",
+        "urlPlaceholder": "โพสลิงค์สถานที่ท่องเที่ยว..."
       },
       "mustVisit": {
-        "label": "Must-Visit Attractions",
-        "hint": "These will be included in your itinerary.",
-        "specifyDate": "Specify preferred date",
-        "specifyTime": "Specify preferred time"
+        "label": "จะต้องเยี่ยมชมสถานที่ท่องเที่ยว",
+        "hint": "สถานที่ท่องเที่ยวเหล่านี้จะรวมอยู่ในแผนการเดินทางของคุณ",
+        "specifyDate": "ระบุวันที่ที่ต้องการ",
+        "specifyTime": "ระบุเวลาที่ต้องการ"
       }
     },
     "map": {
-      "label": "Map Provider",
-      "apple": "Apple Maps",
-      "google": "Google Maps",
-      "amap": "Amap (Gaode)",
-      "baidu": "Baidu Maps"
+      "label": "บริการแผนที่",
+      "apple": "แอปเปิ้ลแผนที่",
+      "google": "Google แผนที่",
+      "amap": "แผนที่ เกาเต๋อ",
+      "baidu": "แผนที่ไป่ตู้"
     },
     "accessibility": {
-      "label": "Accessibility Needs",
-      "wheelchair": "Wheelchair Access",
-      "stroller": "Stroller Friendly",
-      "mobility": "Limited Mobility"
+      "label": "ความต้องการด้านการเข้าถึง",
+      "wheelchair": "สามารถเข้าถึงเก้าอี้รถเข็นได้",
+      "stroller": "เป็นมิตรกับรถเข็นเด็ก",
+      "mobility": "ความคล่องตัวลดลง"
     },
     "visa": {
-      "label": "Visa Requirements",
-      "nationality": "Passport Nationality",
-      "hint": "We'll check if you need a visa"
+      "label": "ข้อกำหนดเกี่ยวกับวีซ่า",
+      "nationality": "สัญชาติหนังสือเดินทาง",
+      "hint": "เราจะยืนยันว่าคุณต้องการวีซ่าหรือไม่"
     },
     "insurance": {
-      "label": "Travel Insurance",
-      "have": "Already covered",
-      "need": "Need recommendations",
-      "skip": "Skip for now"
+      "label": "ประกันการเดินทาง",
+      "have": "ผู้ประกันตน",
+      "need": "ต้องการคำแนะนำ",
+      "skip": "ข้ามไปก่อน"
     },
     "notes": {
-      "label": "Additional Notes",
-      "placeholder": "Any other preferences or requirements..."
+      "label": "หมายเหตุ",
+      "placeholder": "ความชอบหรือความต้องการอื่นๆ..."
     },
     "language": {
-      "label": "App Language",
-      "hint": "Choose your preferred language"
+      "label": "ภาษาแอปพลิเคชัน",
+      "hint": "เลือกภาษาที่คุณต้องการ"
     },
-    "generateTrip": "Generate My Trip",
-    "generating": "AI is planning your perfect trip...",
+    "generateTrip": "สร้างแผนการเดินทางของฉัน",
+    "generating": "AI กำลังวางแผนการเดินทางที่สมบูรณ์แบบสำหรับคุณ...",
     "tierLabels": {
-      "required": "Required Information",
-      "recommended": "Recommended",
-      "optional": "Optional Details"
+      "required": "ข้อมูลที่จำเป็น",
+      "recommended": "แนะนำให้กรอก",
+      "optional": "รายการเสริม"
+    },
+    "actions": {
+      "confirmDiscardTitle": "ยืนยันการยกเลิกฉบับร่าง",
+      "confirmDiscardMessage": "คุณแน่ใจหรือไม่ว่าต้องการยกเลิกแผนการเดินทางฉบับร่างปัจจุบันและเริ่มวางแผนอีกครั้ง การดำเนินการนี้ไม่สามารถยกเลิกได้",
+      "saveSuccessTitle": "บันทึกเรียบร้อยแล้ว",
+      "saveSuccessMessage": "ข้อมูลแบบสอบถามของคุณได้รับการจัดเก็บไว้อย่างปลอดภัยภายในเครื่อง คุณสามารถปิดแอปพลิเคชันได้ตลอดเวลา และแอปพลิเคชันจะกลับมาแก้ไขสถานะโดยอัตโนมัติเมื่อคุณป้อนในครั้งถัดไป",
+      "cancelEditWebConfirm": "คุณต้องการยกเลิกการแก้ไขนี้และกลับสู่แผนการเดินทางเดิม หรือบันทึกการแก้ไขปัจจุบันเป็นแผนการเดินทางใหม่\n\n[ตกลง] ละทิ้งการแก้ไขและกลับสู่แผนการเดินทางเดิม\n[ยกเลิก] บันทึกเป็นแผนใหม่และดำเนินการต่อ",
+      "convertedTitle": "แปลงแล้ว",
+      "convertedMessage": "การแก้ไขปัจจุบันจะถูกบันทึกเป็นแผนการเดินทางใหม่และจะไม่เขียนทับแผนเก่า โปรดดำเนินการตั้งค่าให้เสร็จสิ้นและสร้างต่อไป!",
+      "cancelEditTitle": "ยกเลิกการแก้ไข",
+      "cancelEditMessage": "คุณต้องการยกเลิกการแก้ไขนี้ หรือบันทึกการแก้ไขปัจจุบันเป็นแผนการเดินทางใหม่",
+      "discardAndReturn": "ยกเลิกการแก้ไขและกลับสู่แผนการเดินทางเดิม",
+      "saveAsNew": "บันทึกเป็นโครงการใหม่",
+      "continueEditing": "แก้ไขต่อ",
+      "saveDraft": "บันทึกฉบับร่าง",
+      "restart": "เติมเงิน",
+      "loginOrRegister": "เข้าสู่ระบบ/ลงทะเบียน"
+    },
+    "summary": {
+      "title": "ไฮไลท์ทริปสุดพิเศษของฉัน",
+      "progress": "ความคืบหน้าการวางแผนอัจฉริยะของ AI",
+      "notSelectedHint": "ไม่ได้เลือก (โปรดตั้งค่าในขั้นตอนแรก)",
+      "dateTo": "ถึง",
+      "notSelected": "ไม่ได้เลือก",
+      "notSet": "ไม่ได้ตั้งค่า",
+      "adults": "ผู้ใหญ่",
+      "children": "เด็ก",
+      "guestMode": "โหมดผู้มาเยือน (ข้อมูลถูกจัดเก็บไว้ในเครื่อง)",
+      "loggedInAs": "เข้าสู่ระบบแล้ว:"
     }
   },
   "itinerary": {
-    "title": "My Itinerary",
-    "day": "Day {{number}}",
-    "overview": "Overview",
-    "dailySummary": "Daily Summary",
-    "estimatedCost": "Estimated Cost",
-    "walkingDistance": "Walking Distance",
-    "weather": "Weather Forecast",
-    "timeline": "Timeline View",
-    "mapView": "Map View",
+    "title": "แผนการเดินทางของฉัน",
+    "day": "วัน {{number}}",
+    "overview": "ภาพรวม",
+    "dailySummary": {
+      "weather": {
+        "sunny": "แดดจัดและร้อน",
+        "cloudy": "มีเมฆมากและมีแดดจัด",
+        "rainy": "ฝักบัวแบบแยก",
+        "partlySunny": "ฝนฟ้าคะนองช่วงบ่าย",
+        "rainProb": "โอกาสที่ฝนจะตก %{prob}"
+      },
+      "advice": {
+        "sunny": "ขอแนะนำให้สวมเสื้อผ้าที่ระบายอากาศได้ดีและใส่ใจกับการป้องกันแสงแดด",
+        "cloudy": "สวมเสื้อผ้าลำลองที่สะดวกสบายเหมาะสำหรับกิจกรรมกลางแจ้ง",
+        "rainy": "กรุณานำอุปกรณ์กันฝนและสวมรองเท้ากันฝนมาด้วย",
+        "partlySunny": "แนะนำให้พกร่มพับติดตัวไปด้วยเพื่อป้องกันตัวเองจากการอาบน้ำในช่วงบ่าย"
+      }
+    },
+    "estimatedCost": "ค่าใช้จ่ายโดยประมาณ",
+    "walkingDistance": "เดินไปได้",
+    "weather": "พยากรณ์อากาศ",
+    "timeline": "มุมมองไทม์ไลน์",
+    "mapView": "มุมมองแผนที่",
+    "timelineView": {
+      "types": {
+        "transport": "✈️การเดินทาง/ขาเข้า",
+        "meal": "🍽️รับประทานอาหาร",
+        "hotel": "🏨 ที่พัก",
+        "attraction": "🏛️ เยี่ยมชมสถานที่ท่องเที่ยว",
+        "default": "📍 กิจกรรม"
+      },
+      "alerts": {
+        "grabWebHint": "💡 เคล็ดลับ: Grab ไม่มีบริการเรียกรถ \"เวอร์ชันเว็บ\"! ต้องใช้แอพมือถือ\n\nเว็บไซต์อย่างเป็นทางการของ Grab จะเปิดให้คุณดาวน์โหลดข้อมูลได้ในเร็วๆ นี้",
+        "boltWebHint": "💡 เคล็ดลับ: Bolt ให้บริการเรียกรถผ่านแอปมือถือเป็นหลัก\n\nเว็บไซต์อย่างเป็นทางการของ Bolt จะเปิดให้คุณเร็วๆ นี้เพื่อให้ข้อมูลการดาวน์โหลด",
+        "cannotOpenTitle": "ไม่สามารถเปิดได้",
+        "cannotOpenMessage": "ลิงค์นี้ไม่สามารถเปิดได้ อาจเป็นไปได้ว่าไม่ได้ติดตั้งแอปที่เกี่ยวข้องบนอุปกรณ์ของคุณหรือการตั้งค่าเบราว์เซอร์กำลังบล็อกแอปนั้น",
+        "errorTitle": "เกิดข้อผิดพลาด",
+        "errorMessage": "ไม่สามารถเปิดลิงก์ได้"
+      },
+      "endOfDay": {
+        "title": "🌙 จบทริปวันนี้ เตรียมเดินทางกลับที่พัก",
+        "transportAdvice": "การเดินทางที่แนะนำ: Take Grab/Bolt การเดินทางใช้เวลาประมาณ 15 นาที",
+        "shuttleGuideTitle": "🚗 คู่มือการโอนที่พัก:",
+        "shuttleGuideDesc": "หากโรงแรมไม่มีระบบรถรับส่ง กรุณาใช้ Bolt หรือ Grab เพื่อเรียกแท็กซี่ ไปที่ที่พักเริ่มต้น (%{hotelName})",
+        "yourHotel": "โรงแรมของคุณ",
+        "tonightStay": "ที่พักคืนนี้: %{hotelName}",
+        "airportMapHint": "ข้อมูลอ้างอิงแผนผังชั้นห้องโถงขาเข้าและขาออกของสนามบิน",
+        "openGrab": "คลิกที่นี่เพื่อเริ่ม Grab",
+        "openBolt": "คลิกที่นี่เพื่อเปิด Bolt"
+      },
+      "activity": {
+        "region": "พื้นที่:%{region}",
+        "thisRegion": "พื้นที่",
+        "transitGuide": "ข้อแนะนำการเดินทาง: การขนส่งสาธารณะไม่สะดวกที่จะไปยังจุดต่อไป ไม่มีรถไฟใต้ดินที่ชัดเจนในส่วนนี้ ขอแนะนำอย่างยิ่งให้คุณใช้บริการรถเช่าเหมาลำหรือใช้ Bolt/Grab เพื่อเรียกแท็กซี่เที่ยวเดียว ระยะเวลาการเดินทางโดยประมาณคือ %{gap} นาที",
+        "navigate": "นำทางไปยังแผนที่",
+        "charter": "เช่ารถ",
+        "notesLabel": "การปรับเกียร์ | หมายเหตุ",
+        "notesPlaceholder": "เช่น หมายเลขโทรศัพท์คนขับ การยืนยันเวลาทำการ..."
+      }
+    },
+    "mapFallbackView": {
+      "errors": {
+        "openFailed": "ไม่สามารถโหลดแผนที่นำทางได้ จะพยายามเปิดในเบราว์เซอร์"
+      },
+      "title": "แผนที่โทโพโลยีเครือข่ายเส้นทางปัจจุบัน",
+      "empty": "ไม่มีข้อมูลสถานที่ท่องเที่ยวในแผนการเดินทางวันนี้"
+    },
+    "combinedView": {
+      "title": "🗺️ วัน %{day} ตารางข้อมูลเส้นทางและตารางเวลา",
+      "subtitle": "แผนที่เส้นทาง 3 มิติแบบโต้ตอบ การตอบสนองแบบเรียลไทม์ต่อการเปลี่ยนแปลงแผนการเดินทาง",
+      "refresh": "อัปเดตแผนภูมิได้ด้วยคลิกเดียว"
+    },
+    "horizontalCard": {
+      "types": {
+        "activity": "สถานที่ท่องเที่ยว",
+        "dining": "อาหารเลิศรส",
+        "shopping": "ช้อปปิ้ง",
+        "experience": "ประสบการณ์"
+      }
+    },
+    "activityEditor": {
+      "title": "แก้ไขรายละเอียดการเดินทาง",
+      "types": {
+        "attraction": "สถานที่ท่องเที่ยว",
+        "restaurant": "อาหาร",
+        "cafe": "คาเฟ่/น้ำชายามบ่าย",
+        "shopping": "ช้อปปิ้ง",
+        "spa": "สปา/นวด",
+        "entertainment": "ความบันเทิง",
+        "hotel": "อยู่",
+        "transport": "เคลื่อนไหว",
+        "activity": "ประสบการณ์"
+      },
+      "errors": {
+        "titleEmpty": "ชื่อการเดินทางต้องไม่เว้นว่าง"
+      },
+      "deleteConfirm": {
+        "title": "ลบโปรเจ็กต์",
+        "message": "คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?"
+      },
+      "fields": {
+        "time": "เวลา (เช่น 10:00 น.)",
+        "type": "ประเภทโครงการ",
+        "title": "ชื่อแผนการเดินทาง",
+        "titlePlaceholder": "กรุณากรอกชื่อแผนการเดินทาง",
+        "location": "ที่ตั้งทางภูมิศาสตร์ (ภูมิภาค)",
+        "locationPlaceholder": "ตัวอย่างเช่น: พัทยา",
+        "day": "วันที่กำหนด (การเดินทางบนมือถือ)",
+        "notes": "คำแนะนำโดยละเอียด (การขนส่งหรือการรวบรวมบันทึก)",
+        "notesPlaceholder": "ป้อนการแจ้งเตือนหรือบันทึกย่อ...",
+        "links": "URL อ้างอิง (ไม่บังคับ)"
+      },
+      "links": {
+        "map": "แผนที่:",
+        "mapPlaceholder": "URL ของ Google แผนที่",
+        "info": "แนะนำ:",
+        "infoPlaceholder": "บล็อกหรือเว็บไซต์อย่างเป็นทางการ",
+        "booking": "การขนส่ง:",
+        "bookingPlaceholder": "Klook หรือการจองรถเช่าเหมาลำ"
+      },
+      "actions": {
+        "delete": "ลบรายการนี้",
+        "cancel": "ยกเลิก",
+        "save": "บันทึกการเปลี่ยนแปลง"
+      }
+    },
+    "destinationGuide": {
+      "loading": "รวบรวมคู่มือท้องถิ่นสุดพิเศษสำหรับคุณ...",
+      "exchange": {
+        "title": "%{currencyName}/ผู้ช่วยการแปลงอัตราแลกเปลี่ยนดอลลาร์ไต้หวัน",
+        "subtitle": "คำนวณค่าใช้จ่ายและงบประมาณของวันนี้ทันที (อัตราแลกเปลี่ยนปัจจุบันคือประมาณ 1 TWD = %{rate} %{code})",
+        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
+        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
+        "inputTwd": "ใส่ดอลลาร์ไต้หวัน (TWD)",
+        "inputLocal": "ป้อน%{name} (%{code})",
+        "resultLabel": "ผลลัพธ์การแปลง (%{code})",
+        "twdLabel": "TWD ดอลลาร์ไต้หวัน"
+      },
+      "guide": {
+        "title": "💡 คู่มือปฏิบัติเพื่อการบริโภคการเดินทาง (แนวคิด %{code}/TWD)",
+        "quickSelect": "คลิกเพื่อคำนวณจำนวนเงินอย่างรวดเร็ว:"
+      },
+      "emergency": {
+        "title": "📞ข้อมูลติดต่อฉุกเฉิน"
+      },
+      "phrases": {
+        "title": "☕ คู่มือภาษาเชิงปฏิบัติ",
+        "translator": "1. หน้าเว็บแปลเสียงสองทาง",
+        "openTool": "เปิดเครื่องมือ"
+      }
+    },
+    "expenseSplitter": {
+      "me": "ฉัน",
+      "companionN": "เพื่อนร่วมเดินทาง %{n}",
+      "errors": {
+        "companionExists": "มีชื่อผู้ร่วมเดินทางคนนี้แล้ว!",
+        "cannotRemoveCreator": "ไม่สามารถลบผู้สร้างบัญชีได้",
+        "emptyTitle": "กรุณากรอกชื่อรายการค่าใช้จ่าย!",
+        "invalidAmount": "กรุณากรอกจำนวนเงินที่ถูกต้อง!",
+        "noSplitters": "โปรดเลือกผู้ร่วมเดินทางอย่างน้อยหนึ่งคนเพื่อแชร์ค่าใช้จ่ายด้วย!"
+      },
+      "summary": {
+        "title": "ภาพรวมค่าใช้จ่ายในการเดินทาง",
+        "budgetLevel": "ระดับงบประมาณ: %{level}"
+      },
+      "companions": {
+        "title": "รายชื่อเพื่อนร่วมเดินทางแบบแยกส่วน (%{count} คน)",
+        "addPlaceholder": "เพิ่มชื่อผู้ร่วมเดินทางอื่น...",
+        "addBtn": "ใหม่"
+      },
+      "settlement": {
+        "title": "คำแนะนำการตั้งถิ่นฐาน",
+        "allSettled": "บัญชีทั้งหมดได้รับการชำระเรียบร้อยแล้ว ไม่ต้องโอน!"
+      },
+      "expenses": {
+        "title": "บันทึกรายละเอียดค่าใช้จ่าย (%{count} รายการ)",
+        "addBtn": "จดบันทึก",
+        "detail": "ผู้ชำระเงิน: %{paidBy} | แบ่งปัน: %{count} คน"
+      },
+      "modal": {
+        "title": "เพิ่มบันทึกค่าใช้จ่าย",
+        "fields": {
+          "titleLabel": "ชื่อโครงการ",
+          "titlePlaceholder": "ตัวอย่างเช่น อาหารเย็นแบบไทย ตั๋วรถไฟใต้ดิน เที่ยวภูเขาอากุงแบบไปเช้าเย็นกลับ",
+          "amountLabel": "จำนวนเงินที่ใช้ไป (%{currency})",
+          "amountPlaceholder": "กรุณากรอกจำนวนเงิน",
+          "paidByLabel": "ผู้ชำระเงิน",
+          "splitWithLabel": "ส่วนแบ่งต้นทุน (มีให้เลือกหลายตัวเลือก)"
+        }
+      }
+    },
+    "packingChecklist": {
+      "items": {
+        "doc1": "หนังสือเดินทางและสำเนาหนังสือเดินทาง",
+        "doc2": "ตั๋วอิเล็กทรอนิกส์/บัตรผ่านขึ้นเครื่อง",
+        "doc3": "บัตรยืนยันแพลตฟอร์มการจอง",
+        "doc4": "กรมธรรม์ประกันความปลอดภัยการเดินทางไปต่างประเทศ",
+        "ess1": "โทรศัพท์มือถือและสายชาร์จ",
+        "ess2": "ธนาคารพลังงาน",
+        "ess3": "ปลั๊กอะแดปเตอร์สากล",
+        "ess4": "เงินสดสกุลเงินต่างประเทศและบัตรเครดิต",
+        "ess5": "ยาประจำตัว",
+        "ess6": "เครื่องใช้ในห้องน้ำและผลิตภัณฑ์ดูแลผิว",
+        "clo1": "เปลี่ยนเสื้อผ้าและชุดนอน",
+        "clo2": "รองเท้าที่ใส่สบายและเดินง่าย",
+        "clo3": "หมวกกันแดดและแว่นกันแดด",
+        "child1": "ยาแก้หวัด/เทอร์โมมิเตอร์สำหรับเด็ก",
+        "child2": "ผ้าเช็ดทำความสะอาดเปียกและของว่างสำหรับเด็ก",
+        "driver1": "ใบขับขี่สากลต้นฉบับและใบขับขี่ในประเทศ",
+        "driver2": "ที่วางโทรศัพท์มือถือในรถ",
+        "water1": "ชุดว่ายน้ำ หมวก และแว่นตา",
+        "water2": "กระเป๋าใส่มือถือกันฝุ่นและกันน้ำ",
+        "nat1": "โลชั่นกันยุงและแผ่นแปะกันยุง",
+        "nat2": "เสื้อแจ็คเก็ตกันน้ำ/รองเท้าเดินป่า"
+      },
+      "progress": {
+        "title": "ความคืบหน้าการบรรจุก่อนออกเดินทาง",
+        "subtitle": "%{checkedCount} / %{totalCount} รายการที่รวบรวม"
+      },
+      "custom": {
+        "title": "เพิ่มรายการบรรจุภัณฑ์แบบกำหนดเอง",
+        "placeholder": "เช่น ยาแก้หวัด ขาตั้งกล้อง..."
+      },
+      "categories": {
+        "docs": "ใบรับรองและเอกสารที่จำเป็น",
+        "essential": "ของใช้ส่วนตัว",
+        "clothing": "เสื้อผ้าและการสวมใส่",
+        "custom": "รายการบรรจุภัณฑ์ที่กำหนดเอง"
+      }
+    },
+    "travelTranslator": {
+      "tabs": {
+        "live": "การแปลทันที AI ออนไลน์",
+        "handbook": "ค้นหาวลีที่ใช้บ่อยแบบออฟไลน์อย่างรวดเร็ว"
+      },
+      "langs": {
+        "english": "ภาษาอังกฤษ",
+        "japanese": "ญี่ปุ่น",
+        "korean": "ภาษาเกาหลี",
+        "thai": "แบบไทย",
+        "vietnamese": "ภาษาเวียดนาม"
+      },
+      "live": {
+        "targetLabel": "ภาษาการแปลเป้าหมาย",
+        "placeholder": "กรุณาระบุสิ่งที่ต้องการพูดกับชาวต่างชาติ... (เช่น อาหารจานนี้จะใช้เวลาสั่งนานแค่ไหน?)",
+        "translateBtn": "เริ่มการแปล AI",
+        "resultLabel": "ผลการแปล"
+      },
+      "categories": {
+        "general": "คำทักทายประจำวัน",
+        "dining": "ร้านอาหารตามสั่ง",
+        "transport": "คำแนะนำด้านการจราจร",
+        "emergency": "ภาวะฉุกเฉิน"
+      },
+      "errors": {
+        "translationFailed": "เกิดข้อผิดพลาดในการแปล โปรดลองอีกครั้งในภายหลัง"
+      },
+      "phrases": {
+        "mockPrefix": "[การแปลจำลอง - %{lang}]",
+        "englishRef": "การเปรียบเทียบภาษาอังกฤษ: %{text}",
+        "general": {
+          "0": "สวัสดี",
+          "1": "ขอบคุณ",
+          "2": "ขอโทษ/ขอโทษ",
+          "3": "ราคาเท่าไหร่คะ?"
+        },
+        "dining": {
+          "0": "ฉันต้องการดูเมนู",
+          "1": "โปรดให้น้ำแก่ฉันด้วย",
+          "2": "จานนี้มีถั่วลิสงไหม?",
+          "3": "โปรดช่วยฉันตรวจสอบ"
+        },
+        "transport": {
+          "0": "สถานีรถไฟใต้ดินอยู่ที่ไหน?",
+          "1": "ฉันอยากไปที่นี่",
+          "2": "ห้องน้ำอยู่ที่ไหน?"
+        },
+        "emergency": {
+          "0": "กรุณาเรียกรถพยาบาลให้ฉันด้วย!",
+          "1": "ฉันทำหนังสือเดินทางหาย!",
+          "2": "สถานีตำรวจอยู่ที่ไหน?"
+        }
+      }
+    },
+    "apiKeyModal": {
+      "title": "ปลดล็อคเครื่องยนต์อัจฉริยะ AI",
+      "description": "เพื่อมอบการวางแผนการเดินทางที่เป็นส่วนตัวให้กับคุณโดยไม่มีค่าธรรมเนียมการสมัครสมาชิก แอปพลิเคชันนี้จึงใช้สถาปัตยกรรม BYOK โปรดสมัครคีย์ Google Gemini API ฟรีและโพสต์ไว้ด้านล่าง กุญแจของคุณจะถูกเข้ารหัสอย่างปลอดภัยและจัดเก็บไว้ในอุปกรณ์ของคุณ",
+      "linkText": "ไปที่ Google AI Studio เพื่อสมัครรับรหัสฟรี",
+      "cancelBtn": "ยกเลิก (ใช้เทมเพลตออฟไลน์)",
+      "saveBtn": "บันทึกและสร้าง"
+    },
     "activity": {
-      "startTime": "Start Time",
-      "endTime": "End Time",
-      "duration": "Duration",
-      "cost": "Cost",
-      "transport": "Getting There",
-      "travelTime": "Travel Time",
-      "openHours": "Opening Hours",
-      "closedDay": "Closed on",
-      "rating": "Rating",
-      "navigate": "Navigate",
-      "bookTicket": "Book Ticket",
-      "moreInfo": "More Info",
-      "notes": "Notes",
+      "startTime": "เวลาเริ่มต้น",
+      "endTime": "เวลาสิ้นสุด",
+      "duration": "เวลาที่อยู่อาศัย",
+      "cost": "ค่าใช้จ่าย",
+      "transport": "การขนส่ง",
+      "travelTime": "เวลาขนส่ง",
+      "openHours": "เวลาทำการ",
+      "closedDay": "วันหยุดนักขัตฤกษ์",
+      "rating": "คะแนน",
+      "navigate": "การนำทาง",
+      "bookTicket": "จองตั๋ว",
+      "moreInfo": "ข้อมูลเพิ่มเติม",
+      "notes": "หมายเหตุ",
       "type": {
-        "attraction": "Attraction",
-        "restaurant": "Restaurant",
-        "shopping": "Shopping",
-        "transport": "Transportation",
-        "hotel": "Hotel",
-        "activity": "Activity"
+        "attraction": "สถานที่ท่องเที่ยว",
+        "restaurant": "ห้องรับประทานอาหาร",
+        "shopping": "ช้อปปิ้ง",
+        "transport": "การขนส่ง",
+        "hotel": "โรงแรม",
+        "activity": "กิจกรรม"
       }
     },
     "hotel": {
-      "label": "Today's Hotel",
-      "checkIn": "Check-in",
-      "checkOut": "Check-out",
-      "contact": "Contact",
-      "bookingLink": "Booking Link"
+      "label": "ที่พักวันนี้",
+      "checkIn": "เช็คอิน",
+      "checkOut": "ตรวจสอบ",
+      "contact": "ข้อมูลการติดต่อ",
+      "bookingLink": "ลิงค์จอง"
     },
     "emergency": {
-      "label": "Emergency Contacts",
-      "police": "Police",
-      "ambulance": "Ambulance",
-      "embassy": "Embassy/Consulate",
-      "tourist": "Tourist Police"
+      "label": "ติดต่อฉุกเฉิน",
+      "police": "ตำรวจ",
+      "ambulance": "รถพยาบาล",
+      "embassy": "สถานทูต/สถานกงสุล",
+      "tourist": "ตำรวจท่องเที่ยว"
     },
     "tips": {
-      "label": "Local Tips",
-      "tipping": "Tipping Etiquette",
-      "customs": "Local Customs",
-      "wifi": "Wi-Fi / SIM Card Info"
+      "label": "ก้าวเล็กๆ บนพื้น",
+      "tipping": "มารยาทการให้ทิป",
+      "customs": "ประเพณีท้องถิ่น",
+      "wifi": "ข้อมูล Wi-Fi/ซิมการ์ด"
     },
     "export": {
-      "label": "Export",
-      "pdf": "Export as PDF",
-      "share": "Share Link",
-      "image": "Save as Image"
+      "label": "ส่งเงิน",
+      "pdf": "ส่งออกเป็น PDF",
+      "share": "แชร์ลิงก์",
+      "image": "บันทึกเป็นภาพ"
     },
-    "dragHint": "Hold and drag to reorder",
-    "aiSuggestion": "AI suggests nearby attractions for your free time",
-    "offlineReady": "Available offline",
+    "dragHint": "กดค้างไว้แล้วลากเพื่อเรียงลำดับใหม่",
+    "aiSuggestion": "AI แนะนำสถานที่ท่องเที่ยวใกล้เคียงสำหรับเวลาว่างของคุณ",
+    "offlineReady": "รองรับการท่องเว็บแบบออฟไลน์",
     "tabs": {
-      "timeline": "Timeline",
-      "guide": "Local Guide",
-      "checklist": "Checklist",
-      "expenses": "Expenses",
-      "translator": "Translator"
+      "timeline": "ภาพรวมแผนการเดินทาง",
+      "guide": "มัคคุเทศก์ท้องถิ่น",
+      "checklist": "รายการตรวจสอบก่อนออกเดินทาง",
+      "expenses": "บัญชีแยกประเภทค่าใช้จ่าย",
+      "translator": "การแปลการเดินทาง"
     },
     "map": {
-      "title": "Full Route 3D Map"
+      "title": "แผนที่ภูมิทัศน์ 3 มิติแบบเต็มการเดินทาง"
     },
     "nav": {
-      "collapse": "Collapse Navigation",
-      "expand": "Expand Navigation"
+      "collapse": "ยุบแผงเมนู",
+      "expand": "ขยายมุมมองและเมนูวัน"
     },
-    "offline": "Offline Mode",
-    "noData": "No itinerary data found",
-    "backHome": "Back to Home",
-    "shareTitle": "Share Itinerary",
-    "shareMsg": "Itinerary link copied to clipboard!",
-    "exportTitle": "Export Itinerary PDF",
-    "exportSuccess": "Export Successful",
-    "exportSuccessMsg": "PDF generated at: %{uri}",
-    "exportFail": "Export Failed",
-    "exportFailMsg": "Failed to generate PDF file.",
+    "offline": "โหมดการเรียกดูแบบออฟไลน์",
+    "noData": "ไม่มีข้อมูลรายละเอียดการเดินทาง",
+    "backHome": "กลับสู่หน้าแรก",
+    "shareTitle": "แบ่งปันรายละเอียดการเดินทาง",
+    "shareMsg": "คัดลอกลิงก์แผนการเดินทางไปยังคลิปบอร์ดแล้ว!",
+    "exportTitle": "ส่งออกแผนการเดินทาง PDF",
+    "exportSuccess": "โอนเงินเรียบร้อยแล้ว",
+    "exportSuccessMsg": "PDF สร้างเป็น: %{uri}",
+    "exportFail": "การส่งออกล้มเหลว",
+    "exportFailMsg": "ไม่สามารถสร้างไฟล์ PDF ได้",
     "aiRecommend": {
-      "title": "AI Recommendation",
-      "msg": "Automatically filled gap with nearby spots!",
-      "actTitle": "AI Recommended: Local Delicacies",
-      "actDesc": "Recommended popular restaurants nearby.",
-      "actLocName": "Street food & Cafes",
-      "actLocAddr": "Within walking distance",
-      "actNotes": "Try the local cold drinks."
-    },
-    "destinationGuide": {
-      "loading": "Compiling your exclusive local guide...",
-      "exchange": {
-        "title": "%{currencyName}/TWD Exchange Assistant",
-        "subtitle": "Calculate today's budget (Current rate: 1 TWD = %{rate} %{code})",
-        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
-        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
-        "inputTwd": "Enter TWD",
-        "inputLocal": "Enter %{name} (%{code})",
-        "resultLabel": "Result (%{code})",
-        "twdLabel": "TWD"
-      },
-      "guide": {
-        "title": "💡 Practical Spending Guide (%{code}/TWD)",
-        "quickSelect": "Quick Select:"
-      },
-      "emergency": {
-        "title": "📞 Emergency Contacts"
-      },
-      "phrases": {
-        "title": "☕ Useful Phrases",
-        "translator": "1. Two-way Voice Translator",
-        "openTool": "Open Tool"
-      }
+      "title": "คำแนะนำของเอไอ",
+      "msg": "ช่องว่างของแผนการเดินทางถูกเติมเต็มโดยอัตโนมัติและอัปเดตเส้นทางให้คุณแล้ว!",
+      "actTitle": "คำแนะนำ AI: การเลือกชิมอาหารท้องถิ่น",
+      "actDesc": "เราขอแนะนำร้านอาหารกูร์เมต์ยอดนิยมในพื้นที่โดยรอบเหมาะสำหรับการพักผ่อนและเพลิดเพลินในเวลาว่าง",
+      "actLocName": "ของว่างและร้านกาแฟสุดพิเศษ",
+      "actLocAddr": "ภายในบริเวณเดินชมสถานที่ท่องเที่ยว",
+      "actNotes": "ขอแนะนำให้ลองเครื่องดื่มเย็นพิเศษในท้องถิ่น"
     }
   },
   "settings": {
-    "title": "Settings",
-    "language": "Language",
-    "darkMode": "Dark Mode",
-    "notifications": "Notifications",
-    "about": "About",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "version": "Version"
+    "title": "ตั้งค่า",
+    "language": "ภาษา",
+    "darkMode": "โหมดมืด",
+    "notifications": "แจ้ง",
+    "about": "เกี่ยวกับ",
+    "privacy": "นโยบายความเป็นส่วนตัว",
+    "terms": "ข้อกำหนดในการให้บริการ",
+    "version": "เวอร์ชัน"
   },
   "errors": {
-    "required": "This field is required",
-    "invalidDate": "Invalid date selection",
-    "invalidUrl": "Please enter a valid URL",
+    "required": "ต้องระบุข้อมูลในช่องนี้",
+    "invalidDate": "การเลือกวันที่ไม่ถูกต้อง",
+    "invalidUrl": "โปรดป้อน URL ที่ถูกต้อง",
     "invalidEmail": "รูปแบบอีเมลไม่ถูกต้อง",
-    "networkError": "Network error. Please try again.",
-    "serverError": "Server error. Please try again later.",
-    "uploadFailed": "File upload failed",
-    "fileTooLarge": "File is too large (max 10MB)",
-    "unsupportedFormat": "Unsupported file format",
-    "minTravelers": "At least 1 traveler is required",
-    "minDestination": "At least 1 destination is required",
-    "dateRange": "End date must be after start date"
-  },
-  "home": {
-    "greetingMorning": "Good Morning",
-    "greetingAfternoon": "Good Afternoon",
-    "greetingEvening": "Good Evening",
-    "apiKeySetupTitle": "Setup Your AI Engine",
-    "apiKeySetupDesc": "To provide personalized itinerary planning, the system requires access to Gemini AI. Please enter your API Key to enable the smart engine.",
-    "apiKeyPlaceholder": "Paste your Gemini API Key (AIzaSy...)",
-    "apiKeySaveLocally": "Save to local device",
-    "apiKeySaveLocallyDesc": "If unchecked, it will be cleared upon exit and not saved in memory.",
-    "getFreeApiKey": "👉 Click here to get a free Google Gemini API Key",
-    "saveAndStart": "Save & Start Planning",
-    "myItineraries": "My Itineraries"
+    "networkError": "เครือข่ายเกิดข้อผิดพลาด โปรดลองอีกครั้งในภายหลัง",
+    "serverError": "ข้อผิดพลาดของเซิร์ฟเวอร์ โปรดลองอีกครั้งในภายหลัง",
+    "uploadFailed": "การอัปโหลดไฟล์ล้มเหลว",
+    "fileTooLarge": "ไฟล์ใหญ่เกินไป (สูงสุด 10MB)",
+    "unsupportedFormat": "รูปแบบไฟล์ที่ไม่รองรับ",
+    "minTravelers": "ต้องมีผู้เดินทางอย่างน้อย 1 คน",
+    "minDestination": "ต้องมีปลายทางอย่างน้อย 1 แห่ง",
+    "dateRange": "วันที่เดินทางกลับจะต้องอยู่หลังวันที่ออกเดินทาง",
+    "passwordMinLength": "รหัสผ่านต้องยาวเกิน 6 ตัวอักษร",
+    "passwordMismatch": "รหัสผ่านที่ป้อนสองครั้งไม่สอดคล้องกัน",
+    "emailInUse": "ที่อยู่อีเมลนี้มีการลงทะเบียนแล้ว",
+    "invalidCredential": "อีเมลหรือรหัสผ่านผิด",
+    "invalidEmailFormat": "รูปแบบอีเมลไม่ถูกต้อง",
+    "guestLoginFailed": "การเข้าสู่ระบบโดยไม่ระบุชื่อล้มเหลว โปรดลองอีกครั้งในภายหลัง"
   },
   "dashboard": {
-    "untitledItinerary": "Untitled Itinerary"
+    "untitledItinerary": "แผนการเดินทางที่ไม่มีชื่อ"
   }
 }

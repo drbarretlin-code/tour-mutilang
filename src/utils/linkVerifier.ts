@@ -1,7 +1,5 @@
 export const SAFE_DOMAINS = [
-  'google.com', 'klook.com', 'kkday.com', 'tripadvisor.com', 
-  'agoda.com', 'booking.com', 'expedia.com', 'hotels.com',
-  'tabelog.com', 'yelp.com'
+  'google.com', 'klook.com', 'kkday.com'
 ];
 
 /**

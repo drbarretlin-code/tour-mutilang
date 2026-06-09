@@ -3,6 +3,32 @@
     "name": "Tour Plan",
     "tagline": "スマートな旅を、手軽にプランニング"
   },
+  "home": {
+    "title": "私の計画",
+    "emptyStateTitle": "旅程はまだ作成されていません",
+    "emptyStateSubtitle": "下のボタンをクリックして、AI があなたにぴったりの旅行を計画しましょう。",
+    "aiBatchTitle": "🤖AIスマートバッチスケジューリングアシスタント",
+    "aiBatchSubtitle": "複数の URL を貼り付けて、専用の分析とスケジュールの提案をすばやく生成します",
+    "newPlan": "新しい計画",
+    "errorNotFound": "該当するプロジェクト情報が見つかりません。削除された可能性があります。",
+    "errorLoadFailed": "読み込みに失敗しました。後でもう一度お試しください。",
+    "errorDeleteFailed": "削除に失敗しました。後でもう一度お試しください。",
+    "confirmDeleteTitle": "旅行の削除",
+    "confirmDeleteMessage": "このプロジェクトを削除してもよろしいですか?一度削除すると復元することはできません。",
+    "confirmLogoutTitle": "サインアウト",
+    "confirmLogoutMessage": "ログアウトしてもよろしいですか?",
+    "greetingMorning": "おはよう",
+    "greetingAfternoon": "こんにちは",
+    "greetingEvening": "こんばんは",
+    "apiKeySetupTitle": "AI エンジンをセットアップする",
+    "apiKeySetupDesc": "パーソナライズされた独自の旅程計画を提供するには、システムが Gemini AI にアクセスする必要があります。 API キーを入力してスマート エンジンを有効にしてください。",
+    "apiKeyPlaceholder": "Gemini API キー (AIzaSy...) を貼り付けます。",
+    "apiKeySaveLocally": "ローカルデバイスに保存",
+    "apiKeySaveLocallyDesc": "チェックを外した場合、Web ページを閉じると自動的に消去され、メモリには残りません。",
+    "getFreeApiKey": "👉 無料の Google Gemini API キーをすぐに申請するには、ここをクリックしてください",
+    "saveAndStart": "保存して計画を開始する",
+    "myItineraries": "私の旅行計画"
+  },
   "common": {
     "next": "次へ",
     "back": "戻る",
@@ -28,7 +54,7 @@
     "other": "その他",
     "done": "完了",
     "skip": "スキップ",
-    "days": "%{count} Days"
+    "days": "%{count} 日"
   },
   "auth": {
     "login": "ログイン",
@@ -38,7 +64,15 @@
     "password": "パスワード",
     "forgotPassword": "パスワードを忘れた方",
     "welcomeBack": "おかえりなさい",
-    "createAccount": "アカウント作成"
+    "createAccount": "アカウント作成",
+    "passwordPlaceholder": "パスワードを入力してください",
+    "confirmPassword": "パスワードを認証する",
+    "confirmPasswordPlaceholder": "パスワードをもう一度入力してください",
+    "noAccount": "まだアカウントをお持ちでない場合は、",
+    "hasAccount": "すでにアカウントをお持ちですか?",
+    "or": "または",
+    "guestLogin": "ゲストとして直接開始する",
+    "registerSuccess": "アカウントが正常に作成されました。自動的にログインされました。"
   },
   "survey": {
     "title": "旅行を計画する",
@@ -239,18 +273,329 @@
       "required": "必須項目",
       "recommended": "推奨",
       "optional": "任意項目"
+    },
+    "actions": {
+      "confirmDiscardTitle": "下書き破棄の確認",
+      "confirmDiscardMessage": "現在の旅程草案を破棄して、計画をやり直してもよろしいですか?この操作は元に戻すことができません。",
+      "saveSuccessTitle": "正常に保存されました",
+      "saveSuccessMessage": "アンケート データはローカルに安全に保存されています。アプリケーションはいつでも閉じることができ、次回起動したときに自動的に編集状態が再開されます。",
+      "cancelEditWebConfirm": "この変更を破棄して元の旅程に戻りますか、それとも現在の変更を新しい旅程として保存しますか?\n\n[OK] 変更を破棄して元の旅程に戻ります\n[キャンセル] 新しいプランとして保存して続行します",
+      "convertedTitle": "変換された",
+      "convertedMessage": "現在の変更は新しい旅程として保存され、古い計画は上書きされません。引き続き設定を完了して生成してください。",
+      "cancelEditTitle": "編集をキャンセルする",
+      "cancelEditMessage": "この変更を破棄しますか、それとも現在の変更を新しい旅程として保存しますか?",
+      "discardAndReturn": "変更を破棄して元の旅程に戻す",
+      "saveAsNew": "新しいプロジェクトとして保存",
+      "continueEditing": "編集を続ける",
+      "saveDraft": "下書きの保存",
+      "restart": "リフィル",
+      "loginOrRegister": "ログイン/登録"
+    },
+    "summary": {
+      "title": "私だけの旅のハイライト",
+      "progress": "AIスマートプランニングの進捗状況",
+      "notSelectedHint": "未選択（最初のステップで設定してください）",
+      "dateTo": "に",
+      "notSelected": "未選択",
+      "notSet": "未設定",
+      "adults": "成人した",
+      "children": "子供",
+      "guestMode": "ゲストモード (データはローカルに保存されます)",
+      "loggedInAs": "すでにログインしています:"
     }
   },
   "itinerary": {
     "title": "旅行プラン",
     "day": "{{number}} 日目",
     "overview": "概要",
-    "dailySummary": "1 日のまとめ",
+    "dailySummary": {
+      "weather": {
+        "sunny": "晴れて暑い",
+        "cloudy": "曇りのち晴れ",
+        "rainy": "独立したシャワー",
+        "partlySunny": "午後雷雨",
+        "rainProb": "降水確率 %{prob}"
+      },
+      "advice": {
+        "sunny": "通気性の良い薄手の服を着て、日焼け止めに注意することをお勧めします。",
+        "cloudy": "アウトドア活動に適した快適なカジュアルな服装でお越しください。",
+        "rainy": "雨具をご持参の上、雨よけの靴を履いてお越しください。",
+        "partlySunny": "午後の雨から身を守るために、折りたたみ傘を持ち歩くことをお勧めします。"
+      }
+    },
     "estimatedCost": "推定費用",
     "walkingDistance": "徒歩距離",
     "weather": "天気予報",
     "timeline": "タイムライン表示",
     "mapView": "マップ表示",
+    "timelineView": {
+      "types": {
+        "transport": "✈️交通・到着",
+        "meal": "🍽️食事",
+        "hotel": "🏨 宿泊施設",
+        "attraction": "🏛️ アトラクション訪問",
+        "default": "📍アクティビティ"
+      },
+      "alerts": {
+        "grabWebHint": "💡 ヒント: Grab は配車サービスの「Web バージョン」を提供しません。モバイルアプリを使用する必要があります。\n\nダウンロード情報を提供するために、Grab 公式 Web サイトが間もなくオープンされます。",
+        "boltWebHint": "💡 ヒント: Bolt は主にモバイル アプリの配車サービスを提供しています。\n\n近々、Bolt 公式 Web サイトをオープンし、ダウンロード情報を提供する予定です。",
+        "cannotOpenTitle": "開けません",
+        "cannotOpenMessage": "このリンクは開けません。対応するアプリがデバイスにインストールされていないか、ブラウザの設定によってブロックされている可能性があります。",
+        "errorTitle": "エラーが発生しました",
+        "errorMessage": "リンクを開けません。"
+      },
+      "endOfDay": {
+        "title": "🌙 今日の旅程の終了: 宿泊施設に戻る準備をします",
+        "transportAdvice": "推奨される交通機関: Grab/Bolt をご利用ください。所要時間は約 15 分です。",
+        "shuttleGuideTitle": "🚗 宿泊施設の移動ガイド:",
+        "shuttleGuideDesc": "ホテルにシャトルシステムがない場合は、Bolt または Grab を使用してタクシーを呼んでください。デフォルトの宿泊施設 (%{hotelName}) に移動します。",
+        "yourHotel": "あなたのホテル",
+        "tonightStay": "今夜の宿泊施設: %{hotelName}",
+        "airportMapHint": "空港発着ホール平面図参考",
+        "openGrab": "Grabを開始するにはここをクリックしてください",
+        "openBolt": "ここをクリックしてボルトを開きます"
+      },
+      "activity": {
+        "region": "エリア:%{region}",
+        "thisRegion": "地域",
+        "transitGuide": "交通案内：次の停留所までは公共交通機関が不便です。この区間には明確な地下鉄はありません。チャーター車を利用するか、Bolt/Grab を使用して片道のタクシーを呼ぶことを強くお勧めします。推定所要時間は %{gap} 分です。",
+        "navigate": "地図に移動",
+        "charter": "車をチャーターする",
+        "notesLabel": "変速調整｜注意事項",
+        "notesPlaceholder": "例: ドライバーの電話番号、営業時間の確認..."
+      }
+    },
+    "mapFallbackView": {
+      "errors": {
+        "openFailed": "マップ ナビゲーションを読み込めません。ブラウザで開こうとします。"
+      },
+      "title": "現在の路線ネットワークトポロジマップ",
+      "empty": "本日の旅程には観光スポットの位置情報がありません。"
+    },
+    "combinedView": {
+      "title": "🗺️ 日 %{day} 旅程のルートとスケジュール情報表",
+      "subtitle": "インタラクティブな 3D ルート マップ、旅程の変更に対するリアルタイムの応答",
+      "refresh": "ワンクリックでチャートを更新"
+    },
+    "horizontalCard": {
+      "types": {
+        "activity": "アトラクション",
+        "dining": "グルメ",
+        "shopping": "買い物",
+        "experience": "経験"
+      }
+    },
+    "activityEditor": {
+      "title": "旅程を編集する",
+      "types": {
+        "attraction": "アトラクション",
+        "restaurant": "食べ物",
+        "cafe": "カフェ・アフタヌーンティー",
+        "shopping": "買い物",
+        "spa": "スパ・マッサージ",
+        "entertainment": "エンターテインメント",
+        "hotel": "滞在する",
+        "transport": "動く",
+        "activity": "経験"
+      },
+      "errors": {
+        "titleEmpty": "旅行名を空にすることはできません"
+      },
+      "deleteConfirm": {
+        "title": "プロジェクトの削除",
+        "message": "この項目を削除してもよろしいですか?"
+      },
+      "fields": {
+        "time": "時間 (例: 10:00)",
+        "type": "プロジェクトの種類",
+        "title": "旅程名",
+        "titlePlaceholder": "旅程名を入力してください",
+        "location": "地理的位置 (地域)",
+        "locationPlaceholder": "例: パタヤ",
+        "day": "予定日（モバイルトリップ）",
+        "notes": "詳しい手順（移動や採取の注意事項）",
+        "notesPlaceholder": "リマインダーやメモを入力してください...",
+        "links": "参考URL（任意）"
+      },
+      "links": {
+        "map": "地図：",
+        "mapPlaceholder": "GoogleマップのURL",
+        "info": "導入：",
+        "infoPlaceholder": "ブログまたは公式サイト",
+        "booking": "交通機関：",
+        "bookingPlaceholder": "KLOOKまたはチャーターカーの予約"
+      },
+      "actions": {
+        "delete": "この項目を削除します",
+        "cancel": "キャンセル",
+        "save": "変更を保存する"
+      }
+    },
+    "destinationGuide": {
+      "loading": "あなたのための地元限定ガイドを作成中...",
+      "exchange": {
+        "title": "%{currencyName}/台湾ドル為替換算アシスタント",
+        "subtitle": "今日の出費と予算を即座に計算します (現在の為替レートは約 1 TWD = %{rate} %{code})",
+        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
+        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
+        "inputTwd": "台湾ドル（TWD）を入力してください",
+        "inputLocal": "%{name} (%{code}) を入力してください",
+        "resultLabel": "変換結果 (%{code})",
+        "twdLabel": "TWD 台湾ドル"
+      },
+      "guide": {
+        "title": "💡 旅行消費に関する実践ガイド (%{code}/TWD コンセプト)",
+        "quickSelect": "クリックすると金額がすぐに計算されます。"
+      },
+      "emergency": {
+        "title": "📞緊急連絡先"
+      },
+      "phrases": {
+        "title": "☕ 実践的な言語ガイド",
+        "translator": "1.双方向音声翻訳Webページ",
+        "openTool": "ツールを開く"
+      }
+    },
+    "expenseSplitter": {
+      "me": "私",
+      "companionN": "旅行同行者 %{n}",
+      "errors": {
+        "companionExists": "この旅行仲間の名前はすでに存在します。",
+        "cannotRemoveCreator": "アカウント作成者を削除できません。",
+        "emptyTitle": "経費項目名を入力してください。",
+        "invalidAmount": "有効な金額を入力してください。",
+        "noSplitters": "費用を分担する同行者を少なくとも 1 人選択してください。"
+      },
+      "summary": {
+        "title": "旅行費用の概要",
+        "budgetLevel": "予算レベル: %{level}"
+      },
+      "companions": {
+        "title": "旅行同伴者リストを分割 (%{count} 人)",
+        "addPlaceholder": "他の旅行者名を追加...",
+        "addBtn": "新しい"
+      },
+      "settlement": {
+        "title": "決済アドバイス",
+        "allSettled": "これまでにすべてのアカウントが決済されており、振込は必要ありません。"
+      },
+      "expenses": {
+        "title": "支出明細レコード (%{count} 項目)",
+        "addBtn": "メモを取る",
+        "detail": "支払者: %{paidBy} |シェア: %{count} 人"
+      },
+      "modal": {
+        "title": "経費レコードを追加する",
+        "fields": {
+          "titleLabel": "プロジェクト名",
+          "titlePlaceholder": "例: タイ料理ディナー、地下鉄チケット、アグン山への日帰り旅行",
+          "amountLabel": "使用金額 (%{currency})",
+          "amountPlaceholder": "金額を入力してください",
+          "paidByLabel": "支払者",
+          "splitWithLabel": "コスト分担者 (複数の選択肢が利用可能)"
+        }
+      }
+    },
+    "packingChecklist": {
+      "items": {
+        "doc1": "パスポートとパスポートのコピー",
+        "doc2": "電子チケット/搭乗券",
+        "doc3": "予約プラットフォーム確認バウチャー",
+        "doc4": "海外旅行安全保険",
+        "ess1": "携帯電話と充電ケーブル",
+        "ess2": "パワーバンク",
+        "ess3": "ユニバーサルアダプタープラグ",
+        "ess4": "外貨現金とクレジットカード",
+        "ess5": "個人の薬",
+        "ess6": "トイレタリーおよびスキンケア製品",
+        "clo1": "着替えとパジャマ",
+        "clo2": "快適で歩きやすい靴",
+        "clo3": "日よけ帽子とサングラス",
+        "child1": "風邪薬・子供用体温計",
+        "child2": "お子様用ウェットティッシュとおやつ",
+        "driver1": "国際運転免許証と国内運転免許証の原本",
+        "driver2": "携帯電話車載ホルダー",
+        "water1": "水着、帽子、ゴーグル",
+        "water2": "携帯電話用防塵・防水バッグ",
+        "nat1": "蚊よけローションと蚊よけパッチ",
+        "nat2": "撥水ジャケット/登山靴"
+      },
+      "progress": {
+        "title": "出発前の荷造り進行状況",
+        "subtitle": "%{checkedCount} / %{totalCount} アイテムを収集しました"
+      },
+      "custom": {
+        "title": "カスタムパッケージアイテムを追加する",
+        "placeholder": "例：風邪薬、カメラの三脚…。"
+      },
+      "categories": {
+        "docs": "必要な証明書や書類",
+        "essential": "個人的な必需品",
+        "clothing": "服装と服装",
+        "custom": "カスタマイズされたパッキングリスト"
+      }
+    },
+    "travelTranslator": {
+      "tabs": {
+        "live": "オンラインAI即時翻訳",
+        "handbook": "よく使うフレーズをオフラインで簡単に検索"
+      },
+      "langs": {
+        "english": "英語",
+        "japanese": "日本語",
+        "korean": "韓国語",
+        "thai": "タイ語",
+        "vietnamese": "ベトナム語"
+      },
+      "live": {
+        "targetLabel": "ターゲット翻訳言語",
+        "placeholder": "外国人の方に言いたいことを入力してください... (例: この料理を注文するのにどれくらい時間がかかりますか?)",
+        "translateBtn": "AI翻訳を始める",
+        "resultLabel": "翻訳結果"
+      },
+      "categories": {
+        "general": "毎日の挨拶",
+        "dining": "レストランの注文",
+        "transport": "交通誘導",
+        "emergency": "緊急"
+      },
+      "errors": {
+        "translationFailed": "翻訳中にエラーが発生しました。後でもう一度試してください。"
+      },
+      "phrases": {
+        "mockPrefix": "[シミュレーション翻訳 - %{lang}]",
+        "englishRef": "英語の比較: %{text}",
+        "general": {
+          "0": "こんにちは",
+          "1": "ありがとう",
+          "2": "ごめんなさい/すみません",
+          "3": "これにはいくらかかりますか?"
+        },
+        "dining": {
+          "0": "メニューが見たい",
+          "1": "水をください",
+          "2": "この料理にはピーナッツが含まれていますか?",
+          "3": "チェックアウトを手伝ってください"
+        },
+        "transport": {
+          "0": "地下鉄の駅はどこですか？",
+          "1": "この場所に行きたいです",
+          "2": "化粧室はどこですか？"
+        },
+        "emergency": {
+          "0": "救急車を呼んでください！",
+          "1": "パスポートを失くしました！",
+          "2": "警察署はどこですか?"
+        }
+      }
+    },
+    "apiKeyModal": {
+      "title": "AI インテリジェンス エンジンのロックを解除する",
+      "description": "サブスクリプション料金なしでパーソナライズされた旅程計画を提供するために、このアプリケーションは BYOK アーキテクチャを使用しています。 Google Gemini API キーを無料で申請し、以下に投稿してください。キーは安全に暗号化され、デバイスに保存されます。",
+      "linkText": "Google AI Studio にアクセスして無料キーを申請します",
+      "cancelBtn": "キャンセル (オフラインテンプレートを使用)",
+      "saveBtn": "保存して生成する"
+    },
     "activity": {
       "startTime": "開始時刻",
       "endTime": "終了時刻",
@@ -304,62 +649,37 @@
     "aiSuggestion": "AI が空き時間に近くのスポットを提案します",
     "offlineReady": "オフラインで利用可能",
     "tabs": {
-      "timeline": "Timeline",
-      "guide": "Local Guide",
-      "checklist": "Checklist",
-      "expenses": "Expenses",
-      "translator": "Translator"
+      "timeline": "旅程の概要",
+      "guide": "ローカルガイド",
+      "checklist": "出発前チェックリスト",
+      "expenses": "経費台帳",
+      "translator": "旅行翻訳"
     },
     "map": {
-      "title": "Full Route 3D Map"
+      "title": "旅行全体の 3D 風景地図"
     },
     "nav": {
-      "collapse": "Collapse Navigation",
-      "expand": "Expand Navigation"
+      "collapse": "メニューパネルを折りたたむ",
+      "expand": "ビューと曜日メニューを展開します"
     },
-    "offline": "Offline Mode",
-    "noData": "No itinerary data found",
-    "backHome": "Back to Home",
-    "shareTitle": "Share Itinerary",
-    "shareMsg": "Itinerary link copied to clipboard!",
-    "exportTitle": "Export Itinerary PDF",
-    "exportSuccess": "Export Successful",
-    "exportSuccessMsg": "PDF generated at: %{uri}",
-    "exportFail": "Export Failed",
-    "exportFailMsg": "Failed to generate PDF file.",
+    "offline": "オフライン閲覧モード",
+    "noData": "旅程情報なし",
+    "backHome": "ホームページに戻る",
+    "shareTitle": "旅程を共有する",
+    "shareMsg": "旅程のリンクがクリップボードにコピーされました。",
+    "exportTitle": "旅程PDFをエクスポート",
+    "exportSuccess": "正常に送金されました",
+    "exportSuccessMsg": "PDF は %{uri} に生成されました",
+    "exportFail": "エクスポートに失敗しました",
+    "exportFailMsg": "PDF ファイルを生成できません。",
     "aiRecommend": {
-      "title": "AI Recommendation",
-      "msg": "Automatically filled gap with nearby spots!",
-      "actTitle": "AI Recommended: Local Delicacies",
-      "actDesc": "Recommended popular restaurants nearby.",
-      "actLocName": "Street food & Cafes",
-      "actLocAddr": "Within walking distance",
-      "actNotes": "Try the local cold drinks."
-    },
-    "destinationGuide": {
-      "loading": "Compiling your exclusive local guide...",
-      "exchange": {
-        "title": "%{currencyName}/TWD Exchange Assistant",
-        "subtitle": "Calculate today's budget (Current rate: 1 TWD = %{rate} %{code})",
-        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
-        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
-        "inputTwd": "Enter TWD",
-        "inputLocal": "Enter %{name} (%{code})",
-        "resultLabel": "Result (%{code})",
-        "twdLabel": "TWD"
-      },
-      "guide": {
-        "title": "💡 Practical Spending Guide (%{code}/TWD)",
-        "quickSelect": "Quick Select:"
-      },
-      "emergency": {
-        "title": "📞 Emergency Contacts"
-      },
-      "phrases": {
-        "title": "☕ Useful Phrases",
-        "translator": "1. Two-way Voice Translator",
-        "openTool": "Open Tool"
-      }
+      "title": "AIレコメンド",
+      "msg": "旅程のギャップは自動的に埋められ、ルートが更新されます。",
+      "actTitle": "AI推奨：厳選された地元の食べ物の試食",
+      "actDesc": "空いた時間をゆっくりと楽しむのに最適な、周辺エリアの人気グルメレストランをおすすめします。",
+      "actLocName": "特製スナックとカフェ",
+      "actLocAddr": "観光スポットの徒歩圏内",
+      "actNotes": "地元の名物冷たい飲み物を試してみることをお勧めします。"
     }
   },
   "settings": {
@@ -384,22 +704,15 @@
     "unsupportedFormat": "サポートされていないファイル形式です",
     "minTravelers": "旅行者は 1 名以上必要です",
     "minDestination": "目的地は 1 つ以上必要です",
-    "dateRange": "帰着日は出発日より後の日付にしてください"
-  },
-  "home": {
-    "greetingMorning": "Good Morning",
-    "greetingAfternoon": "Good Afternoon",
-    "greetingEvening": "Good Evening",
-    "apiKeySetupTitle": "Setup Your AI Engine",
-    "apiKeySetupDesc": "To provide personalized itinerary planning, the system requires access to Gemini AI. Please enter your API Key to enable the smart engine.",
-    "apiKeyPlaceholder": "Paste your Gemini API Key (AIzaSy...)",
-    "apiKeySaveLocally": "Save to local device",
-    "apiKeySaveLocallyDesc": "If unchecked, it will be cleared upon exit and not saved in memory.",
-    "getFreeApiKey": "👉 Click here to get a free Google Gemini API Key",
-    "saveAndStart": "Save & Start Planning",
-    "myItineraries": "My Itineraries"
+    "dateRange": "帰着日は出発日より後の日付にしてください",
+    "passwordMinLength": "パスワードは6文字以上である必要があります",
+    "passwordMismatch": "2回入力したパスワードは一致しません",
+    "emailInUse": "このメールアドレスはすでに登録されています。",
+    "invalidCredential": "メールアドレスまたはパスワードが間違っています。",
+    "invalidEmailFormat": "無効な電子メール形式です。",
+    "guestLoginFailed": "匿名ログインに失敗しました。後でもう一度試してください。"
   },
   "dashboard": {
-    "untitledItinerary": "Untitled Itinerary"
+    "untitledItinerary": "名前のない旅程"
   }
 }

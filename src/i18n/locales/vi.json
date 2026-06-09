@@ -1,405 +1,718 @@
 {
   "app": {
     "name": "Tour Plan",
-    "tagline": "Smart trips, effortless planning"
+    "tagline": "Hành trình thông minh, lập kế hoạch dễ dàng"
+  },
+  "home": {
+    "title": "kế hoạch của tôi",
+    "emptyStateTitle": "Chưa có hành trình nào được tạo",
+    "emptyStateSubtitle": "Hãy nhấp vào nút bên dưới và để AI lên kế hoạch cho chuyến đi hoàn hảo cho bạn.",
+    "aiBatchTitle": "🤖Trợ lý lập kế hoạch hàng loạt thông minhAI",
+    "aiBatchSubtitle": "Dán nhiều URL để nhanh chóng tạo các đề xuất phân tích và lập kế hoạch độc quyền",
+    "newPlan": "kế hoạch mới",
+    "errorNotFound": "Thông tin dự án tương ứng không thể được tìm thấy. Nó có thể đã được gỡ bỏ.",
+    "errorLoadFailed": "Tải không thành công, vui lòng thử lại sau.",
+    "errorDeleteFailed": "Xóa không thành công, vui lòng thử lại sau.",
+    "confirmDeleteTitle": "Xóa chuyến đi",
+    "confirmDeleteMessage": "Bạn có chắc chắn muốn xóa dự án này? Một khi đã xóa, nó không thể được khôi phục.",
+    "confirmLogoutTitle": "Đăng xuất",
+    "confirmLogoutMessage": "Bạn có chắc chắn muốn đăng xuất không?",
+    "greetingMorning": "Chào buổi sáng",
+    "greetingAfternoon": "Chào buổi chiều",
+    "greetingEvening": "Buổi tối vui vẻ",
+    "apiKeySetupTitle": "Thiết lập công cụ AI của bạn",
+    "apiKeySetupDesc": "Để cung cấp kế hoạch hành trình được cá nhân hóa và độc quyền, hệ thống cần truy cập vào Gemini AI. Vui lòng nhập Khóa API của bạn để kích hoạt công cụ thông minh.",
+    "apiKeyPlaceholder": "Dán Khóa API Gemini của bạn (AIzaSy...)",
+    "apiKeySaveLocally": "Lưu vào thiết bị cục bộ",
+    "apiKeySaveLocallyDesc": "Nếu bỏ chọn, nó sẽ tự động bị xóa sau khi đóng trang web và không được lưu giữ trong bộ nhớ.",
+    "getFreeApiKey": "👉 Click vào đây để đăng ký nhanh Google Gemini API Key miễn phí",
+    "saveAndStart": "Lưu và bắt đầu lập kế hoạch",
+    "myItineraries": "kế hoạch du lịch của tôi"
   },
   "common": {
-    "next": "Next",
-    "back": "Back",
-    "save": "Save",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "add": "Add",
-    "confirm": "Confirm",
-    "required": "Required",
-    "optional": "Optional",
-    "loading": "Loading",
-    "error": "Error",
-    "success": "Success",
-    "search": "Search",
-    "select": "Select",
-    "submit": "Submit",
-    "reset": "Reset",
-    "close": "Close",
-    "yes": "Yes",
-    "no": "No",
-    "none": "None",
-    "other": "Other",
-    "done": "Done",
-    "skip": "Skip",
-    "days": "%{count} Days"
+    "next": "Bước tiếp theo",
+    "back": "trở lại",
+    "save": "cửa hàng",
+    "cancel": "Hủy bỏ",
+    "delete": "xóa bỏ",
+    "edit": "biên tập",
+    "add": "Mới",
+    "confirm": "xác nhận",
+    "required": "Yêu cầu",
+    "optional": "Không bắt buộc",
+    "loading": "đang tải",
+    "error": "sai lầm",
+    "success": "thành công",
+    "search": "tìm kiếm",
+    "select": "chọn",
+    "submit": "gửi đi",
+    "reset": "cài lại",
+    "close": "đóng cửa",
+    "yes": "Đúng",
+    "no": "KHÔNG",
+    "none": "không có",
+    "other": "khác",
+    "done": "Hoàn thành",
+    "skip": "nhảy",
+    "days": "%{count} ngày"
   },
   "auth": {
-    "login": "Log In",
-    "logout": "Log Out",
-    "register": "Sign Up",
-    "email": "Email",
-    "password": "Password",
-    "forgotPassword": "Forgot Password",
-    "welcomeBack": "Welcome Back",
-    "createAccount": "Create Account"
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "register": "đăng ký",
+    "email": "E-mail",
+    "password": "mật khẩu",
+    "forgotPassword": "quên mật khẩu",
+    "welcomeBack": "chào mừng trở lại",
+    "createAccount": "Tạo tài khoản",
+    "passwordPlaceholder": "Vui lòng nhập mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "confirmPasswordPlaceholder": "Vui lòng nhập lại mật khẩu",
+    "noAccount": "Bạn chưa có tài khoản?",
+    "hasAccount": "Đã có tài khoản?",
+    "or": "hoặc",
+    "guestLogin": "Bắt đầu trực tiếp với tư cách là khách",
+    "registerSuccess": "Tài khoản được tạo thành công! Bạn đã được đăng nhập tự động."
   },
   "survey": {
-    "title": "Plan Your Trip",
-    "subtitle": "Tell us about your dream trip",
+    "title": "Lên kế hoạch cho chuyến đi của bạn",
+    "subtitle": "Hãy kể cho chúng tôi về chuyến đi lý tưởng của bạn",
     "sections": {
-      "basics": "Basic Information",
-      "budget": "Budget & Spending",
-      "transport": "Transportation",
-      "style": "Travel Style & Interests",
-      "accommodation": "Accommodation",
-      "attractions": "Attractions & Activities",
-      "special": "Special Requirements"
+      "basics": "Thông tin cơ bản",
+      "budget": "Ngân sách và chi tiêu",
+      "transport": "Vận tải",
+      "style": "Phong cách và sở thích du lịch",
+      "accommodation": "ở lại",
+      "attractions": "Điểm tham quan & hoạt động",
+      "special": "nhu cầu đặc biệt"
     },
     "dates": {
-      "label": "Travel Dates",
-      "start": "Start Date",
-      "end": "End Date",
-      "flexible": "Flexible Dates",
-      "flexibleHint": "Allow +/- 1-3 days for better options",
-      "selectDates": "Select your travel dates",
-      "duration": "Duration",
-      "days": "days",
-      "nights": "nights"
+      "label": "Ngày đi",
+      "start": "Ngày khởi hành",
+      "end": "Ngày về",
+      "flexible": "Ngày linh hoạt",
+      "flexibleHint": "Cho phép 1 đến 3 ngày trước và sau để có thêm lựa chọn",
+      "selectDates": "Chọn ngày du lịch của bạn",
+      "duration": "Ngày hành trình",
+      "days": "bầu trời",
+      "nights": "Đêm"
     },
     "destination": {
-      "label": "Destination",
-      "placeholder": "Search for a city or country",
-      "addMore": "Add another destination",
-      "remove": "Remove destination",
-      "multiCity": "Multi-city trip",
-      "dragToReorder": "Drag to reorder"
+      "label": "điểm đến",
+      "placeholder": "Tìm kiếm thành phố hoặc quốc gia",
+      "addMore": "Thêm điểm đến bổ sung",
+      "remove": "Xóa điểm đến",
+      "multiCity": "Hành trình nhiều thành phố",
+      "dragToReorder": "Kéo để sắp xếp lại"
     },
     "travelers": {
-      "label": "Number of Travelers",
-      "adults": "Adults",
-      "children": "Children",
-      "childAge": "Child age",
-      "infants": "Infants",
-      "seniors": "Seniors"
+      "label": "Số lượng hành khách",
+      "adults": "người lớn",
+      "children": "đứa trẻ",
+      "childAge": "tuổi trẻ",
+      "infants": "trẻ sơ sinh",
+      "seniors": "Người già"
     },
     "tripType": {
-      "label": "Trip Type",
-      "family": "Family",
-      "couple": "Couple",
-      "solo": "Solo",
-      "friends": "Friends",
-      "business": "Business",
-      "honeymoon": "Honeymoon"
+      "label": "loại chuyến đi",
+      "family": "du lịch gia đình",
+      "couple": "Du lịch cặp đôi",
+      "solo": "đi du lịch một mình",
+      "friends": "bạn bè đi du lịch",
+      "business": "chuyến công tác",
+      "honeymoon": "chuyến đi trăng mật"
     },
     "departure": {
-      "label": "Departure City",
-      "placeholder": "Where are you departing from?"
+      "label": "Thành phố khởi hành",
+      "placeholder": "Bạn bắt đầu từ đâu?"
     },
     "budget": {
-      "label": "Total Budget",
-      "economy": "Economy",
-      "moderate": "Moderate",
-      "luxury": "Luxury",
-      "unlimited": "No Limit",
-      "dailyMeals": "Daily Meal Budget (per person)",
-      "currency": "Preferred Currency"
+      "label": "tổng ngân sách",
+      "economy": "Tiết kiệm",
+      "moderate": "trung bình",
+      "luxury": "sang trọng",
+      "unlimited": "Không giới hạn ngân sách",
+      "dailyMeals": "Định mức bữa ăn hàng ngày (mỗi người)",
+      "currency": "Tiền tệ ưa thích"
     },
     "transport": {
-      "label": "Local Transportation Preference",
-      "public": "Public Transit",
-      "taxi": "Taxi / Ride-hailing (Grab, Uber)",
-      "rental": "Rental Car",
-      "charter": "Private Charter",
-      "walking": "Walking",
-      "drivingLicense": "Do you have an international driving license?",
+      "label": "Ưu tiên giao thông địa phương",
+      "public": "vận chuyển hàng loạt",
+      "taxi": "Dịch vụ taxi/gọi xe (Grab, Uber)",
+      "rental": "thuê xe",
+      "charter": "Thuê xe",
+      "walking": "đi bộ",
+      "drivingLicense": "Bạn có bằng lái xe quốc tế không?",
       "flightInfo": {
-        "label": "Flight Information",
-        "flightNumber": "Flight Number",
-        "departure": "Departure Time",
-        "arrival": "Arrival Time",
-        "addFlight": "Add flight info"
+        "label": "Thông tin chuyến bay",
+        "flightNumber": "số chuyến bay",
+        "departure": "Thời gian khởi hành",
+        "arrival": "Thời gian đến",
+        "addFlight": "Thêm thông tin chuyến bay"
       }
     },
     "interests": {
-      "label": "Interests & Activities",
-      "culture": "Culture & History",
-      "nature": "Nature & Outdoors",
-      "food": "Food & Dining",
-      "shopping": "Shopping",
-      "nightlife": "Nightlife",
-      "water": "Water Activities",
-      "family": "Family-friendly",
-      "photo": "Photography Spots",
-      "temple": "Temples & Religious Sites",
-      "spa": "Spa & Massage",
-      "themepark": "Theme Parks",
-      "art": "Art & Exhibitions",
-      "market": "Local Markets"
+      "label": "Sở thích và hoạt động",
+      "culture": "Văn hóa và Lịch sử",
+      "nature": "thiên nhiên & ngoài trời",
+      "food": "Thực phẩm & Ăn uống",
+      "shopping": "Mua sắm",
+      "nightlife": "cuộc sống về đêm",
+      "water": "thể thao dưới nước",
+      "family": "Thân thiện với cha mẹ và con cái",
+      "photo": "điểm chụp ảnh",
+      "temple": "Đền chùa và các điểm tham quan tôn giáo",
+      "spa": "Spa & Mát-xa",
+      "themepark": "công viên giải trí",
+      "art": "Nghệ thuật và Triển lãm",
+      "market": "thị trường địa phương"
     },
     "pace": {
-      "label": "Travel Pace",
-      "packed": "Packed & Busy",
-      "balanced": "Balanced",
-      "relaxed": "Relaxed & Easy"
+      "label": "nhịp điệu du lịch",
+      "packed": "Nhỏ gọn và đáng kể",
+      "balanced": "Cân bằng vừa phải",
+      "relaxed": "Thư giãn"
     },
     "schedule": {
-      "label": "Morning Preference",
-      "earlyBird": "Early Bird (before 7:00)",
-      "normal": "Normal (around 9:00)",
-      "lateRiser": "Late Riser (after 10:00)"
+      "label": "sở thích buổi sáng",
+      "earlyBird": "Dậy sớm (trước 7h)",
+      "normal": "Loại thông thường (khoảng 9:00)",
+      "lateRiser": "Dậy muộn (sau 10h00)"
     },
     "dietary": {
-      "label": "Dietary Restrictions",
-      "vegetarian": "Vegetarian",
-      "vegan": "Vegan",
-      "halal": "Halal",
-      "allergies": "Allergies",
-      "peanut": "Peanut allergy",
-      "seafood": "Seafood allergy",
-      "noRestriction": "No restrictions"
+      "label": "hạn chế ăn kiêng",
+      "vegetarian": "ăn chay",
+      "vegan": "ăn chay",
+      "halal": "Hồi giáo",
+      "allergies": "dị ứng",
+      "peanut": "dị ứng đậu phộng",
+      "seafood": "dị ứng hải sản",
+      "noRestriction": "Không giới hạn"
     },
     "accommodation": {
       "platform": {
-        "label": "Booking Platform",
-        "customUrl": "Other booking website URL"
+        "label": "Nền tảng đặt phòng",
+        "customUrl": "URL trang web đặt phòng khác"
       },
       "type": {
-        "label": "Accommodation Type",
-        "hotel": "Hotel",
-        "homestay": "Homestay / B&B",
-        "hostel": "Hostel",
-        "resort": "Resort",
-        "apartment": "Apartment"
+        "label": "Loại chỗ ở",
+        "hotel": "khách sạn",
+        "homestay": "Ở trọ",
+        "hostel": "ký túc xá thanh niên",
+        "resort": "Khu nghỉ mát",
+        "apartment": "căn hộ"
       },
       "location": {
-        "label": "Preferred Location",
-        "cityCenter": "City Center",
-        "nearAttractions": "Near Attractions",
-        "quiet": "Quiet Residential Area",
-        "beachfront": "Beachfront"
+        "label": "Vị trí ưa thích",
+        "cityCenter": "trung tâm thành phố",
+        "nearAttractions": "Các điểm tham quan lân cận",
+        "quiet": "Khu dân cư yên tĩnh",
+        "beachfront": "Hàng đầu tiên của bãi biển"
       },
       "amenities": {
-        "label": "Required Amenities",
-        "pool": "Swimming Pool",
-        "gym": "Gym",
-        "breakfast": "Free Breakfast",
-        "kitchen": "Kitchen",
-        "laundry": "Laundry",
-        "parking": "Parking"
+        "label": "Cơ sở vật chất cần thiết",
+        "pool": "bể bơi",
+        "gym": "phòng tập thể dục",
+        "breakfast": "bữa sáng miễn phí",
+        "kitchen": "phòng bếp",
+        "laundry": "thiết bị giặt ủi",
+        "parking": "BÃI ĐẬU XE"
       }
     },
     "attractions": {
       "reference": {
-        "label": "Reference Attractions",
-        "hint": "Share places you're interested in. AI will consider these when planning.",
-        "addUrl": "Add URL",
-        "addPhoto": "Add Photo",
-        "addFile": "Add File",
-        "urlPlaceholder": "Paste a link to an attraction..."
+        "label": "Tham khảo các điểm tham quan",
+        "hint": "Chia sẻ những điểm tham quan mà bạn quan tâm và AI sẽ cân nhắc chúng khi lập kế hoạch.",
+        "addUrl": "Thêm URL mới",
+        "addPhoto": "Thêm ảnh",
+        "addFile": "Thêm tập tin mới",
+        "urlPlaceholder": "Đăng một liên kết đến điểm thu hút..."
       },
       "mustVisit": {
-        "label": "Must-Visit Attractions",
-        "hint": "These will be included in your itinerary.",
-        "specifyDate": "Specify preferred date",
-        "specifyTime": "Specify preferred time"
+        "label": "Phải ghé thăm các điểm tham quan",
+        "hint": "Những điểm tham quan này sẽ được đưa vào hành trình của bạn.",
+        "specifyDate": "Chỉ định ngày ưa thích",
+        "specifyTime": "Chỉ định thời gian ưa thích"
       }
     },
     "map": {
-      "label": "Map Provider",
-      "apple": "Apple Maps",
-      "google": "Google Maps",
-      "amap": "Amap (Gaode)",
-      "baidu": "Baidu Maps"
+      "label": "dịch vụ bản đồ",
+      "apple": "Bản đồ táo",
+      "google": "Bản đồ Google",
+      "amap": "Bản đồ Gaode",
+      "baidu": "Bản đồ Baidu"
     },
     "accessibility": {
-      "label": "Accessibility Needs",
-      "wheelchair": "Wheelchair Access",
-      "stroller": "Stroller Friendly",
-      "mobility": "Limited Mobility"
+      "label": "Nhu cầu tiếp cận",
+      "wheelchair": "có thể sử dụng xe lăn",
+      "stroller": "Thân thiện với xe đẩy",
+      "mobility": "Giảm khả năng di chuyển"
     },
     "visa": {
-      "label": "Visa Requirements",
-      "nationality": "Passport Nationality",
-      "hint": "We'll check if you need a visa"
+      "label": "Yêu cầu thị thực",
+      "nationality": "quốc tịch hộ chiếu",
+      "hint": "Chúng tôi sẽ xác nhận xem bạn có cần visa hay không"
     },
     "insurance": {
-      "label": "Travel Insurance",
-      "have": "Already covered",
-      "need": "Need recommendations",
-      "skip": "Skip for now"
+      "label": "bảo hiểm du lịch",
+      "have": "được bảo hiểm",
+      "need": "Cần khuyến nghị",
+      "skip": "Bỏ qua đầu tiên"
     },
     "notes": {
-      "label": "Additional Notes",
-      "placeholder": "Any other preferences or requirements..."
+      "label": "Nhận xét",
+      "placeholder": "Các sở thích hoặc nhu cầu khác..."
     },
     "language": {
-      "label": "App Language",
-      "hint": "Choose your preferred language"
+      "label": "ngôn ngữ ứng dụng",
+      "hint": "Chọn ngôn ngữ ưa thích của bạn"
     },
-    "generateTrip": "Generate My Trip",
-    "generating": "AI is planning your perfect trip...",
+    "generateTrip": "tạo hành trình của tôi",
+    "generating": "AI đang lên kế hoạch cho chuyến hành trình hoàn hảo dành cho bạn...",
     "tierLabels": {
-      "required": "Required Information",
-      "recommended": "Recommended",
-      "optional": "Optional Details"
+      "required": "Thông tin bắt buộc",
+      "recommended": "Nên điền vào",
+      "optional": "Các mục tùy chọn"
+    },
+    "actions": {
+      "confirmDiscardTitle": "Xác nhận hủy bản nháp",
+      "confirmDiscardMessage": "Bạn có chắc chắn muốn hủy hành trình dự thảo hiện tại của mình và bắt đầu lên kế hoạch lại không? Không thể hoàn tác hành động này.",
+      "saveSuccessTitle": "Đã lưu thành công",
+      "saveSuccessMessage": "Dữ liệu câu hỏi của bạn đã được lưu trữ an toàn cục bộ. Bạn có thể đóng ứng dụng bất kỳ lúc nào và nó sẽ tự động tiếp tục trạng thái chỉnh sửa vào lần tiếp theo bạn nhập nó.",
+      "cancelEditWebConfirm": "Bạn muốn hủy sửa đổi này và quay lại hành trình ban đầu hay lưu sửa đổi hiện tại dưới dạng một hành trình hoàn toàn mới?\n\n[OK] Bỏ sửa đổi và quay lại hành trình ban đầu\n[Hủy] Lưu làm gói mới và tiếp tục",
+      "convertedTitle": "Đã chuyển đổi",
+      "convertedMessage": "Những sửa đổi hiện tại sẽ được lưu dưới dạng hành trình mới và sẽ không ghi đè lên các kế hoạch cũ. Vui lòng tiếp tục hoàn tất cài đặt và tạo!",
+      "cancelEditTitle": "Hủy chỉnh sửa",
+      "cancelEditMessage": "Bạn muốn từ bỏ sửa đổi này hay lưu sửa đổi hiện tại làm hành trình mới?",
+      "discardAndReturn": "Hủy bỏ các sửa đổi và quay lại hành trình ban đầu",
+      "saveAsNew": "Lưu dưới dạng dự án mới",
+      "continueEditing": "Tiếp tục chỉnh sửa",
+      "saveDraft": "Lưu bản nháp",
+      "restart": "Nạp tiền",
+      "loginOrRegister": "Đăng nhập/Đăng ký"
+    },
+    "summary": {
+      "title": "Điểm nổi bật của chuyến đi độc quyền của tôi",
+      "progress": "Tiến trình lập kế hoạch thông minh AI",
+      "notSelectedHint": "Chưa được chọn (vui lòng đặt ở bước đầu tiên)",
+      "dateTo": "ĐẾN",
+      "notSelected": "Không được chọn",
+      "notSet": "Chưa đặt",
+      "adults": "người lớn",
+      "children": "đứa trẻ",
+      "guestMode": "Chế độ khách (dữ liệu được lưu trữ cục bộ)",
+      "loggedInAs": "Đã đăng nhập:"
     }
   },
   "itinerary": {
-    "title": "My Itinerary",
-    "day": "Day {{number}}",
-    "overview": "Overview",
-    "dailySummary": "Daily Summary",
-    "estimatedCost": "Estimated Cost",
-    "walkingDistance": "Walking Distance",
-    "weather": "Weather Forecast",
-    "timeline": "Timeline View",
-    "mapView": "Map View",
+    "title": "hành trình của tôi",
+    "day": "Ngày {{number}}",
+    "overview": "Tổng quan",
+    "dailySummary": {
+      "weather": {
+        "sunny": "nắng và nóng",
+        "cloudy": "Nhiều mây và nắng",
+        "rainy": "Vòi sen cách ly",
+        "partlySunny": "Mưa giông buổi chiều",
+        "rainProb": "Khả năng có mưa %{prob}"
+      },
+      "advice": {
+        "sunny": "Nên mặc quần áo nhẹ thoáng khí và chú ý chống nắng.",
+        "cloudy": "Mặc quần áo thường ngày thoải mái, phù hợp cho các hoạt động ngoài trời.",
+        "rainy": "Vui lòng mang theo áo mưa và mang giày chống mưa.",
+        "partlySunny": "Bạn nên mang theo ô gấp bên mình để bảo vệ mình khỏi những cơn mưa rào vào buổi chiều."
+      }
+    },
+    "estimatedCost": "Chi phí ước tính",
+    "walkingDistance": "khoảng cách đi bộ",
+    "weather": "dự báo thời tiết",
+    "timeline": "Chế độ xem dòng thời gian",
+    "mapView": "Chế độ xem bản đồ",
+    "timelineView": {
+      "types": {
+        "transport": "✈️Chuyên chở/Đến nơi",
+        "meal": "🍽️Ăn tối",
+        "hotel": "🏨 Chỗ ở",
+        "attraction": "🏛️ Tham quan điểm tham quan",
+        "default": "📍Hoạt động"
+      },
+      "alerts": {
+        "grabWebHint": "💡 Mẹo: Grab không cung cấp \"phiên bản web\" của dịch vụ gọi xe! Phải sử dụng ứng dụng di động.\n\nTrang web chính thức của Grab sẽ sớm được mở để bạn cung cấp thông tin tải về.",
+        "boltWebHint": "💡 Mẹo: Bolt chủ yếu cung cấp dịch vụ gọi xe trên ứng dụng di động.\n\nTrang web chính thức của Bolt sẽ sớm được mở để bạn cung cấp thông tin tải xuống.",
+        "cannotOpenTitle": "Không thể mở được",
+        "cannotOpenMessage": "Liên kết này không thể mở được. Có thể ứng dụng tương ứng chưa được cài đặt trên thiết bị của bạn hoặc cài đặt trình duyệt đang chặn ứng dụng đó.",
+        "errorTitle": "Đã xảy ra lỗi",
+        "errorMessage": "Không thể mở liên kết."
+      },
+      "endOfDay": {
+        "title": "🌙 Kết thúc hành trình hôm nay: chuẩn bị quay về chỗ ở",
+        "transportAdvice": "Phương tiện di chuyển đề xuất: Đi Grab/Bolt, hành trình mất khoảng 15 phút.",
+        "shuttleGuideTitle": "🚗 Hướng dẫn chuyển chỗ ở:",
+        "shuttleGuideDesc": "Nếu khách sạn không có hệ thống đưa đón, vui lòng sử dụng Bolt hoặc Grab để gọi taxi. Đến chỗ ở mặc định (%{hotelName}).",
+        "yourHotel": "khách sạn của bạn",
+        "tonightStay": "Chỗ ở tối nay: %{hotelName}",
+        "airportMapHint": "Tham khảo sơ đồ mặt bằng sảnh đến và đi của sân bay",
+        "openGrab": "Nhấn vào đây để bắt đầu Grab",
+        "openBolt": "Bấm vào đây để mở Bolt"
+      },
+      "activity": {
+        "region": "Diện tích:%{region}",
+        "thisRegion": "khu vực",
+        "transitGuide": "Hướng dẫn di chuyển: Phương tiện công cộng bất tiện để đến điểm dừng tiếp theo. Không có tàu điện ngầm rõ ràng trong phần này. Chúng tôi khuyên bạn nên đi xe thuê hoặc sử dụng Bolt/Grab để gọi taxi một chiều. Thời gian hành trình ước tính là %{gap} phút.",
+        "navigate": "Điều hướng đến bản đồ",
+        "charter": "Thuê xe",
+        "notesLabel": "Điều chỉnh hộp số｜Lưu ý",
+        "notesPlaceholder": "Ví dụ: số điện thoại tài xế, xác nhận giờ làm việc..."
+      }
+    },
+    "mapFallbackView": {
+      "errors": {
+        "openFailed": "Không thể tải điều hướng bản đồ, sẽ thử mở nó trong trình duyệt."
+      },
+      "title": "Bản đồ cấu trúc liên kết mạng tuyến đường ngày nay",
+      "empty": "Không có thông tin vị trí cho các điểm tham quan trong hành trình ngày hôm nay."
+    },
+    "combinedView": {
+      "title": "🗺️ Ngày %{day} lộ trình hành trình và biểu đồ thông tin lịch trình",
+      "subtitle": "Bản đồ lộ trình 3D tương tác, phản hồi theo thời gian thực với những thay đổi trong hành trình",
+      "refresh": "Cập nhật biểu đồ chỉ bằng một cú nhấp chuột"
+    },
+    "horizontalCard": {
+      "types": {
+        "activity": "Điểm tham quan",
+        "dining": "món ăn ngon",
+        "shopping": "Mua sắm",
+        "experience": "kinh nghiệm"
+      }
+    },
+    "activityEditor": {
+      "title": "Chỉnh sửa hành trình",
+      "types": {
+        "attraction": "Điểm tham quan",
+        "restaurant": "Đồ ăn",
+        "cafe": "Cà phê / Trà chiều",
+        "shopping": "mua sắm",
+        "spa": "SPA/Massage",
+        "entertainment": "sự giải trí",
+        "hotel": "ở lại",
+        "transport": "di chuyển",
+        "activity": "kinh nghiệm"
+      },
+      "errors": {
+        "titleEmpty": "Tên chuyến đi không được để trống"
+      },
+      "deleteConfirm": {
+        "title": "Xóa dự án",
+        "message": "Bạn có chắc chắn muốn xóa mục này?"
+      },
+      "fields": {
+        "time": "thời gian (ví dụ: 10:00)",
+        "type": "Loại dự án",
+        "title": "Tên hành trình",
+        "titlePlaceholder": "Vui lòng nhập tên hành trình",
+        "location": "Vị trí địa lý (khu vực)",
+        "locationPlaceholder": "Ví dụ: Pattaya",
+        "day": "Ngày theo lịch trình (Chuyến đi di động)",
+        "notes": "Hướng dẫn chi tiết (ghi chú vận chuyển hoặc thu thập)",
+        "notesPlaceholder": "Nhập bất kỳ lời nhắc hoặc ghi chú nào...",
+        "links": "URL tham chiếu (tùy chọn)"
+      },
+      "links": {
+        "map": "bản đồ:",
+        "mapPlaceholder": "URL của Google Maps",
+        "info": "giới thiệu:",
+        "infoPlaceholder": "Blog hoặc trang web chính thức",
+        "booking": "vận tải:",
+        "bookingPlaceholder": "Đặt xe Klook hoặc thuê xe"
+      },
+      "actions": {
+        "delete": "Xóa mục này",
+        "cancel": "Hủy bỏ",
+        "save": "Lưu thay đổi"
+      }
+    },
+    "destinationGuide": {
+      "loading": "Đang biên soạn hướng dẫn độc quyền tại địa phương cho bạn...",
+      "exchange": {
+        "title": "%{currencyName}/Trợ lý chuyển đổi tỷ giá đô la Đài Loan",
+        "subtitle": "Tính toán ngay chi phí và ngân sách ngày hôm nay (tỷ giá hối đoái hiện tại là khoảng 1 TWD = %{rate} %{code})",
+        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
+        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
+        "inputTwd": "Nhập Đô la Đài Loan (TWD)",
+        "inputLocal": "Nhập%{name} (%{code})",
+        "resultLabel": "Kết quả chuyển đổi (%{code})",
+        "twdLabel": "TWD Đô la Đài Loan"
+      },
+      "guide": {
+        "title": "💡 Hướng dẫn thực hành về chi tiêu khi đi du lịch (__VAR0___/TWD Concept)",
+        "quickSelect": "Click để tính nhanh số tiền:"
+      },
+      "emergency": {
+        "title": "📞Thông tin liên hệ khẩn cấp"
+      },
+      "phrases": {
+        "title": "☕ Hướng dẫn ngôn ngữ thực tế",
+        "translator": "1. Trang web dịch giọng nói hai chiều",
+        "openTool": "Mở công cụ"
+      }
+    },
+    "expenseSplitter": {
+      "me": "TÔI",
+      "companionN": "Bạn đồng hành %{n}",
+      "errors": {
+        "companionExists": "Tên của người bạn đồng hành này đã tồn tại!",
+        "cannotRemoveCreator": "Không thể xóa người tạo tài khoản.",
+        "emptyTitle": "Vui lòng nhập tên khoản mục chi phí!",
+        "invalidAmount": "Vui lòng nhập số tiền hợp lệ!",
+        "noSplitters": "Hãy chọn ít nhất một người bạn đồng hành để cùng chia sẻ chi phí nhé!"
+      },
+      "summary": {
+        "title": "Tổng quan về chi phí chuyến đi",
+        "budgetLevel": "Mức ngân sách: %{level}"
+      },
+      "companions": {
+        "title": "Chia danh sách bạn đồng hành (%{count} người)",
+        "addPlaceholder": "Thêm tên bạn đồng hành du lịch khác...",
+        "addBtn": "Mới"
+      },
+      "settlement": {
+        "title": "Tư vấn định cư",
+        "allSettled": "Tất cả các tài khoản đã được giải quyết cho đến nay, không cần chuyển khoản!"
+      },
+      "expenses": {
+        "title": "Bản ghi chi tiết chi tiêu (%{count} mục)",
+        "addBtn": "Ghi chú",
+        "detail": "Người nộp: %{paidBy} | Chia sẻ: %{count} người"
+      },
+      "modal": {
+        "title": "Thêm bản ghi chi phí",
+        "fields": {
+          "titleLabel": "Tên dự án",
+          "titlePlaceholder": "Ví dụ: Bữa tối kiểu Thái, vé tàu điện ngầm, chuyến đi trong ngày đến Núi Agung",
+          "amountLabel": "Số tiền chi tiêu (%{currency})",
+          "amountPlaceholder": "Vui lòng nhập số tiền",
+          "paidByLabel": "Người trả tiền",
+          "splitWithLabel": "Chia sẻ chi phí (có nhiều lựa chọn)"
+        }
+      }
+    },
+    "packingChecklist": {
+      "items": {
+        "doc1": "Hộ chiếu và bản sao hộ chiếu",
+        "doc2": "Vé điện tử/thẻ lên máy bay",
+        "doc3": "Phiếu xác nhận nền tảng đặt phòng",
+        "doc4": "Chính sách bảo hiểm an toàn du lịch nước ngoài",
+        "ess1": "Điện thoại di động và cáp sạc",
+        "ess2": "ngân hàng điện",
+        "ess3": "Ổ cắm chuyển đổi đa năng",
+        "ess4": "Ngoại tệ tiền mặt và thẻ tín dụng",
+        "ess5": "Thuốc cá nhân",
+        "ess6": "Đồ dùng vệ sinh và sản phẩm chăm sóc da",
+        "clo1": "Thay quần áo và đồ ngủ",
+        "clo2": "Giày đi êm chân và thoải mái",
+        "clo3": "Mũ chống nắng và kính râm",
+        "child1": "Thuốc cảm/nhiệt kế cho trẻ em",
+        "child2": "Khăn ướt và đồ ăn nhẹ cho trẻ em",
+        "driver1": "Bằng lái xe quốc tế gốc và bằng lái xe nội địa",
+        "driver2": "Giá đỡ điện thoại di động trên ô tô",
+        "water1": "Đồ bơi, mũ và kính bảo hộ",
+        "water2": "Túi đựng điện thoại di động chống bụi và chống thấm nước",
+        "nat1": "Kem chống muỗi và miếng dán đuổi muỗi",
+        "nat2": "Áo khoác chống thấm nước/giày đi bộ đường dài"
+      },
+      "progress": {
+        "title": "Tiến độ đóng gói trước giờ khởi hành",
+        "subtitle": "%{checkedCount} / %{totalCount} vật phẩm được thu thập"
+      },
+      "custom": {
+        "title": "Thêm các mặt hàng đóng gói tùy chỉnh",
+        "placeholder": "Ví dụ: thuốc cảm, chân máy ảnh..."
+      },
+      "categories": {
+        "docs": "Giấy chứng nhận và tài liệu cần thiết",
+        "essential": "Vật dụng cần thiết cá nhân",
+        "clothing": "Quần áo và cách ăn mặc",
+        "custom": "Danh sách đóng gói tùy chỉnh"
+      }
+    },
+    "travelTranslator": {
+      "tabs": {
+        "live": "Dịch thuật tức thời AI trực tuyến",
+        "handbook": "Tra cứu nhanh ngoại tuyến các cụm từ thường dùng"
+      },
+      "langs": {
+        "english": "Tiếng Anh",
+        "japanese": "tiếng Nhật",
+        "korean": "tiếng Hàn",
+        "thai": "tiếng Thái",
+        "vietnamese": "Tiếng Việt"
+      },
+      "live": {
+        "targetLabel": "ngôn ngữ dịch đích",
+        "placeholder": "Hãy nhập những điều bạn muốn nói với người nước ngoài... (Ví dụ: Đặt món này mất bao lâu?)",
+        "translateBtn": "Bắt đầu dịch AI",
+        "resultLabel": "Kết quả dịch thuật"
+      },
+      "categories": {
+        "general": "lời chào hàng ngày",
+        "dining": "Đặt hàng nhà hàng",
+        "transport": "hướng dẫn giao thông",
+        "emergency": "khẩn cấp"
+      },
+      "errors": {
+        "translationFailed": "Đã xảy ra lỗi trong bản dịch, vui lòng thử lại sau."
+      },
+      "phrases": {
+        "mockPrefix": "[Dịch mô phỏng - %{lang}]",
+        "englishRef": "So sánh tiếng Anh: %{text}",
+        "general": {
+          "0": "Xin chào",
+          "1": "Cảm ơn",
+          "2": "Xin lỗi/Xin lỗi",
+          "3": "Cái này giá bao nhiêu?"
+        },
+        "dining": {
+          "0": "Tôi muốn xem thực đơn",
+          "1": "làm ơn cho tôi nước",
+          "2": "Món ăn này có chứa đậu phộng không?",
+          "3": "Vui lòng kiểm tra giúp tôi"
+        },
+        "transport": {
+          "0": "Ga tàu điện ngầm ở đâu?",
+          "1": "Tôi muốn đi đến nơi này",
+          "2": "phòng tắm ở đâu?"
+        },
+        "emergency": {
+          "0": "Hãy gọi xe cứu thương giúp tôi!",
+          "1": "Tôi bị mất hộ chiếu!",
+          "2": "Đồn cảnh sát ở đâu?"
+        }
+      }
+    },
+    "apiKeyModal": {
+      "title": "Mở khóa công cụ trí tuệ AI",
+      "description": "Để cung cấp cho bạn kế hoạch hành trình được cá nhân hóa mà không tính phí đăng ký, ứng dụng này sử dụng kiến ​​trúc BYOK. Vui lòng đăng ký khóa API Google Gemini miễn phí và đăng nó bên dưới. Khóa của bạn sẽ được mã hóa và lưu trữ an toàn trên thiết bị của bạn.",
+      "linkText": "Vào Google AI Studio để đăng ký key miễn phí",
+      "cancelBtn": "Hủy (sử dụng mẫu ngoại tuyến)",
+      "saveBtn": "Lưu và tạo"
+    },
     "activity": {
-      "startTime": "Start Time",
-      "endTime": "End Time",
-      "duration": "Duration",
-      "cost": "Cost",
-      "transport": "Getting There",
-      "travelTime": "Travel Time",
-      "openHours": "Opening Hours",
-      "closedDay": "Closed on",
-      "rating": "Rating",
-      "navigate": "Navigate",
-      "bookTicket": "Book Ticket",
-      "moreInfo": "More Info",
-      "notes": "Notes",
+      "startTime": "thời gian bắt đầu",
+      "endTime": "thời gian kết thúc",
+      "duration": "thời gian cư trú",
+      "cost": "trị giá",
+      "transport": "Vận tải",
+      "travelTime": "thời gian vận chuyển",
+      "openHours": "Giờ làm việc",
+      "closedDay": "ngày nghỉ lễ",
+      "rating": "điểm",
+      "navigate": "điều hướng",
+      "bookTicket": "Đặt vé",
+      "moreInfo": "Thêm thông tin",
+      "notes": "Nhận xét",
       "type": {
-        "attraction": "Attraction",
-        "restaurant": "Restaurant",
-        "shopping": "Shopping",
-        "transport": "Transportation",
-        "hotel": "Hotel",
-        "activity": "Activity"
+        "attraction": "Điểm tham quan",
+        "restaurant": "Phòng ăn",
+        "shopping": "Mua sắm",
+        "transport": "vận tải",
+        "hotel": "khách sạn",
+        "activity": "Hoạt động"
       }
     },
     "hotel": {
-      "label": "Today's Hotel",
-      "checkIn": "Check-in",
-      "checkOut": "Check-out",
-      "contact": "Contact",
-      "bookingLink": "Booking Link"
+      "label": "Chỗ ở hôm nay",
+      "checkIn": "Đăng ký vào",
+      "checkOut": "kiểm tra",
+      "contact": "Thông tin liên hệ",
+      "bookingLink": "Liên kết đặt chỗ"
     },
     "emergency": {
-      "label": "Emergency Contacts",
-      "police": "Police",
-      "ambulance": "Ambulance",
-      "embassy": "Embassy/Consulate",
-      "tourist": "Tourist Police"
+      "label": "Liên hệ khẩn cấp",
+      "police": "cảnh sát",
+      "ambulance": "xe cứu thương",
+      "embassy": "Đại sứ quán/Lãnh sự quán",
+      "tourist": "cảnh sát du lịch"
     },
     "tips": {
-      "label": "Local Tips",
-      "tipping": "Tipping Etiquette",
-      "customs": "Local Customs",
-      "wifi": "Wi-Fi / SIM Card Info"
+      "label": "Những bước chân nhỏ trên mặt đất",
+      "tipping": "Nghi thức tip",
+      "customs": "phong tục địa phương",
+      "wifi": "Thông tin thẻ Wi-Fi/SIM"
     },
     "export": {
-      "label": "Export",
-      "pdf": "Export as PDF",
-      "share": "Share Link",
-      "image": "Save as Image"
+      "label": "chuyển tiền",
+      "pdf": "Xuất sang PDF",
+      "share": "Chia sẻ liên kết",
+      "image": "Lưu dưới dạng hình ảnh"
     },
-    "dragHint": "Hold and drag to reorder",
-    "aiSuggestion": "AI suggests nearby attractions for your free time",
-    "offlineReady": "Available offline",
+    "dragHint": "Nhấn và kéo để sắp xếp lại",
+    "aiSuggestion": "AI đề xuất các điểm tham quan gần đó khi bạn rảnh rỗi",
+    "offlineReady": "Hỗ trợ duyệt ngoại tuyến",
     "tabs": {
-      "timeline": "Timeline",
-      "guide": "Local Guide",
-      "checklist": "Checklist",
-      "expenses": "Expenses",
-      "translator": "Translator"
+      "timeline": "Tổng quan về hành trình",
+      "guide": "hướng dẫn viên địa phương",
+      "checklist": "Danh sách kiểm tra trước khi khởi hành",
+      "expenses": "sổ cái chi phí",
+      "translator": "dịch du lịch"
     },
     "map": {
-      "title": "Full Route 3D Map"
+      "title": "Bản đồ cảnh quan 3D toàn chuyến đi"
     },
     "nav": {
-      "collapse": "Collapse Navigation",
-      "expand": "Expand Navigation"
+      "collapse": "Thu gọn bảng menu",
+      "expand": "Mở rộng menu xem và ngày"
     },
-    "offline": "Offline Mode",
-    "noData": "No itinerary data found",
-    "backHome": "Back to Home",
-    "shareTitle": "Share Itinerary",
-    "shareMsg": "Itinerary link copied to clipboard!",
-    "exportTitle": "Export Itinerary PDF",
-    "exportSuccess": "Export Successful",
-    "exportSuccessMsg": "PDF generated at: %{uri}",
-    "exportFail": "Export Failed",
-    "exportFailMsg": "Failed to generate PDF file.",
+    "offline": "Chế độ duyệt ngoại tuyến",
+    "noData": "Không có thông tin hành trình",
+    "backHome": "Quay lại trang chủ",
+    "shareTitle": "Chia sẻ hành trình",
+    "shareMsg": "Liên kết hành trình đã được sao chép vào clipboard!",
+    "exportTitle": "Xuất hành trình PDF",
+    "exportSuccess": "Chuyển tiền thành công",
+    "exportSuccessMsg": "PDF được tạo tới: %{uri}",
+    "exportFail": "Xuất không thành công",
+    "exportFailMsg": "Không thể tạo tập tin PDF.",
     "aiRecommend": {
-      "title": "AI Recommendation",
-      "msg": "Automatically filled gap with nearby spots!",
-      "actTitle": "AI Recommended: Local Delicacies",
-      "actDesc": "Recommended popular restaurants nearby.",
-      "actLocName": "Street food & Cafes",
-      "actLocAddr": "Within walking distance",
-      "actNotes": "Try the local cold drinks."
-    },
-    "destinationGuide": {
-      "loading": "Compiling your exclusive local guide...",
-      "exchange": {
-        "title": "%{currencyName}/TWD Exchange Assistant",
-        "subtitle": "Calculate today's budget (Current rate: 1 TWD = %{rate} %{code})",
-        "twdToLocal": "🇹🇼 TWD ➔ 💱 %{code}",
-        "localToTwd": "💱 %{code} ➔ 🇹🇼 TWD",
-        "inputTwd": "Enter TWD",
-        "inputLocal": "Enter %{name} (%{code})",
-        "resultLabel": "Result (%{code})",
-        "twdLabel": "TWD"
-      },
-      "guide": {
-        "title": "💡 Practical Spending Guide (%{code}/TWD)",
-        "quickSelect": "Quick Select:"
-      },
-      "emergency": {
-        "title": "📞 Emergency Contacts"
-      },
-      "phrases": {
-        "title": "☕ Useful Phrases",
-        "translator": "1. Two-way Voice Translator",
-        "openTool": "Open Tool"
-      }
+      "title": "Đề xuất AI",
+      "msg": "Các khoảng trống trong hành trình đã được tự động lấp đầy và lộ trình được cập nhật cho bạn!",
+      "actTitle": "Khuyến nghị của AI: Nếm thử món ăn địa phương được chọn lọc",
+      "actDesc": "Chúng tôi giới thiệu những nhà hàng ăn ngon nổi tiếng ở khu vực xung quanh, thích hợp để bạn thư giãn và tận hưởng trong thời gian rảnh rỗi.",
+      "actLocName": "Đồ ăn nhẹ và quán cà phê đặc biệt",
+      "actLocAddr": "Trong khu vực đi bộ của các điểm tham quan",
+      "actNotes": "Bạn nên thử đồ uống lạnh đặc sản địa phương."
     }
   },
   "settings": {
-    "title": "Settings",
-    "language": "Language",
-    "darkMode": "Dark Mode",
-    "notifications": "Notifications",
-    "about": "About",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "version": "Version"
+    "title": "cài đặt",
+    "language": "ngôn ngữ",
+    "darkMode": "chế độ tối",
+    "notifications": "thông báo",
+    "about": "Về",
+    "privacy": "chính sách bảo mật",
+    "terms": "Điều khoản dịch vụ",
+    "version": "Phiên bản"
   },
   "errors": {
-    "required": "This field is required",
-    "invalidDate": "Invalid date selection",
-    "invalidUrl": "Please enter a valid URL",
+    "required": "Trường này là bắt buộc",
+    "invalidDate": "Lựa chọn ngày không hợp lệ",
+    "invalidUrl": "Vui lòng nhập một URL hợp lệ",
     "invalidEmail": "Định dạng email không hợp lệ",
-    "networkError": "Network error. Please try again.",
-    "serverError": "Server error. Please try again later.",
-    "uploadFailed": "File upload failed",
-    "fileTooLarge": "File is too large (max 10MB)",
-    "unsupportedFormat": "Unsupported file format",
-    "minTravelers": "At least 1 traveler is required",
-    "minDestination": "At least 1 destination is required",
-    "dateRange": "End date must be after start date"
-  },
-  "home": {
-    "greetingMorning": "Good Morning",
-    "greetingAfternoon": "Good Afternoon",
-    "greetingEvening": "Good Evening",
-    "apiKeySetupTitle": "Setup Your AI Engine",
-    "apiKeySetupDesc": "To provide personalized itinerary planning, the system requires access to Gemini AI. Please enter your API Key to enable the smart engine.",
-    "apiKeyPlaceholder": "Paste your Gemini API Key (AIzaSy...)",
-    "apiKeySaveLocally": "Save to local device",
-    "apiKeySaveLocallyDesc": "If unchecked, it will be cleared upon exit and not saved in memory.",
-    "getFreeApiKey": "👉 Click here to get a free Google Gemini API Key",
-    "saveAndStart": "Save & Start Planning",
-    "myItineraries": "My Itineraries"
+    "networkError": "Lỗi mạng, vui lòng thử lại sau.",
+    "serverError": "Lỗi máy chủ, vui lòng thử lại sau.",
+    "uploadFailed": "Tải tệp lên không thành công",
+    "fileTooLarge": "Tệp quá lớn (tối đa 10 MB)",
+    "unsupportedFormat": "Định dạng tệp không được hỗ trợ",
+    "minTravelers": "Yêu cầu ít nhất 1 khách du lịch",
+    "minDestination": "Cần có ít nhất 1 điểm đến",
+    "dateRange": "Ngày về phải sau ngày khởi hành",
+    "passwordMinLength": "Mật khẩu phải dài hơn 6 ký tự",
+    "passwordMismatch": "Mật khẩu nhập hai lần không nhất quán",
+    "emailInUse": "Địa chỉ email này đã được đăng ký.",
+    "invalidCredential": "Sai email hoặc mật khẩu.",
+    "invalidEmailFormat": "Định dạng email không hợp lệ.",
+    "guestLoginFailed": "Đăng nhập ẩn danh không thành công, vui lòng thử lại sau."
   },
   "dashboard": {
-    "untitledItinerary": "Untitled Itinerary"
+    "untitledItinerary": "Hành trình chưa đặt tên"
   }
 }

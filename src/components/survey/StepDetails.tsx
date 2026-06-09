@@ -32,6 +32,11 @@ export function StepDetails() {
   const [fArr, setFArr] = useState('');
   const [fReturn, setFReturn] = useState(false);
 
+  // Return flight temp input state
+  const [retFNum, setRetFNum] = useState('');
+  const [retFDep, setRetFDep] = useState('');
+  const [retFArr, setRetFArr] = useState('');
+
   // Interest tags
   const interestTags: { value: InterestTag; labelKey: string }[] = [
     { value: 'culture', labelKey: 'survey.interests.culture' },
@@ -90,11 +95,27 @@ export function StepDetails() {
   };
 
   const handleAddFlight = () => {
-    if (!fNum) return;
-    addFlight(fNum, fDep, fArr, fReturn);
+    if (!fNum && !retFNum) return;
+    
+    // 如果有填寫去程航班
+    if (fNum) {
+      addFlight(fNum, fDep, fArr, false);
+    }
+
+    // 如果有填寫回程航班
+    if (retFNum) {
+      addFlight(retFNum, retFDep, retFArr, true);
+    }
+
+    // 清空去程欄位
     setFNum('');
     setFDep('');
     setFArr('');
+    
+    // 清空回程欄位
+    setRetFNum('');
+    setRetFDep('');
+    setRetFArr('');
     setFReturn(false);
   };
 
@@ -141,13 +162,17 @@ export function StepDetails() {
 
             {/* Add New Flight Form */}
             <View style={[styles.addFlightForm, { marginTop: spacing.md, borderTopColor: colors.divider, borderTopWidth: 1, paddingTop: spacing.md }]}>
+              {/* Outgoing Flight */}
+              <Text style={[typography.titleSmall, { color: colors.text, marginBottom: spacing.xs, fontWeight: '600' }]}>
+                Outgoing Flight (去程航班)
+              </Text>
               <Input
                 placeholder="Flight Number (e.g. CI915)"
                 value={fNum}
                 onChangeText={setFNum}
                 containerStyle={{ marginBottom: spacing.sm }}
               />
-              <View style={styles.flexRowBetween}>
+              <View style={[styles.flexRowBetween, { marginBottom: spacing.sm }]}>
                 <Input
                   placeholder="Departure (e.g. 10:00)"
                   value={fDep}
@@ -161,15 +186,51 @@ export function StepDetails() {
                   containerStyle={{ width: '48%' }}
                 />
               </View>
-              <View style={[styles.switchRow, { marginVertical: spacing.sm }]}>
-                <Text style={[typography.bodyMedium, { color: colors.text }]}>Return Flight?</Text>
+              
+              {/* Return Flight Switch */}
+              <TouchableOpacity 
+                activeOpacity={0.8}
+                onPress={() => setFReturn(!fReturn)}
+                style={[styles.switchRow, { marginVertical: spacing.sm }]}
+              >
+                <Text style={[typography.bodyMedium, { color: colors.text, fontWeight: '600' }]}>Return Flight? (加填返程機票)</Text>
                 <Switch value={fReturn} onValueChange={setFReturn} trackColor={{ true: colors.primary500 }} />
-              </View>
+              </TouchableOpacity>
+
+              {/* Conditional Return Flight Inputs */}
+              {fReturn && (
+                <View style={{ marginTop: spacing.sm, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: spacing.sm, marginBottom: spacing.sm }}>
+                  <Text style={[typography.titleSmall, { color: colors.text, marginBottom: spacing.xs, fontWeight: '600' }]}>
+                    Return Flight (返程航班)
+                  </Text>
+                  <Input
+                    placeholder="Flight Number (e.g. CI916)"
+                    value={retFNum}
+                    onChangeText={setRetFNum}
+                    containerStyle={{ marginBottom: spacing.sm }}
+                  />
+                  <View style={styles.flexRowBetween}>
+                    <Input
+                      placeholder="Departure (e.g. 16:00)"
+                      value={retFDep}
+                      onChangeText={setRetFDep}
+                      containerStyle={{ width: '48%' }}
+                    />
+                    <Input
+                      placeholder="Arrival (e.g. 20:00)"
+                      value={retFArr}
+                      onChangeText={setRetFArr}
+                      containerStyle={{ width: '48%' }}
+                    />
+                  </View>
+                </View>
+              )}
+
               <Button
                 title={t('survey.transport.flightInfo.addFlight')}
                 variant="outlined"
                 onPress={handleAddFlight}
-                disabled={!fNum}
+                disabled={!fNum && (!fReturn || !retFNum)}
               />
             </View>
           </View>

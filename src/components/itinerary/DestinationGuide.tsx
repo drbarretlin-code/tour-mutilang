@@ -43,7 +43,7 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
       setLoading(true);
       setErrorMsg('');
       const country = countryName || (survey.destinations && survey.destinations.length > 0 
-        ? survey.destinations[0].name 
+        ? survey.destinations[0].country || survey.destinations[0].name 
         : '泰國'); // fallback
 
       // 1. 嘗試從 Cache 讀取 (Web 使用 localStorage，Native 使用 AsyncStorage)
@@ -60,9 +60,16 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
       if (cached) {
         try {
           data = JSON.parse(cached);
-          console.log('[DestinationGuide] Loaded from cache for:', country);
+          if (!data || !data.currencyCode || !Array.isArray(data.emergencyContacts)) {
+            console.warn('[DestinationGuide] Invalid or stale cache detected, bypassing:', cached);
+            data = null;
+            await cacheSet(cacheKey, '');
+          } else {
+            console.log('[DestinationGuide] Loaded from cache for:', country);
+          }
         } catch (e) {
           console.warn('[DestinationGuide] Cache JSON parse error:', e);
+          data = null;
         }
       }
 
@@ -70,8 +77,8 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
         // 2. 呼叫 AI 產生
         console.log('[DestinationGuide] No cache, calling AI for:', country);
         data = await aiService.getDestinationGuideInfo(country);
-        if (data) {
-          console.log('[DestinationGuide] AI returned data, caching...');
+        if (data && data.currencyCode && Array.isArray(data.emergencyContacts)) {
+          console.log('[DestinationGuide] AI returned valid data, caching...');
           try {
             await cacheSet(cacheKey, JSON.stringify(data));
           } catch (e) {
@@ -123,18 +130,33 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
   }
 
   if (errorMsg || !guideData) {
+    const country = countryName || (survey.destinations && survey.destinations.length > 0 
+      ? survey.destinations[0].country || survey.destinations[0].name 
+      : '泰國');
     return (
       <View style={[styles.container, { justifyContent: 'center', alignItems: 'center', minHeight: 400 }]}>
         <Ionicons name="alert-circle-outline" size={48} color={colors.textTertiary} />
         <Text style={[typography.bodyMedium, { color: colors.textSecondary, marginTop: 16, textAlign: 'center' }]}>
           {errorMsg || '目前沒有可用資料'}
         </Text>
-        <TouchableOpacity 
-          style={{ marginTop: 24, paddingHorizontal: 20, paddingVertical: 10, backgroundColor: colors.primary50, borderRadius: borderRadius.md }}
-          onPress={loadGuideData}
-        >
-          <Text style={[typography.labelMedium, { color: colors.primary700, fontWeight: '700' }]}>重試</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', gap: 12, marginTop: 24 }}>
+          <TouchableOpacity 
+            style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: colors.primary50, borderRadius: borderRadius.md }}
+            onPress={loadGuideData}
+          >
+            <Text style={[typography.labelMedium, { color: colors.primary700, fontWeight: '700' }]}>重試</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={{ paddingHorizontal: 20, paddingVertical: 10, backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.md, borderWidth: 1, borderColor: colors.border }}
+            onPress={async () => {
+              const cacheKey = `@guide_data_${country}`;
+              await cacheSet(cacheKey, '');
+              loadGuideData();
+            }}
+          >
+            <Text style={[typography.labelMedium, { color: colors.textSecondary }]}>清除快取重試</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
