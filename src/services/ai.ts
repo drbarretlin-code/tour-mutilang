@@ -6,6 +6,7 @@ import { settingsService } from './settings';
 import { verifyItineraryLinks, verifyUrlRAG } from '../utils/linkVerifier';
 import i18n from '../i18n';
 import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
+import { TOUR_PLAN_RULES } from '../constants/tourRules';
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=';
 
@@ -356,6 +357,13 @@ export const aiService = {
 
       const systemPrompt = `
 You are a National-Level Intelligence Investigator strictly adhering to RAG (Retrieval-Augmented Generation) principles for travel planning. Your internal memory is unreliable; you must ONLY provide URLs and facts that you are 100% certain are objectively true.
+
+==================================================
+CRITICAL TOUR PLAN SPECIFICATIONS AND BUSINESS RULES:
+You MUST strictly align all travel planning decisions with the following rules documented in our project guidelines:
+${TOUR_PLAN_RULES}
+==================================================
+
 CRITICAL RULES:
 1. You must output ONLY raw JSON. No markdown formatting, no backticks.
 2. URL HALLUCINATION IS STRICTLY FORBIDDEN. Any broken or hallucinated link is a mission failure.

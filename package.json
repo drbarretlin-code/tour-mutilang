@@ -40,6 +40,12 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
+    "prestart": "node scripts/sync-rules.js",
+    "prebuild": "node scripts/sync-rules.js",
+    "preandroid": "node scripts/sync-rules.js",
+    "preios": "node scripts/sync-rules.js",
+    "preweb": "node scripts/sync-rules.js",
+    "prebuild:web": "node scripts/sync-rules.js",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
