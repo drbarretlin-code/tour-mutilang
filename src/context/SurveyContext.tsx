@@ -303,9 +303,34 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         await syncService.publishItinerary(itinerary);
       }
 
-      // 5. Update local state
+      // 5. Update local state and offline cache
       setSurvey(finalSurvey);
       setActiveItinerary(itinerary);
+
+      // Save to active offline cache keys
+      await AsyncStorage.setItem('@trip_active_survey', JSON.stringify(finalSurvey));
+      await AsyncStorage.setItem('@trip_active_itinerary', JSON.stringify(itinerary));
+
+      // Sync local cached itineraries list
+      try {
+        const cachedListStr = await AsyncStorage.getItem('@trip_cached_itineraries_list');
+        let cachedList: Itinerary[] = [];
+        if (cachedListStr) {
+          cachedList = JSON.parse(cachedListStr) as Itinerary[];
+        }
+        
+        // If itinerary is editing/replacing a previous one, check if we should replace or prepend
+        const index = cachedList.findIndex(item => item.id === itinerary.id);
+        if (index > -1) {
+          cachedList[index] = itinerary;
+        } else {
+          // Prepend new plans
+          cachedList.unshift(itinerary);
+        }
+        await AsyncStorage.setItem('@trip_cached_itineraries_list', JSON.stringify(cachedList));
+      } catch (listErr) {
+        console.warn('Failed to sync offline itineraries list:', listErr);
+      }
 
       // Clear local draft
       await AsyncStorage.removeItem(SURVEY_DRAFT_KEY);

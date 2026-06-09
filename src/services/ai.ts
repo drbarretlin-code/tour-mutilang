@@ -450,7 +450,17 @@ CRITICAL RULES:
 - If locale is "es", use Spanish.
 - If locale is "pt", use Portuguese.
 - Default to English if the locale is unrecognized.
-13. COORDINATE RULE: You MUST provide realistic real-world geographic coordinates (latitude and longitude) for every activity's "location" object. Under no circumstances should latitude or longitude be 0 or omitted, as they are directly used for rendering the dynamic route maps and calculate distances. If you don't know the exact coordinates of a specific spot, estimate them based on its parent city/region.`;
+13. COORDINATE RULE: You MUST provide realistic real-world geographic coordinates (latitude and longitude) for every activity's "location" object. Under no circumstances should latitude or longitude be 0 or omitted, as they are directly used for rendering the dynamic route maps and calculate distances. If you don't know the exact coordinates of a specific spot, estimate them based on its parent city/region.
+
+==================================================
+CRITICAL TOUR PLAN SPECIFICATIONS AND BUSINESS RULES WARNING:
+YOU MUST STRICTLY COMPLY WITH ALL TOUR PLAN SPECIFICATIONS AND RULES DEFINED ABOVE:
+1. THE DAILY ACTIVITIES TIME MUST BE STRICTLY WITHIN 08:00 - 21:00. NO ACTIVITY START TIME BEFORE 08:00 OR END TIME AFTER 21:00 (EXCEPT FLIGHT ARRIVALS/DEPARTURES MATCHING FLIGHT ALIGNMENT RULE).
+2. THE AIRPORT AND HOTEL LOOP RULES MUST BE 100% FOLLOWED.
+3. THE OUTPUT TEXTUAL FIELDS MUST BE ALIGNED WITH THE USER'S LOCALE: "${alignedSurvey.locale || 'zh-TW'}".
+4. THE "localTitle" FIELD MUST BE IN DESTINATION'S LOCAL LANGUAGE.
+FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
+==================================================`;
 
       const response = await fetch(`${GEMINI_API_URL}${apiKey}`, {
         method: 'POST',
@@ -693,61 +703,310 @@ CRITICAL RULES:
     const mainDest = survey?.destinations?.[0]?.name || '台北';
     const country = survey?.destinations?.[0]?.country || '台灣';
     const currency = survey?.currency || 'TWD';
+    const locale = survey?.locale || 'zh-TW';
 
     const outgoingFlight = survey?.flights?.find(f => !f.isReturn);
     const returnFlight = survey?.flights?.find(f => f.isReturn);
 
-    // Image & description templates based on popular destinations
-    const getDestTemplates = (dest: string) => {
-      const lower = dest.toLowerCase();
-      if (lower.includes('東京') || lower.includes('tokyo') || lower.includes('日本')) {
-        return {
-          images: [
-            'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=600', // Tokyo Tower
-            'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600', // Shibuya
-            'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600', // Temple
-          ],
-          titles: ['淺草寺與雷門江戶風情', '澀谷十字路口與潮流探索', '明治神宮森呼吸'],
-          descs: [
-            '淺草寺是東京都內歷史最悠久的寺廟，創建於公元628年。其標誌性的巨型紅燈籠「雷門」是江戶文化的象徵，兩側的仲見世通商店街販售各式傳統小吃與工藝品，是體驗日本傳統佛教底蘊的必訪之地。',
-            '澀谷是東京乃至全球時尚與青年文化的發源地。著名的澀谷站前十字路口在綠燈亮起時，成百上千的人潮交織穿梭，極具震撼感。周邊林立著百貨公司、潮流品牌與特色居酒屋。',
-            '明治神宮是為了供奉明治天皇與昭憲皇太后而建的神社。神宮掩映在佔地70公頃的巨大人工森林中，踏入神宮，塵囂頓消，是繁華東京市中心難得的靜謐綠洲與神聖之所。'
-          ]
-        };
+    // 1. 本地多語系對照字典
+    const LOCALIZED_STRINGS: Record<string, any> = {
+      'zh-TW': {
+        arriveAirport: '抵達當地機場',
+        arriveAirportDesc: '順利抵達當地機場，完成通關手續並領取行李。建議您先在機場購買當地的網卡或兌換部分當地貨幣，為接下來的旅程做好準備。',
+        arriveAirportLocName: '國際機場',
+        arriveAirportLocAddress: '機場航廈',
+        airportTransportDesc: '搭乘機場接送專車直達市區，省去搬運行李的麻煩。',
+        airportLink: 'Klook 機場接送預訂',
+        airportNotes: '請備妥入境文件與護照。',
+        airportHours: '24小時開放',
+        departHotel: '從飯店出發',
+        departHotelDesc: '在飯店享用完豐盛的早餐後，整理行囊準備出發。今日行程較為豐富，建議攜帶足夠的飲用水與防曬用品。',
+        hotelName: '精選特色飯店',
+        hotelAddress: '市中心街區',
+        hotelTransportDesc: '搭乘包車前往第一站，當地包車服務安全有保障，司機皆具備良民證。',
+        hotelLink: 'Klook 推薦交通與包車',
+        lunchTitle: '午餐：',
+        lunchDesc: '這家在地私房菜館不僅提供道地的傳統風味，更是當地老饕的首選。每一道菜品背後都有著深厚的家傳淵源，使用每日清晨從市集採購的最新鮮食材製作。AI 根據您的預算級別與飲食偏好為您精選，提供乾淨衛生的用餐環境與豐富的素食、過敏原標示選擇。',
+        lunchLocName: '人氣在地風味館',
+        lunchLocAddress: '美食街區',
+        lunchTransportDesc: '自景點步行約 5 分鐘至捷運站，搭乘捷運至市中心站，出站後由 3 號出口步行即達。',
+        lunchNotes: '午餐時間人潮較多，已為您將時間遷就並避開最擁擠時段。',
+        returnHotel: '返回飯店休息',
+        returnHotelDesc: '結束一整天豐富充實的行程，搭乘交通工具返回溫馨舒適的飯店。您可以先洗去一身的疲憊，或是在飯店周邊的便利商店採買宵夜，為明天的旅程充飽電。',
+        returnHotelTransportDesc: '搭乘包車返回飯店，夜間搭車請隨時留意隨身物品。',
+        grabLink: '當地推薦安全叫車 App',
+        checklistTipTitle: '當地小費與消費習慣',
+        checklistTipContent: '一般餐廳已包含服務費。路邊小吃與市場以現金支付為主，部分商店支援行動支付。',
+        wifiTipTitle: '上網與通訊建議',
+        wifiTipContent: '推薦於機場領取實體 SIM 卡或提前開通 eSIM，在市區內各景點連線訊號極佳。',
+        dayTitle: 'Day {day} - {dest}探索之旅',
+        daySummary: '深度探訪 {dest} 的核心觀光資源，感受當地的獨特氛圍。',
+        itineraryTitle: '{dests} {days} 天智慧之旅',
+        emergencyPolice: '當地觀光警察局',
+        emergencyPoliceDesc: '24小時英文求助專線',
+        emergencyGeneral: '緊急救援專線',
+        mustVisitTitle: '必訪景點：{value}',
+        mustVisitDesc: '這是您在問卷中指定安排的必去景點。這座景點蘊含了深厚的文化底蘊與獨特的歷史背景，是當地最具代表性的地標之一。我們為您安排在上午時段前往，避開了午後擁擠的人潮，讓您能有更充裕的時間細細品味這裡的建築之美與人文風情。建議您可以尋找當地的專業導覽，進一步了解其背後動人的故事與傳說。',
+        refUrlDesc: '（參照您提供的參考網站進行深度遊覽）',
+        refUrlLabel: '使用者參考網站',
+        attractionNotes: '建議穿著舒適好走的鞋子，並攜帶水壺。',
+        activityNotes: '適合拍照留念與挑選伴手禮，可使用行動支付。',
+        classicAttraction: '經典名勝',
+        commercialDistrict: '商圈地標'
+      },
+      'zh-CN': {
+        arriveAirport: '抵达当地机场',
+        arriveAirportDesc: '顺利抵达当地机场，完成通关手续并领取行李。建议您先在机场购买当地的网卡或兑换部分当地货币，为接下来的旅程做好准备。',
+        arriveAirportLocName: '国际机场',
+        arriveAirportLocAddress: '机场航站楼',
+        airportTransportDesc: '搭乘机场接送专车直达市区，省去搬运大件行李的麻烦。',
+        airportLink: 'Klook 机场接送预订',
+        airportNotes: '请备妥入境文件与护照。',
+        airportHours: '24小时开放',
+        departHotel: '从酒店出发',
+        departHotelDesc: '在酒店享用完丰盛的早餐后，整理行囊准备出发。今日行程较为丰富，建议携带足够的饮用水与防晒用品。',
+        hotelName: '精选特色酒店',
+        hotelAddress: '市中心街区',
+        hotelTransportDesc: '搭乘包车前往第一站，当地包车服务安全有保障，司机皆具备良民证。',
+        hotelLink: 'Klook 推荐交通与包车',
+        lunchTitle: '午餐：',
+        lunchDesc: '这家在地私房菜馆不仅提供道地的传统风味，更是当地饕客的首选。每一道菜品背后都有着深厚的家传渊源，使用每日清晨从市集采购最新鲜食材制作。AI 根据您的预算级别与饮食偏好为您精选，提供干净卫生的用餐环境与丰富的素食、过敏原标示选择。',
+        lunchLocName: '人气在地风味馆',
+        lunchLocAddress: '美食街区',
+        lunchTransportDesc: '自景点步行约 5 分钟至捷运站，搭乘捷运至市中心站，出站后由 3 号出口步行即达。',
+        lunchNotes: '午餐时间人潮较多，已为您将时间迁就并避开最拥挤时段。',
+        returnHotel: '返回酒店休息',
+        returnHotelDesc: '结束一整天丰富充实的行程，搭乘交通工具返回温馨舒适的酒店。您可以先洗去一身的疲惫，或是在酒店周边的便利店采买夜宵，为明天的旅程充饱电。',
+        returnHotelTransportDesc: '搭乘包车返回酒店，夜间搭车请随时留意随身物品。',
+        grabLink: '当地推荐安全叫车 App',
+        checklistTipTitle: '当地小费与消费习惯',
+        checklistTipContent: '一般餐厅已包含服务费。路边小吃与市场以现金支付为主，部分商店支持移动支付。',
+        wifiTipTitle: '上网与通讯建议',
+        wifiTipContent: '推荐于机场领取实体 SIM 卡或提前开通 eSIM，在市区内各景点连线信号极佳。',
+        dayTitle: 'Day {day} - {dest}探索之旅',
+        daySummary: '深度探访 {dest} 的核心观光资源，感受当地的独特氛围。',
+        itineraryTitle: '{dests} {days} 天智慧之旅',
+        emergencyPolice: '当地观光警察局',
+        emergencyPoliceDesc: '24小时英文求助专线',
+        emergencyGeneral: '紧急救援专线',
+        mustVisitTitle: '必访景点：{value}',
+        mustVisitDesc: '这是您在问卷中指定安排 of 的必去景点。这座景点蕴含了深厚的文化底蕴与独特的历史背景，是当地最具代表性的地标之一。我们为您安排在上午时段前往，避开了午后拥挤的人潮，让您能有更充裕的时间细细品味这里的建筑之美与人文风情。建议您可以寻找当地的专业导览，进一步了解其背后动人的故事与传说。',
+        refUrlDesc: '（参照您提供的参考网站进行深度游览）',
+        refUrlLabel: '使用者参考网站',
+        attractionNotes: '建议穿着舒适好走的鞋子，并携带水壶。',
+        activityNotes: '适合拍照留念与挑选伴手礼，可使用移动支付。',
+        classicAttraction: '经典名胜',
+        commercialDistrict: '商圈地标'
+      },
+      'en': {
+        arriveAirport: 'Arrive at Airport',
+        arriveAirportDesc: 'Successfully arrived at the airport, completed customs clearance and retrieved baggage. It is recommended to purchase a local SIM card or exchange local currency at the airport to prepare for the trip.',
+        arriveAirportLocName: 'International Airport',
+        arriveAirportLocAddress: 'Airport Terminal',
+        airportTransportDesc: 'Take airport private transfer directly to downtown, avoiding the hassle of carrying heavy luggage.',
+        airportLink: 'Klook Airport Transfer Booking',
+        airportNotes: 'Please prepare entry documents and passport.',
+        airportHours: '24 Hours Open',
+        departHotel: 'Depart from Hotel',
+        departHotelDesc: 'After enjoying a hearty breakfast at the hotel, organize your belongings and prepare to depart. Today\\\'s itinerary is rich, so carrying enough drinking water and sun protection is advised.',
+        hotelName: 'Selected Premium Hotel',
+        hotelAddress: 'Downtown District',
+        hotelTransportDesc: 'Take charter car to the first destination. Local charter services are safe and reliable with background-checked drivers.',
+        hotelLink: 'Klook Recommended Transportation & Charter',
+        lunchTitle: 'Lunch: ',
+        lunchDesc: 'This local hidden gem restaurant serves authentic traditional flavors and is highly favored by local foodies. Every dish has a deep family heritage, using the freshest ingredients sourced daily from local markets. Curated based on your budget level and dietary preferences, providing a clean, hygienic dining environment with vegetarian and allergen labels.',
+        lunchLocName: 'Popular Local Flavor Restaurant',
+        lunchLocAddress: 'Food Street District',
+        lunchTransportDesc: 'Walk about 5 minutes to the metro station, take the transit line to Downtown Station, exit from Gate 3, and walk to the restaurant.',
+        lunchNotes: 'Lunch time can be busy; the schedule is adjusted to avoid peak hours.',
+        returnHotel: 'Return to Hotel',
+        returnHotelDesc: 'After a rich and fulfilling day, return to the comfortable hotel by transport. You can wash away the fatigue or buy late-night snacks at nearby convenience stores to recharge for tomorrow.',
+        returnHotelTransportDesc: 'Take a charter car back to the hotel. Please pay close attention to your belongings during night rides.',
+        grabLink: 'Recommended Local Ride-Hailing App',
+        checklistTipTitle: 'Tipping and Payment',
+        checklistTipContent: 'Service charge is usually included in standard restaurants. Street food and local markets are cash-oriented. Mobile payment is accepted in major stores.',
+        wifiTipTitle: 'Internet and Communication',
+        wifiTipContent: 'Recommended to get a physical SIM card at the airport or pre-activate eSIM. Network signal is excellent at major tourist spots.',
+        dayTitle: 'Day {day} - {dest} Exploration',
+        daySummary: 'Explore the core tourism resources of {dest} and experience the local unique atmosphere.',
+        itineraryTitle: '{dests} {days}-Day Smart Journey',
+        emergencyPolice: 'Tourist Police Department',
+        emergencyPoliceDesc: '24-Hour English Helpline',
+        emergencyGeneral: 'Emergency Rescue Hotline',
+        mustVisitTitle: 'Must-Visit: {value}',
+        mustVisitDesc: 'This is the mandatory spot you specified in the survey. This attraction carries rich cultural heritage and unique history, making it a prominent landmark. Arranged in the morning to avoid afternoon crowds, allowing more time to appreciate its architectural beauty and local vibes. Guided tour is recommended to learn about its stories.',
+        refUrlDesc: '(Explored based on your provided reference website)',
+        refUrlLabel: 'User Reference Website',
+        attractionNotes: 'Comfortable walking shoes and a water bottle are highly recommended.',
+        activityNotes: 'Great for photography and souvenir shopping. Mobile payments are accepted.',
+        classicAttraction: 'Classic Landmark',
+        commercialDistrict: 'Shopping District'
       }
-      if (lower.includes('曼谷') || lower.includes('bangkok') || lower.includes('泰國')) {
-        return {
-          images: [
-            'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600', // Bangkok Temple
-            'https://images.unsplash.com/photo-1562790351-d273a961e0e9?w=600', // Market
-            'https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=600', // River
-          ],
-          titles: ['大皇宮與玉佛寺金碧輝煌', '安帕瓦水上市場熱鬧體驗', '鄭王廟夕陽光輝'],
-          descs: [
-            '大皇宮是曼谷王朝的象徵，自1782年建立起便是暹羅王室的官方官邸。其內部建築融合了泰式傳統與歐式風情，雕樑畫棟、極盡奢華。供奉於玉佛寺的翡翠玉佛更是泰國最崇高的國寶。',
-            '水上市場是泰國古老運河文化的縮影。商家划著裝滿新鮮水果、椰子烤肉的小船在河道上穿梭兜售，空氣中瀰漫著地道泰式調味料的香氣，是體驗泰國常民風情與美食的絕佳去處。',
-            '鄭王廟又稱黎明寺，座落於昭披耶河畔。其主塔高達82米，塔身鑲嵌了無數碎陶瓷與貝殼，在陽光下熠熠生輝。黃昏時分，夕陽將塔影拉長，倒映在河面上，極具詩意。'
-          ]
-        };
-      }
-      
-      // Default: Taipei / general template
-      return {
-        images: [
-          'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=600', // Taipei 101
-          'https://images.unsplash.com/photo-1571474004502-c1def214ac6d?w=600', // Jiufen
-          'https://images.unsplash.com/photo-1555529669-e69e7aa0db9a?w=600', // Night Market
-        ],
-        titles: ['台北 101 與信義商圈俯瞰', '九份老街悲情城市茶香', '士林夜市在地美食巡禮'],
-        descs: [
-          '台北101曾是世界第一高樓，是台灣現代科技的里程碑。搭乘超高速電梯僅需37秒即可直達89樓觀景台，俯瞰台北盆地壯麗的城市天際線，並近距離觀察重達660公噸的風阻尼器巨大鋼球。',
-          '九份是一座依山面海的古老礦業小鎮，因李安導演《悲情城市》與傳聞中神似宮崎駿《神隱少女》場景而聲名大噪。窄小的石階、錯落有致的紅燈籠與茶樓，漫步其間，彷彿時空倒流。',
-          '夜市是台灣最具代表性的飲食文化核心。士林夜市歷史悠久，匯聚了超大雞排、蚵宰煎、大腸包小腸與珍珠奶茶等全球知名的庶民美食，是感受台北夜生活與熱情民風的必選地。'
-        ]
-      };
     };
 
-    const templates = getDestTemplates(mainDest);
+    // 根據語系決定使用的資源包，未支援之語系自動 fallback 至 'en'
+    const strings = LOCALIZED_STRINGS[locale] || LOCALIZED_STRINGS['en'];
+
+    // 2. 景點範本語系與內容對照
+    const getDestTemplates = (dest: string, lang: string) => {
+      const lower = dest.toLowerCase();
+      const isZhCn = lang === 'zh-CN';
+      const isEn = lang !== 'zh-TW' && lang !== 'zh-CN';
+      
+      const isJapan = lower.includes('東京') || lower.includes('tokyo') || lower.includes('日本') || lower.includes('japan');
+      const isThailand = lower.includes('曼谷') || lower.includes('bangkok') || lower.includes('泰國') || lower.includes('thai') || lower.includes('芭達雅') || lower.includes('pattaya');
+
+      if (isJapan) {
+        if (isZhCn) {
+          return {
+            images: [
+              'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=600',
+              'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600',
+              'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600',
+            ],
+            titles: ['浅草寺与雷门江户风情', '涩谷十字路口与潮流探索', '明治神宫森呼吸'],
+            localTitles: ['浅草寺 (雷門)', '渋谷スクランブル交差点', '明治神宮'],
+            descs: [
+              '浅草寺是东京都内历史最悠久的寺庙，创建于公元628年。其标志性的巨型红灯笼“雷门”是江户文化的象征，两侧的仲见世通商店街贩售各式传统小吃与工艺品，是体验日本传统佛教底蕴的必访之地。',
+              '涩谷是东京乃至全球时尚与青年文化的发源地。著名的涩谷站前十字路口在绿灯亮起时，成百上千的人潮交织穿梭，极具震撼感。周边林立着百货公司、潮流品牌与特色居酒屋。',
+              '明治神宫是为了供奉明治天皇与昭宪皇太后而建的神社。神宫掩映在占地70公顷的巨大人工森林中，踏入神宫，尘嚣顿消，是繁华东京市中心难得的静谧绿洲与神圣之所。'
+            ]
+          };
+        } else if (isEn) {
+          return {
+            images: [
+              'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=600',
+              'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600',
+              'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600',
+            ],
+            titles: ['Sensō-ji Temple and Kaminarimon Gate', 'Shibuya Crossing and Trendy Exploration', 'Meiji Jingu Forest Walk'],
+            localTitles: ['浅草寺 (雷門)', '渋谷スクランブル交差点', '明治神宮'],
+            descs: [
+              'Sensō-ji is Tokyo\\\'s oldest temple, founded in 628. Its iconic red lantern at the Kaminarimon Gate symbolizes Edo culture. The Nakamise-dori street is filled with traditional snacks and crafts, making it a must-visit to experience Japan\\\'s Buddhist heritage.',
+              'Shibuya is the birthplace of fashion and youth culture in Tokyo. The famous Shibuya Crossing sees hundreds of people crossing in all directions simultaneously when the lights turn green. Surrounding areas are packed with shopping malls, trend brands, and izakayas.',
+              'Meiji Jingu is a Shinto shrine dedicated to the deified spirits of Emperor Meiji and his consort. Enclosed in a 70-hectare forest, entering the shrine grounds makes you forget the busy city, providing a rare green oasis in Tokyo.'
+            ]
+          };
+        } else {
+          // Default zh-TW
+          return {
+            images: [
+              'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=600',
+              'https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600',
+              'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600',
+            ],
+            titles: ['淺草寺與雷門江戶風情', '澀谷十字路口與潮流探索', '明治神宮森呼吸'],
+            localTitles: ['淺草寺 (雷門)', '渋谷スクランブル交差点', '明治神宮'],
+            descs: [
+              '淺草寺是東京都內歷史最悠久的寺廟，創建於公元628年。其標誌性的巨型紅燈籠「雷門」是江戶文化的象徵，兩側的仲見世通商店街販售各式傳統小吃與工藝品，是體驗日本傳統佛教底蘊的必訪之地。',
+              '澀谷是東京乃至全球時尚與青年文化的發源地。著名的澀谷站前十字路口在綠燈亮起時，成百上千的人潮交織穿梭，極具震撼感。周邊林立著百貨公司、潮流品牌與特色居酒屋。',
+              '明治神宮是為了供奉明治天皇與昭憲皇太后而建的神社。神宮掩映在佔地70公頃的巨大人工森林中，踏入神宮，塵囂頓消，是繁華東京市中心難得的靜謐綠洲與神聖之所。'
+            ]
+          };
+        }
+      }
+
+      if (isThailand) {
+        if (isZhCn) {
+          return {
+            images: [
+              'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600',
+              'https://images.unsplash.com/photo-1562790351-d273a961e0e9?w=600',
+              'https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=600',
+            ],
+            titles: ['大皇宫与玉佛寺金碧辉煌', '安帕瓦水上市场热闹体验', '郑王庙夕阳光辉'],
+            localTitles: ['พระบรมมหาราชวังและวัดพระแก้ว', 'ตลาดน้ำอัมพวา', 'วัดอรุณราชวราราม'],
+            descs: [
+              '大皇宫是曼谷王朝的象征，自1782年建立起便是暹罗王室的官方官邸。其内部建筑融合了泰式传统与欧式风情，雕梁画栋、极尽奢华。供奉于玉佛寺的翡翠玉佛更是泰国最崇高的国宝。',
+              '水上市场是泰国古老运河文化的缩影。商家划着装满新鲜水果、椰子烤肉的小船在河道上穿梭兜售，空气中弥漫着地道泰式调味料的香气，是体验泰国常民风情与美食的绝佳去处。',
+              '郑王庙又称黎明寺，座落于昭批耶河畔。其主塔高达82米，塔身镶嵌了无数碎陶瓷与贝壳，在阳光下熠熠生辉。黄昏时分，夕阳将塔影拉长，倒映在河面上，极具诗意。'
+            ]
+          };
+        } else if (isEn) {
+          return {
+            images: [
+              'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600',
+              'https://images.unsplash.com/photo-1562790351-d273a961e0e9?w=600',
+              'https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=600',
+            ],
+            titles: ['Grand Palace and Temple of the Emerald Buddha', 'Amphawa Floating Market Experience', 'Wat Arun Golden Sunset'],
+            localTitles: ['พระบรมมหาราชวังและวัดพระแก้ว', 'ตลาดน้ำอัมพวา', 'วัดอรุณราชวราราม'],
+            descs: [
+              'The Grand Palace is a complex of buildings at the heart of Bangkok, serving as the official residence of the Kings of Siam since 1782. Its architecture blends traditional Thai and European styles. The Emerald Buddha housed in Wat Phra Kaew is Thailand\\\'s most sacred object.',
+              'The floating markets showcase Thailand\\\'s ancient canal culture. Merchants row small boats laden with fresh fruits and grilled food, selling directly to visitors. The air is filled with authentic Thai seasoning aroma, making it a perfect spot to experience local life.',
+              'Wat Arun, also known as the Temple of Dawn, is situated on the west bank of the Chao Phraya River. Its central prang rises 82 meters high, decorated with colorful porcelain and seashells. At sunset, the golden light reflections on the river are exceptionally poetic.'
+            ]
+          };
+        } else {
+          // Default zh-TW
+          return {
+            images: [
+              'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600',
+              'https://images.unsplash.com/photo-1562790351-d273a961e0e9?w=600',
+              'https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=600',
+            ],
+            titles: ['大皇宮與玉佛寺金碧輝煌', '安帕瓦水上市場熱鬧體驗', '鄭王廟夕陽光輝'],
+            localTitles: ['พระบรมมหาราชวังและวัดพระแก้ว', 'ตลาดน้ำอัมพวา', 'วัดอรุณราชวราราม'],
+            descs: [
+              '大皇宮是曼谷王朝的象徵，自1782年建立起便是暹羅王室的官方官邸。其內部建築融合了泰式傳統與歐式風情，雕樑畫棟、極盡奢華。供奉於玉佛寺的翡翠玉佛更是泰國最崇高的國寶。',
+              '水上市場是泰國古老運河文化的縮影。商家劃著裝滿新鮮水果、椰子烤肉的小船在河道上穿梭兜售，空氣中瀰漫著地道泰式調味料的香氣，是體驗泰國常民風情與美食的絕佳去處。',
+              '鄭王廟又稱黎明寺，座落於昭批耶河畔。其主塔高達82米，塔身鑲嵌了無數碎陶瓷與貝殼，在陽光下熠熠生輝。黃昏時分，夕陽將塔影拉長，倒映在河面上，極具詩意。'
+            ]
+          };
+        }
+      }
+
+      // Default: Taipei / general template
+      if (isZhCn) {
+        return {
+          images: [
+            'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=600',
+            'https://images.unsplash.com/photo-1571474004502-c1def214ac6d?w=600',
+            'https://images.unsplash.com/photo-1555529669-e69e7aa0db9a?w=600',
+          ],
+          titles: ['台北 101 与信义商圈俯瞰', '九份老街悲情城市茶香', '士林夜市在地美食巡礼'],
+          localTitles: ['台北101', '九份老街', '士林夜市'],
+          descs: [
+            '台北101曾是世界第一高楼，是台湾现代科技的里程碑。搭乘超高速电梯仅需37秒即可直达89楼观景台，俯瞰台北盆地壮丽的城市天际线，并近距离观察重达660公吨的风阻尼器巨大钢球。',
+            '九份是一座依山面海的古老矿业小镇，因李安导演《悲情城市》与传闻中神似宫崎骏《千与千寻》场景而声名大噪。窄小的石阶、错落有致的红灯笼与茶楼，漫步其间，仿佛时空倒流。',
+            '夜市是台湾最具代表性的饮食文化核心。士林夜市历史悠久，汇聚了超大鸡排、蚵仔煎、大肠包小肠与珍珠奶茶等全球知名的饭餐美食，是感受台北夜生活与热情民风的必选地。'
+          ]
+        };
+      } else if (isEn) {
+        return {
+          images: [
+            'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=600',
+            'https://images.unsplash.com/photo-1571474004502-c1def214ac6d?w=600',
+            'https://images.unsplash.com/photo-1555529669-e69e7aa0db9a?w=600',
+          ],
+          titles: ['Taipei 101 and Xinyi Shopping District', 'Jiufen Old Street Tea Tasting', 'Shilin Night Market Food Tour'],
+          localTitles: ['台北101', '九份老街', '士林夜市'],
+          descs: [
+            'Taipei 101 was once the tallest building in the world and is a milestone of Taiwan\\\'s modern technology. An ultra-high-speed elevator whisks you to the 89th-floor observatory in just 37 seconds for a breathtaking 360-degree view of Taipei Basin.',
+            'Jiufen is a historic mountainside gold-mining town famous for its atmospheric teahouses and narrow cobblestone alleys. It inspired the film A City of Sadness and draws comparison to Spirited Away scenery.',
+            'Night markets are the core of Taiwan\\\'s culinary culture. Shilin Night Market is historical, serving famous foods like giant fried chicken cutlets, oyster omelets, and bubble tea. A must-visit to experience local life.'
+          ]
+        };
+      } else {
+        // Default zh-TW
+        return {
+          images: [
+            'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=600',
+            'https://images.unsplash.com/photo-1571474004502-c1def214ac6d?w=600',
+            'https://images.unsplash.com/photo-1555529669-e69e7aa0db9a?w=600',
+          ],
+          titles: ['台北 101 與信義商圈俯瞰', '九份老街悲情城市茶香', '士林夜市在地美食巡禮'],
+          localTitles: ['台北101', '九份老街', '士林夜市'],
+          descs: [
+            '台北101曾是世界第一高樓，是台灣現代科技的里程碑。搭乘超高速電梯僅需37秒即可直達89樓觀景台，俯瞰台北盆地壯麗的城市天際線，並近距離觀察重達660公噸的風阻尼器巨大鋼球。',
+            '九份是一座依山面海的古老礦業小鎮，因李安導演《悲情城市》與傳聞中神似宮崎駿《神隱少女》場景而聲名大噪。窄小的石階、錯落有致的紅燈籠與茶樓，漫步其間，彷彿時空倒流。',
+            '夜市是台灣最具代表性的飲食文化核心。士林夜市歷史悠久，匯聚了超大雞排、蚵仔煎、大腸包小腸與珍珠奶茶等全球知名的庶民美食，是感受台北夜生活與熱情民風的必選地。'
+          ]
+        };
+      }
+    };
+
+    const templates = getDestTemplates(mainDest, locale);
 
     // Collect references from user input survey (Attractions / URLs)
     const userMustVisits = survey?.mustVisitAttractions || [];
@@ -768,28 +1027,30 @@ CRITICAL RULES:
       
       // 1. Depart Hotel or Arrive at Airport
       if (i === 0) {
+        const titleText = outgoingFlight ? `${strings.arriveAirport} (${outgoingFlight.flightNumber})` : strings.arriveAirport;
         activities.push({
           id: `act-${i}-start`,
           order: 0,
           startTime: '08:30',
           endTime: '10:00',
-          title: '抵達當地機場',
+          title: titleText,
+          localTitle: outgoingFlight ? `Airport (${outgoingFlight.flightNumber})` : 'Airport',
           type: 'transport',
-          description: '順利抵達當地機場，完成通關手續並領取行李。建議您先在機場購買當地的網卡或兌換部分當地貨幣，為接下來的旅程做好準備。',
+          description: strings.arriveAirportDesc,
           location: {
-            name: `${currentDest.name}國際機場`,
-            address: `${currentDest.name}機場航廈`,
+            name: `${currentDest.name}${strings.arriveAirportLocName}`,
+            address: `${currentDest.name}${strings.arriveAirportLocAddress}`,
             latitude: currentDest.latitude || 0,
             longitude: currentDest.longitude || 0
           },
           duration: 90,
-          transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘機場接送專車直達市區，省去搬運行李的麻煩。' },
-          links: [{ label: 'Klook 機場接送預訂', url: 'https://www.klook.com/', type: 'booking' }],
-          notes: '請備妥入境文件與護照。',
+          transport: { mode: 'charter', duration: 45, distance: 30000, description: strings.airportTransportDesc },
+          links: [{ label: strings.airportLink, url: 'https://www.klook.com/', type: 'booking' }],
+          notes: strings.airportNotes,
           isMustVisit: false,
           photoUrl: 'local-asset://airport_map',
           cost: { amount: 0, currency },
-          openingHours: '24小時開放'
+          openingHours: strings.airportHours
         });
       } else {
         activities.push({
@@ -797,18 +1058,19 @@ CRITICAL RULES:
           order: 0,
           startTime: '08:30',
           endTime: '09:00',
-          title: '從飯店出發',
+          title: strings.departHotel,
+          localTitle: 'Hotel',
           type: 'hotel',
-          description: '在飯店享用完豐盛的早餐後，整理行囊準備出發。今日行程較為豐富，建議攜帶足夠的飲用水與防曬用品。',
+          description: strings.departHotelDesc,
           location: {
-            name: `精選特色飯店`,
-            address: `${currentDest.name}市中心街區`,
+            name: strings.hotelName,
+            address: `${currentDest.name}${strings.hotelAddress}`,
             latitude: currentDest.latitude || 0,
             longitude: currentDest.longitude || 0
           },
           duration: 30,
-          transport: { mode: 'charter', duration: 30, distance: 15000, description: '搭乘包車前往第一站，當地包車服務安全有保障，司機皆具備良民證。' },
-          links: [{ label: 'Klook 泰國包車推薦', url: 'https://www.klook.com/', type: 'booking' }],
+          transport: { mode: 'charter', duration: 30, distance: 15000, description: strings.hotelTransportDesc },
+          links: [{ label: strings.hotelLink, url: 'https://www.klook.com/', type: 'booking' }],
           notes: '',
           isMustVisit: false,
           cost: { amount: 0, currency },
@@ -819,16 +1081,18 @@ CRITICAL RULES:
       // 2. Morning Activity
       const morningIdx = (i * 2) % templates.titles.length;
       let morningTitle = templates.titles[morningIdx]!;
+      let morningLocalTitle = templates.localTitles[morningIdx]!;
       let morningDesc = templates.descs[morningIdx]!;
       let morningPhoto = templates.images[morningIdx]!;
       let morningLinks = [];
 
       if (matchedMust) {
-        morningTitle = `必訪景點：${matchedMust.value}`;
-        morningDesc = `這是您在問卷中指定安排的必去景點。${templates.descs[0]} \n\n這座景點蘊含了深厚的文化底蘊與獨特的歷史背景，是當地最具代表性的地標之一。我們為您安排在上午時段前往，避開了午後擁擠的人潮，讓您能有更充裕的時間細細品味這裡的建築之美與人文風情。建議您可以尋找當地的專業導覽，進一步了解其背後動人的故事與傳說。`;
+        morningTitle = strings.mustVisitTitle.replace('{value}', matchedMust.value);
+        morningLocalTitle = matchedMust.value;
+        morningDesc = strings.mustVisitDesc.replace('{value}', matchedMust.value);
         if (matchedMust.type === 'url' && matchedMust.value.startsWith('http')) {
           morningLinks.push({
-            label: '您的參考網站',
+            label: strings.refUrlLabel,
             url: matchedMust.value,
             type: 'info' as const
           });
@@ -836,9 +1100,9 @@ CRITICAL RULES:
       } else if (userReferences[i]) {
         const ref = userReferences[i]!;
         if (ref.type === 'url' && ref.value.startsWith('http')) {
-          morningDesc = `（參照您提供的參考網站進行深度遊覽）${morningDesc} \n\n這座景點蘊含了深厚的文化底蘊與獨特的歷史背景，是當地最具代表性的地標之一。我們為您安排在上午時段前往，避開了午後擁擠的人潮，讓您能有更充裕的時間細細品味這裡的建築之美與人文風情。`;
+          morningDesc = `${strings.refUrlDesc} ${morningDesc}`;
           morningLinks.push({
-            label: ref.fileName || '使用者參考網站',
+            label: ref.fileName || strings.refUrlLabel,
             url: ref.value,
             type: 'info' as const
           });
@@ -851,17 +1115,18 @@ CRITICAL RULES:
         startTime: matchedMust?.preferredTime || '09:00',
         endTime: '11:30',
         title: morningTitle,
+        localTitle: morningLocalTitle,
         type: 'attraction',
         description: morningDesc,
         location: {
-          name: matchedMust?.value || `${currentDest.name}經典名勝`,
+          name: matchedMust?.value || `${currentDest.name}${strings.classicAttraction}`,
           address: `${currentDest.name}`,
           latitude: currentDest.latitude || 0,
           longitude: currentDest.longitude || 0
         },
         duration: 150,
         links: morningLinks,
-        notes: '建議穿著舒適好走的鞋子，並攜帶水壺。',
+        notes: strings.attractionNotes,
         isMustVisit: !!matchedMust,
         photoUrl: morningPhoto,
         rating: 4.8,
@@ -870,27 +1135,33 @@ CRITICAL RULES:
       });
 
       // 3. Afternoon Activity (Restaurant)
-      const lunchTitles = ['在地推薦人氣私房菜', '文青風特色咖啡廳輕食', '老字號經典道地小吃', '米其林必比登推薦餐廳'];
-      const currentLunchTitle = lunchTitles[i % lunchTitles.length];
+      const lunchTitles: Record<string, string[]> = {
+        'zh-TW': ['在地推薦人氣私房菜', '文青風特色咖啡廳輕食', '老字號經典道地小吃', '米其林必比登推薦餐廳'],
+        'zh-CN': ['在地推荐人气私房菜', '文青风特色咖啡厅轻食', '老字号经典道地小吃', '米其林必比登推荐餐厅'],
+        'en': ['Local Recommended Restaurant', 'Trendy Boutique Cafe', 'Classic Traditional Eatery', 'Michelin Bib Gourmand Selection']
+      };
+      const activeLunchTitles = lunchTitles[locale] || lunchTitles['en'];
+      const currentLunchTitle = activeLunchTitles[i % activeLunchTitles.length];
       
       activities.push({
         id: `act-${i}-2`,
         order: 2,
         startTime: '12:00',
         endTime: '13:30',
-        title: `午餐：${currentLunchTitle}`,
+        title: `${strings.lunchTitle}${currentLunchTitle}`,
+        localTitle: 'Local Restaurant',
         type: 'restaurant',
-        description: `這家在地私房菜館不僅提供道地的傳統風味，更是當地老饕的首選。每一道菜品背後都有著深厚的家傳淵源，使用每日清晨從市集採購的最新鮮食材製作。AI 根據您的預算級別（${survey?.budgetLevel || '中等'}）與飲食偏好為您精選，提供乾淨衛生的用餐環境與豐富的素食、過敏原標示選擇。`,
+        description: strings.lunchDesc,
         location: {
-          name: '人氣在地風味館',
-          address: `${currentDest.name}美食街區`,
+          name: strings.lunchLocName,
+          address: `${currentDest.name}${strings.lunchLocAddress}`,
           latitude: currentDest.latitude || 0,
           longitude: currentDest.longitude || 0
         },
         duration: 90,
-        transport: { mode: 'public', duration: 15, distance: 2000, description: '自景點步行約 5 分鐘至捷運站，搭乘淺綠線至市中心站，出站後由 3 號出口步行即達。' },
+        transport: { mode: 'public', duration: 15, distance: 2000, description: strings.lunchTransportDesc },
         links: [],
-        notes: '午餐時間人潮較多，已為您將時間挪移避開最擁擠時段。',
+        notes: strings.lunchNotes,
         isMustVisit: false,
         photoUrl: templates.images[2],
         rating: 4.7,
@@ -901,6 +1172,7 @@ CRITICAL RULES:
       // 4. Late Afternoon Activity (Sightseeing / Shopping)
       const afternoonIdx = (i * 2 + 1) % templates.titles.length;
       const afternoonTitle = templates.titles[afternoonIdx]!;
+      const afternoonLocalTitle = templates.localTitles[afternoonIdx]!;
       const afternoonDesc = templates.descs[afternoonIdx]!;
       
       activities.push({
@@ -909,17 +1181,18 @@ CRITICAL RULES:
         startTime: '14:30',
         endTime: '17:30',
         title: afternoonTitle,
+        localTitle: afternoonLocalTitle,
         type: 'activity',
-        description: `${afternoonDesc} \n\n這裡不僅是購物的絕佳去處，更是體驗當地常民生活脈動的最佳櫥窗。穿梭在琳琅滿目的特色小舖間，您可以發掘許多獨一無二的手工藝品與原創設計。我們特別為您預留了充足的時間，讓您可以悠閒地在此散步、拍照，並在充滿異國情調的咖啡館裡享受一個美好的下午茶時光。`,
+        description: afternoonDesc,
         location: {
-          name: `${currentDest.name}商圈地標`,
+          name: `${currentDest.name}${strings.commercialDistrict}`,
           address: `${currentDest.name}`,
           latitude: currentDest.latitude || 0,
           longitude: currentDest.longitude || 0
         },
         duration: 180,
         links: [],
-        notes: '適合拍照留念與挑選伴手禮，可使用行動支付。',
+        notes: strings.activityNotes,
         isMustVisit: false,
         photoUrl: templates.images[afternoonIdx],
         rating: 4.9,
@@ -929,28 +1202,30 @@ CRITICAL RULES:
 
       // 5. Return to Hotel or Depart to Airport
       if (i === dayCount - 1) {
+        const titleText = returnFlight ? `${strings.arriveAirport} (${returnFlight.flightNumber})` : strings.arriveAirport;
         activities.push({
           id: `act-${i}-end`,
           order: 4,
           startTime: '18:00',
           endTime: '20:00',
-          title: '抵達機場準備返國',
+          title: titleText,
+          localTitle: returnFlight ? `Airport (${returnFlight.flightNumber})` : 'Airport',
           type: 'transport',
-          description: '帶著滿滿的美好回憶，抵達機場準備搭機返國。建議您預留足夠的時間辦理退稅手續，並在免稅店做最後的採購。',
+          description: strings.arriveAirportDesc,
           location: {
-            name: `${currentDest.name}國際機場`,
-            address: `${currentDest.name}機場航廈`,
+            name: `${currentDest.name}${strings.arriveAirportLocName}`,
+            address: `${currentDest.name}${strings.arriveAirportLocAddress}`,
             latitude: currentDest.latitude || 0,
             longitude: currentDest.longitude || 0
           },
           duration: 120,
-          transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘包車前往機場，請務必再三確認護照與隨身行李是否帶齊。' },
-          links: [{ label: '當地推薦安全叫車 App', url: 'https://www.grab.com/', type: 'info' }],
-          notes: '請提早2-3小時抵達機場。',
+          transport: { mode: 'charter', duration: 45, distance: 30000, description: strings.returnHotelTransportDesc },
+          links: [{ label: strings.grabLink, url: 'https://www.grab.com/', type: 'info' }],
+          notes: returnFlight ? `航班時間：${returnFlight.departureTime}。請務必再三確認護照與隨身行李是否帶齊。` : strings.airportNotes,
           isMustVisit: false,
           photoUrl: 'local-asset://airport_map',
           cost: { amount: 0, currency },
-          openingHours: '24小時開放'
+          openingHours: strings.airportHours
         });
       } else {
         activities.push({
@@ -958,18 +1233,19 @@ CRITICAL RULES:
           order: 4,
           startTime: '18:00',
           endTime: '18:30',
-          title: '返回飯店休息',
+          title: strings.returnHotel,
+          localTitle: 'Hotel',
           type: 'hotel',
-          description: '結束一整天豐富充實的行程，搭乘交通工具返回溫馨舒適的飯店。您可以先洗去一身的疲憊，或是在飯店周邊的便利商店採買宵夜，為明天的旅程充飽電。',
+          description: strings.returnHotelDesc,
           location: {
-            name: `精選特色飯店`,
-            address: `${currentDest.name}市中心街區`,
+            name: strings.hotelName,
+            address: `${currentDest.name}${strings.hotelAddress}`,
             latitude: currentDest.latitude || 0,
             longitude: currentDest.longitude || 0
           },
           duration: 30,
-          transport: { mode: 'charter', duration: 30, distance: 15000, description: '搭乘包車返回飯店，夜間搭車請隨時留意隨身物品。' },
-          links: [{ label: '當地推薦安全叫車 App', url: 'https://www.grab.com/', type: 'info' }],
+          transport: { mode: 'charter', duration: 30, distance: 15000, description: strings.returnHotelTransportDesc },
+          links: [{ label: strings.grabLink, url: 'https://www.grab.com/', type: 'info' }],
           notes: '',
           isMustVisit: false,
           cost: { amount: 0, currency },
@@ -977,9 +1253,9 @@ CRITICAL RULES:
         });
       }
 
-      // Fallback 航班時間對齊校正
+      // 3. Fallback 航班時間對齊校正
       if (i === 0) {
-        // 第一天 forward correction
+        // 第一天去程對齊
         const arrTime = outgoingFlight ? outgoingFlight.arrivalTime : '08:30';
         const arrEndTime = addMinutesToTime(arrTime, 90);
         const firstAct = activities[0];
@@ -987,12 +1263,9 @@ CRITICAL RULES:
           firstAct.startTime = arrTime;
           firstAct.endTime = arrEndTime;
           firstAct.duration = 90;
-          if (outgoingFlight) {
-            firstAct.title = `抵達當地機場 (${outgoingFlight.flightNumber})`;
-          }
         }
 
-        // 後續活動順延
+        // 順延
         for (let idx = 1; idx < activities.length; idx++) {
           const prev = activities[idx - 1];
           const curr = activities[idx];
@@ -1005,7 +1278,7 @@ CRITICAL RULES:
           }
         }
       } else if (i === dayCount - 1) {
-        // 最後一天 backward correction
+        // 最後一天回程對齊
         const depTime = returnFlight ? returnFlight.departureTime : '18:00';
         const airportStart = subMinutesFromTime(depTime, 150);
         const lastAct = activities[activities.length - 1];
@@ -1013,13 +1286,9 @@ CRITICAL RULES:
           lastAct.startTime = airportStart;
           lastAct.endTime = depTime;
           lastAct.duration = 150;
-          if (returnFlight) {
-            lastAct.title = `抵達機場準備返航 (${returnFlight.flightNumber})`;
-            lastAct.notes = `航班時間：${depTime}。請務必再三確認護照與隨身行李是否帶齊。`;
-          }
         }
 
-        // 前序活動前推
+        // 前推
         let targetEnd = airportStart;
         const remainingActivities = activities.slice(0, -1);
         for (let idx = remainingActivities.length - 1; idx >= 0; idx--) {
@@ -1034,7 +1303,7 @@ CRITICAL RULES:
           targetEnd = act.startTime;
         }
 
-        // 過濾時間太早的中間活動
+        // 過濾早於 07:30 的中間活動
         const filteredActs = activities.filter((act, idx) => {
           if (idx === 0 || idx === activities.length - 1) return true;
           return act.startTime >= '07:30';
@@ -1048,50 +1317,61 @@ CRITICAL RULES:
         activities.push(...filteredActs);
       }
 
+      // 4. 強制執行嚴格的 08:00 - 21:00 每日活動時間校正自癒
+      const clampedActivities = clampFallbackItineraryTimes(activities);
+
+      // 5. 構建每日行程資料
+      const dayTitleTemplate = strings.dayTitle.replace('{day}', String(i + 1)).replace('{dest}', currentDest.name);
+      const daySummaryTemplate = strings.daySummary.replace('{dest}', currentDest.name);
+
       days.push({
         dayNumber: i + 1,
         date: dateStr,
-        title: `Day ${i + 1} - ${currentDest.name}探索之旅`,
-        summary: `深度探訪 ${currentDest.name} 的核心觀光資源，感受當地的獨特氛圍。`,
+        title: dayTitleTemplate,
+        summary: daySummaryTemplate,
         region: currentDest.name,
         estimatedCost: {
           amount: (survey?.dailyMealBudget || 800) * ((survey?.travelers?.adults || 2) + (survey?.travelers?.children || []).length),
           currency
         },
         walkingDistance: 5400,
-        activities,
+        activities: clampedActivities,
         hotel: {
-          name: `精選特色${survey?.accommodationType?.[0] || '飯店'}`,
-          address: `${currentDest.name}市中心街區`,
+          name: strings.hotelName,
+          address: `${currentDest.name}${strings.hotelAddress}`,
           bookingUrl: survey?.customBookingUrl || undefined
         },
         localTips: [
           {
             category: 'tipping',
-            title: '當地小費與消費習慣',
-            content: '一般餐廳已包含服務費。路邊小吃與市場以現金支付為主，部分商店支援街口/Line Pay。'
+            title: strings.checklistTipTitle,
+            content: strings.checklistTipContent
           },
           {
             category: 'wifi',
-            title: '上網與通訊建議',
-            content: '推薦於機場領取實體 SIM 卡或提前開通 eSIM，在市區內各景點連線訊號極佳。'
+            title: strings.wifiTipTitle,
+            content: strings.wifiTipContent
           }
         ]
       });
     }
 
+    const titleTemplate = strings.itineraryTitle
+      .replace('{dests}', survey.destinations.map(d => d.name).join(' & '))
+      .replace('{days}', String(dayCount));
+
     const generatedItinerary: Itinerary = {
       id: `itinerary-${Date.now().toString(36)}`,
       surveyId: survey.id,
       userId: survey.userId,
-      title: `${survey.destinations.map(d => d.name).join(' & ')} ${dayCount} 天智慧之旅`,
+      title: titleTemplate,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       status: 'ready',
       days,
       emergencyContacts: [
-        { label: '當地觀光警察局', number: '1155', description: '24小時英文求助專線' },
-        { label: '緊急求難專線', number: '119' }
+        { label: strings.emergencyPolice, number: '1155', description: strings.emergencyPoliceDesc },
+        { label: strings.emergencyGeneral, number: '119' }
       ],
       totalEstimatedCost: {
         amount: days.reduce((acc, d) => acc + d.estimatedCost.amount, 0),
@@ -1103,7 +1383,6 @@ CRITICAL RULES:
     healItineraryCoordinates(generatedItinerary, survey);
     return generatedItinerary;
   },
-
   async analyzeBatchUrls(urlsText: string, itinerary?: Itinerary | null): Promise<any> {
     const itineraryContext = itinerary && itinerary.days 
       ? `\n**既有行程摘要**：\n${JSON.stringify(
@@ -1409,6 +1688,96 @@ CRITICAL RULES:
   }
 
   return alternatives.slice(0, 3);
+}
+
+function clampFallbackItineraryTimes(activities: Activity[]): Activity[] {
+  if (activities.length === 0) return activities;
+
+  const ABSOLUTE_START = '08:00';
+  const ABSOLUTE_END = '21:00';
+
+  // 1. Force first activity startTime to be at least 08:00
+  let firstAct = activities[0];
+  if (firstAct.startTime < ABSOLUTE_START) {
+    const dur = firstAct.duration || 60;
+    firstAct.startTime = ABSOLUTE_START;
+    firstAct.endTime = addMinutesToTime(ABSOLUTE_START, dur);
+  } else if (firstAct.startTime > ABSOLUTE_END) {
+    firstAct.startTime = '20:00';
+    firstAct.endTime = ABSOLUTE_END;
+    firstAct.duration = 60;
+  }
+
+  // 2. Align subsequent activities forward
+  for (let idx = 1; idx < activities.length; idx++) {
+    const prev = activities[idx - 1];
+    const curr = activities[idx];
+    const transDuration = prev.transport?.duration || 15;
+    const earliestStart = addMinutesToTime(prev.endTime, transDuration);
+    if (curr.startTime < earliestStart) {
+      const duration = curr.duration || 60;
+      curr.startTime = earliestStart;
+      curr.endTime = addMinutesToTime(earliestStart, duration);
+    }
+  }
+
+  // 3. Backward correction from the last activity if it exceeds 21:00
+  let lastAct = activities[activities.length - 1];
+  if (lastAct.endTime > ABSOLUTE_END) {
+    lastAct.endTime = ABSOLUTE_END;
+    const dur = lastAct.duration || 60;
+    lastAct.startTime = subMinutesFromTime(ABSOLUTE_END, dur);
+  }
+
+  // 4. Align backwards to prevent overlap
+  let targetEnd = lastAct.startTime;
+  for (let idx = activities.length - 2; idx >= 0; idx--) {
+    const act = activities[idx];
+    const transDuration = act.transport?.duration || 15;
+    const latestEnd = subMinutesFromTime(targetEnd, transDuration);
+    if (act.endTime > latestEnd) {
+      act.endTime = latestEnd;
+      const duration = act.duration || 60;
+      act.startTime = subMinutesFromTime(latestEnd, duration);
+    }
+    targetEnd = act.startTime;
+  }
+
+  // 5. If backwards push makes the first activity start before 08:00, compress durations
+  if (firstAct.startTime < ABSOLUTE_START) {
+    firstAct.startTime = ABSOLUTE_START;
+    const firstDur = Math.max(30, firstAct.duration || 60);
+    firstAct.endTime = addMinutesToTime(ABSOLUTE_START, firstDur);
+    firstAct.duration = firstDur;
+
+    for (let idx = 1; idx < activities.length; idx++) {
+      const prev = activities[idx - 1];
+      const curr = activities[idx];
+      const transDuration = prev.transport?.duration || 15;
+      const earliestStart = addMinutesToTime(prev.endTime, transDuration);
+      curr.startTime = earliestStart;
+      
+      const [currH, currM] = earliestStart.split(':').map(Number);
+      const remainingMinutes = (21 * 60) - ((currH || 0) * 60 + (currM || 0));
+      let allowedDur = curr.duration || 60;
+      
+      if (allowedDur > remainingMinutes) {
+        allowedDur = Math.max(30, remainingMinutes);
+      }
+      
+      curr.duration = allowedDur;
+      curr.endTime = addMinutesToTime(earliestStart, allowedDur);
+    }
+  }
+
+  // 6. Clean up: filter out any activity starting after 21:00 and reorder
+  const validActs = activities.filter(act => act.startTime <= ABSOLUTE_END);
+  validActs.forEach((act, idx) => {
+    act.order = idx;
+    act.duration = typeof act.duration === 'string' ? parseInt(act.duration, 10) : act.duration;
+  });
+
+  return validActs;
 }
 
 function addMinutesToTime(timeStr: string, minutes: number): string {

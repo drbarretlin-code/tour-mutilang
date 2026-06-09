@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { View, StyleSheet, ActivityIndicator, FlatList, Text, TouchableOpacity, Alert, Platform, Image, TextInput, Switch, Linking, ScrollView } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../src/context/AuthContext';
 import { useTheme } from '../src/context/ThemeContext';
 import { useSurvey } from '../src/context/SurveyContext';
@@ -13,6 +14,8 @@ import { ItineraryCard } from '../src/components/dashboard/ItineraryCard';
 import { t } from '../src/i18n';
 import { LanguagePicker } from '../src/components/common/LanguagePicker';
 import { useLanguage } from '../src/context/LanguageContext';
+
+const OFFLINE_ITINERARIES_LIST_KEY = '@trip_cached_itineraries_list';
 
 export default function HomeDashboard() {
   const { user, loading: authLoading, logout } = useAuth();
@@ -49,25 +52,48 @@ export default function HomeDashboard() {
     });
   }, []);
 
-  // Fetch itineraries when the screen comes into focus
+  // Fetch itineraries when the screen comes into focus - Offline-first loading
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-      if (user) {
+
+      const loadCachedAndFresh = async () => {
         setLoadingList(true);
-        dbService.getUserItineraries(user.uid)
-          .then(data => {
+        
+        // 1. Load from Local Cache first (Instant Offline UX)
+        try {
+          const cached = await AsyncStorage.getItem(OFFLINE_ITINERARIES_LIST_KEY);
+          if (cached && isActive) {
+            const parsed = JSON.parse(cached) as Itinerary[];
+            setItineraries(parsed);
+          }
+        } catch (cacheErr) {
+          console.warn('[HomeDashboard] Failed to load cached itineraries:', cacheErr);
+        }
+
+        // 2. Fetch fresh data from Firestore if user is present
+        if (user) {
+          try {
+            const data = await dbService.getUserItineraries(user.uid);
             if (isActive) {
               const sorted = data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
               setItineraries(sorted);
-              setLoadingList(false);
+              
+              // Persist locally for offline fallback
+              await AsyncStorage.setItem(OFFLINE_ITINERARIES_LIST_KEY, JSON.stringify(sorted));
             }
-          })
-          .catch(err => {
-            console.error('Failed to fetch itineraries:', err);
-            if (isActive) setLoadingList(false);
-          });
-      }
+          } catch (dbErr) {
+            console.warn('[HomeDashboard] Firestore fetch failed (falling back to cache):', dbErr);
+          }
+        }
+        
+        if (isActive) {
+          setLoadingList(false);
+        }
+      };
+
+      loadCachedAndFresh();
+
       return () => { isActive = false; };
     }, [user])
   );
