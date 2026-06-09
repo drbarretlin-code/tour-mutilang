@@ -44,7 +44,54 @@ export function ExpenseSplitter({ itinerary, survey }: ExpenseSplitterProps) {
   const [expensePaidBy, setExpensePaidBy] = useState('');
   const [expenseSplitWith, setExpenseSplitWith] = useState<string[]>([]);
 
+  // Currency converter states
+  const [isForeignCurrency, setIsForeignCurrency] = useState(false);
+  const [foreignAmount, setForeignAmount] = useState('');
+  const [exchangeRate, setExchangeRate] = useState('0.90'); // 預設 1 THB = 0.90 TWD
+  const [exchangeRateStatus, setExchangeRateStatus] = useState('預設匯率: 1 THB = 0.9 TWD');
+
   const EXPENSES_KEY = `@expenses_${itinerary.id}`;
+
+  // 背景獲取即時泰銖對台幣匯率
+  useEffect(() => {
+    if (showAddExpense) {
+      setIsForeignCurrency(false);
+      setForeignAmount('');
+      setExchangeRate('0.90');
+      setExchangeRateStatus('正在載入最新匯率...');
+      
+      fetch('https://open.er-api.com/v6/latest/THB')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.rates && data.rates.TWD) {
+            const rate = data.rates.TWD;
+            setExchangeRate(rate.toFixed(4));
+            setExchangeRateStatus(`已獲取今日即時匯率: 1 THB = ${rate.toFixed(2)} TWD`);
+          } else {
+            setExchangeRate('0.90');
+            setExchangeRateStatus('無台幣匯率資料，使用預設: 1 THB = 0.9 TWD');
+          }
+        })
+        .catch(err => {
+          console.warn('Failed to fetch live exchange rate, using default.', err);
+          setExchangeRate('0.90');
+          setExchangeRateStatus('離線/載入失敗，使用預設匯率: 1 THB = 0.9 TWD');
+        });
+    }
+  }, [showAddExpense]);
+
+  // 外幣金額與匯率改變時，自動換算台幣
+  useEffect(() => {
+    if (isForeignCurrency) {
+      const famount = parseFloat(foreignAmount);
+      const rate = parseFloat(exchangeRate);
+      if (!isNaN(famount) && !isNaN(rate) && famount > 0 && rate > 0) {
+        setExpenseAmount(Math.round(famount * rate).toString());
+      } else {
+        setExpenseAmount('');
+      }
+    }
+  }, [foreignAmount, exchangeRate, isForeignCurrency]);
   const COMPANIONS_KEY = `@companions_${itinerary.id}`;
 
   // Initialize companions and expenses
@@ -410,12 +457,97 @@ export function ExpenseSplitter({ itinerary, survey }: ExpenseSplitterProps) {
                 onChangeText={setExpenseTitle}
               />
 
+              {/* 外幣換算切換 */}
+              <TouchableOpacity
+                onPress={() => setIsForeignCurrency(!isForeignCurrency)}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: spacing.md,
+                  marginBottom: spacing.xs
+                }}
+              >
+                <Ionicons
+                  name={isForeignCurrency ? "checkbox" : "square-outline"}
+                  size={18}
+                  color={isForeignCurrency ? colors.primary500 : colors.textTertiary}
+                  style={{ marginRight: 8 }}
+                />
+                <Text style={[typography.labelMedium, { color: colors.text, fontWeight: '700' }]}>
+                  輸入泰銖 (THB) 外幣金額換算台幣
+                </Text>
+              </TouchableOpacity>
+
+              {isForeignCurrency && (
+                <View style={{
+                  padding: spacing.md,
+                  backgroundColor: colors.backgroundSecondary,
+                  borderColor: colors.border,
+                  borderWidth: 1,
+                  borderRadius: borderRadius.md,
+                  marginBottom: spacing.xs
+                }}>
+                  <Text style={[typography.caption, { color: colors.textSecondary, marginBottom: 8, fontWeight: '600' }]}>
+                    {exchangeRateStatus}
+                  </Text>
+                  <View style={{ flexDirection: 'row', gap: 12, marginBottom: 8 }}>
+                    {/* 外幣金額 */}
+                    <View style={{ flex: 1 }}>
+                      <Text style={[typography.caption, { color: colors.textSecondary, marginBottom: 4 }]}>泰銖金額 (฿)</Text>
+                      <TextInput
+                        style={{
+                          height: 40,
+                          borderWidth: 1,
+                          borderColor: colors.border,
+                          backgroundColor: colors.background,
+                          color: colors.text,
+                          borderRadius: borderRadius.sm,
+                          paddingHorizontal: 12,
+                          fontSize: 14
+                        }}
+                        placeholder="例如: 1500"
+                        placeholderTextColor={colors.textTertiary}
+                        keyboardType="numeric"
+                        value={foreignAmount}
+                        onChangeText={setForeignAmount}
+                      />
+                    </View>
+                    {/* 自訂匯率 */}
+                    <View style={{ flex: 1 }}>
+                      <Text style={[typography.caption, { color: colors.textSecondary, marginBottom: 4 }]}>自訂匯率 (THB to TWD)</Text>
+                      <TextInput
+                        style={{
+                          height: 40,
+                          borderWidth: 1,
+                          borderColor: colors.border,
+                          backgroundColor: colors.background,
+                          color: colors.text,
+                          borderRadius: borderRadius.sm,
+                          paddingHorizontal: 12,
+                          fontSize: 14
+                        }}
+                        placeholder="匯率"
+                        keyboardType="numeric"
+                        value={exchangeRate}
+                        onChangeText={setExchangeRate}
+                      />
+                    </View>
+                  </View>
+                  {expenseAmount !== '' && (
+                    <Text style={[typography.caption, { color: colors.primary500, fontWeight: '800' }]}>
+                      💰 換算後金額：{expenseAmount} {survey.currency}
+                    </Text>
+                  )}
+                </View>
+              )}
+
               <Input
                 label={t('itinerary.expenseSplitter.modal.fields.amountLabel', { currency: survey.currency })}
                 placeholder={t('itinerary.expenseSplitter.modal.fields.amountPlaceholder')}
                 keyboardType="numeric"
                 value={expenseAmount}
                 onChangeText={setExpenseAmount}
+                editable={!isForeignCurrency} // 外幣換算時唯讀
                 containerStyle={{ marginTop: spacing.md }}
               />
 

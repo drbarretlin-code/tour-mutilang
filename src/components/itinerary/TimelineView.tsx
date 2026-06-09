@@ -90,6 +90,7 @@ export function TimelineView({
 
   // Local state to track notes input before saving
   const [localNotes, setLocalNotes] = useState<Record<string, string>>({});
+  const [expandedTerminalMap, setExpandedTerminalMap] = useState<Record<string, boolean>>({});
 
   const handleNoteChange = (id: string, text: string) => {
     setLocalNotes(prev => ({ ...prev, [id]: text }));
@@ -225,13 +226,48 @@ export function TimelineView({
                       {t('itinerary.timelineView.endOfDay.tonightStay', { hotelName: act.location?.name || t('itinerary.timelineView.endOfDay.yourHotel') })}
                     </Text>
 
-                    {act.photoUrl === 'local-asset://airport_map' && (
-                      <View style={{ marginTop: 12, backgroundColor: '#F1F5F9', borderRadius: 8, overflow: 'hidden', padding: 8 }}>
-                        <Image 
-                          source={require('../../../assets/images/airport_terminal_map.png')} 
-                          style={{ width: '100%', height: 450, resizeMode: 'contain' }} 
-                        />
-                        <Text style={[typography.caption, { color: '#64748B', textAlign: 'center', marginTop: 8 }]}>{t('itinerary.timelineView.endOfDay.airportMapHint')}</Text>
+                    {(act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport')) && (
+                      <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: 12 }}>
+                        <TouchableOpacity
+                          onPress={() => setExpandedTerminalMap(prev => ({ ...prev, [act.id]: !prev[act.id] }))}
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 8,
+                            paddingVertical: 10,
+                            paddingHorizontal: 16,
+                            backgroundColor: colors.backgroundSecondary,
+                            borderColor: colors.border,
+                            borderWidth: 1,
+                            borderRadius: borderRadius.md,
+                          }}
+                        >
+                          <Ionicons name="airplane-outline" size={16} color={colors.primary500} />
+                          <Text style={[typography.labelMedium, { color: colors.primary500, fontWeight: '700' }]}>
+                            {expandedTerminalMap[act.id] ? '收起航站大廳導覽圖 ▴' : '🗺️ 展開航站大廳導覽圖 (BKK Airport) ▾'}
+                          </Text>
+                        </TouchableOpacity>
+
+                        {expandedTerminalMap[act.id] && (
+                          <View style={{ marginTop: 10, backgroundColor: colors.backgroundSecondary, borderColor: colors.border, borderWidth: 1, borderRadius: borderRadius.md, padding: 12 }}>
+                            <Text style={[typography.labelSmall, { color: colors.text, fontWeight: '700', marginBottom: 8 }]}>
+                              {day.dayNumber === 1 ? '🇹🇭 曼谷蘇凡納布機場 (BKK) 入境大廳指引 (Level 2)' : '🇹🇭 曼谷蘇凡納布機場 (BKK) 出境大廳指引 (Level 4)'}
+                            </Text>
+                            <View style={{ borderRadius: borderRadius.sm, overflow: 'hidden', borderWidth: 1, borderColor: colors.border, backgroundColor: '#FFFFFF' }}>
+                              <Image 
+                                source={require('../../../assets/images/airport_terminal_map.png')} 
+                                style={{ width: '100%', height: 350, resizeMode: 'contain' }} 
+                              />
+                            </View>
+                            <Text style={[typography.caption, { color: colors.textSecondary, marginTop: 8, lineHeight: 18 }]}>
+                              {day.dayNumber === 1 
+                                ? '💡 抵達指引：下飛機後順著「Immigration (入境)」指標前進，至 Level 2 辦理入境與行李提取。提取行李後，出口位於 Level 2 大廳。若欲搭乘機場快線 (ARL)，請搭手扶梯下至 B1 層。'
+                                : '💡 離境指引：專車或 Grab 將在 Level 4 離境大廳入口停靠。進入航廈後請尋找對應航空公司的 Check-in 櫃檯辦理登機。安檢與證照查驗位於 Level 4 後方中央。'
+                              }
+                            </Text>
+                          </View>
+                        )}
                       </View>
                     )}
 
@@ -293,13 +329,48 @@ export function TimelineView({
                   {getActivityTypeLabel(act.type)}：{act.title} {act.localTitle ? `[${act.localTitle}]` : ''}
                 </Text>
 
-                {act.photoUrl === 'local-asset://airport_map' && (
-                  <View style={{ marginTop: 12, backgroundColor: '#F1F5F9', borderRadius: 8, overflow: 'hidden', padding: 8 }}>
-                    <Image 
-                      source={require('../../../assets/images/airport_terminal_map.png')} 
-                      style={{ width: '100%', height: 450, resizeMode: 'contain' }} 
-                    />
-                    <Text style={[typography.caption, { color: '#64748B', textAlign: 'center', marginTop: 8 }]}>{t('itinerary.timelineView.endOfDay.airportMapHint')}</Text>
+                {(act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport')) && (
+                  <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: 12 }}>
+                    <TouchableOpacity
+                      onPress={() => setExpandedTerminalMap(prev => ({ ...prev, [act.id]: !prev[act.id] }))}
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 8,
+                        paddingVertical: 10,
+                        paddingHorizontal: 16,
+                        backgroundColor: colors.backgroundSecondary,
+                        borderColor: colors.border,
+                        borderWidth: 1,
+                        borderRadius: borderRadius.md,
+                      }}
+                    >
+                      <Ionicons name="airplane-outline" size={16} color={colors.primary500} />
+                      <Text style={[typography.labelMedium, { color: colors.primary500, fontWeight: '700' }]}>
+                        {expandedTerminalMap[act.id] ? '收起航站大廳導覽圖 ▴' : '🗺️ 展開航站大廳導覽圖 (BKK Airport) ▾'}
+                      </Text>
+                    </TouchableOpacity>
+
+                    {expandedTerminalMap[act.id] && (
+                      <View style={{ marginTop: 10, backgroundColor: colors.backgroundSecondary, borderColor: colors.border, borderWidth: 1, borderRadius: borderRadius.md, padding: 12 }}>
+                        <Text style={[typography.labelSmall, { color: colors.text, fontWeight: '700', marginBottom: 8 }]}>
+                          {day.dayNumber === 1 ? '🇹🇭 曼谷蘇凡納布機場 (BKK) 入境大廳指引 (Level 2)' : '🇹🇭 曼谷蘇凡納布機場 (BKK) 出境大廳指引 (Level 4)'}
+                        </Text>
+                        <View style={{ borderRadius: borderRadius.sm, overflow: 'hidden', borderWidth: 1, borderColor: colors.border, backgroundColor: '#FFFFFF' }}>
+                          <Image 
+                            source={require('../../../assets/images/airport_terminal_map.png')} 
+                            style={{ width: '100%', height: 350, resizeMode: 'contain' }} 
+                          />
+                        </View>
+                        <Text style={[typography.caption, { color: colors.textSecondary, marginTop: 8, lineHeight: 18 }]}>
+                          {day.dayNumber === 1 
+                            ? '💡 抵達指引：下飛機後順著「Immigration (入境)」指標前進，至 Level 2 辦理入境與行李提取。提取行李後，出口位於 Level 2 大廳。若欲搭乘機場快線 (ARL)，請搭手扶梯下至 B1 層。'
+                            : '💡 離境指引：專車或 Grab 將在 Level 4 離境大廳入口停靠。進入航廈後請尋找對應航空公司的 Check-in 櫃檯辦理登機。安檢與證照查驗位於 Level 4 後方中央。'
+                          }
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 )}
 
@@ -450,9 +521,9 @@ export function TimelineView({
                   <Ionicons name="create-outline" size={16} color="#94A3B8" />
                   <Text style={[typography.caption, { color: '#64748B', marginLeft: 4 }]}>{t('itinerary.timelineView.activity.notesLabel')}</Text>
                   <TextInput
-                    style={[styles.noteInput, { borderColor: '#E2E8F0', color: '#334155', backgroundColor: '#F8FAFC' }]}
+                    style={[styles.noteInput, { borderColor: colors.border, color: colors.text, backgroundColor: colors.backgroundSecondary }]}
                     placeholder={t('itinerary.timelineView.activity.notesPlaceholder')}
-                    placeholderTextColor="#94A3B8"
+                    placeholderTextColor={colors.textTertiary}
                     value={noteValue}
                     onChangeText={(text) => handleNoteChange(act.id, text)}
                     onBlur={() => handleNoteBlur(act.id)}

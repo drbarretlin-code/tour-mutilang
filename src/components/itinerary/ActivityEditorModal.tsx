@@ -5,6 +5,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { Activity, Itinerary } from '../../types/itinerary';
 import { t } from '../../i18n';
 import { verifyUrlRAG } from '../../utils/linkVerifier';
+import { validateActivityTime, findBestTimeSlots, TimeSlotRecommendation, ValidationResult } from '../../utils/itineraryValidator';
 
 const getActivityTypes = () => [
   { value: 'attraction', label: t('itinerary.activityEditor.types.attraction') },
@@ -53,6 +54,10 @@ export function ActivityEditorModal({
   const [showTypeMenu, setShowTypeMenu] = useState(false);
   const [showDayMenu, setShowDayMenu] = useState(false);
 
+  const [validation, setValidation] = useState<ValidationResult | null>(null);
+  const [recommendations, setRecommendations] = useState<TimeSlotRecommendation[]>([]);
+  const [showRecommendations, setShowRecommendations] = useState(false);
+
   useEffect(() => {
     if (visible && activity) {
       setStartTime(activity.startTime || '10:00');
@@ -65,8 +70,36 @@ export function ActivityEditorModal({
       
       setShowTypeMenu(false);
       setShowDayMenu(false);
+      setShowRecommendations(false);
     }
   }, [visible, activity, currentDayNumber]);
+
+  useEffect(() => {
+    if (visible && activity && itinerary) {
+      const tempActivity: Activity = {
+        ...activity,
+        startTime,
+        title,
+        type,
+        location: {
+          ...activity.location,
+          name: title,
+          address: address,
+          latitude: activity.location?.latitude || 0,
+          longitude: activity.location?.longitude || 0,
+        }
+      };
+      
+      const result = validateActivityTime(tempActivity, itinerary, targetDay);
+      setValidation(result);
+
+      const recs = findBestTimeSlots(tempActivity, itinerary, targetDay);
+      setRecommendations(recs);
+    } else {
+      setValidation(null);
+      setRecommendations([]);
+    }
+  }, [startTime, title, type, address, targetDay, visible, activity, itinerary]);
 
   const hasData = !!activity && !!itinerary;
   const isVisible = visible && hasData;
@@ -187,13 +220,23 @@ export function ActivityEditorModal({
             {/* Time */}
             <View style={[styles.inputGroup, { flex: 1, marginRight: spacing.sm }]}>
               <Text style={[typography.labelMedium, styles.label, { color: colors.textSecondary }]}>{t('itinerary.activityEditor.fields.time')}</Text>
-              <TextInput
-                style={[styles.input, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.md }]}
-                value={startTime}
-                onChangeText={setStartTime}
-                placeholder="HH:mm"
-                placeholderTextColor={colors.textSecondary}
-              />
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <TextInput
+                  style={[styles.input, { borderColor: colors.border, color: colors.text, borderRadius: borderRadius.md, flex: 1 }]}
+                  value={startTime}
+                  onChangeText={setStartTime}
+                  placeholder="HH:mm"
+                  placeholderTextColor={colors.textSecondary}
+                />
+                {recommendations.length > 0 && (
+                  <TouchableOpacity
+                    style={[styles.recTriggerBtn, { borderColor: colors.primary500, borderRadius: borderRadius.md }]}
+                    onPress={() => setShowRecommendations(!showRecommendations)}
+                  >
+                    <Ionicons name="sparkles" size={16} color={colors.primary500} />
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
 
             {/* Type Selection */}
@@ -221,6 +264,69 @@ export function ActivityEditorModal({
               )}
             </View>
           </View>
+
+          {/* 推薦時段列表 */}
+          {showRecommendations && recommendations.length > 0 && (
+            <View style={[styles.recContainer, { backgroundColor: colors.backgroundSecondary, borderColor: colors.border, borderRadius: borderRadius.md }]}>
+              <Text style={[typography.labelSmall, { color: colors.primary500, fontWeight: '700', marginBottom: 8 }]}>
+                ✨ 推薦空檔時段 (一鍵套用)：
+              </Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+                {recommendations.map((rec, rIdx) => (
+                  <TouchableOpacity
+                    key={rIdx}
+                    onPress={() => {
+                      setStartTime(rec.time);
+                      setShowRecommendations(false);
+                    }}
+                    style={[styles.recBadge, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                  >
+                    <Text style={[typography.caption, { color: colors.text, fontWeight: '700' }]}>{rec.time} - {rec.endTime}</Text>
+                    <Text style={[typography.caption, { color: colors.textSecondary, fontSize: 10, marginTop: 2 }]}>
+                      車程: {rec.travelFromPrev} 分 • 緩衝: {rec.buffer} 分
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
+
+          {/* 合理性衝突警告 */}
+          {validation && (validation.hasConflict || validation.warningType) && (
+            <View style={[
+              styles.warningBox,
+              {
+                borderRadius: borderRadius.md,
+                backgroundColor: validation.hasConflict 
+                  ? (validation.warningType === 'location' ? '#FFFBEB' : '#FEF2F2')
+                  : '#EFF6FF',
+                borderColor: validation.hasConflict
+                  ? (validation.warningType === 'location' ? '#F59E0B' : '#FECACA')
+                  : '#BFDBFE',
+              }
+            ]}>
+              <Ionicons 
+                name={validation.hasConflict ? "alert-circle" : "information-circle"} 
+                size={18} 
+                color={validation.hasConflict 
+                  ? (validation.warningType === 'location' ? '#D97706' : '#EF4444') 
+                  : '#2563EB'} 
+                style={{ marginRight: 8, marginTop: 2 }}
+              />
+              <Text style={[
+                typography.caption, 
+                { 
+                  color: validation.hasConflict 
+                    ? (validation.warningType === 'location' ? '#B45309' : '#DC2626') 
+                    : '#1D4ED8',
+                  flex: 1,
+                  fontWeight: '600'
+                }
+              ]}>
+                {validation.reason}
+              </Text>
+            </View>
+          )}
 
           {/* Title */}
           <View style={[styles.inputGroup, { zIndex: 9 }]}>
@@ -478,5 +584,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
+  },
+  recTriggerBtn: {
+    padding: 10,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(79, 70, 229, 0.05)',
+  },
+  recContainer: {
+    padding: 12,
+    borderWidth: 1,
+    marginBottom: 16,
+  },
+  recBadge: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderRadius: 16,
+    alignItems: 'center',
+    minWidth: 130,
+  },
+  warningBox: {
+    flexDirection: 'row',
+    padding: 12,
+    borderWidth: 1,
+    marginBottom: 16,
+    alignItems: 'flex-start',
   }
 });

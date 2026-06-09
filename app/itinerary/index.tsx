@@ -470,7 +470,7 @@ export default function ItineraryScreen() {
     if (!itinerary) return;
     try {
       setLoading(true);
-      const html = generateItineraryHtml(itinerary);
+      const html = generateItineraryHtml(itinerary, contextSurvey);
 
       if (Platform.OS === 'web') {
         const iframe = document.createElement('iframe');
