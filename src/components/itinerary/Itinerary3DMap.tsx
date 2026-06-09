@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
-import Svg, { Line, Circle, G, Text as SvgText, Defs, Marker, Polygon } from 'react-native-svg';
+import { View, StyleSheet, Platform } from 'react-native';
+import { WebView } from 'react-native-webview';
 import { useTheme } from '../../context/ThemeContext';
 import { Itinerary } from '../../types/itinerary';
 
@@ -10,11 +10,10 @@ function getRouteDistance(transport: any): number {
     return t.distance / 1000;
   }
   
-  // Route distance estimation based on travel duration and transport mode
-  const duration = t.duration || 10; // default 10 mins
+  const duration = t.duration || 10;
   const mode = t.mode || 'drive';
   
-  let speedKmh = 40; // Default drive speed
+  let speedKmh = 40;
   if (mode === 'walk') {
     speedKmh = 4.5;
   } else if (mode === 'public') {
@@ -23,7 +22,7 @@ function getRouteDistance(transport: any): number {
     speedKmh = 40;
   }
   
-  return (duration / 60) * speedKmh; // distance in km
+  return (duration / 60) * speedKmh;
 }
 
 interface Itinerary3DMapProps {
@@ -34,258 +33,211 @@ interface Itinerary3DMapProps {
 
 export function Itinerary3DMap({ itinerary, activeDay, height = 300 }: Itinerary3DMapProps) {
   const { colors } = useTheme();
-  const [layout, setLayout] = useState({ width: 0, height: 0 });
-  const [mapError, setMapError] = useState(false);
-  const [mapSourceIndex, setMapSourceIndex] = useState(0);
-
-  useEffect(() => {
-    setMapSourceIndex(0);
-    setMapError(false);
-  }, [activeDay, itinerary.id]);
 
   const dayData = itinerary.days.find(d => d.dayNumber === activeDay);
   const dayActivities = dayData?.activities || [];
-  const hotel = dayData?.hotel;
 
-  // Simulated anchor points for an isometric perspective map
-  const ANCHOR_POINTS = [
-    { x: 15, y: 70 }, // Start / Hotel
-    { x: 30, y: 50 }, // Point 1
-    { x: 50, y: 35 }, // Point 2
-    { x: 70, y: 40 }, // Point 3
-    { x: 85, y: 60 }, // Point 4
-    { x: 65, y: 80 }, // Point 5
-    { x: 40, y: 85 }, // Point 6
-    { x: 20, y: 80 }, // Point 7
-  ];
-
-  const basePoints = dayActivities.map((act, index) => {
-    // Determine node label and icon color representation
+  // 1. Prepare points data for Leaflet injection
+  const pointsData = dayActivities.map((act, index) => {
     let label = String(index + 1);
     let isHotel = act.type === 'hotel';
     
     if (act.type === 'hotel') {
       label = 'H';
     } else if (act.type === 'transport' && (index === 0 || index === dayActivities.length - 1)) {
-      label = 'A'; // Airport or station
+      label = 'A';
+    }
+
+    let distToNext = '';
+    if (index < dayActivities.length - 1) {
+      const nextAct = dayActivities[index + 1];
+      const distKm = getRouteDistance(nextAct.transport);
+      distToNext = `${distKm.toFixed(1)} km`;
     }
 
     return {
-      ...act,
-      id: act.id,
-      isHotel,
-      title: act.title,
+      lat: act.location?.latitude || 0,
+      lng: act.location?.longitude || 0,
       label,
-      latitude: act.location?.latitude || 0,
-      longitude: act.location?.longitude || 0,
-      order: index,
+      title: act.title,
+      time: act.startTime,
+      isHotel,
+      distToNext
     };
   });
 
-  const validPts = basePoints.filter(p => p.latitude !== 0 && p.longitude !== 0);
-  const hasValidCoords = validPts.length > 0;
-
-  let routePoints = [];
-  let mapImageUrls: string[] = [];
-
-  const viewWidth = layout.width || 500;
-  const viewHeight = layout.height || height;
-
-  if (hasValidCoords) {
-    let minLat = Math.min(...validPts.map(p => p.latitude));
-    let maxLat = Math.max(...validPts.map(p => p.latitude));
-    let minLng = Math.min(...validPts.map(p => p.longitude));
-    let maxLng = Math.max(...validPts.map(p => p.longitude));
-
-    if (maxLat - minLat < 0.005) {
-      maxLat += 0.0025;
-      minLat -= 0.0025;
+  // 2. Leaflet HTML Template String
+  const leafletTemplate = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    html, body, #map {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #0B0F19;
     }
-    if (maxLng - minLng < 0.005) {
-      maxLng += 0.0025;
-      minLng -= 0.0025;
+    /* Custom Pin style */
+    .custom-marker {
+      background: #4F46E5;
+      border: 2px solid #FFF;
+      border-radius: 50%;
+      color: #FFF;
+      font-weight: bold;
+      text-align: center;
+      line-height: 20px;
+      font-size: 11px;
+      box-shadow: 0 0 10px rgba(79, 70, 229, 0.6);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
-
-    const centerLat = (minLat + maxLat) / 2;
-    const centerLng = (minLng + maxLng) / 2;
-
-    const latSpan = maxLat - minLat;
-    const lngSpan = maxLng - minLng;
-
-    const containerRatio = viewWidth / viewHeight;
-    const latDistanceFactor = Math.cos(centerLat * Math.PI / 180);
-
-    let targetLngSpan = lngSpan;
-    let targetLatSpan = latSpan;
-
-    const currentRatio = (lngSpan * latDistanceFactor) / latSpan;
-
-    if (currentRatio > containerRatio) {
-      targetLatSpan = (lngSpan * latDistanceFactor) / containerRatio;
-    } else {
-      targetLngSpan = (latSpan * containerRatio) / latDistanceFactor;
+    .custom-marker.hotel {
+      background: #10B981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
     }
+    .custom-marker.airport {
+      background: #8B5CF6;
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+    }
+    /* Floating Distance Label */
+    .distance-label {
+      background: #1E293B;
+      border: 1px solid #00D8A1;
+      border-radius: 20px;
+      color: #00D8A1;
+      padding: 2px 8px;
+      font-size: 9px;
+      font-weight: 800;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      display: inline-block;
+      transform: translate(-50%, -50%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    /* Leaflet popup styling customization to fit dark theme */
+    .leaflet-popup-content-wrapper {
+      background: #1E293B !important;
+      color: #FFF !important;
+      border-radius: 8px;
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .leaflet-popup-tip {
+      background: #1E293B !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    var map = L.map('map', { 
+      zoomControl: false,
+      attributionControl: false
+    });
+    
+    // CartoDB Dark Matter tile layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19
+    }).addTo(map);
 
-    const marginLatMax = centerLat + targetLatSpan * 0.625;
-    const marginLatMin = centerLat - targetLatSpan * 0.625;
-    const marginLngMax = centerLng + targetLngSpan * 0.625;
-    const marginLngMin = centerLng - targetLngSpan * 0.625;
+    L.control.zoom({ position: 'topright' }).addTo(map);
 
-    const requestWidth = 650;
-    const requestHeight = Math.round(650 / containerRatio);
+    var points = __POINTS_DATA__;
+    var markers = [];
+    var latlngs = [];
 
-    const osmUrl = `https://staticmap.openstreetmap.de/staticmap.php?bbox=${marginLngMin},${marginLatMin},${marginLngMax},${marginLatMax}&size=${requestWidth}x${requestHeight}&maptype=mapnik`;
-    const yandexUrl = `https://static-maps.yandex.ru/1.x/?l=map&size=${requestWidth},${requestHeight}&bbox=${marginLngMin},${marginLatMin}~${marginLngMax},${marginLatMax}`;
-
-    mapImageUrls = [osmUrl, yandexUrl];
-
-    routePoints = basePoints.map((pt) => {
-      const lat = pt.latitude || (maxLat + minLat) / 2;
-      const lng = pt.longitude || (maxLng + minLng) / 2;
+    points.forEach(function(pt) {
+      if (pt.lat === 0 && pt.lng === 0) return;
       
-      const x = ((lng - marginLngMin) / (marginLngMax - marginLngMin)) * viewWidth;
-      const y = viewHeight - ((lat - marginLatMin) / (marginLatMax - marginLatMin)) * viewHeight;
+      var className = 'custom-marker';
+      if (pt.isHotel) className += ' hotel';
+      if (pt.label === 'A') className += ' airport';
 
-      return {
-        ...pt,
-        x,
-        y,
-      };
+      var icon = L.divIcon({
+        className: className,
+        html: pt.label,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
+
+      var popupHtml = '<div style="padding: 4px;">' +
+        '<strong style="color: #00D8A1; font-size: 14px;">' + pt.title + '</strong>' +
+        '<div style="margin-top: 6px; color: #94A3B8;">抵達時間：' + pt.time + '</div>' +
+        '</div>';
+
+      var marker = L.marker([pt.lat, pt.lng], { icon: icon })
+        .bindPopup(popupHtml)
+        .addTo(map);
+        
+      markers.push(marker);
+      latlngs.push([pt.lat, pt.lng]);
     });
-  } else {
-    // Fallback to isometric ANCHOR_POINTS mapping
-    routePoints = basePoints.map((pt, index) => {
-      const base = ANCHOR_POINTS[index % ANCHOR_POINTS.length];
-      return {
-        ...pt,
-        x: (base.x / 100) * viewWidth,
-        y: (base.y / 100) * viewHeight,
-      };
-    });
+
+    if (latlngs.length > 0) {
+      // Connect points with neon green dashed lines
+      L.polyline(latlngs, {
+        color: '#00D8A1',
+        weight: 3.5,
+        dashArray: '6, 6',
+        opacity: 0.85
+      }).addTo(map);
+
+      // Render distance labels at path midpoints
+      for (var i = 0; i < latlngs.length - 1; i++) {
+        var pt = points[i];
+        if (pt.distToNext && pt.lat !== 0 && points[i+1].lat !== 0) {
+          var midLat = (latlngs[i][0] + latlngs[i+1][0]) / 2;
+          var midLng = (latlngs[i][1] + latlngs[i+1][1]) / 2;
+          
+          L.marker([midLat, midLng], {
+            icon: L.divIcon({
+              className: 'distance-label-container',
+              html: '<div class="distance-label">' + pt.distToNext + '</div>',
+              iconSize: [0, 0]
+            })
+          }).addTo(map);
+        }
+      }
+
+      // Automatically adjust camera zoom boundary to cover all points
+      var group = new L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.15));
+    } else {
+      // Fallback center if no valid points
+      map.setView([13.7563, 100.5018], 10);
+    }
+  </script>
+</body>
+</html>
+  `.replace('__POINTS_DATA__', JSON.stringify(pointsData));
+
+  // 3. Platform split rendering
+  if (Platform.OS === 'web') {
+    return (
+      <View style={[styles.container, { height }]}>
+        <iframe
+          srcDoc={leafletTemplate}
+          style={styles.webFrame}
+          title="Itinerary Map"
+        />
+      </View>
+    );
   }
 
-  const currentMapUrl = mapImageUrls[mapSourceIndex] || itinerary.mapImageUrl;
-
   return (
-    <View 
-      style={[styles.container, { height, backgroundColor: colors.backgroundSecondary }]}
-      onLayout={(e) => setLayout(e.nativeEvent.layout)}
-    >
-      <Image
-        source={(currentMapUrl && !mapError) ? { uri: currentMapUrl } : require('../../../assets/images/isometric_map_pattaya.png')}
-        style={styles.mapImage}
-        resizeMode="cover"
-        onError={() => {
-          if (mapSourceIndex < mapImageUrls.length - 1) {
-            console.warn(`[Itinerary3DMap] Failed to load map source ${mapSourceIndex}, trying next source...`);
-            setMapSourceIndex(prev => prev + 1);
-          } else {
-            console.warn('[Itinerary3DMap] All static map sources failed, falling back to isometric map.');
-            setMapError(true);
-          }
-        }}
+    <View style={[styles.container, { height }]}>
+      <WebView
+        originWhitelist={['*']}
+        source={{ html: leafletTemplate }}
+        style={styles.webView}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
       />
-      
-      {/* Decorative gradient overlay */}
-      <View style={styles.gradient} />
-
-      {/* Dynamic SVG Route Layer */}
-      {routePoints.length > 0 && (
-        <Svg 
-          viewBox={`0 0 ${viewWidth} ${viewHeight}`}
-          width="100%" 
-          height="100%" 
-          style={[StyleSheet.absoluteFill, { zIndex: 10, pointerEvents: 'none' }]}
-        >
-          <Defs>
-            <Marker id="arrow" viewBox="0 0 10 10" refX="16" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <Polygon points="0,0 10,5 0,10" fill={colors.primary500} />
-            </Marker>
-            <Marker id="arrow-green" viewBox="0 0 10 10" refX="16" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <Polygon points="0,0 10,5 0,10" fill="#10B981" />
-            </Marker>
-          </Defs>
-
-          {/* Draw connecting lines with dashed style and arrows */}
-          {routePoints.map((p, i) => {
-            if (i === routePoints.length - 1) return null;
-            const nextP = routePoints[i + 1];
-            const markerId = p.isHotel || nextP.isHotel ? 'url(#arrow-green)' : 'url(#arrow)';
-            return (
-              <Line
-                key={`line-${p.id}-${nextP.id}`}
-                x1={p.x} y1={p.y}
-                x2={nextP.x} y2={nextP.y}
-                stroke={p.isHotel || nextP.isHotel ? '#10B981' : colors.primary500}
-                strokeWidth="2.5"
-                strokeDasharray="6, 4"
-                markerEnd={markerId}
-              />
-            );
-          })}
-
-          {/* Draw distance badges exactly at the midpoint of each connecting line */}
-          {routePoints.map((p, i) => {
-            if (i === routePoints.length - 1) return null;
-            const nextP = routePoints[i + 1];
-            const midX = (p.x + nextP.x) / 2;
-            const midY = (p.y + nextP.y) / 2;
-
-            // Get route distance using AI suggested distance or road duration-based route estimation
-            const distKm = getRouteDistance(nextP.transport);
-            const distStr = `${distKm.toFixed(1)} km`;
-
-            return (
-              <G key={`dist-${p.id}-${nextP.id}`}>
-                <rect
-                  x={midX - 25}
-                  y={midY - 9}
-                  width="50"
-                  height="18"
-                  rx="9"
-                  fill="#1E293B"
-                  stroke={p.isHotel || nextP.isHotel ? '#10B981' : '#4F46E5'}
-                  strokeWidth="1"
-                />
-                <SvgText
-                  x={midX}
-                  y={midY + 4}
-                  fill="#FFFFFF"
-                  fontSize="9"
-                  fontWeight="bold"
-                  textAnchor="middle"
-                >
-                  {distStr}
-                </SvgText>
-              </G>
-            );
-          })}
-
-          {/* Draw pins, glowing rings, and sequence numbers */}
-          {routePoints.map((p, i) => (
-            <G key={`node-${p.id}`} x={p.x} y={p.y}>
-              <Circle cx="0" cy="0" r="14" fill={p.isHotel ? '#10B981' : colors.primary500} opacity="0.2" />
-              <Circle cx="0" cy="0" r="9" fill={colors.backgroundSecondary} stroke={p.isHotel ? '#10B981' : colors.primary500} strokeWidth="2" />
-              <SvgText
-                x="0" y="3.5"
-                fill={p.isHotel ? '#10B981' : colors.primary500}
-                fontSize="10"
-                fontWeight="bold"
-                textAnchor="middle"
-              >
-                {p.label}
-              </SvgText>
-            </G>
-          ))}
-        </Svg>
-      )}
-
-
-      <View style={[styles.hud, { backgroundColor: 'rgba(15, 23, 42, 0.85)', borderColor: 'rgba(255,255,255,0.1)' }]}>
-        <Text style={styles.hudText}>
-          Day {activeDay} - {itinerary.days.find(d => d.dayNumber === activeDay)?.title || 'Exploring Thailand'}
-        </Text>
-      </View>
     </View>
   );
 }
@@ -294,35 +246,20 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     overflow: 'hidden',
-    borderRadius: 12,
+    borderRadius: 16,
+    backgroundColor: '#0B0F19',
     position: 'relative',
   },
-  mapImage: {
+  webFrame: {
     width: '100%',
     height: '100%',
+    borderWidth: 0,
+    background: '#0B0F19',
   },
-  gradient: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: '40%',
-    backgroundColor: 'rgba(15, 23, 42, 0.2)', // Simple fallback for gradient
-  },
-  hud: {
-    position: 'absolute',
-    bottom: 12,
-    left: 12,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 6,
-    borderWidth: 1,
-  },
-  hudText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '600',
-  },
+  webView: {
+    flex: 1,
+    backgroundColor: '#0B0F19',
+  }
 });
 
 export default Itinerary3DMap;
