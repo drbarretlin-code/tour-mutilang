@@ -221,6 +221,7 @@ export function Itinerary3DMap({ itinerary, activeDay, height = 300 }: Itinerary
     return (
       <View style={[styles.container, { height }]}>
         <iframe
+          key={`map_iframe_day_${activeDay}`}
           srcDoc={leafletTemplate}
           style={styles.webFrame}
           title="Itinerary Map"
@@ -232,6 +233,7 @@ export function Itinerary3DMap({ itinerary, activeDay, height = 300 }: Itinerary
   return (
     <View style={[styles.container, { height }]}>
       <WebView
+        key={`map_webview_day_${activeDay}`}
         originWhitelist={['*']}
         source={{ html: leafletTemplate }}
         style={styles.webView}
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderWidth: 0,
-    background: '#0B0F19',
+    backgroundColor: '#0B0F19',
   },
   webView: {
     flex: 1,
