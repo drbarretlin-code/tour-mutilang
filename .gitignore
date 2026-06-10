@@ -42,3 +42,7 @@ yarn-error.*
 
 .env
 .env.local
+
+# user temp files
+1.docx
+check_results.txt

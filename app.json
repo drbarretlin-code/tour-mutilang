@@ -31,7 +31,8 @@
       "expo-localization",
       "expo-secure-store",
       "expo-splash-screen",
-      "expo-sharing"
+      "expo-sharing",
+      "expo-font"
     ],
     "extra": {
       "router": {},
