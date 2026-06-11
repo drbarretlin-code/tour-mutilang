@@ -656,7 +656,8 @@
       "translator": "여행 번역"
     },
     "map": {
-      "title": "전체 여행 3D 풍경 지도"
+      "title": "전체 여행 3D 풍경 지도",
+      "openNavigation": "%{provider}(으)로 전체 경로 길찾기 열기"
     },
     "nav": {
       "collapse": "메뉴 패널 접기",

@@ -647,37 +647,6 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
         }
       };
 
-      // 嘗試發送生圖請求 (動態生成全行程 3D 地圖)
-      try {
-        const destNames = survey.destinations.map(d => d.name).join(' and ');
-        const keyAttractions = survey.mustVisitAttractions?.slice(0, 5).map(a => {
-          if (a.type === 'file') return a.fileName || 'document';
-          return a.value;
-        }).join(', ') || '';
-        const mapPrompt = `A vibrant isometric 3D map of ${destNames} tourism city, featuring detailed golden temples, a busy floating market on a blue river, a modern airport, transportation, and a city skyline. Key landmarks: ${keyAttractions}. The style should be highly detailed, bright, colorful, isometric view, simulation game aesthetic like SimCity or mobile tycoon games. No text overlay.`;
-        
-        const imgResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${apiKey}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            instances: [{ prompt: mapPrompt }],
-            parameters: { sampleCount: 1 }
-          })
-        });
-
-        if (imgResponse.ok) {
-          const imgData = await imgResponse.json();
-          const base64Image = imgData?.predictions?.[0]?.bytesBase64Encoded;
-          if (base64Image) {
-             generatedItinerary.mapImageUrl = `data:image/png;base64,${base64Image}`;
-          }
-        } else {
-          console.warn('Map generation API returned non-OK status:', response.status);
-        }
-      } catch (err) {
-        console.warn('Map image generation failed, falling back to default image.', err);
-      }
-
       return generatedItinerary;
     };
 

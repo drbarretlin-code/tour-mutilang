@@ -668,7 +668,8 @@
       "translator": "旅遊翻譯"
     },
     "map": {
-      "title": "全行程 3D 立體景觀圖"
+      "title": "全行程 3D 立體景觀圖",
+      "openNavigation": "用 %{provider} 開啟完整路線導航"
     },
     "nav": {
       "collapse": "收起選單面板",

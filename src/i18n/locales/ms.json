@@ -656,7 +656,8 @@
       "translator": "terjemahan perjalanan"
     },
     "map": {
-      "title": "Peta landskap 3D perjalanan penuh"
+      "title": "Peta landskap 3D perjalanan penuh",
+      "openNavigation": "Buka navigasi laluan penuh dalam %{provider}"
     },
     "nav": {
       "collapse": "Runtuhkan panel menu",

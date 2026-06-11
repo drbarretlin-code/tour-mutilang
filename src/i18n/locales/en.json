@@ -668,7 +668,8 @@
       "translator": "Translator"
     },
     "map": {
-      "title": "Full Route 3D Map"
+      "title": "Full Route 3D Map",
+      "openNavigation": "Open Full Route in %{provider}"
     },
     "nav": {
       "collapse": "Collapse Navigation",

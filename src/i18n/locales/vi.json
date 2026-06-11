@@ -656,7 +656,8 @@
       "translator": "dịch du lịch"
     },
     "map": {
-      "title": "Bản đồ cảnh quan 3D toàn chuyến đi"
+      "title": "Bản đồ cảnh quan 3D toàn chuyến đi",
+      "openNavigation": "Mở chỉ đường toàn bộ lộ trình bằng %{provider}"
     },
     "nav": {
       "collapse": "Thu gọn bảng menu",

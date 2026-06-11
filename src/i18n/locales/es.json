@@ -656,7 +656,8 @@
       "translator": "traducción de viajes"
     },
     "map": {
-      "title": "Mapa paisajístico 3D del viaje completo"
+      "title": "Mapa paisajístico 3D del viaje completo",
+      "openNavigation": "Abrir ruta completa en %{provider}"
     },
     "nav": {
       "collapse": "Contraer panel de menú",

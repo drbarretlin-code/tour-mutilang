@@ -12,6 +12,50 @@ interface MapFallbackViewProps {
   mapProvider: 'apple' | 'google' | 'amap' | 'baidu';
 }
 
+/**
+ * Builds a deep link that opens the user's preferred map app with the
+ * full day route (origin -> waypoints -> destination) for navigation.
+ * Returns null if there are fewer than 2 activities with valid coordinates.
+ */
+export function getDayRouteNavigationUrl(
+  activities: Activity[],
+  mapProvider: 'apple' | 'google' | 'amap' | 'baidu'
+): string | null {
+  const points = (activities || []).filter(act =>
+    act.location && act.location.latitude && act.location.longitude
+  );
+
+  if (points.length < 2) return null;
+
+  const origin = points[0].location;
+  const destination = points[points.length - 1].location;
+  const waypoints = points.slice(1, -1);
+
+  switch (mapProvider) {
+    case 'apple': {
+      // Apple Maps URL scheme supports chained stops via repeated "+to:" segments
+      const stops = points.slice(1).map(p => `${p.location!.latitude},${p.location!.longitude}`).join('+to:');
+      return `https://maps.apple.com/?saddr=${origin.latitude},${origin.longitude}&daddr=${stops}&dirflg=d`;
+    }
+    case 'baidu': {
+      const waypointsParam = waypoints.length > 0
+        ? `&waypoints=${waypoints.map(p => `${p.location!.latitude},${p.location!.longitude}`).join('|')}`
+        : '';
+      return `https://api.map.baidu.com/direction?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}${waypointsParam}&mode=driving&output=html`;
+    }
+    case 'amap':
+      // Amap's URI API does not support multi-stop waypoints; fall back to origin -> final destination
+      return `https://uri.amap.com/navigation?from=${origin.longitude},${origin.latitude}&to=${destination.longitude},${destination.latitude}&mode=car&policy=1`;
+    case 'google':
+    default: {
+      const waypointsParam = waypoints.length > 0
+        ? `&waypoints=${waypoints.map(p => `${p.location!.latitude},${p.location!.longitude}`).join('|')}`
+        : '';
+      return `https://www.google.com/maps/dir/?api=1&origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}${waypointsParam}&travelmode=driving`;
+    }
+  }
+}
+
 export function MapFallbackView({ day, mapProvider }: MapFallbackViewProps) {
   const { colors, spacing, borderRadius, typography, shadows } = useTheme();
 

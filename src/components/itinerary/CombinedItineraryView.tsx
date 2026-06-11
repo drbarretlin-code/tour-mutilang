@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Itinerary, Activity } from '../../types/itinerary';
 import { Itinerary3DMap } from './Itinerary3DMap';
+import { getDayRouteNavigationUrl } from './MapFallbackView';
 import { HorizontalActivityCard } from './HorizontalActivityCard';
 import { t } from '../../i18n';
 
@@ -31,12 +32,13 @@ function getRouteDistance(transport: any): number {
 interface Props {
   itinerary: Itinerary;
   activeDay: number;
+  mapProvider?: 'apple' | 'google' | 'amap' | 'baidu';
   onEditActivity?: (id: string) => void;
   onRefreshMap?: () => void;
   onNavigate?: (location: { latitude?: number; longitude?: number; address?: string; name?: string }) => void;
 }
 
-export const CombinedItineraryView: React.FC<Props> = ({ itinerary, activeDay, onEditActivity, onRefreshMap, onNavigate }) => {
+export const CombinedItineraryView: React.FC<Props> = ({ itinerary, activeDay, mapProvider = 'google', onEditActivity, onRefreshMap, onNavigate }) => {
   const currentDayData = itinerary.days.find(d => d.dayNumber === activeDay) || itinerary.days[0];
   
   const scrollRef = useRef<any>(null);
@@ -120,6 +122,20 @@ export const CombinedItineraryView: React.FC<Props> = ({ itinerary, activeDay, o
       <View style={styles.mapContainer}>
         <Itinerary3DMap itinerary={itinerary} activeDay={activeDay} height={400} />
       </View>
+
+      {/* Open full route in user's preferred map app */}
+      {(() => {
+        const navUrl = getDayRouteNavigationUrl(currentDayData.activities, mapProvider);
+        if (!navUrl) return null;
+        return (
+          <TouchableOpacity style={styles.navigateButton} onPress={() => Linking.openURL(navUrl)}>
+            <Ionicons name="navigate" size={16} color="#FFFFFF" style={{ marginRight: 6 }} />
+            <Text style={styles.refreshText}>
+              {t('itinerary.map.openNavigation', { provider: t(`survey.map.${mapProvider}`) })}
+            </Text>
+          </TouchableOpacity>
+        );
+      })()}
 
       {/* Horizontal Timeline Section */}
       <View style={styles.timelineContainer}>
@@ -268,6 +284,17 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: 'bold',
     fontSize: 14,
+  },
+  navigateButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'flex-start',
+    backgroundColor: '#4F46E5',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginBottom: 24,
   },
   mapContainer: {
     width: '100%',

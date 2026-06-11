@@ -656,7 +656,8 @@
       "translator": "旅行翻訳"
     },
     "map": {
-      "title": "旅行全体の 3D 風景地図"
+      "title": "旅行全体の 3D 風景地図",
+      "openNavigation": "%{provider} で全ルートのナビを開く"
     },
     "nav": {
       "collapse": "メニューパネルを折りたたむ",

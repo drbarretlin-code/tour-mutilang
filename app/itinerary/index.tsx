@@ -6,7 +6,7 @@ import { useLanguage } from '../../src/context/LanguageContext';
 import { useTheme } from '../../src/context/ThemeContext';
 import { DailySummaryCard } from '../../src/components/itinerary/DailySummaryCard';
 import { TimelineView } from '../../src/components/itinerary/TimelineView';
-import { MapFallbackView } from '../../src/components/itinerary/MapFallbackView';
+import { MapFallbackView, getDayRouteNavigationUrl } from '../../src/components/itinerary/MapFallbackView';
 import { PackingChecklist } from '../../src/components/itinerary/PackingChecklist';
 import { ExpenseSplitter } from '../../src/components/itinerary/ExpenseSplitter';
 import { TravelTranslator } from '../../src/components/itinerary/TravelTranslator';
@@ -545,6 +545,22 @@ export default function ItineraryScreen() {
           {t('itinerary.map.title')}
         </Text>
         <Itinerary3DMap itinerary={activeItinerary} activeDay={activeDay} height={320} />
+        {(() => {
+          const mapProvider = contextSurvey?.mapProvider || 'google';
+          const navUrl = currentDayData ? getDayRouteNavigationUrl(currentDayData.activities, mapProvider) : null;
+          if (!navUrl) return null;
+          return (
+            <TouchableOpacity
+              style={[styles.navigateButton, { backgroundColor: colors.primary500, marginTop: spacing.sm }]}
+              onPress={() => Linking.openURL(navUrl)}
+            >
+              <Ionicons name="navigate" size={16} color={colors.neutral0} style={{ marginRight: 6 }} />
+              <Text style={[typography.labelMedium, { color: colors.neutral0, fontWeight: '700' }]}>
+                {t('itinerary.map.openNavigation', { provider: t(`survey.map.${mapProvider}`) })}
+              </Text>
+            </TouchableOpacity>
+          );
+        })()}
       </Card>
       {currentDayData && (
         <ScrollView style={{ flex: 1, marginTop: spacing.md }} showsVerticalScrollIndicator={false}>
@@ -793,9 +809,10 @@ export default function ItineraryScreen() {
             contentContainerStyle={{ padding: isLargeScreen ? spacing.lg : spacing.xs, paddingBottom: 60 }} 
             showsVerticalScrollIndicator={false}
           > 
-            <CombinedItineraryView 
+            <CombinedItineraryView
                itinerary={activeItinerary}
                activeDay={activeDay}
+               mapProvider={contextSurvey?.mapProvider || 'google'}
                onEditActivity={setEditingActivityId}
                onRefreshMap={handleRefreshItinerary}
                onNavigate={(loc: any, origin?: any) => {
@@ -965,6 +982,13 @@ const styles = StyleSheet.create({
   },
   mapCard: {
     padding: 12,
+  },
+  navigateButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    borderRadius: 10,
   },
   rightContentPanel: {
     flex: 1,
