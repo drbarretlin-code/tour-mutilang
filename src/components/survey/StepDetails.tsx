@@ -95,15 +95,17 @@ export function StepDetails() {
   };
 
   const handleAddFlight = () => {
-    if (!fNum && !retFNum) return;
-    
-    // 如果有填寫去程航班
-    if (fNum) {
+    const hasOutgoing = fNum || fDep || fArr;
+    const hasReturn = retFNum || retFDep || retFArr;
+    if (!hasOutgoing && !hasReturn) return;
+
+    // 如果有填寫去程航班（航班編號、起飛或抵達時間其中之一）
+    if (hasOutgoing) {
       addFlight(fNum, fDep, fArr, false);
     }
 
-    // 如果有填寫回程航班
-    if (retFNum) {
+    // 如果有填寫回程航班（航班編號、起飛或抵達時間其中之一）
+    if (hasReturn) {
       addFlight(retFNum, retFDep, retFArr, true);
     }
 
@@ -230,7 +232,7 @@ export function StepDetails() {
                 title={t('survey.transport.flightInfo.addFlight')}
                 variant="outlined"
                 onPress={handleAddFlight}
-                disabled={!fNum && (!fReturn || !retFNum)}
+                disabled={!fNum && !fDep && !fArr && (!fReturn || (!retFNum && !retFDep && !retFArr))}
               />
             </View>
           </View>

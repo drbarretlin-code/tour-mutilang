@@ -43,7 +43,7 @@ function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
 
     // 去程對齊自癒
     if (firstDay.activities && firstDay.activities.length > 0) {
-      const arrTime = outgoingFlight ? outgoingFlight.arrivalTime : '08:30';
+      const arrTime = (outgoingFlight && outgoingFlight.arrivalTime) ? outgoingFlight.arrivalTime : '08:30';
       const arrEndTime = addMinutesToTime(arrTime, 90);
       const firstAct = firstDay.activities[0];
 
@@ -92,7 +92,7 @@ function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
 
     // 回程對齊自癒
     if (lastDay.activities && lastDay.activities.length > 0) {
-      const depTime = returnFlight ? returnFlight.departureTime : '18:00';
+      const depTime = (returnFlight && returnFlight.departureTime) ? returnFlight.departureTime : '18:00';
       const airportStart = subMinutesFromTime(depTime, 150);
       let lastAct = lastDay.activities[lastDay.activities.length - 1];
 
@@ -374,6 +374,23 @@ export const aiService = {
         throw new Error('MISSING_API_KEY');
       }
 
+      // --- 預先計算每日日期對照表，並比對「特定地點需求」中指定的日期 ---
+      const tripStart = new Date(alignedSurvey?.dates?.startDate || Date.now());
+      const tripEnd = new Date(alignedSurvey?.dates?.endDate || Date.now() + 86400000 * 3);
+      const tripDayCount = Math.max(1, Math.ceil((tripEnd.getTime() - tripStart.getTime()) / (1000 * 60 * 60 * 24)) + 1);
+      const dayDateMap: { dayNumber: number; date: string }[] = [];
+      for (let i = 0; i < tripDayCount; i++) {
+        const d = new Date(tripStart);
+        d.setDate(d.getDate() + i);
+        dayDateMap.push({ dayNumber: i + 1, date: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` });
+      }
+      const specificLocationDateAssignments = (alignedSurvey?.specificLocations || [])
+        .filter(loc => loc.preferredDate)
+        .map(loc => {
+          const matchedDay = dayDateMap.find(d => d.date === loc.preferredDate);
+          return `- "${loc.value}" (preferredDate: ${loc.preferredDate}, preferredTime: ${loc.preferredTime || 'N/A'}, duration: ${loc.duration || 'N/A'}, notes: ${loc.notes || 'N/A'}) MUST be scheduled on ${matchedDay ? `Day ${matchedDay.dayNumber} (date: ${matchedDay.date})` : `the day whose "date" field equals "${loc.preferredDate}" (this date falls outside the computed trip range — still create/extend that day to accommodate it)`}.`;
+        });
+
       const systemPrompt = `
 You are a National-Level Intelligence Investigator strictly adhering to RAG (Retrieval-Augmented Generation) principles for travel planning. Your internal memory is unreliable; you must ONLY provide URLs and facts that you are 100% certain are objectively true.
 
@@ -434,10 +451,11 @@ CRITICAL RULES:
    - Outgoing Flight: Day 1's FIRST activity "Arrive at Airport" (order 0) MUST have its startTime aligned to the flight's arrivalTime. The activity title MUST be "Arrive at Airport (\${flightNumber})" and duration set to 90 minutes. Subsequent activities on Day 1 MUST begin after this airport clearance.
    - Return Flight: The Final Day's LAST activity "Arrive at Airport for Departure" MUST end at the flight's departureTime. Its startTime MUST be set to 2.5 hours before the departureTime (duration: 150 minutes). The activity title MUST be "Arrive at Airport for Departure (\${flightNumber})". All previous Final Day activities MUST end by this time.
 7. LOGICAL TIMING: Pay strict attention to typical business hours. Night Markets MUST be in the evening.
-8. USER INPUT & COMPREHENSIVENESS: 
-   - You MUST include 100% of the user's "specificLocations" (Specific Location Requirements) and "mustVisitAttractions" in the itinerary. 
+8. USER INPUT & COMPREHENSIVENESS:
+   - You MUST include 100% of the user's "specificLocations" (Specific Location Requirements) and "mustVisitAttractions" in the itinerary.
    - CRITICAL PRIORITY: The "specificLocations" have a HIGHER priority than "mustVisitAttractions". You MUST arrange them first, strictly respecting the user's specified hotel, dates (preferredDate), times (preferredTime), suggested durations (duration), and distance/notes (notes).
-   - If the user specifies an accommodation/hotel in "specificLocations" or via hotel fields, use it as the daily hotel loop starting and ending point.
+   - DAY-DATE BINDING RULE: Each output day's "date" field MUST exactly match the trip's day-by-day date table below. Any "specificLocations" entry with a "preferredDate" MUST be placed ONLY on the day whose "date" field equals that "preferredDate" - NOT on any other day, even if it would otherwise fit better. The exact day assignments are listed below in "SPECIFIC LOCATION DATE ASSIGNMENTS" - you MUST follow them precisely.
+   - If the user specifies an accommodation/hotel in "specificLocations" or via hotel fields, use it as the daily hotel loop starting and ending point for that day (and surrounding days where applicable, per the AIRPORT & HOTEL LOOP RULE).
    - You MUST strictly follow the user's suggested durations (duration) and note requirements (e.g. distance details, special timings) for all specific locations.
    - For every "referenceAttractions" (URLs) provided by the user, you MUST create or adapt an activity for it, and strictly inject that URL into the "links" array of that activity.
 9. OPTIMIZATION & FILLING GAPS: You MUST optimize the itinerary to be rich and fulfilling. There should be NO gaps longer than 90 minutes between activities (excluding sleep). If the user's requested attractions do not fill the entire day, you MUST proactively recommend and invent high-quality, logically located activities (e.g., highly-rated local cafes, hidden gem sightseeing, shopping districts) to fill the empty time slots.
@@ -455,6 +473,12 @@ CRITICAL RULES:
 - Default to English if the locale is unrecognized.
 13. COORDINATE RULE: You MUST provide realistic real-world geographic coordinates (latitude and longitude) for every activity's "location" object. Under no circumstances should latitude or longitude be 0 or omitted, as they are directly used for rendering the dynamic route maps and calculate distances. If you don't know the exact coordinates of a specific spot, estimate them based on its parent city/region.
 
+==================================================
+TRIP DAY-BY-DAY DATE TABLE (the output "days" array MUST contain exactly ${tripDayCount} entries, one per row, with "date" set EXACTLY as shown):
+${dayDateMap.map(d => `- Day ${d.dayNumber}: date = "${d.date}"`).join('\n')}
+
+SPECIFIC LOCATION DATE ASSIGNMENTS (mandatory - see Rule 8 DAY-DATE BINDING RULE):
+${specificLocationDateAssignments.length > 0 ? specificLocationDateAssignments.join('\n') : '- (No date-specific locations provided.)'}
 ==================================================
 CRITICAL TOUR PLAN SPECIFICATIONS AND BUSINESS RULES WARNING:
 YOU MUST STRICTLY COMPLY WITH ALL TOUR PLAN SPECIFICATIONS AND RULES DEFINED ABOVE:
@@ -521,7 +545,7 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
 
         // 檢查第一天第一站 (去程對齊)
         if (firstDay.activities && firstDay.activities.length > 0) {
-          const arrTime = outgoingFlight ? outgoingFlight.arrivalTime : '08:30';
+          const arrTime = (outgoingFlight && outgoingFlight.arrivalTime) ? outgoingFlight.arrivalTime : '08:30';
           const arrEndTime = addMinutesToTime(arrTime, 90);
           const firstAct = firstDay.activities[0];
 
@@ -531,7 +555,7 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
               order: 0,
               startTime: arrTime,
               endTime: arrEndTime,
-              title: outgoingFlight ? `抵達當地機場 (${outgoingFlight.flightNumber})` : '抵達當地機場',
+              title: (outgoingFlight && outgoingFlight.flightNumber) ? `抵達當地機場 (${outgoingFlight.flightNumber})` : '抵達當地機場',
               type: 'transport',
               description: '順利抵達當地機場，完成通關手續並領取行李。建議您先在機場購買當地的網卡或兌換部分當地貨幣，為接下來的旅程做好準備。',
               location: { name: `${destName}國際機場`, address: `${destName}機場航廈` },
@@ -548,7 +572,7 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
             firstAct.startTime = arrTime;
             firstAct.endTime = arrEndTime;
             firstAct.duration = 90;
-            if (outgoingFlight) {
+            if (outgoingFlight && outgoingFlight.flightNumber) {
               firstAct.title = `抵達當地機場 (${outgoingFlight.flightNumber})`;
             }
           }
@@ -570,7 +594,7 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
 
         // 檢查最後一天最後一站 (回程對齊)
         if (lastDay.activities && lastDay.activities.length > 0) {
-          const depTime = returnFlight ? returnFlight.departureTime : '18:00';
+          const depTime = (returnFlight && returnFlight.departureTime) ? returnFlight.departureTime : '18:00';
           const airportStart = subMinutesFromTime(depTime, 150);
           let lastAct = lastDay.activities[lastDay.activities.length - 1];
 
@@ -580,7 +604,7 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
               order: lastDay.activities.length,
               startTime: airportStart,
               endTime: depTime,
-              title: returnFlight ? `抵達機場準備返航 (${returnFlight.flightNumber})` : '抵達機場準備返國',
+              title: (returnFlight && returnFlight.flightNumber) ? `抵達機場準備返航 (${returnFlight.flightNumber})` : '抵達機場準備返國',
               type: 'transport',
               description: '帶著滿滿的美好回憶，抵達機場準備搭機返國。建議您預留足夠的時間辦理退稅手續，並在免稅店做最後的採購。',
               location: { name: `${destName}國際機場`, address: `${destName}機場航廈` },
@@ -597,7 +621,7 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
             lastAct.startTime = airportStart;
             lastAct.endTime = depTime;
             lastAct.duration = 150;
-            if (returnFlight) {
+            if (returnFlight && returnFlight.flightNumber) {
               lastAct.title = `抵達機場準備返航 (${returnFlight.flightNumber})`;
               lastAct.notes = `航班時間：${depTime}。請務必再三確認護照與隨身行李是否帶齊。`;
             }
@@ -1001,14 +1025,14 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
       
       // 1. Depart Hotel or Arrive at Airport
       if (i === 0) {
-        const titleText = outgoingFlight ? `${strings.arriveAirport} (${outgoingFlight.flightNumber})` : strings.arriveAirport;
+        const titleText = (outgoingFlight && outgoingFlight.flightNumber) ? `${strings.arriveAirport} (${outgoingFlight.flightNumber})` : strings.arriveAirport;
         activities.push({
           id: `act-${i}-start`,
           order: 0,
           startTime: '08:30',
           endTime: '10:00',
           title: titleText,
-          localTitle: outgoingFlight ? `Airport (${outgoingFlight.flightNumber})` : 'Airport',
+          localTitle: (outgoingFlight && outgoingFlight.flightNumber) ? `Airport (${outgoingFlight.flightNumber})` : 'Airport',
           type: 'transport',
           description: strings.arriveAirportDesc,
           location: {
@@ -1192,14 +1216,14 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
 
       // 5. Return to Hotel or Depart to Airport
       if (i === dayCount - 1) {
-        const titleText = returnFlight ? `${strings.arriveAirport} (${returnFlight.flightNumber})` : strings.arriveAirport;
+        const titleText = (returnFlight && returnFlight.flightNumber) ? `${strings.arriveAirport} (${returnFlight.flightNumber})` : strings.arriveAirport;
         activities.push({
           id: `act-${i}-end`,
           order: 4,
           startTime: '18:00',
           endTime: '20:00',
           title: titleText,
-          localTitle: returnFlight ? `Airport (${returnFlight.flightNumber})` : 'Airport',
+          localTitle: (returnFlight && returnFlight.flightNumber) ? `Airport (${returnFlight.flightNumber})` : 'Airport',
           type: 'transport',
           description: strings.arriveAirportDesc,
           location: {
