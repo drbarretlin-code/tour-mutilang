@@ -682,7 +682,9 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
       fetchItineraryAction,
       fallbackAction,
       'generateItinerary',
-      1, // Reduce retries for API key errors to avoid spamming
+      // API key 相關錯誤已列為 fatalErrors、不受重試影響；此重試次數僅針對暫時性網路
+      // 失敗。設為 2 讓真正的 AI 路徑在抖動時有一次重試，而非立即掉到離線範本。
+      2,
       ['MISSING_API_KEY', 'INVALID_API_KEY']
     );
   },

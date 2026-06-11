@@ -67,36 +67,47 @@ class ProjectAutonomicCore {
     });
   }
 
+  private markOnline() {
+    if (this.state.network !== 'online') {
+      this.updateNetworkState('online');
+    }
+    if (this.state.healing === 'degraded' && this.pendingQueue.length === 0) {
+      this.state.healing = 'stable';
+      this.state.lastError = null;
+      this.notify();
+    }
+  }
+
   private async performPingVerification() {
+    // 瀏覽器環境：跨來源的連線偵測請求一律受 CORS 阻擋（對 google.com 等外站發出的
+    // fetch 會直接拋錯），因此外部 ping 在 web 上不是可靠的連線訊號。改為信任瀏覽器
+    // 自身的 navigator.onLine 狀態，避免誤判為離線而導致 AI 請求被攔截、誤走離線備援。
+    if (Platform.OS === 'web' && typeof navigator !== 'undefined') {
+      if (navigator.onLine) {
+        this.markOnline();
+      } else if (this.state.network !== 'offline') {
+        this.updateNetworkState('offline');
+      }
+      return;
+    }
+
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 秒超時限制
 
-      // 發起輕量級的 HEAD 請求驗證外網連通性
-      const response = await fetch('https://www.google.com', {
+      // 原生環境：使用 no-cors 模式發出輕量請求。只要能解析（即使是 opaque 回應）即代表
+      // 網路可達；唯有拋錯或逾時才判定為離線。不可依賴 response.ok（opaque 回應永遠為 false）。
+      await fetch('https://www.google.com', {
         method: 'HEAD',
+        mode: 'no-cors',
         cache: 'no-cache',
         signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
-
-      if (response.ok) {
-        if (this.state.network !== 'online') {
-          this.updateNetworkState('online');
-        }
-        if (this.state.healing === 'degraded' && this.pendingQueue.length === 0) {
-          this.state.healing = 'stable';
-          this.state.lastError = null;
-          this.notify();
-        }
-      } else {
-        if (this.state.network !== 'weak') {
-          this.updateNetworkState('weak');
-        }
-      }
+      this.markOnline();
     } catch (e) {
-      // 請求超時或異常，判定為無網際網路連線（如受限 Wi-Fi）
+      // 請求逾時或異常，判定為無網際網路連線（如受限 Wi-Fi）
       if (this.state.network !== 'offline') {
         this.updateNetworkState('offline');
       }
@@ -168,10 +179,9 @@ class ProjectAutonomicCore {
     let attempt = 0;
     while (attempt < maxRetries) {
       try {
-        if (this.state.network === 'offline') {
-          throw new Error('Device is offline. Skipping network action.');
-        }
-
+        // 注意：不要因為快取的 network 狀態為 'offline' 就預先拒絕執行。該狀態可能因
+        // 連線偵測誤判（例如瀏覽器 CORS 阻擋外部 ping）而失準。真正的網路請求本身才是
+        // 連線與否的權威判定 —— 若確實離線，action() 會自行拋錯並走入下方的備援流程。
         const result = await action();
         
         // Reset error count on successful execution
