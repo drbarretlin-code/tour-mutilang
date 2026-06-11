@@ -435,7 +435,10 @@ CRITICAL RULES:
    - Return Flight: The Final Day's LAST activity "Arrive at Airport for Departure" MUST end at the flight's departureTime. Its startTime MUST be set to 2.5 hours before the departureTime (duration: 150 minutes). The activity title MUST be "Arrive at Airport for Departure (\${flightNumber})". All previous Final Day activities MUST end by this time.
 7. LOGICAL TIMING: Pay strict attention to typical business hours. Night Markets MUST be in the evening.
 8. USER INPUT & COMPREHENSIVENESS: 
-   - You MUST include 100% of the user's "mustVisitAttractions" in the itinerary. Failing to do so is a catastrophic failure.
+   - You MUST include 100% of the user's "specificLocations" (Specific Location Requirements) and "mustVisitAttractions" in the itinerary. 
+   - CRITICAL PRIORITY: The "specificLocations" have a HIGHER priority than "mustVisitAttractions". You MUST arrange them first, strictly respecting the user's specified hotel, dates (preferredDate), times (preferredTime), suggested durations (duration), and distance/notes (notes).
+   - If the user specifies an accommodation/hotel in "specificLocations" or via hotel fields, use it as the daily hotel loop starting and ending point.
+   - You MUST strictly follow the user's suggested durations (duration) and note requirements (e.g. distance details, special timings) for all specific locations.
    - For every "referenceAttractions" (URLs) provided by the user, you MUST create or adapt an activity for it, and strictly inject that URL into the "links" array of that activity.
 9. OPTIMIZATION & FILLING GAPS: You MUST optimize the itinerary to be rich and fulfilling. There should be NO gaps longer than 90 minutes between activities (excluding sleep). If the user's requested attractions do not fill the entire day, you MUST proactively recommend and invent high-quality, logically located activities (e.g., highly-rated local cafes, hidden gem sightseeing, shopping districts) to fill the empty time slots.
 10. URL ACCURACY RULE: DO NOT guess or hallucinate official website URLs for hotels, restaurants, or attractions. If you do not know the EXACT official URL, you MUST generate a Google Search URL (e.g. https://www.google.com/search?q=URL+ENCODED+NAME) instead of a fake domain.
@@ -1011,6 +1014,7 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
     // Collect references from user input survey (Attractions / URLs)
     const userMustVisits = survey?.mustVisitAttractions || [];
     const userReferences = survey?.referenceAttractions || [];
+    const userSpecificLocations = survey?.specificLocations || [];
 
     for (let i = 0; i < dayCount; i++) {
       const currentDayDate = new Date(start.getTime() + i * 86400000);
@@ -1022,8 +1026,9 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
       // Activities building
       const activities: Activity[] = [];
 
-      // If user has a specific must-visit attraction for this day, insert it first
-      const matchedMust = userMustVisits.find(item => item.preferredDate === dateStr) || userMustVisits[i];
+      // If user has a specific location or must-visit attraction for this day, insert it
+      const matchedSpecific = userSpecificLocations.find(item => item.preferredDate === dateStr) || userSpecificLocations[i];
+      const matchedMust = matchedSpecific ? null : (userMustVisits.find(item => item.preferredDate === dateStr) || userMustVisits[i]);
       
       // 1. Depart Hotel or Arrive at Airport
       if (i === 0) {
@@ -1085,11 +1090,27 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
       let morningDesc = templates.descs[morningIdx]!;
       let morningPhoto = templates.images[morningIdx]!;
       let morningLinks = [];
+      let morningStartTime = '09:00';
+      let morningDuration = 150;
 
-      if (matchedMust) {
+      if (matchedSpecific) {
+        morningTitle = matchedSpecific.value;
+        morningLocalTitle = matchedSpecific.value;
+        morningDesc = matchedSpecific.notes ? `${matchedSpecific.value} (${matchedSpecific.notes})` : matchedSpecific.value;
+        morningStartTime = matchedSpecific.preferredTime || '09:00';
+        morningDuration = matchedSpecific.duration || 120;
+        if (matchedSpecific.type === 'url' && matchedSpecific.value.startsWith('http')) {
+          morningLinks.push({
+            label: strings.refUrlLabel,
+            url: matchedSpecific.value,
+            type: 'info' as const
+          });
+        }
+      } else if (matchedMust) {
         morningTitle = strings.mustVisitTitle.replace('{value}', matchedMust.value);
         morningLocalTitle = matchedMust.value;
         morningDesc = strings.mustVisitDesc.replace('{value}', matchedMust.value);
+        morningStartTime = matchedMust.preferredTime || '09:00';
         if (matchedMust.type === 'url' && matchedMust.value.startsWith('http')) {
           morningLinks.push({
             label: strings.refUrlLabel,
@@ -1112,22 +1133,22 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
       activities.push({
         id: `act-${i}-1`,
         order: 1,
-        startTime: matchedMust?.preferredTime || '09:00',
-        endTime: '11:30',
+        startTime: morningStartTime,
+        endTime: addMinutesToTime(morningStartTime, morningDuration),
         title: morningTitle,
         localTitle: morningLocalTitle,
         type: 'attraction',
         description: morningDesc,
         location: {
-          name: matchedMust?.value || `${currentDest.name}${strings.classicAttraction}`,
+          name: matchedSpecific?.value || matchedMust?.value || `${currentDest.name}${strings.classicAttraction}`,
           address: `${currentDest.name}`,
           latitude: currentDest.latitude || 0,
           longitude: currentDest.longitude || 0
         },
-        duration: 150,
+        duration: morningDuration,
         links: morningLinks,
-        notes: strings.attractionNotes,
-        isMustVisit: !!matchedMust,
+        notes: matchedSpecific?.notes || strings.attractionNotes,
+        isMustVisit: !!matchedSpecific || !!matchedMust,
         photoUrl: morningPhoto,
         rating: 4.8,
         cost: { amount: 0, currency },

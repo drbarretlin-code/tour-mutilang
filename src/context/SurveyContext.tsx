@@ -24,6 +24,8 @@ interface SurveyContextType {
   removeReferenceAttraction: (id: string) => void;
   addMustVisitAttraction: (type: 'url' | 'image' | 'file' | 'text', value: string, preferredDate?: string, preferredTime?: string, fileName?: string, mimeType?: string) => void;
   removeMustVisitAttraction: (id: string) => void;
+  addSpecificLocation: (type: 'url' | 'image' | 'file' | 'text', value: string, preferredDate?: string, preferredTime?: string, duration?: number, notes?: string, fileName?: string, mimeType?: string) => void;
+  removeSpecificLocation: (id: string) => void;
   saveDraft: () => Promise<void>;
   submitSurvey: () => Promise<void>;
   resetSurvey: () => Promise<void>;
@@ -218,6 +220,29 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const addSpecificLocation = (
+    type: 'url' | 'image' | 'file' | 'text',
+    value: string,
+    preferredDate?: string,
+    preferredTime?: string,
+    duration?: number,
+    notes?: string,
+    fileName?: string,
+    mimeType?: string
+  ) => {
+    const id = Math.random().toString(36).substring(2, 9);
+    const newItem = { id, type, value, preferredDate, preferredTime, duration, notes, fileName, mimeType };
+    updateSurvey({
+      specificLocations: [...(survey.specificLocations || []), newItem]
+    });
+  };
+
+  const removeSpecificLocation = (id: string) => {
+    updateSurvey({
+      specificLocations: (survey.specificLocations || []).filter((item) => item.id !== id)
+    });
+  };
+
   const saveDraft = async () => {
     try {
       // 1. Always save to Local Storage (Offline support)
@@ -282,6 +307,7 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
       // 1. Just proceed with the original user input references and must-visits.
       finalSurvey.referenceAttractions = survey.referenceAttractions;
       finalSurvey.mustVisitAttractions = survey.mustVisitAttractions;
+      finalSurvey.specificLocations = survey.specificLocations || [];
 
       // 2. Save survey draft & submissions in Firestore if logged in
       if (user) {
@@ -360,6 +386,8 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
         removeReferenceAttraction,
         addMustVisitAttraction,
         removeMustVisitAttraction,
+        addSpecificLocation,
+        removeSpecificLocation,
         saveDraft,
         submitSurvey,
         resetSurvey,

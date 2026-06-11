@@ -233,6 +233,18 @@
         "hint": "These will be included in your itinerary.",
         "specifyDate": "Specify preferred date",
         "specifyTime": "Specify preferred time"
+      },
+      "specificLocation": {
+        "label": "Specific Location Requirements",
+        "hint": "Enter locations that must be prioritized over must-visit attractions, such as booked hotels, specific reservation times, or restaurants.",
+        "placeholder": "e.g. Cross Pattaya Hotel, Cliff Restaurant",
+        "specifyDate": "Specify Date (e.g. 2026-07-15)",
+        "specifyTime": "Specify Time (e.g. 14:00)",
+        "duration": "Suggested Duration (mins)",
+        "durationPlaceholder": "e.g. 120",
+        "notes": "Distance & Notes (e.g. travel constraints, tickets)",
+        "notesPlaceholder": "e.g. No MRT within 2km, 2 hours limit",
+        "addBtn": "Add Specific Location Requirement"
       }
     },
     "map": {

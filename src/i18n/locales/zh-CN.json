@@ -233,6 +233,18 @@
         "hint": "这些景点将会被纳入你的行程中。",
         "specifyDate": "指定偏好日期",
         "specifyTime": "指定偏好时间"
+      },
+      "specificLocation": {
+        "label": "特定地点需求",
+        "hint": "在此填写您指定且必须优先安排的地点（优先级大于必去景点），例如酒店、指定时间的票券或特殊餐厅。",
+        "placeholder": "例如: 芭达雅 Cross 酒店、悬崖餐厅",
+        "specifyDate": "指定日期 (如 2026-07-15)",
+        "specifyTime": "指定时间 (如 14:00)",
+        "duration": "建议停留时间 (分钟)",
+        "durationPlaceholder": "例如: 120",
+        "notes": "距离与额外备注 (如交通距离、限时票券)",
+        "notesPlaceholder": "例如: 附近 2 公里内无地铁、下午茶限时 2 小时",
+        "addBtn": "新增特定地点需求"
       }
     },
     "map": {

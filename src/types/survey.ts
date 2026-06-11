@@ -153,6 +153,8 @@ export interface MultiModalInput {
   mimeType?: string;
   preferredDate?: string;
   preferredTime?: string;
+  duration?: number; // 建議停留時間 (分鐘)
+  notes?: string;    // 距離或備註
 }
 
 // ─── Composite Survey Data ───
@@ -189,6 +191,7 @@ export interface TripSurvey {
   // Tier 3: Optional
   referenceAttractions: MultiModalInput[];
   mustVisitAttractions: MultiModalInput[];
+  specificLocations?: MultiModalInput[];
   morningPreference: MorningPreference;
   dailyMealBudget?: number;
   accommodationLocation?: AccommodationLocation;
@@ -256,6 +259,7 @@ export function createDefaultSurvey(userId: string): TripSurvey {
       { id: generateId(), type: 'text', value: 'Big C Supercenter' },
       { id: generateId(), type: 'text', value: 'Park Sathorn Restaurant' }
     ],
+    specificLocations: [],
     morningPreference: 'normal',
     accommodationAmenities: [],
     accessibilityNeeds: [],
