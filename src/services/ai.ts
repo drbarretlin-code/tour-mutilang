@@ -384,11 +384,35 @@ export const aiService = {
         d.setDate(d.getDate() + i);
         dayDateMap.push({ dayNumber: i + 1, date: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` });
       }
+      // 將使用者輸入的 preferredDate 正規化成日期範圍。支援單一日期 ("2026-07-15")
+      // 與區間 ("2026-07-14~2026-07-16" 或以 - 連接)。回傳該範圍涵蓋的所有 dayNumber。
+      const parseDateRangeToDays = (raw: string): { startDate: string; endDate: string; dayNumbers: number[] } | null => {
+        if (!raw) return null;
+        const parts = raw.split(/\s*[~]\s*|\s+to\s+/i).map(s => s.trim()).filter(Boolean);
+        // 若用「-」分隔且看起來像兩個完整日期 (YYYY-MM-DD-YYYY-MM-DD)，特別處理
+        let startStr = parts[0];
+        let endStr = parts[1] || parts[0];
+        if (parts.length === 1) {
+          const m = raw.match(/^(\d{4}-\d{2}-\d{2})\s*-\s*(\d{4}-\d{2}-\d{2})$/);
+          if (m) { startStr = m[1]; endStr = m[2]; }
+        }
+        const inRange = dayDateMap.filter(d => d.date >= startStr && d.date <= endStr);
+        return { startDate: startStr, endDate: endStr, dayNumbers: inRange.map(d => d.dayNumber) };
+      };
       const specificLocationDateAssignments = (alignedSurvey?.specificLocations || [])
         .filter(loc => loc.preferredDate)
         .map(loc => {
-          const matchedDay = dayDateMap.find(d => d.date === loc.preferredDate);
-          return `- "${loc.value}" (preferredDate: ${loc.preferredDate}, preferredTime: ${loc.preferredTime || 'N/A'}, duration: ${loc.duration || 'N/A'}, notes: ${loc.notes || 'N/A'}) MUST be scheduled on ${matchedDay ? `Day ${matchedDay.dayNumber} (date: ${matchedDay.date})` : `the day whose "date" field equals "${loc.preferredDate}" (this date falls outside the computed trip range — still create/extend that day to accommodate it)`}.`;
+          const range = parseDateRangeToDays(loc.preferredDate!);
+          const isHotel = /飯店|hotel|resort|villa|inn|住宿|旅館/i.test(loc.value || '');
+          const meta = `(preferredDate: ${loc.preferredDate}, preferredTime: ${loc.preferredTime || 'N/A'}, duration: ${loc.duration || 'N/A'}, notes: ${loc.notes || 'N/A'})`;
+          if (range && range.dayNumbers.length > 0) {
+            if (range.dayNumbers.length > 1 || isHotel) {
+              // 跨多日的住宿：作為這幾天的每日起訖（hotel loop）基準點
+              return `- "${loc.value}" ${meta} is an accommodation/multi-day item spanning Day ${range.dayNumbers.join(', Day ')} (dates ${range.startDate} ~ ${range.endDate}). For EACH of those days it MUST be used as the daily hotel loop anchor: the day STARTS by departing this exact hotel and ENDS by returning to this exact hotel (with the airport exceptions on the first/last trip day). Do NOT invent a different hotel for these days, and do NOT list it as a sightseeing attraction.`;
+            }
+            return `- "${loc.value}" ${meta} MUST be scheduled on Day ${range.dayNumbers[0]} (date: ${range.startDate}).`;
+          }
+          return `- "${loc.value}" ${meta} MUST be scheduled on the day whose "date" field equals "${loc.preferredDate}" (this date falls outside the computed trip range — still create/extend that day to accommodate it).`;
         });
 
       const systemPrompt = `
@@ -495,7 +519,10 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
         body: JSON.stringify({
           system_instruction: { parts: [{ text: systemPrompt }] },
           contents: [{ role: 'user', parts: [{ text: JSON.stringify(alignedSurvey) }] }],
-          tools: [{ googleSearch: {} }],
+          // 注意：不可同時啟用 googleSearch 接地工具與 response_mime_type: 'application/json'，
+          // Gemini API 會回傳 400（兩者互斥）導致每次呼叫都失敗、靜默掉到離線範本。
+          // 我們需要可靠的 JSON 輸出，故保留 JSON 模式、移除 googleSearch；URL 正確性改由
+          // verifyItineraryLinks 事後驗證處理。
           generationConfig: {
             response_mime_type: 'application/json',
             temperature: 0.7
@@ -505,10 +532,12 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
 
       if (!response.ok) {
         const errJson = await response.json().catch(() => ({}));
+        // 記錄完整錯誤內容，避免 AI 呼叫失敗時只看到靜默掉到離線範本而無從診斷。
+        console.error(`[generateItinerary] Gemini API error ${response.status}:`, errJson?.error?.message || errJson);
         if (response.status === 400 && errJson.error?.message?.includes('API key not valid')) {
           throw new Error('INVALID_API_KEY');
         }
-        throw new Error(`Gemini API returned status ${response.status}`);
+        throw new Error(`Gemini API returned status ${response.status}: ${errJson?.error?.message || 'unknown error'}`);
       }
 
       const data = await response.json();
@@ -1011,18 +1040,45 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
     const userReferences = survey?.referenceAttractions || [];
     const userSpecificLocations = survey?.specificLocations || [];
 
+    // 判斷某筆特定地點是否為住宿（飯店/度假村/villa…），以及其涵蓋的日期範圍。
+    const isHotelItem = (v?: string) => !!v && /飯店|hotel|resort|villa|inn|住宿|旅館|ホテル/i.test(v);
+    const parseRange = (raw?: string): { startStr: string; endStr: string } | null => {
+      if (!raw) return null;
+      const parts = raw.split(/\s*[~]\s*|\s+to\s+/i).map(s => s.trim()).filter(Boolean);
+      let startStr = parts[0];
+      let endStr = parts[1] || parts[0];
+      if (parts.length === 1) {
+        const m = raw.match(/^(\d{4}-\d{2}-\d{2})\s*-\s*(\d{4}-\d{2}-\d{2})$/);
+        if (m) { startStr = m[1]; endStr = m[2]; }
+      }
+      return { startStr, endStr };
+    };
+    // 找出涵蓋指定日期的住宿名稱（支援日期區間），作為當日 hotel loop 的起訖點。
+    const resolveHotelForDate = (dateStr: string): string | null => {
+      for (const loc of userSpecificLocations) {
+        if (!isHotelItem(loc.value)) continue;
+        const r = parseRange(loc.preferredDate);
+        if (r && dateStr >= r.startStr && dateStr <= r.endStr) return loc.value;
+      }
+      return null;
+    };
+
     for (let i = 0; i < dayCount; i++) {
       const currentDayDate = new Date(start.getTime() + i * 86400000);
       const dateStr = `${currentDayDate.getFullYear()}-${String(currentDayDate.getMonth() + 1).padStart(2, '0')}-${String(currentDayDate.getDate()).padStart(2, '0')}`;
-      
+
       const destIndex = i % (survey?.destinations?.length || 1);
       const currentDest = survey?.destinations?.[destIndex] || { name: mainDest, country };
+
+      // 當日住宿（依日期區間解析），作為每日起訖點；找不到則退回通用名稱。
+      const dayHotelName = resolveHotelForDate(dateStr) || strings.hotelName;
 
       // Activities building
       const activities: Activity[] = [];
 
-      // If user has a specific location or must-visit attraction for this day, insert it
-      const matchedSpecific = userSpecificLocations.find(item => item.preferredDate === dateStr) || userSpecificLocations[i];
+      // 非住宿的特定地點才當作當日景點插入；住宿改由 hotel loop 起訖點處理，不重複列為景點。
+      const matchedSpecific = userSpecificLocations.find(item => !isHotelItem(item.value) && item.preferredDate === dateStr)
+        || userSpecificLocations.find(item => !isHotelItem(item.value) && (() => { const r = parseRange(item.preferredDate); return !!r && dateStr >= r.startStr && dateStr <= r.endStr; })());
       const matchedMust = matchedSpecific ? null : (userMustVisits.find(item => item.preferredDate === dateStr) || userMustVisits[i]);
       
       // 1. Depart Hotel or Arrive at Airport
@@ -1058,12 +1114,12 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
           order: 0,
           startTime: '08:30',
           endTime: '09:00',
-          title: strings.departHotel,
-          localTitle: 'Hotel',
+          title: `${strings.departHotel}（${dayHotelName}）`,
+          localTitle: dayHotelName,
           type: 'hotel',
           description: strings.departHotelDesc,
           location: {
-            name: strings.hotelName,
+            name: dayHotelName,
             address: `${currentDest.name}${strings.hotelAddress}`,
             latitude: currentDest.latitude || 0,
             longitude: currentDest.longitude || 0
@@ -1249,12 +1305,12 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
           order: 4,
           startTime: '18:00',
           endTime: '18:30',
-          title: strings.returnHotel,
-          localTitle: 'Hotel',
+          title: `${strings.returnHotel}（${dayHotelName}）`,
+          localTitle: dayHotelName,
           type: 'hotel',
           description: strings.returnHotelDesc,
           location: {
-            name: strings.hotelName,
+            name: dayHotelName,
             address: `${currentDest.name}${strings.hotelAddress}`,
             latitude: currentDest.latitude || 0,
             longitude: currentDest.longitude || 0
@@ -1272,7 +1328,7 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
       // 3. Fallback 航班時間對齊校正
       if (i === 0) {
         // 第一天去程對齊
-        const arrTime = outgoingFlight ? outgoingFlight.arrivalTime : '08:30';
+        const arrTime = (outgoingFlight && outgoingFlight.arrivalTime) ? outgoingFlight.arrivalTime : '08:30';
         const arrEndTime = addMinutesToTime(arrTime, 90);
         const firstAct = activities[0];
         if (firstAct) {
@@ -1295,7 +1351,7 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
         }
       } else if (i === dayCount - 1) {
         // 最後一天回程對齊
-        const depTime = returnFlight ? returnFlight.departureTime : '18:00';
+        const depTime = (returnFlight && returnFlight.departureTime) ? returnFlight.departureTime : '18:00';
         const airportStart = subMinutesFromTime(depTime, 150);
         const lastAct = activities[activities.length - 1];
         if (lastAct) {

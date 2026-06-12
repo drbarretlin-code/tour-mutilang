@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch } from 'react-native';
 import { useSurvey } from '../../context/SurveyContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -19,7 +19,12 @@ import {
   InsuranceStatus
 } from '../../types/survey';
 
-export function StepDetails() {
+export interface StepDetailsHandle {
+  /** 提交所有尚未加入清單、但已填寫於輸入框中的航班，避免使用者忘記按「新增」而遺失資料 */
+  commitPendingInputs: () => void;
+}
+
+export const StepDetails = forwardRef<StepDetailsHandle>((_props, ref) => {
   const { survey, updateSurvey, addFlight, removeFlight } = useSurvey();
   const { colors, spacing, borderRadius, typography } = useTheme();
 
@@ -120,6 +125,15 @@ export function StepDetails() {
     setRetFArr('');
     setFReturn(false);
   };
+
+  // 對外暴露：在離開此步驟前，自動提交尚未加入的航班輸入（避免使用者忘記按「新增航班資訊」）
+  useImperativeHandle(ref, () => ({
+    commitPendingInputs: () => {
+      if (fNum || fDep || fArr || retFNum || retFDep || retFArr) {
+        handleAddFlight();
+      }
+    },
+  }));
 
   const toggleMultiselect = <T extends string>(field: string, value: T) => {
     const list = (survey as any)[field] as string[];
@@ -526,7 +540,9 @@ export function StepDetails() {
 
     </ScrollView>
   );
-}
+});
+
+StepDetails.displayName = 'StepDetails';
 
 const styles = StyleSheet.create({
   container: {

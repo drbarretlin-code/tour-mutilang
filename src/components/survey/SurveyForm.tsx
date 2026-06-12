@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, TouchableOpacity, ScrollView, Platform, Alert } from 'react-native';
 import { useSurvey } from '../../context/SurveyContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -7,7 +7,7 @@ import { StepIndicator } from '../common/StepIndicator';
 import { Button } from '../common/Button';
 import { StepBasics } from './StepBasics';
 import { StepPreferences } from './StepPreferences';
-import { StepDetails } from './StepDetails';
+import { StepDetails, StepDetailsHandle } from './StepDetails';
 import { StepAttractions } from './StepAttractions';
 import { t } from '../../i18n';
 import { router } from 'expo-router';
@@ -25,6 +25,14 @@ export function SurveyForm() {
   const [showApiModal, setShowApiModal] = useState(false);
   
   const [step, setStep] = useState(0);
+  const stepDetailsRef = useRef<StepDetailsHandle>(null);
+
+  // 在離開「旅遊風格與興趣」步驟（含航班資訊）前，提交尚未加入的航班輸入
+  const commitStepPendingInputs = () => {
+    if (step === 2) {
+      stepDetailsRef.current?.commitPendingInputs();
+    }
+  };
 
   const stepLabels = [
     t('survey.sections.basics'),
@@ -76,6 +84,7 @@ export function SurveyForm() {
   const handleNext = () => {
     try {
       if (validateStep(step)) {
+        commitStepPendingInputs();
         if (step < totalSteps - 1) {
           setStep(step + 1);
         }
@@ -195,7 +204,7 @@ export function SurveyForm() {
       case 1:
         return <StepPreferences />;
       case 2:
-        return <StepDetails />;
+        return <StepDetails ref={stepDetailsRef} />;
       case 3:
         return <StepAttractions />;
       default:
