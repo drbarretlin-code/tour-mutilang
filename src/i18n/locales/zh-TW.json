@@ -671,6 +671,11 @@
       "title": "全行程 3D 立體景觀圖",
       "openNavigation": "用 %{provider} 開啟完整路線導航"
     },
+    "fallback": {
+      "title": "⚠️ 此為離線範本行程（AI 生成未成功）",
+      "desc": "目前顯示的是離線備援範本，並未依您的航班與飯店需求由 AI 生成。請確認已設定有效的 Gemini API Key 與網路連線後，點右上角重新整理重試。",
+      "reason": "失敗原因"
+    },
     "nav": {
       "collapse": "收起選單面板",
       "expand": "展開視圖與天數選單"

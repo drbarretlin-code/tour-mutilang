@@ -16,6 +16,10 @@ export interface Itinerary {
   totalEstimatedCost: CostEstimate;
   currency: string;
   mapImageUrl?: string;
+  /** 此行程是否由離線範本產生（AI 生成失敗時的備援），用於在 UI 上明確提示使用者 */
+  generatedByFallback?: boolean;
+  /** 若使用離線範本，記錄 AI 失敗的真實原因，便於診斷 */
+  fallbackReason?: string;
 }
 
 export interface ItineraryDay {

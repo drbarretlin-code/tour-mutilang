@@ -8,7 +8,10 @@ import i18n from '../i18n';
 import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
 import { TOUR_PLAN_RULES } from '../constants/tourRules';
 
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=';
+// 注意：gemini-1.5-flash 系列已逐步退役，舊型號會回傳 404 並導致靜默掉到離線範本。
+// 統一改用目前 GA 的 gemini-2.0-flash（支援 system_instruction 與 JSON 輸出）。
+const GEMINI_MODEL = 'gemini-2.0-flash';
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=`;
 
 function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
   if (!itinerary) return;
@@ -368,6 +371,9 @@ export const aiService = {
     const appLocale = i18n.locale || survey.locale || 'zh-TW';
     const alignedSurvey = { ...survey, locale: appLocale };
 
+    // 捕捉最後一次 AI 失敗原因，供備援行程在 UI 上明確顯示，終結「靜默掉到範本」的盲點。
+    let lastAiError: string | null = null;
+
     const fetchItineraryAction = async (): Promise<Itinerary> => {
       const apiKey = await settingsService.getApiKey();
       if (!apiKey) {
@@ -704,11 +710,24 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
     };
 
     const fallbackAction = (): Itinerary => {
-      return this.generateFallbackItinerary(alignedSurvey);
+      const fallback = this.generateFallbackItinerary(alignedSurvey);
+      // 明確標記此行程來自離線範本，並附上 AI 失敗的真實原因，讓 UI 能提示使用者。
+      fallback.generatedByFallback = true;
+      fallback.fallbackReason = lastAiError || 'AI 服務暫時無法使用（未知原因）';
+      console.warn('[generateItinerary] 已改用離線範本，AI 失敗原因：', fallback.fallbackReason);
+      return fallback;
     };
 
     return PACEngine.executeWithHealing(
-      fetchItineraryAction,
+      // 包一層 try/catch 以記錄 AI 失敗的真實原因（PACEngine 會吞掉錯誤改走備援）。
+      async () => {
+        try {
+          return await fetchItineraryAction();
+        } catch (e: any) {
+          lastAiError = e?.message || String(e);
+          throw e;
+        }
+      },
       fallbackAction,
       'generateItinerary',
       // API key 相關錯誤已列為 fatalErrors、不受重試影響；此重試次數僅針對暫時性網路
@@ -1505,7 +1524,7 @@ JSON 結構樣式：
         throw new Error('MISSING_API_KEY');
       }
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      const response = await fetch(`${GEMINI_API_URL}${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1592,7 +1611,7 @@ JSON 結構樣式：
       console.log('[getDestinationGuideInfo] API Key found (first 8:', apiKey.substring(0, 8), '...)');
 
       console.log('[getDestinationGuideInfo] Calling Gemini API for:', country);
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      const response = await fetch(`${GEMINI_API_URL}${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

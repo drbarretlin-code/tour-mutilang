@@ -653,7 +653,37 @@ export default function ItineraryScreen() {
 
       {/* === STATE 3: Main Itinerary Content === */}
       <View style={[styles.container, { display: showContent ? 'flex' : 'none' }]}>
-        
+
+        {/* AI 生成失敗、改用離線範本時的明確警示橫幅（含真實失敗原因，方便診斷） */}
+        {itinerary?.generatedByFallback && (
+          <View style={{
+            backgroundColor: colors.warning50,
+            borderColor: colors.warning500,
+            borderWidth: 1,
+            borderRadius: borderRadius.md,
+            margin: isLargeScreen ? spacing.md : spacing.xs,
+            marginBottom: 0,
+            padding: spacing.md,
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+          }}>
+            <Ionicons name="warning" size={20} color={colors.warning600} style={{ marginRight: spacing.sm, marginTop: 2 }} />
+            <View style={{ flex: 1 }}>
+              <Text style={[typography.labelMedium, { color: colors.warning700, fontWeight: '800', marginBottom: 2 }]}>
+                {t('itinerary.fallback.title')}
+              </Text>
+              <Text style={[typography.bodySmall, { color: colors.warning700 }]}>
+                {t('itinerary.fallback.desc')}
+              </Text>
+              {!!itinerary?.fallbackReason && (
+                <Text style={[typography.caption, { color: colors.warning600, marginTop: 4 }]} selectable>
+                  {t('itinerary.fallback.reason')}: {itinerary.fallbackReason}
+                </Text>
+              )}
+            </View>
+          </View>
+        )}
+
         {/* Consolidated Floating Control Panel */}
         <View style={{ 
           backgroundColor: colors.surface, 
