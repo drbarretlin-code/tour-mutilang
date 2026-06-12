@@ -675,6 +675,12 @@ export default function ItineraryScreen() {
               <Text style={[typography.bodySmall, { color: colors.warning700 }]}>
                 {t('itinerary.fallback.desc')}
               </Text>
+              {/* 針對配額不足（429）給出可行動的中文指引 */}
+              {!!itinerary?.fallbackReason && /429|quota|exceeded/i.test(itinerary.fallbackReason) && (
+                <Text style={[typography.bodySmall, { color: colors.warning700, fontWeight: '700', marginTop: 6 }]}>
+                  {t('itinerary.fallback.quotaHint')}
+                </Text>
+              )}
               {!!itinerary?.fallbackReason && (
                 <Text style={[typography.caption, { color: colors.warning600, marginTop: 4 }]} selectable>
                   {t('itinerary.fallback.reason')}: {itinerary.fallbackReason}

@@ -674,7 +674,8 @@
     "fallback": {
       "title": "⚠️ 此為離線範本行程（AI 生成未成功）",
       "desc": "目前顯示的是離線備援範本，並未依您的航班與飯店需求由 AI 生成。請確認已設定有效的 Gemini API Key 與網路連線後，點右上角重新整理重試。",
-      "reason": "失敗原因"
+      "reason": "失敗原因",
+      "quotaHint": "您的 Gemini API Key 免費額度為 0（配額不足）。請至 Google AI Studio / Google Cloud 為該金鑰所屬專案「啟用帳單（billing）」改用付費方案，或改用具免費額度的金鑰；部分地區不提供免費方案。完成後再點右上角重新整理重試。"
     },
     "nav": {
       "collapse": "收起選單面板",
