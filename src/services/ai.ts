@@ -7,11 +7,83 @@ import { verifyItineraryLinks, verifyUrlRAG } from '../utils/linkVerifier';
 import i18n from '../i18n';
 import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
 import { TOUR_PLAN_RULES } from '../constants/tourRules';
+import { fetchDestinationPOIs, POI, PoiCategory } from './poi';
 
 // 注意：gemini-1.5-flash 系列已逐步退役，舊型號會回傳 404 並導致靜默掉到離線範本。
 // 統一改用目前 GA 的 gemini-2.0-flash（支援 system_instruction 與 JSON 輸出）。
 const GEMINI_MODEL = 'gemini-2.0-flash';
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=`;
+
+// ─── POI → 行程範本 轉換（規則式引擎使用） ───
+
+/** 範本物件形狀，與 getDestTemplates 相容，另含真實座標 coords 供直接定位 */
+interface DestTemplate {
+  images: string[];
+  titles: string[];
+  localTitles: string[];
+  descs: string[];
+  coords?: { lat: number; lon: number }[];
+}
+
+/** 各分類的代表性示意圖（OpenTripMap radius 不含圖片，以分類對應穩定的免費圖庫） */
+const CATEGORY_IMAGE: Record<PoiCategory, string> = {
+  cultural: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=600',
+  historic: 'https://images.unsplash.com/photo-1558117338-7b6a3b6b6b6b?w=600',
+  architecture: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600',
+  museum: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600',
+  nature: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600',
+  beach: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600',
+  park: 'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=600',
+  religion: 'https://images.unsplash.com/photo-1545126178-862cdb469409?w=600',
+  shopping: 'https://images.unsplash.com/photo-1481437156560-3205f6a55735?w=600',
+  market: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=600',
+  food: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600',
+  amusement: 'https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?w=600',
+  viewpoint: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600',
+  entertainment: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=600',
+  other: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600',
+};
+
+/** 各語系的分類標籤，用於組裝制式但真實的景點描述 */
+const CATEGORY_LABEL: Record<string, Record<PoiCategory, string>> = {
+  'zh-TW': {
+    cultural: '文化景點', historic: '歷史古蹟', architecture: '特色建築', museum: '博物館',
+    nature: '自然景觀', beach: '海灘', park: '公園綠地', religion: '宗教廟宇',
+    shopping: '購物商圈', market: '在地市集', food: '美食餐廳', amusement: '遊樂景點',
+    viewpoint: '觀景點', entertainment: '娛樂場所', other: '熱門景點',
+  },
+  'zh-CN': {
+    cultural: '文化景点', historic: '历史古迹', architecture: '特色建筑', museum: '博物馆',
+    nature: '自然景观', beach: '海滩', park: '公园绿地', religion: '宗教庙宇',
+    shopping: '购物商圈', market: '在地市集', food: '美食餐厅', amusement: '游乐景点',
+    viewpoint: '观景点', entertainment: '娱乐场所', other: '热门景点',
+  },
+  'en': {
+    cultural: 'cultural site', historic: 'historic landmark', architecture: 'notable architecture', museum: 'museum',
+    nature: 'natural attraction', beach: 'beach', park: 'park', religion: 'temple / shrine',
+    shopping: 'shopping district', market: 'local market', food: 'restaurant', amusement: 'attraction',
+    viewpoint: 'viewpoint', entertainment: 'entertainment venue', other: 'popular spot',
+  },
+};
+
+/** 由真實 POI 清單組裝出與 getDestTemplates 相容的範本物件 */
+function buildDestTemplateFromPOIs(pois: POI[], destName: string, locale: string): DestTemplate {
+  const labels = CATEGORY_LABEL[locale] || CATEGORY_LABEL['en'];
+  const tpl: DestTemplate = { images: [], titles: [], localTitles: [], descs: [], coords: [] };
+  for (const p of pois) {
+    const label = labels[p.category] || labels.other;
+    tpl.titles.push(p.name);
+    tpl.localTitles.push(p.localName || p.name);
+    tpl.images.push(CATEGORY_IMAGE[p.category] || CATEGORY_IMAGE.other);
+    tpl.coords!.push({ lat: p.lat, lon: p.lon });
+    if (locale.startsWith('zh')) {
+      tpl.descs.push(`「${p.name}」是${destName}著名的${label}，深受旅客喜愛。建議安排充裕的時間細細探訪，感受當地獨特的氛圍與風情。實際開放時間與票價請於出發前再次確認。`);
+    } else {
+      tpl.descs.push(`${p.name} is a well-known ${label} in ${destName}, popular with travelers. Allow enough time to explore it and soak in the local atmosphere. Please re-confirm opening hours and ticket prices before you go.`);
+    }
+  }
+  return tpl;
+}
 
 function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
   if (!itinerary) return;
@@ -362,11 +434,59 @@ export const aiService = {
   healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
     healItineraryCoordinates(itinerary, survey);
   },
+
   /**
-   * Submits the survey to the backend AI to generate a complete travel itinerary.
-   * @param survey The complete survey data gathered from the user
+   * 主要行程生成入口：採「規則式引擎 + 免費 POI（OpenTripMap）」，完全不依賴 LLM／無配額問題。
+   * 排程完全依 tour_plan 規則（航班時間、飯店日期區間、每日起訖閉環、興趣、步調）由本程式控制。
    */
   async generateItinerary(survey: TripSurvey): Promise<Itinerary> {
+    return this.generateRuleBasedItinerary(survey);
+  },
+
+  /**
+   * 規則式行程引擎：逐目的地抓取真實 POI，套入確定性排程器產出行程。
+   */
+  async generateRuleBasedItinerary(survey: TripSurvey): Promise<Itinerary> {
+    const appLocale = i18n.locale || survey.locale || 'zh-TW';
+    const alignedSurvey = { ...survey, locale: appLocale };
+
+    const start = new Date(alignedSurvey?.dates?.startDate || Date.now());
+    const end = new Date(alignedSurvey?.dates?.endDate || Date.now() + 86400000 * 3);
+    const dayCount = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / 86400000) + 1);
+    const limitPerDest = Math.max(12, dayCount * 3);
+
+    // 逐目的地抓取真實 POI（並行），組成範本；任何目的地失敗則該地退回內建範本。
+    const poiByDest: Record<string, DestTemplate> = {};
+    const dests = alignedSurvey?.destinations || [];
+    await Promise.all(dests.map(async (d) => {
+      if (!d?.name || poiByDest[d.name]) return;
+      try {
+        const pois = await fetchDestinationPOIs({
+          destName: d.name,
+          lat: d.latitude,
+          lon: d.longitude,
+          interests: alignedSurvey.interests || [],
+          limit: limitPerDest,
+        });
+        if (pois.length > 0) {
+          poiByDest[d.name] = buildDestTemplateFromPOIs(pois, d.name, appLocale);
+        }
+      } catch (e) {
+        console.warn(`[generateRuleBasedItinerary] 取得 ${d.name} POI 失敗，改用內建範本`, e);
+      }
+    }));
+
+    const itinerary = this.generateFallbackItinerary(alignedSurvey, poiByDest);
+    // 此為正式生成方式（非 AI 失敗備援），故不標記 generatedByFallback。
+    healItineraryCoordinates(itinerary, alignedSurvey);
+    return itinerary;
+  },
+
+  /**
+   * （保留）以 Gemini LLM 生成行程。目前預設不啟用；如需切換可改由 generateItinerary 呼叫此方法。
+   * @param survey The complete survey data gathered from the user
+   */
+  async generateItineraryWithGemini(survey: TripSurvey): Promise<Itinerary> {
     // 強制將 survey.locale 對齊至當前 App 實體運作中的語系設定，避免語系未同步造成的英文行程
     const appLocale = i18n.locale || survey.locale || 'zh-TW';
     const alignedSurvey = { ...survey, locale: appLocale };
@@ -740,7 +860,7 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
   /**
    * Generates a structural fallback itinerary matching survey inputs
    */
-  generateFallbackItinerary(survey: TripSurvey): Itinerary {
+  generateFallbackItinerary(survey: TripSurvey, poiByDest?: Record<string, DestTemplate>): Itinerary {
     const start = new Date(survey?.dates?.startDate || Date.now());
     const end = new Date(survey?.dates?.endDate || Date.now() + 86400000 * 3);
     const dayCount = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
@@ -1052,7 +1172,14 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
       }
     };
 
-    const templates = getDestTemplates(mainDest, locale);
+    // 解析每個目的地當日要用的範本：優先採用傳入的真實 POI（規則式引擎），否則退回內建範本。
+    const resolveTemplates = (destName: string): DestTemplate => {
+      const poiTpl = poiByDest?.[destName];
+      if (poiTpl && poiTpl.titles.length > 0) return poiTpl;
+      return getDestTemplates(destName, locale);
+    };
+    // 各目的地的景點取用游標，逐日遞增以避免全程重複景點。
+    const destCursor: Record<string, number> = {};
 
     // Collect references from user input survey (Attractions / URLs)
     const userMustVisits = survey?.mustVisitAttractions || [];
@@ -1088,6 +1215,13 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
 
       const destIndex = i % (survey?.destinations?.length || 1);
       const currentDest = survey?.destinations?.[destIndex] || { name: mainDest, country };
+
+      // 當日所用範本（真實 POI 優先）與不重複的景點游標
+      const templates = resolveTemplates(currentDest.name);
+      const cursor = destCursor[currentDest.name] || 0;
+      const morningIdx2 = templates.titles.length ? cursor % templates.titles.length : 0;
+      const afternoonIdx2 = templates.titles.length ? (cursor + 1) % templates.titles.length : 0;
+      destCursor[currentDest.name] = cursor + 2;
 
       // 當日住宿（依日期區間解析），作為每日起訖點；找不到則退回通用名稱。
       const dayHotelName = resolveHotelForDate(dateStr) || strings.hotelName;
@@ -1154,11 +1288,12 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
       }
 
       // 2. Morning Activity
-      const morningIdx = (i * 2) % templates.titles.length;
+      const morningIdx = morningIdx2;
       let morningTitle = templates.titles[morningIdx]!;
       let morningLocalTitle = templates.localTitles[morningIdx]!;
       let morningDesc = templates.descs[morningIdx]!;
       let morningPhoto = templates.images[morningIdx]!;
+      let morningCoord = templates.coords?.[morningIdx];
       let morningLinks = [];
       let morningStartTime = '09:00';
       let morningDuration = 150;
@@ -1210,10 +1345,10 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
         type: 'attraction',
         description: morningDesc,
         location: {
-          name: matchedSpecific?.value || matchedMust?.value || `${currentDest.name}${strings.classicAttraction}`,
+          name: matchedSpecific?.value || matchedMust?.value || morningTitle || `${currentDest.name}${strings.classicAttraction}`,
           address: `${currentDest.name}`,
-          latitude: currentDest.latitude || 0,
-          longitude: currentDest.longitude || 0
+          latitude: (!matchedSpecific && !matchedMust && morningCoord) ? morningCoord.lat : (currentDest.latitude || 0),
+          longitude: (!matchedSpecific && !matchedMust && morningCoord) ? morningCoord.lon : (currentDest.longitude || 0)
         },
         duration: morningDuration,
         links: morningLinks,
@@ -1261,11 +1396,12 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
       });
 
       // 4. Late Afternoon Activity (Sightseeing / Shopping)
-      const afternoonIdx = (i * 2 + 1) % templates.titles.length;
+      const afternoonIdx = afternoonIdx2;
       const afternoonTitle = templates.titles[afternoonIdx]!;
       const afternoonLocalTitle = templates.localTitles[afternoonIdx]!;
       const afternoonDesc = templates.descs[afternoonIdx]!;
-      
+      const afternoonCoord = templates.coords?.[afternoonIdx];
+
       activities.push({
         id: `act-${i}-3`,
         order: 3,
@@ -1276,10 +1412,10 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
         type: 'activity',
         description: afternoonDesc,
         location: {
-          name: `${currentDest.name}${strings.commercialDistrict}`,
+          name: afternoonTitle || `${currentDest.name}${strings.commercialDistrict}`,
           address: `${currentDest.name}`,
-          latitude: currentDest.latitude || 0,
-          longitude: currentDest.longitude || 0
+          latitude: afternoonCoord ? afternoonCoord.lat : (currentDest.latitude || 0),
+          longitude: afternoonCoord ? afternoonCoord.lon : (currentDest.longitude || 0)
         },
         duration: 180,
         links: [],
