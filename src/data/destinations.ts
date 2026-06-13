@@ -188,6 +188,10 @@ function translateAndEnhancePoiName(poiName: string, locale: string): { title?: 
 
   // 1. 全球知名熱門景點的對照表 (Blogger 接地氣風格名稱)
   const famousMap: Record<string, { tw: string; cn: string }> = {
+    'shinjuku niagara falls': { tw: '新宿尼亞加拉大飛瀑 (都市綠洲芬多精)', cn: '新宿尼亚加拉大飞瀑 (都市绿洲芬多精)' },
+    'kyubei sushi at keio plaza hotel': { tw: '東京京王廣場飯店久兵衛壽司 (極致江戶前旬味)', cn: '东京京王广场饭店久兵卫寿司 (极致江户前旬味)' },
+    'kyubei sushi': { tw: '久兵衛壽司名店 (極致江戶前旬味)', cn: '久兵卫寿司名店 (极致江户前旬味)' },
+    'keio plaza hotel': { tw: '東京京王廣場大飯店 (精選特色住宿)', cn: '东京京王广场大饭店 (精选特色住宿)' },
     'tokyo tower': { tw: '東京鐵塔地標展望', cn: '东京铁塔地标展望' },
     'tokyo skytree': { tw: '東京晴空塔俯瞰市景', cn: '东京晴空塔俯瞰市景' },
     'sensoji': { tw: '淺草寺與雷門江戶風情', cn: '浅草寺与雷门江户风情' },
@@ -264,6 +268,9 @@ function translateAndEnhancePoiName(poiName: string, locale: string): { title?: 
 
   // 2. 針對字根進行翻譯美化 (Blogger 旅遊指南風格)
   const suffixMap: { en: string; tw: string; cn: string }[] = [
+    { en: 'falls', tw: '大飛瀑 (壯麗自然景致)', cn: '大飞瀑 (壮丽自然景致)' },
+    { en: 'waterfall', tw: '大飛瀑 (壯麗自然景致)', cn: '大飞瀑 (壮丽自然景致)' },
+    { en: 'sushi', tw: '壽司料理名店 (品味在地旬鮮)', cn: '寿司料理名店 (品味当地旬鲜)' },
     { en: 'museum of art', tw: '市立美術館 (藝術美學巡禮)', cn: '市立美术馆 (艺术美学巡礼)' },
     { en: 'national museum', tw: '國家博物館 (文化珍寶探索)', cn: '国家博物馆 (文化珍宝探索)' },
     { en: 'botanical garden', tw: '植物園 (城市綠色芬多精)', cn: '植物园 (城市绿色芬多精)' },

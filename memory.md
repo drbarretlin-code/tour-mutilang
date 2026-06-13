@@ -141,3 +141,14 @@
   - 將 `TimelineView.tsx` 中 `hailingInfo` 的定義提升至整個 `isLast` 區塊頂部（讓 JSX 範疇外與 IIFE 範疇皆能存取）。
   - 將多語系呼叫 `t('itinerary.timelineView.endOfDay.transportAdvice')` 與 `t('itinerary.timelineView.endOfDay.shuttleGuideDesc')` 修改為動態傳入變數 `{ platforms: hailingInfo.transitLabel }`。
   - 編寫自動化 Python 腳本對 10 個多國語系 JSON 檔案進行批次修改，將硬寫死「Grab / Bolt」或「Bolt 或 Grab」的句子轉化為動態佔位符 `%{platforms}`，使終點交通指引與下方按鈕叫車平台完全吻合。
+
+### 景點名稱顯示順序修正與餐廳中文化補強
+- **問題分析**：截圖中景點顯示為 `Shinjuku Niagara Falls [Shinjuku Niagara Falls]` 且午餐顯示為 `Kyubei Sushi... [Kyubei Sushi...]`，此代表：
+  1. 顯示順序與使用者要求相反：使用者要求前面顯示當地語系文字，後面顯示 UI 語系接地氣中文化名稱。
+  2. 上游 `ai.ts` 的餐廳資料在產生 `seeds` 時漏掉了呼叫 `findLocalizedName` 進行美化中譯，導致 `title` 與 `localTitle` 都是英文原名。
+  3. `Shinjuku Niagara Falls` 及其詞根沒有在字典中，故落入 default 導致顯示為原名。
+- **解決方案**：
+  - **順序調整**：重構 [TimelineView.tsx](file:///Users/barretlin/GitProjects/tour-mutilang/src/components/itinerary/TimelineView.tsx) 中活動標題渲染，新增 `renderActivityTitle` 輔助函式，使常規卡片顯示為 `當地語系文字 [UI語系接地氣美化名稱]`。且在 UI 渲染層加上防禦性中文化翻譯自癒（若 `uiName` 不含中文且 `locale` 為中文時，動態重新嘗試呼叫 `findLocalizedName` 進行補強翻譯）。
+  - **餐廳種子翻譯補強**：在 [ai.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/services/ai.ts) 中產生 `foodPois` 的 `seeds` 時，補上 `findLocalizedName` 呼叫，使餐廳也能成功翻譯為中文化接地氣的店名。
+  - **補全熱門景點與字尾對照**：於 [destinations.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/data/destinations.ts) 中補強了知名景點與飯店（如 `Shinjuku Niagara Falls`、`Kyubei Sushi`、`Keio Plaza Hotel` 等）的精準 blogger 風格翻譯，並在 `suffixMap` 增加 `falls`、`waterfall`、`sushi` 的字尾比對規則。
+

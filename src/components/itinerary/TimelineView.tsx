@@ -7,6 +7,7 @@ import i18n, { t } from '../../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { getRouteDistanceKm } from '../../utils/distance';
 import { useResponsive } from '../../hooks/useResponsive';
+import { findLocalizedName } from '../../data/destinations';
 
 function getAirportData(regionName: string, locationName: string, activityTitle: string, isArrival: boolean, isEn: boolean) {
   const rName = (regionName || '').toLowerCase();
@@ -430,6 +431,38 @@ export function TimelineView({
     }
   };
 
+  const renderActivityTitle = (act: Activity) => {
+    const titleType = getActivityTypeLabel(act.type);
+    
+    let localName = act.localTitle || act.location?.name || act.title || '';
+    let uiName = act.title || act.location?.name || act.localTitle || '';
+
+    // Remove any pre-existing brackets in title names to prevent nesting brackets
+    if (localName.includes('[') && localName.includes(']')) {
+      localName = localName.split('[')[0].trim();
+    }
+    if (uiName.includes('[') && uiName.includes(']')) {
+      uiName = uiName.split('[')[0].trim();
+    }
+
+    // If UI language is Chinese and the UI name doesn't contain Chinese, resolve via findLocalizedName
+    if (!isEn) {
+      const hasChinese = /[\u4e00-\u9fa5]/.test(uiName);
+      if (!hasChinese) {
+        const localized = findLocalizedName(uiName, act.location?.latitude || 0, act.location?.longitude || 0, locale);
+        if (localized.title && localized.title !== uiName) {
+          uiName = localized.title;
+        }
+      }
+    }
+
+    if (localName === uiName) {
+      return `${titleType}：${localName}`;
+    }
+    
+    return `${titleType}：${localName} [${uiName}]`;
+  };
+
   const handleOpenUrl = async (url: string) => {
     try {
       // 處理各國叫車 App 服務的特例
@@ -721,7 +754,7 @@ export function TimelineView({
                     </View>
 
                     <Text style={[typography.titleMedium, { color: '#0F172A', fontWeight: '800', marginTop: 8 }]}>
-                      {getActivityTypeLabel(act.type)}：{act.title} {act.localTitle ? `[${act.localTitle}]` : ''}
+                      {renderActivityTitle(act)}
                     </Text>
 
                     {/* 景點長介紹（約300字）：可展開／收合，預設顯示前幾行 */}

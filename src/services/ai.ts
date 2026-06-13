@@ -573,14 +573,17 @@ export const aiService = {
         });
         const seeds = foodPois
           .filter(p => p.name && p.lat && p.lon)
-          .map((p): RestaurantSeed => ({
-            title: p.name,
-            localTitle: p.localName || p.name,
-            desc: buildPoiDescription(p, d.name, '餐廳', appLocale),
-            lat: p.lat,
-            lon: p.lon,
-            cost: 0,
-          }));
+          .map((p): RestaurantSeed => {
+            const localized = findLocalizedName(p.name, p.lat, p.lon, appLocale);
+            return {
+              title: localized.title || p.name,
+              localTitle: localized.localTitle || p.localName || p.name,
+              desc: buildPoiDescription(p, d.name, '餐廳', appLocale, localized.title),
+              lat: p.lat,
+              lon: p.lon,
+              cost: 0,
+            };
+          });
         if (seeds.length > 0) restByDest[d.name] = seeds;
       } catch (e) {
         console.warn(`[generateRuleBasedItinerary] 取得 ${d.name} 餐廳 POI 失敗，午餐改用內建清單`, e);
