@@ -8,6 +8,120 @@ import { Ionicons } from '@expo/vector-icons';
 import { getRouteDistanceKm } from '../../utils/distance';
 import { useResponsive } from '../../hooks/useResponsive';
 
+function getAirportData(regionName: string, isArrival: boolean, isEn: boolean) {
+  const rName = (regionName || '').toLowerCase();
+  
+  if (rName.includes('東京') || rName.includes('日本') || rName.includes('tokyo') || rName.includes('japan') || rName.includes('成田') || rName.includes('羽田') || rName.includes('nrt') || rName.includes('hnd')) {
+    const isHaneda = rName.includes('羽田') || rName.includes('hnd') || rName.includes('haneda');
+    if (isHaneda) {
+      return {
+        code: 'HND',
+        title: isEn
+          ? `🇯🇵 Haneda Airport (HND) ${isArrival ? 'Arrival Terminal' : 'Departure Terminal'} Guide`
+          : `🇯🇵 東京羽田國際機場 (HND) ${isArrival ? '入境大廳指引' : '出境大廳指引'}`,
+        description: isArrival
+          ? (isEn 
+              ? '💡 Arrival Guide: Follow the "Arrival / Immigration" signs after deplaning to proceed to immigration and baggage claim. After exiting, take the Tokyo Monorail or Keikyu Line at the underground railway station.'
+              : '💡 抵達指引：下飛機後順著「Arrival (入境)」指標前進，至入境審查處辦理入境手續與提取行李。通關後，出口位於抵達大廳。若欲搭乘東京單軌電車 (Tokyo Monorail) 或京急線，請往聯絡通道前進搭乘。')
+          : (isEn
+              ? '💡 Departure Guide: Taxis or airport transfers will drop you off at the departure floor entrance. Proceed to the check-in counters of your airline (usually Terminal 3). Security and passport control are located in the center.'
+              : '💡 離境指引：接送專車或計程車將在出境大廳入口停靠。請前往第三航廈 (或對應航廈) 的 Check-in 櫃檯辦理登機與行李託運。完成安檢與證照查驗後即可前往登機門。'),
+      };
+    } else {
+      return {
+        code: 'NRT',
+        title: isEn
+          ? `🇯🇵 Narita Airport (NRT) ${isArrival ? 'Arrival Terminal' : 'Departure Terminal'} Guide`
+          : `🇯🇵 東京成田國際機場 (NRT) ${isArrival ? '入境大廳指引' : '出境大廳指引'}`,
+        description: isArrival
+          ? (isEn
+              ? '💡 Arrival Guide: Follow the "Arrival / Immigration" signs after deplaning to proceed to immigration and baggage claim. After exiting, take the Narita Express (NEX) or Keisei Skyliner from the B1 train station.'
+              : '💡 抵達指引：下飛機後順著「Arrival (入境)」指標前進，至入境審查處辦理入境手續與提取行李。通關後，出口位於抵達大廳。若欲搭乘成田特快 (NEX) 或京成電鐵 (Keisei Skyliner)，請搭手扶梯下至 B1 層乘車。')
+          : (isEn
+              ? '💡 Departure Guide: Taxis or airport transfers will drop you off at the departure floor entrance. Proceed to the check-in counters of your airline (Terminal 1/2/3). Security and passport control are located in the center.'
+              : '💡 離境指引：接送專車或計程車將在出境大廳入口停靠。請依據您的航空公司前往對應的航廈與 Check-in 櫃檯辦理登機與行李託運。完成安檢與證照查驗後即可前往登機門。'),
+      };
+    }
+  }
+  
+  if (rName.includes('台灣') || rName.includes('台北') || rName.includes('taiwan') || rName.includes('taipei') || rName.includes('桃園') || rName.includes('tpe')) {
+    return {
+      code: 'TPE',
+      title: isEn
+        ? `🇹🇼 Taoyuan Airport (TPE) ${isArrival ? 'Arrival Terminal' : 'Departure Terminal'} Guide`
+        : `🇹🇼 桃園國際機場 (TPE) ${isArrival ? '入境大廳指引' : '出境大廳指引'}`,
+      description: isArrival
+        ? (isEn
+            ? '💡 Arrival Guide: Follow the "Immigration" signs after deplaning, clear customs and retrieve your baggage. After exiting, proceed downstairs to take the Taoyuan Airport MRT.'
+            : '💡 抵達指引：下飛機後順著「Immigration (證照查驗)」指標前進，通關並提取行李。出關後即為抵達大廳。若欲搭乘桃園機場捷運，請依指標下樓前往捷運站乘車。')
+        : (isEn
+            ? '💡 Departure Guide: Taxis or airport transfers will drop you off at the departure floor. Proceed to your airline check-in counters for check-in and baggage drop. Security and passport control are located at the back.'
+            : '💡 離境指引：專車或計程車將在出境大廳入口停靠。進入航廈後請至對應的航空公司 Check-in 櫃檯辦理登機與行李託運。安檢與證照查驗位於出境大廳後方。'),
+    };
+  }
+
+  // Default: Thailand (Bangkok / Suvarnabhumi BKK)
+  return {
+    code: 'BKK',
+    title: isEn
+      ? `🇹🇭 Suvarnabhumi Airport (BKK) ${isArrival ? 'Arrival Terminal' : 'Departure Terminal'} Guide`
+      : `🇹🇭 曼谷蘇凡納布機場 (BKK) ${isArrival ? '入境大廳指引 (Level 2)' : '出境大廳指引 (Level 4)'}`,
+    description: isArrival
+      ? (isEn
+          ? '💡 Arrival Guide: Follow the "Immigration" signs after deplaning to Level 2 for passport control and baggage claim. Exits are on Level 2. For Airport Rail Link (ARL), go down to B1.'
+          : '💡 抵達指引：下飛機後順著「Immigration (入境)」指標前進，至 Level 2 辦理入境與行李提取。提取行李後，出口位於 Level 2 大廳。若欲搭乘機場快線 (ARL)，請搭手扶梯下至 B1 層。')
+      : (isEn
+          ? '💡 Departure Guide: Taxis or Grab will drop you off at the Level 4 departure gates. Check in at your airline counter. Security and passport control are at the rear of Level 4.'
+          : '💡 離境指引：專車或 Grab 將在 Level 4 離境大廳入口停靠。進入航廈後請尋找對應航空公司的 Check-in 櫃檯辦理登機。安檢與證照查驗位於 Level 4 後方中央。'),
+  };
+}
+
+function getRideHailingInfo(regionName: string, isEn: boolean) {
+  const rName = (regionName || '').toLowerCase();
+  
+  if (rName.includes('東京') || rName.includes('日本') || rName.includes('tokyo') || rName.includes('japan') || rName.includes('成田') || rName.includes('羽田') || rName.includes('nrt') || rName.includes('hnd')) {
+    return {
+      platform1Name: isEn ? 'GO' : 'GO App',
+      platform1Url: 'https://go.mo-t.com/',
+      platform1Color: '#005CAF',
+      platform2Name: isEn ? 'Uber' : 'Uber App',
+      platform2Url: 'https://www.uber.com/jp/zh-tw/',
+      platform2Color: '#1A1A1A',
+      transitLabel: isEn ? 'GO / Uber' : 'GO / Uber',
+    };
+  } else if (rName.includes('台灣') || rName.includes('台北') || rName.includes('高雄') || rName.includes('taiwan') || rName.includes('taipei') || rName.includes('tpe')) {
+    return {
+      platform1Name: isEn ? 'yoxi' : 'yoxi App',
+      platform1Url: 'https://www.yoxi.app/',
+      platform1Color: '#FF3B30',
+      platform2Name: isEn ? 'Uber' : 'Uber App',
+      platform2Url: 'https://www.uber.com/tw/zh-tw/',
+      platform2Color: '#1A1A1A',
+      transitLabel: isEn ? 'yoxi / Uber' : 'yoxi / Uber',
+    };
+  } else if (rName.includes('泰國') || rName.includes('曼谷') || rName.includes('thailand') || rName.includes('bangkok') || rName.includes('bkk')) {
+    return {
+      platform1Name: isEn ? 'Grab' : 'Grab App',
+      platform1Url: 'https://www.grab.com/',
+      platform1Color: '#00B14F',
+      platform2Name: isEn ? 'Bolt' : 'Bolt App',
+      platform2Url: 'https://bolt.eu/',
+      platform2Color: '#34D399',
+      transitLabel: isEn ? 'Grab / Bolt' : 'Grab / Bolt',
+    };
+  } else {
+    return {
+      platform1Name: isEn ? 'Uber' : 'Uber App',
+      platform1Url: 'https://www.uber.com/',
+      platform1Color: '#1A1A1A',
+      platform2Name: isEn ? 'Google Maps' : 'Google 地圖叫車',
+      platform2Url: 'https://maps.google.com/',
+      platform2Color: '#4285F4',
+      transitLabel: isEn ? 'Uber / Taxi' : 'Uber / 計程車',
+    };
+  }
+}
+
 interface TimelineViewProps {
   day: ItineraryDay;
   onMoveActivity: (activityId: string, direction: 'up' | 'down') => void;
@@ -16,6 +130,7 @@ interface TimelineViewProps {
   onUpdateNote?: (activityId: string, note: string) => void;
   onEditActivity?: (activityId: string) => void;
   onReRollActivity?: (activityId: string) => void;
+  onToggleRainFallback?: (dayNumber: number) => void;
 }
 
 export function TimelineView({
@@ -26,9 +141,12 @@ export function TimelineView({
   onUpdateNote,
   onEditActivity,
   onReRollActivity,
+  onToggleRainFallback,
 }: TimelineViewProps) {
   const { colors, spacing, borderRadius, typography, shadows } = useTheme();
   const { isLargeScreen } = useResponsive();
+  const locale = i18n.locale || 'zh-TW';
+  const isEn = !locale.startsWith('zh');
 
   const renderVerticalTransitBadge = (transport: any, from?: any, to?: any) => {
     const tData = transport || { mode: 'drive', duration: 10 };
@@ -102,7 +220,7 @@ export function TimelineView({
 
   const handleOpenUrl = async (url: string) => {
     try {
-      // 處理 Grab 與 Bolt 這種純 App 服務的特例
+      // 處理各國叫車 App 服務的特例
       if (url.includes('grab.com')) {
         if (Platform.OS === 'web') {
           alert(t('itinerary.timelineView.alerts.grabWebHint'));
@@ -133,6 +251,36 @@ export function TimelineView({
         }
       }
 
+      if (url.includes('yoxi.app')) {
+        if (Platform.OS === 'web') {
+          alert('請使用手機開啟 yoxi App 進行叫車');
+          window.open(url, '_blank');
+          return;
+        } else {
+          const yoxiAppUrl = 'yoxi://';
+          const canOpenApp = await Linking.canOpenURL(yoxiAppUrl);
+          if (canOpenApp) {
+            await Linking.openURL(yoxiAppUrl);
+            return;
+          }
+        }
+      }
+
+      if (url.includes('go.mo-t.com')) {
+        if (Platform.OS === 'web') {
+          alert('請使用手機開啟 GO App 進行叫車');
+          window.open(url, '_blank');
+          return;
+        } else {
+          const goAppUrl = 'taxigo://';
+          const canOpenApp = await Linking.canOpenURL(goAppUrl);
+          if (canOpenApp) {
+            await Linking.openURL(goAppUrl);
+            return;
+          }
+        }
+      }
+
       // 一般網頁
       if (Platform.OS === 'web') {
         window.open(url, '_blank');
@@ -156,6 +304,42 @@ export function TimelineView({
 
   return (
     <View style={styles.container}>
+      {day.weather && (
+        <View style={[styles.weatherCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <View style={styles.weatherHeader}>
+            <Ionicons name="cloudy-outline" size={20} color={colors.text} />
+            <Text style={[typography.bodyMedium, { color: colors.text, fontWeight: '700', marginLeft: 8 }]}>
+              {t('itinerary.timelineView.weather.title', { defaultValue: '今日氣候預測' })}
+            </Text>
+          </View>
+          <View style={styles.weatherInfoRow}>
+            <Text style={[typography.bodyMedium, { color: colors.textSecondary }]}>
+              {day.weather.condition} • {day.weather.temperature}°{day.weather.temperatureUnit} • {t('itinerary.timelineView.weather.rainChance', { defaultValue: '降雨率' })} {day.weather.rainChance}%
+            </Text>
+          </View>
+          {day.weather.rainChance >= 70 && onToggleRainFallback && (
+            <View style={[styles.rainAlertBox, { backgroundColor: '#FEF2F2', borderColor: '#FCA5A5' }]}>
+              <Ionicons name="rainy-outline" size={18} color="#DC2626" />
+              <View style={{ flex: 1, marginLeft: 8 }}>
+                <Text style={[typography.labelSmall, { color: '#991B1B', fontWeight: '700' }]}>
+                  {t('itinerary.timelineView.weather.rainWarning', { defaultValue: '偵測到今日降雨機率偏高！' })}
+                </Text>
+                <Text style={[typography.labelSmall, { color: '#B91C1C', marginTop: 2 }]}>
+                  {t('itinerary.timelineView.weather.rainHint', { defaultValue: '建議一鍵切換雨天備案，自動將戶外景點對調為室內景點。' })}
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={[styles.rainButton, { backgroundColor: '#EF4444' }]}
+                onPress={() => onToggleRainFallback(day.dayNumber)}
+              >
+                <Text style={[typography.labelSmall, { color: '#FFFFFF', fontWeight: '700' }]}>
+                  {t('itinerary.timelineView.weather.swapBtn', { defaultValue: '一鍵切換室內備案' })}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      )}
       {activities.map((act, index) => {
         const isFirst = index === 0;
         const isLast = index === activities.length - 1;
@@ -208,67 +392,81 @@ export function TimelineView({
                       {t('itinerary.timelineView.endOfDay.tonightStay', { hotelName: act.location?.name || t('itinerary.timelineView.endOfDay.yourHotel') })}
                     </Text>
 
-                    {(act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport')) && (
-                      <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: 12 }}>
-                        <TouchableOpacity
-                          onPress={() => setExpandedTerminalMap(prev => ({ ...prev, [act.id]: !prev[act.id] }))}
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: 8,
-                            paddingVertical: 10,
-                            paddingHorizontal: 16,
-                            backgroundColor: colors.backgroundSecondary,
-                            borderColor: colors.border,
-                            borderWidth: 1,
-                            borderRadius: borderRadius.md,
-                          }}
-                        >
-                          <Ionicons name="airplane-outline" size={16} color={colors.primary500} />
-                          <Text style={[typography.labelMedium, { color: colors.primary500, fontWeight: '700' }]}>
-                            {expandedTerminalMap[act.id] ? '收起航站大廳導覽圖 ▴' : '🗺️ 展開航站大廳導覽圖 (BKK Airport) ▾'}
-                          </Text>
-                        </TouchableOpacity>
+                    {(() => {
+                      const isArrival = day.dayNumber === 1;
+                      const airportInfo = getAirportData(day.region, isArrival, isEn);
+                      const hailingInfo = getRideHailingInfo(day.region, isEn);
+                      const isAirport = act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport');
+                      
+                      return (
+                        <>
+                          {isAirport && (
+                            <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: 12 }}>
+                              <TouchableOpacity
+                                onPress={() => setExpandedTerminalMap(prev => ({ ...prev, [act.id]: !prev[act.id] }))}
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: 8,
+                                  paddingVertical: 10,
+                                  paddingHorizontal: 16,
+                                  backgroundColor: colors.backgroundSecondary,
+                                  borderColor: colors.border,
+                                  borderWidth: 1,
+                                  borderRadius: borderRadius.md,
+                                }}
+                              >
+                                <Ionicons name="airplane-outline" size={16} color={colors.primary500} />
+                                <Text style={[typography.labelMedium, { color: colors.primary500, fontWeight: '700' }]}>
+                                  {expandedTerminalMap[act.id] 
+                                    ? (isEn ? 'Hide Terminal Map ▴' : '收起航站大廳導覽圖 ▴') 
+                                    : (isEn ? `🗺️ Show Terminal Map (${airportInfo.code}) ▾` : `🗺️ 展開航站大廳導覽圖 (${airportInfo.code} Airport) ▾`)}
+                                </Text>
+                              </TouchableOpacity>
 
-                        {expandedTerminalMap[act.id] && (
-                          <View style={{ marginTop: 10, backgroundColor: colors.backgroundSecondary, borderColor: colors.border, borderWidth: 1, borderRadius: borderRadius.md, padding: 12 }}>
-                            <Text style={[typography.labelSmall, { color: colors.text, fontWeight: '700', marginBottom: 8 }]}>
-                              {day.dayNumber === 1 ? '🇹🇭 曼谷蘇凡納布機場 (BKK) 入境大廳指引 (Level 2)' : '🇹🇭 曼谷蘇凡納布機場 (BKK) 出境大廳指引 (Level 4)'}
-                            </Text>
-                            <View style={{ borderRadius: borderRadius.sm, overflow: 'hidden', borderWidth: 1, borderColor: colors.border, backgroundColor: '#FFFFFF' }}>
-                              <Image 
-                                source={require('../../../assets/images/airport_terminal_map.png')} 
-                                style={{ width: '100%', height: 350, resizeMode: 'contain' }} 
-                              />
+                              {expandedTerminalMap[act.id] && (
+                                <View style={{ marginTop: 10, backgroundColor: colors.backgroundSecondary, borderColor: colors.border, borderWidth: 1, borderRadius: borderRadius.md, padding: 12 }}>
+                                  <Text style={[typography.labelSmall, { color: colors.text, fontWeight: '700', marginBottom: 8 }]}>
+                                    {airportInfo.title}
+                                  </Text>
+                                  <View style={{ borderRadius: borderRadius.sm, overflow: 'hidden', borderWidth: 1, borderColor: colors.border, backgroundColor: '#FFFFFF' }}>
+                                    <Image 
+                                      source={require('../../../assets/images/airport_terminal_map.png')} 
+                                      style={{ width: '100%', height: 350, resizeMode: 'contain' }} 
+                                    />
+                                  </View>
+                                  <Text style={[typography.caption, { color: colors.textSecondary, marginTop: 8, lineHeight: 18 }]}>
+                                    {airportInfo.description}
+                                  </Text>
+                                </View>
+                              )}
                             </View>
-                            <Text style={[typography.caption, { color: colors.textSecondary, marginTop: 8, lineHeight: 18 }]}>
-                              {day.dayNumber === 1 
-                                ? '💡 抵達指引：下飛機後順著「Immigration (入境)」指標前進，至 Level 2 辦理入境與行李提取。提取行李後，出口位於 Level 2 大廳。若欲搭乘機場快線 (ARL)，請搭手扶梯下至 B1 層。'
-                                : '💡 離境指引：專車或 Grab 將在 Level 4 離境大廳入口停靠。進入航廈後請尋找對應航空公司的 Check-in 櫃檯辦理登機。安檢與證照查驗位於 Level 4 後方中央。'
-                              }
-                            </Text>
-                          </View>
-                        )}
-                      </View>
-                    )}
+                          )}
 
-                    <View style={styles.endBtnRow}>
-                      <TouchableOpacity 
-                        style={[styles.endBtn, { backgroundColor: '#7C3AED' }]}
-                        onPress={() => Linking.openURL('https://www.grab.com')}
-                      >
-                        <Ionicons name="car" size={16} color="#FFFFFF" style={{ marginRight: 6 }} />
-                        <Text style={[typography.labelMedium, { color: '#FFFFFF', fontWeight: '700' }]}>{t('itinerary.timelineView.endOfDay.openGrab')}</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity 
-                        style={[styles.endBtn, { backgroundColor: '#DB2777' }]}
-                        onPress={() => Linking.openURL('https://bolt.eu')}
-                      >
-                        <Ionicons name="car-sport" size={16} color="#FFFFFF" style={{ marginRight: 6 }} />
-                        <Text style={[typography.labelMedium, { color: '#FFFFFF', fontWeight: '700' }]}>{t('itinerary.timelineView.endOfDay.openBolt')}</Text>
-                      </TouchableOpacity>
-                    </View>
+                          <View style={styles.endBtnRow}>
+                            <TouchableOpacity 
+                              style={[styles.endBtn, { backgroundColor: hailingInfo.platform1Color }]}
+                              onPress={() => handleOpenUrl(hailingInfo.platform1Url)}
+                            >
+                              <Ionicons name="car" size={16} color="#FFFFFF" style={{ marginRight: 6 }} />
+                              <Text style={[typography.labelMedium, { color: '#FFFFFF', fontWeight: '700' }]}>
+                                {isEn ? `Open ${hailingInfo.platform1Name}` : `點此開啟 ${hailingInfo.platform1Name}`}
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                              style={[styles.endBtn, { backgroundColor: hailingInfo.platform2Color }]}
+                              onPress={() => handleOpenUrl(hailingInfo.platform2Url)}
+                            >
+                              <Ionicons name="car-sport" size={16} color="#FFFFFF" style={{ marginRight: 6 }} />
+                              <Text style={[typography.labelMedium, { color: '#FFFFFF', fontWeight: '700' }]}>
+                                {isEn ? `Open ${hailingInfo.platform2Name}` : `點此開啟 ${hailingInfo.platform2Name}`}
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </>
+                      );
+                    })()}
                   </View>
                 </View>
               </View>
@@ -333,50 +531,57 @@ export function TimelineView({
                       </View>
                     )}
 
-                    {(act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport')) && (
-                      <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: 12 }}>
-                        <TouchableOpacity
-                          onPress={() => setExpandedTerminalMap(prev => ({ ...prev, [act.id]: !prev[act.id] }))}
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: 8,
-                            paddingVertical: 10,
-                            paddingHorizontal: 16,
-                            backgroundColor: colors.backgroundSecondary,
-                            borderColor: colors.border,
-                            borderWidth: 1,
-                            borderRadius: borderRadius.md,
-                          }}
-                        >
-                          <Ionicons name="airplane-outline" size={16} color={colors.primary500} />
-                          <Text style={[typography.labelMedium, { color: colors.primary500, fontWeight: '700' }]}>
-                            {expandedTerminalMap[act.id] ? '收起航站大廳導覽圖 ▴' : '🗺️ 展開航站大廳導覽圖 (BKK Airport) ▾'}
-                          </Text>
-                        </TouchableOpacity>
+                    {(() => {
+                      const isArrival = day.dayNumber === 1;
+                      const airportInfo = getAirportData(day.region, isArrival, isEn);
+                      const isAirport = act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport');
+                      
+                      if (!isAirport) return null;
+                      
+                      return (
+                        <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: 12 }}>
+                          <TouchableOpacity
+                            onPress={() => setExpandedTerminalMap(prev => ({ ...prev, [act.id]: !prev[act.id] }))}
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: 8,
+                              paddingVertical: 10,
+                              paddingHorizontal: 16,
+                              backgroundColor: colors.backgroundSecondary,
+                              borderColor: colors.border,
+                              borderWidth: 1,
+                              borderRadius: borderRadius.md,
+                            }}
+                          >
+                            <Ionicons name="airplane-outline" size={16} color={colors.primary500} />
+                            <Text style={[typography.labelMedium, { color: colors.primary500, fontWeight: '700' }]}>
+                              {expandedTerminalMap[act.id] 
+                                ? (isEn ? 'Hide Terminal Map ▴' : '收起航站大廳導覽圖 ▴') 
+                                : (isEn ? `🗺️ Show Terminal Map (${airportInfo.code}) ▾` : `🗺️ 展開航站大廳導覽圖 (${airportInfo.code} Airport) ▾`)}
+                            </Text>
+                          </TouchableOpacity>
 
-                        {expandedTerminalMap[act.id] && (
-                          <View style={{ marginTop: 10, backgroundColor: colors.backgroundSecondary, borderColor: colors.border, borderWidth: 1, borderRadius: borderRadius.md, padding: 12 }}>
-                            <Text style={[typography.labelSmall, { color: colors.text, fontWeight: '700', marginBottom: 8 }]}>
-                              {day.dayNumber === 1 ? '🇹🇭 曼谷蘇凡納布機場 (BKK) 入境大廳指引 (Level 2)' : '🇹🇭 曼谷蘇凡納布機場 (BKK) 出境大廳指引 (Level 4)'}
-                            </Text>
-                            <View style={{ borderRadius: borderRadius.sm, overflow: 'hidden', borderWidth: 1, borderColor: colors.border, backgroundColor: '#FFFFFF' }}>
-                              <Image 
-                                source={require('../../../assets/images/airport_terminal_map.png')} 
-                                style={{ width: '100%', height: 350, resizeMode: 'contain' }} 
-                              />
+                          {expandedTerminalMap[act.id] && (
+                            <View style={{ marginTop: 10, backgroundColor: colors.backgroundSecondary, borderColor: colors.border, borderWidth: 1, borderRadius: borderRadius.md, padding: 12 }}>
+                              <Text style={[typography.labelSmall, { color: colors.text, fontWeight: '700', marginBottom: 8 }]}>
+                                {airportInfo.title}
+                              </Text>
+                              <View style={{ borderRadius: borderRadius.sm, overflow: 'hidden', borderWidth: 1, borderColor: colors.border, backgroundColor: '#FFFFFF' }}>
+                                <Image 
+                                  source={require('../../../assets/images/airport_terminal_map.png')} 
+                                  style={{ width: '100%', height: 350, resizeMode: 'contain' }} 
+                                />
+                              </View>
+                              <Text style={[typography.caption, { color: colors.textSecondary, marginTop: 8, lineHeight: 18 }]}>
+                                {airportInfo.description}
+                              </Text>
                             </View>
-                            <Text style={[typography.caption, { color: colors.textSecondary, marginTop: 8, lineHeight: 18 }]}>
-                              {day.dayNumber === 1 
-                                ? '💡 抵達指引：下飛機後順著「Immigration (入境)」指標前進，至 Level 2 辦理入境與行李提取。提取行李後，出口位於 Level 2 大廳。若欲搭乘機場快線 (ARL)，請搭手扶梯下至 B1 層。'
-                                : '💡 離境指引：專車或 Grab 將在 Level 4 離境大廳入口停靠。進入航廈後請尋找對應航空公司的 Check-in 櫃檯辦理登機。安檢與證照查驗位於 Level 4 後方中央。'
-                              }
-                            </Text>
-                          </View>
-                        )}
-                      </View>
-                    )}
+                          )}
+                        </View>
+                      );
+                    })()}
 
                     {/* 3. Transport Guideline */}
                     {!isLast && (() => {
@@ -386,9 +591,6 @@ export function TimelineView({
                       const transitDistance = nextTransport ? getRouteDistanceKm(nextTransport, act.location, nextAct?.location) : 0;
                       const transitDistStr = transitDistance > 0 ? `${transitDistance.toFixed(1)} km` : '';
                       const transitMode = nextTransport ? nextTransport.mode : 'drive';
-
-                      const locale = i18n.locale || 'zh-TW';
-                      const isEn = !locale.startsWith('zh');
 
                       let transitText = '';
                       let transitIconName: any = 'car';
@@ -416,6 +618,8 @@ export function TimelineView({
                           ? (isEn ? `, ${distLabel} ${transitDistStr}` : `，${distLabel} ${transitDistStr}`) 
                           : '';
 
+                        const hailingInfo = getRideHailingInfo(day.region, isEn);
+
                         if (transitMode === 'walk') {
                           transitIconName = 'walk';
                           transitIconColor = '#10B981';
@@ -432,8 +636,8 @@ export function TimelineView({
                           transitIconName = 'car';
                           transitIconColor = '#DC2626';
                           transitText = isEn
-                            ? `${prefix}Public transit is limited, charter/taxi/Grab recommended${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
-                            : `${prefix}前往下一站大眾運輸不便，建議搭乘包車、計程車或使用 Bolt/Grab 叫車${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
+                            ? `${prefix}Public transit is limited, charter/taxi/${hailingInfo.transitLabel} recommended${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
+                            : `${prefix}前往下一站大眾運輸不便，建議搭乘包車、計程車或使用 ${hailingInfo.transitLabel} 叫車${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
                         }
                       }
 
@@ -698,5 +902,35 @@ const styles = StyleSheet.create({
   verticalTransitText: {
     fontSize: 11,
     fontWeight: 'bold',
+  },
+  weatherCard: {
+    padding: 16,
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  weatherHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  weatherInfoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  rainAlertBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 6,
+    padding: 12,
+    marginTop: 8,
+  },
+  rainButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    marginLeft: 8,
   },
 });

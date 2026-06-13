@@ -8,8 +8,6 @@ import { DailySummaryCard } from '../../src/components/itinerary/DailySummaryCar
 import { TimelineView } from '../../src/components/itinerary/TimelineView';
 import { MapFallbackView, getDayRouteNavigationUrl } from '../../src/components/itinerary/MapFallbackView';
 import { PackingChecklist } from '../../src/components/itinerary/PackingChecklist';
-import { ExpenseSplitter } from '../../src/components/itinerary/ExpenseSplitter';
-import { TravelTranslator } from '../../src/components/itinerary/TravelTranslator';
 import { DestinationGuide } from '../../src/components/itinerary/DestinationGuide';
 import { Itinerary3DMap } from '../../src/components/itinerary/Itinerary3DMap';
 import { CombinedItineraryView } from '../../src/components/itinerary/CombinedItineraryView';
@@ -33,6 +31,8 @@ import { useResponsive } from '../../src/hooks/useResponsive';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { generateItineraryHtml } from '../../src/utils/pdfGenerator';
+import { swapOutdoorWithIndoor } from '../../src/utils/itineraryRepairer';
+import { localSyncManager } from '../../src/services/localSyncManager';
 
 // Web-safe cache helpers: AsyncStorage on Web is unreliable, use localStorage directly
 const cacheGet = async (key: string): Promise<string | null> => {
@@ -62,7 +62,7 @@ const OFFLINE_ITINERARY_KEY = '@trip_active_itinerary';
 const OFFLINE_SURVEY_KEY = '@trip_active_survey';
 
 
-type ViewMode = 'timeline' | 'map' | 'checklist' | 'expenses' | 'translator';
+type ViewMode = 'timeline' | 'map' | 'checklist' | 'guide';
 
 export default function ItineraryScreen() {
   const { survey: contextSurvey, activeItinerary: contextItinerary, updateSurvey } = useSurvey();
@@ -73,7 +73,7 @@ export default function ItineraryScreen() {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
-  const [viewMode, setViewMode] = useState<'timeline' | 'map' | 'checklist' | 'expenses' | 'translator' | 'guide'>('timeline');
+  const [viewMode, setViewMode] = useState<'timeline' | 'map' | 'checklist' | 'guide'>('timeline');
   const [activeDay, setActiveDay] = useState<number>(1);
   const [isNavExpanded, setIsNavExpanded] = useState<boolean>(true);
   const [editingActivityId, setEditingActivityId] = useState<string | null>(null);
@@ -89,6 +89,10 @@ export default function ItineraryScreen() {
   // EXPO_PUBLIC_OPENTRIPMAP_KEY，正常情況此橫幅不會出現。
   const [otmDiag, setOtmDiag] = useState<OtmKeyDiagnostic | null>(null);
   const [otmBannerDismissed, setOtmBannerDismissed] = useState(false);
+  useEffect(() => {
+    localSyncManager.initialize();
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     verifyOpenTripMapKey()
@@ -257,6 +261,14 @@ export default function ItineraryScreen() {
       // Background save
       saveAndSyncItinerary(updatedItinerary).catch(console.error);
     }
+  };
+
+  const handleToggleRainFallback = async (dayNumber: number) => {
+    if (!itinerary) return;
+    const updated = swapOutdoorWithIndoor(itinerary, dayNumber);
+    setItinerary(updated);
+    await saveAndSyncItinerary(updated);
+    showAlert(t('itinerary.timelineView.weather.rainWarning', { defaultValue: '雨天備案已切換' }), t('itinerary.timelineView.weather.rainHint', { defaultValue: '已自動將當日的戶外景點對調為室內景點，並重新規劃交通路線。' }));
   };
 
   const getEditingActivity = (): Activity | null => {
@@ -470,11 +482,7 @@ export default function ItineraryScreen() {
   const saveAndSyncItinerary = async (updatedItinerary: Itinerary) => {
     try {
       await cacheSet(OFFLINE_ITINERARY_KEY, JSON.stringify(updatedItinerary));
-      const user = auth.currentUser;
-      if (user) {
-        await dbService.saveItinerary(updatedItinerary);
-        await syncService.publishItinerary(updatedItinerary);
-      }
+      await localSyncManager.saveItineraryLocal(updatedItinerary, true);
     } catch (error) {
       console.error('Error syncing itinerary updates:', error);
     }
@@ -572,18 +580,7 @@ export default function ItineraryScreen() {
         />
       )}
 
-      {viewMode === 'expenses' && (
-        <ExpenseSplitter
-          itinerary={activeItinerary}
-          survey={contextSurvey}
-        />
-      )}
 
-      {viewMode === 'translator' && (
-        <TravelTranslator
-          survey={contextSurvey}
-        />
-      )}
 
       {viewMode === 'guide' && (
         <DestinationGuide 
@@ -832,8 +829,6 @@ export default function ItineraryScreen() {
                   { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
                   { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
                   { code: 'checklist', label: t('itinerary.tabs.checklist'), icon: 'checkbox-outline' },
-                  { code: 'expenses', label: t('itinerary.tabs.expenses'), icon: 'card-outline' },
-                  { code: 'translator', label: t('itinerary.tabs.translator'), icon: 'language-outline' },
                 ].map((mode) => {
                   const isSelected = viewMode === mode.code;
                   return (
@@ -969,6 +964,7 @@ export default function ItineraryScreen() {
                     Linking.openURL(url);
                  }}
                   onUpdateNote={handleUpdateNote}
+                  onToggleRainFallback={handleToggleRainFallback}
                 />
               </View>
             )}

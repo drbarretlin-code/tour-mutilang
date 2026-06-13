@@ -57,6 +57,7 @@ export interface Activity {
   isMustVisit: boolean;
   bookingRecommended?: boolean;
   photoUrl?: string;
+  environment?: 'indoor' | 'outdoor';
 }
 
 export type ActivityType =

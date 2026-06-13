@@ -96,3 +96,77 @@ export function getBuiltInRestaurants(destName: string, locale: string): BuiltIn
     cost: r.cost,
   }));
 }
+
+/** 依座標及名稱比對，尋找內建資料庫中的中文化/在地化名稱 */
+export function findLocalizedName(poiName: string, lat: number, lon: number, locale: string): { title?: string; localTitle?: string } {
+  const lowerName = (poiName || '').toLowerCase();
+  
+  // 1. 優先透過座標比對 (經緯度差值小於 0.005，約 500 公尺)
+  for (const d of DATA.destinations) {
+    // 檢查景點
+    for (const a of d.attractions) {
+      const latDiff = Math.abs(a.lat - lat);
+      const lonDiff = Math.abs(a.lon - lon);
+      if (latDiff < 0.005 && lonDiff < 0.005) {
+        return {
+          title: pickText(a.title, locale),
+          localTitle: a.localTitle
+        };
+      }
+    }
+    // 檢查餐廳
+    for (const r of d.restaurants) {
+      const latDiff = Math.abs(r.lat - lat);
+      const lonDiff = Math.abs(r.lon - lon);
+      if (latDiff < 0.005 && lonDiff < 0.005) {
+        return {
+          title: pickText(r.title, locale),
+          localTitle: r.localTitle
+        };
+      }
+    }
+  }
+
+  // 2. 次要透過文字名稱比對
+  for (const d of DATA.destinations) {
+    for (const a of d.attractions) {
+      const enTitle = (a.title.en || '').toLowerCase();
+      const twTitle = (a.title['zh-TW'] || '').toLowerCase();
+      const cnTitle = (a.title['zh-CN'] || '').toLowerCase();
+      const locTitle = (a.localTitle || '').toLowerCase();
+      
+      if (
+        (enTitle && (lowerName.includes(enTitle) || enTitle.includes(lowerName))) ||
+        (twTitle && (lowerName.includes(twTitle) || twTitle.includes(lowerName))) ||
+        (cnTitle && (lowerName.includes(cnTitle) || cnTitle.includes(lowerName))) ||
+        (locTitle && (lowerName.includes(locTitle) || locTitle.includes(lowerName)))
+      ) {
+        return {
+          title: pickText(a.title, locale),
+          localTitle: a.localTitle
+        };
+      }
+    }
+    for (const r of d.restaurants) {
+      const enTitle = (r.title.en || '').toLowerCase();
+      const twTitle = (r.title['zh-TW'] || '').toLowerCase();
+      const cnTitle = (r.title['zh-CN'] || '').toLowerCase();
+      const locTitle = (r.localTitle || '').toLowerCase();
+      
+      if (
+        (enTitle && (lowerName.includes(enTitle) || enTitle.includes(lowerName))) ||
+        (twTitle && (lowerName.includes(twTitle) || twTitle.includes(lowerName))) ||
+        (cnTitle && (lowerName.includes(cnTitle) || cnTitle.includes(lowerName))) ||
+        (locTitle && (lowerName.includes(locTitle) || locTitle.includes(lowerName)))
+      ) {
+        return {
+          title: pickText(r.title, locale),
+          localTitle: r.localTitle
+        };
+      }
+    }
+  }
+
+  return {};
+}
+

@@ -201,6 +201,14 @@ export interface TripSurvey {
   passportNationality?: string;
   insuranceStatus: InsuranceStatus;
   notes: string;
+  companions?: CompanionPreference[];
+}
+
+export interface CompanionPreference {
+  name: string;
+  budgetLevel?: 'economy' | 'moderate' | 'luxury' | 'unlimited';
+  dietaryRestrictions?: string[];
+  travelStyles?: string[];
 }
 
 // ─── Default Values Factory ───
@@ -266,6 +274,7 @@ export function createDefaultSurvey(userId: string): TripSurvey {
     hasInternationalLicense: false,
     insuranceStatus: 'skip',
     notes: '必須考量到家庭旅遊的體力負荷，以及交通順暢度',
+    companions: [],
   };
 }
 

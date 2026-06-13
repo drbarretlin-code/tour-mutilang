@@ -4,7 +4,7 @@ import i18n from '../i18n';
 import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
 import { fetchDestinationPOIs, POI, PoiCategory } from './poi';
 import { fetchWikipediaSummaries } from './enrich';
-import { getBuiltInTemplate, getBuiltInRestaurants } from '../data/destinations';
+import { getBuiltInTemplate, getBuiltInRestaurants, findLocalizedName } from '../data/destinations';
 import { detectGuideCountryKey, isCoveredGuideCountry, getDownloadableGuideCountry } from './guidePacks';
 
 // ─── POI → 行程範本 轉換（規則式引擎使用） ───
@@ -63,10 +63,11 @@ const CATEGORY_LABEL: Record<string, Record<PoiCategory, string>> = {
  * 為真實 POI 產生較豐富的引言介紹（約 300 字）。OpenTripMap 的 radius 端點不附帶長文，
  * 故依分類組合具實質內容的段落，並對齊使用者語系；若有 localName 一併提示官方當地名稱。
  */
-function buildPoiDescription(p: POI, destName: string, label: string, locale: string): string {
+function buildPoiDescription(p: POI, destName: string, label: string, locale: string, localizedTitle?: string): string {
   const zh = locale.startsWith('zh');
   const isCn = locale === 'zh-CN';
   const local = p.localName && p.localName !== p.name ? p.localName : '';
+  const title = localizedTitle || p.name;
 
   // 各分類的特色描述（繁中／簡中／英文）
   const traitMap: Record<string, [string, string, string]> = {
@@ -91,12 +92,12 @@ function buildPoiDescription(p: POI, destName: string, label: string, locale: st
 
   if (zh) {
     const localHint = local ? `當地多以「${local}」稱之，現場叫車或使用地圖導航時可直接使用此名稱。` : '';
-    return `「${p.name}」是位於${destName}、名列${label}的人氣景點，${traitText}。${localHint}` +
+    return `「${title}」是位於${destName}、名列${label}的人氣景點，${traitText}。${localHint}` +
       `此地深受國內外旅客喜愛，無論是初次造訪或重遊，都能從不同角度感受其魅力。建議您預留充裕的時間，放慢腳步細細品味周邊的環境與氛圍，並留意現場的指示牌與參觀禮儀；若逢假日或旅遊旺季，人潮可能較多，宜避開尖峰時段以獲得更從容的體驗。` +
       `周邊通常亦有值得順道走訪的店家、餐飲與景點，可一併規劃延伸行程。實際的開放時間、票價、公休日與最新參觀規定可能隨季節調整，出發前請務必透過官方管道再次確認，以免向隅。`;
   }
   const localHint = local ? ` Locally it is commonly known as "${local}", a name you can use directly when hailing a ride or searching on maps.` : '';
-  return `${p.name} is a popular ${label} in ${destName}, ${traitText}.${localHint}` +
+  return `${title} is a popular ${label} in ${destName}, ${traitText}.${localHint}` +
     ` Beloved by both local and international travelers, it rewards first-time visitors and returning guests alike with something new from every angle. Allow yourself ample time to slow down and take in the surroundings and atmosphere, and be mindful of on-site signage and visitor etiquette; during weekends and peak seasons it can get crowded, so consider avoiding peak hours for a more relaxed experience.` +
     ` The area usually offers nearby shops, dining and sights worth combining into an extended outing. Opening hours, ticket prices, closing days and the latest visiting rules may change with the season, so please re-confirm via official channels before you go.`;
 }
@@ -107,11 +108,17 @@ function buildDestTemplateFromPOIs(pois: POI[], destName: string, locale: string
   const tpl: DestTemplate = { images: [], titles: [], localTitles: [], descs: [], coords: [] };
   for (const p of pois) {
     const label = labels[p.category] || labels.other;
-    tpl.titles.push(p.name);
-    tpl.localTitles.push(p.localName || p.name);
+    
+    // 比對內建資料庫取得中文化及在地化的名稱與標題
+    const localized = findLocalizedName(p.name, p.lat, p.lon, locale);
+    const titleVal = localized.title || p.name;
+    const localTitleVal = localized.localTitle || p.localName || p.name;
+    
+    tpl.titles.push(titleVal);
+    tpl.localTitles.push(localTitleVal);
     tpl.images.push(CATEGORY_IMAGE[p.category] || CATEGORY_IMAGE.other);
     tpl.coords!.push({ lat: p.lat, lon: p.lon });
-    tpl.descs.push(buildPoiDescription(p, destName, label, locale));
+    tpl.descs.push(buildPoiDescription(p, destName, label, locale, localized.title));
   }
   return tpl;
 }

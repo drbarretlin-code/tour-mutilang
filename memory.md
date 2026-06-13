@@ -94,4 +94,28 @@
 ### Node 環境
 - 本機已安裝 Homebrew 與 Node（v26.3.0 / npm 11.16.0），路徑為 `/opt/homebrew/bin`。
 - `~/.zprofile` 已有 `eval "$(/opt/homebrew/bin/brew shellenv zsh)"`；若新終端機找不到 `node`/`npm`，先執行此 eval 指令載入 PATH。
-- `npm install` 與 `npx tsc --noEmit -p .` 皆已驗證可正常執行且無錯誤。
+- `npm install` & `npx tsc --noEmit -p .` 皆已驗證可正常執行且無錯誤。
+- `git push` 指令已驗證，專案 repo 為 `https://github.com/drbarretlin-code/tour-mutilang.git`。
+
+---
+
+## 2026-06-13（續）— 日本行程指引修復、移除已取消分頁與叫車平台動態化
+
+### 取消「費用分帳」與「旅遊翻譯」分頁
+- 已於 [index.tsx](file:///Users/barretlin/GitProjects/tour-mutilang/app/itinerary/index.tsx) 中移除 `ExpenseSplitter` 與 `TravelTranslator` 元件的 import、JSX 視圖切換區塊，並將其自 ScrollView 分頁導覽列按鈕陣列中刪除，完成了這兩個已取消功能分頁的 UI 移除工作。
+
+### 動態加載機場指引資訊 (解決日本行程顯示泰國 BKK 機場問題)
+- 於 [TimelineView.tsx](file:///Users/barretlin/GitProjects/tour-mutilang/src/components/itinerary/TimelineView.tsx) 中新增 `getAirportData(regionName, isArrival, isEn)` 輔助函式。
+- 系統現在會根據行程的地區 (`regionName`) 動態偵測所屬國家，並加載對應的機場資訊（如：日本成田 NRT / 羽田 HND、台灣桃園 TPE、泰國 BKK）與對應的國旗 Emoji，以及入境/出境的接駁大眾運輸與報到查驗詳細指引，取代了原先硬編碼泰國 BKK 機場的邏輯。
+
+### 景點名稱中文化翻譯與對齊
+- 於 [destinations.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/data/destinations.ts) 中新增了 `findLocalizedName(poiName, lat, lon, locale)` 函式，用於在內建的離線 `destinations.json` 模板庫中，透過經緯度座標（500公尺內）或名稱相似度模糊匹配對應景點/餐廳的翻譯名稱。
+- 於 [ai.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/services/ai.ts) 的 `buildDestTemplateFromPOIs` 轉換流程中整合此函式，當系統在線上抓取 OpenTripMap 英文 POI 時，若匹配成功，會自動將其替換/附加為 UI 語系顯示名稱（如繁體中文的「淺草寺與雷門江戶風情」），並將官方當地名稱（如日文的「浅草寺 (雷門)」）作為 `localTitle` 保留，大幅改善了先前日本行程景點沒有中文字的錯誤。
+
+### 動態匹配各國租/包車/叫車平台與 Deep Link
+- 於 [TimelineView.tsx](file:///Users/barretlin/GitProjects/tour-mutilang/src/components/itinerary/TimelineView.tsx) 與 [ai.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/services/ai.ts) 中整合 `getRideHailingInfo(regionName, isEn)`，依行程國家動態返回對應的推薦叫車 App：
+  - **日本**：推薦 **GO / Uber** (GO App 開啟 Deep Link `taxigo://`)，更新為深色按鈕。
+  - **台灣**：推薦 **yoxi / Uber** (yoxi App 開啟 Deep Link `yoxi://`)，按鈕為紅色。
+  - **泰國**：推薦 **Grab / Bolt** (開啟 `grab://` / `bolt://`)，按鈕為綠色。
+  - **其他**：推薦 **Uber / Google Maps 叫車**。
+- [TimelineView.tsx](file:///Users/barretlin/GitProjects/tour-mutilang/src/components/itinerary/TimelineView.tsx) 中同步優化 `handleOpenUrl`，支援 yoxi App 與 GO App 的 Deep Link 跳轉。
