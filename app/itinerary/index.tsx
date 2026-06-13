@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator, TouchableOpacity, Alert, Linking, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator, TouchableOpacity, Alert, Linking, Platform, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSurvey } from '../../src/context/SurveyContext';
 import { useLanguage } from '../../src/context/LanguageContext';
@@ -27,7 +27,7 @@ import { dbService } from '../../src/services/db';
 import { aiService } from '../../src/services/ai';
 import { syncService } from '../../src/services/sync';
 import { regenerateActivityAlternatives } from '../../src/services/ai';
-import { verifyOpenTripMapKey, OtmKeyDiagnostic } from '../../src/services/poi';
+import { verifyOpenTripMapKey, setOpenTripMapKey, OtmKeyDiagnostic } from '../../src/services/poi';
 import { auth } from '../../src/services/firebase';
 import { useResponsive } from '../../src/hooks/useResponsive';
 import * as Print from 'expo-print';
@@ -87,6 +87,8 @@ export default function ItineraryScreen() {
   // OpenTripMap 金鑰診斷（用於提示金鑰是否生效並引導解決方案）
   const [otmDiag, setOtmDiag] = useState<OtmKeyDiagnostic | null>(null);
   const [otmBannerDismissed, setOtmBannerDismissed] = useState(false);
+  const [otmKeyInput, setOtmKeyInput] = useState('');
+  const [otmSaving, setOtmSaving] = useState(false);
   useEffect(() => {
     let cancelled = false;
     verifyOpenTripMapKey()
@@ -94,6 +96,28 @@ export default function ItineraryScreen() {
       .catch(() => { /* ignore */ });
     return () => { cancelled = true; };
   }, []);
+
+  // 將使用者輸入的金鑰寫入本機（桌面/行動版適用），並立即重新驗證。
+  const handleSaveOtmKey = async () => {
+    const key = otmKeyInput.trim();
+    if (!key) return;
+    setOtmSaving(true);
+    try {
+      await setOpenTripMapKey(key);
+      const d = await verifyOpenTripMapKey();
+      setOtmDiag(d);
+      if (d.status === 'ok') {
+        setOtmKeyInput('');
+        showAlert(t('common.success', { defaultValue: '成功' }), d.message);
+      } else {
+        showAlert(t('common.notice', { defaultValue: '提示' }), `${d.message}\n${d.hint}`);
+      }
+    } catch {
+      showAlert(t('common.error', { defaultValue: '錯誤' }), '儲存金鑰失敗，請再試一次。');
+    } finally {
+      setOtmSaving(false);
+    }
+  };
 
   const itineraryRef = useRef(itinerary);
   useEffect(() => {
@@ -784,6 +808,41 @@ export default function ItineraryScreen() {
                   <Text style={[typography.caption, { color: '#92400E', lineHeight: 18 }]}>
                     {otmDiag.hint}
                   </Text>
+                  {/* 本機金鑰輸入（桌面/行動版可直接填入並儲存於本機） */}
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 10 }}>
+                    <TextInput
+                      value={otmKeyInput}
+                      onChangeText={setOtmKeyInput}
+                      placeholder="貼上 OpenTripMap 金鑰"
+                      placeholderTextColor="#B45309"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      secureTextEntry
+                      style={{
+                        flex: 1,
+                        borderWidth: 1,
+                        borderColor: '#FCD34D',
+                        borderRadius: borderRadius.sm,
+                        paddingHorizontal: 10,
+                        paddingVertical: 6,
+                        color: '#92400E',
+                        backgroundColor: '#FFFFFF',
+                        fontSize: 13,
+                      }}
+                    />
+                    <TouchableOpacity
+                      disabled={otmSaving || !otmKeyInput.trim()}
+                      onPress={handleSaveOtmKey}
+                      style={{
+                        backgroundColor: otmSaving || !otmKeyInput.trim() ? '#D1D5DB' : '#2563EB',
+                        paddingHorizontal: 14,
+                        paddingVertical: 7,
+                        borderRadius: borderRadius.sm,
+                      }}
+                    >
+                      <Text style={[typography.caption, { color: '#fff', fontWeight: '700' }]}>{otmSaving ? '驗證中…' : '儲存並驗證'}</Text>
+                    </TouchableOpacity>
+                  </View>
                   <View style={{ flexDirection: 'row', gap: 12, marginTop: 8 }}>
                     <TouchableOpacity onPress={() => Linking.openURL('https://opentripmap.io/product')}>
                       <Text style={[typography.caption, { color: '#2563EB', fontWeight: '700' }]}>取得 / 確認金鑰</Text>
