@@ -70,6 +70,7 @@ export function TimelineView({
   // Local state to track notes input before saving
   const [localNotes, setLocalNotes] = useState<Record<string, string>>({});
   const [expandedTerminalMap, setExpandedTerminalMap] = useState<Record<string, boolean>>({});
+  const [expandedDesc, setExpandedDesc] = useState<Record<string, boolean>>({});
 
   const handleNoteChange = (id: string, text: string) => {
     setLocalNotes(prev => ({ ...prev, [id]: text }));
@@ -307,6 +308,25 @@ export function TimelineView({
                 <Text style={[typography.titleMedium, { color: '#0F172A', fontWeight: '800', marginTop: 8 }]}>
                   {getActivityTypeLabel(act.type)}：{act.title} {act.localTitle ? `[${act.localTitle}]` : ''}
                 </Text>
+
+                {/* 景點長介紹（約300字）：可展開／收合，預設顯示前幾行 */}
+                {!!act.description && (
+                  <View style={{ marginTop: 6 }}>
+                    <Text
+                      style={[typography.bodySmall, { color: '#475569', lineHeight: 20 }]}
+                      numberOfLines={expandedDesc[act.id] ? undefined : 4}
+                    >
+                      {act.description}
+                    </Text>
+                    {act.description.length > 80 && (
+                      <TouchableOpacity onPress={() => setExpandedDesc(prev => ({ ...prev, [act.id]: !prev[act.id] }))} style={{ marginTop: 4 }}>
+                        <Text style={[typography.caption, { color: colors.primary500, fontWeight: '700' }]}>
+                          {expandedDesc[act.id] ? '收起 ▴' : '展開更多 ▾'}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                )}
 
                 {(act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport')) && (
                   <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: 12 }}>
