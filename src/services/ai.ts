@@ -3,6 +3,7 @@ import { Itinerary, ItineraryDay, Activity, TransportInfo } from '../types/itine
 import i18n from '../i18n';
 import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
 import { fetchDestinationPOIs, POI, PoiCategory } from './poi';
+import { fetchWikipediaSummaries } from './enrich';
 import { detectGuideCountryKey, isCoveredGuideCountry, getDownloadableGuideCountry } from './guidePacks';
 
 // ─── POI → 行程範本 轉換（規則式引擎使用） ───
@@ -548,6 +549,19 @@ export const aiService = {
         console.warn(`[generateRuleBasedItinerary] 取得 ${d.name} POI 失敗，改用內建範本`, e);
       }
     }));
+
+    // 以維基百科摘要動態補強各景點介紹（免金鑰），命中則覆寫較豐富的權威描述；
+    // 失敗者沿用 buildPoiDescription 既有內容。優先以官方當地名稱查詢以提高命中率。
+    try {
+      await Promise.all(Object.values(poiByDest).map(async (tpl) => {
+        if (!tpl?.titles?.length) return;
+        const queryTitles = tpl.titles.map((t, idx) => (tpl.localTitles?.[idx] || t));
+        const summaries = await fetchWikipediaSummaries(queryTitles, appLocale);
+        tpl.descs = tpl.descs.map((d, idx) => summaries[queryTitles[idx]] || d);
+      }));
+    } catch (e) {
+      console.warn('[generateRuleBasedItinerary] 維基百科介紹補強失敗，沿用內建描述', e);
+    }
 
     const itinerary = this.generateFallbackItinerary(alignedSurvey, poiByDest);
     // 此為正式生成方式（非 AI 失敗備援），故不標記 generatedByFallback。
