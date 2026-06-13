@@ -458,8 +458,9 @@
       },
       "phrases": {
         "title": "☕ 实用语通",
-        "translator": "1. 双向语音翻译网页",
-        "openTool": "开启工具"
+        "translator": "双向语音翻译网页",
+        "openTool": "开启工具",
+        "applyApiKey": "申请 API KEY"
       }
     },
     "expenseSplitter": {

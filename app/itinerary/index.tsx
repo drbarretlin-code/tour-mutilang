@@ -598,7 +598,7 @@ export default function ItineraryScreen() {
       {viewMode === 'guide' && (
         <DestinationGuide 
           countryName={contextSurvey?.destinations?.[0]?.country || '泰國'}
-          onNavigateToTranslator={() => Linking.openURL('https://acia-2.vercel.app')}
+          onNavigateToTranslator={() => Linking.openURL('https://acia-2.vercel.app?reset=1')}
         />
       )}
     </View>

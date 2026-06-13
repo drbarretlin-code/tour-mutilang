@@ -31,7 +31,7 @@ export function TimelineView({
   const renderVerticalTransitBadge = (transport: any, from?: any, to?: any) => {
     const tData = transport || { mode: 'drive', duration: 10 };
     const distKm = getRouteDistanceKm(tData, from, to);
-    const distStr = `${distKm.toFixed(1)} km`;
+    const distStr = distKm > 0 ? `${distKm.toFixed(1)} km` : '';
     
     let iconName: any = 'car-outline';
     let modeLabel = t('itinerary.timelineView.transport.mode.drive', { defaultValue: '乘車' });
@@ -61,7 +61,7 @@ export function TimelineView({
       <View style={[styles.verticalTransitBadge, { backgroundColor: bgColor, borderColor: themeColor + '30' }]}>
         <Ionicons name={iconName} size={13} color={themeColor} />
         <Text style={[styles.verticalTransitText, { color: themeColor }]}>
-          {modeLabel} • {tData.duration || 10} {t('common.minutes', { defaultValue: '分鐘' })} • {distStr}
+          {modeLabel} • {tData.duration || 10} {t('common.minutes', { defaultValue: '分鐘' })}{distStr ? ` • ${distStr}` : ''}
         </Text>
       </View>
     );

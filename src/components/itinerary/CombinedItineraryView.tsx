@@ -155,7 +155,7 @@ export const CombinedItineraryView: React.FC<Props> = ({ itinerary, activeDay, m
               if (index < points.length - 1) {
                 const nextPt = points[index + 1];
                 const distanceKm = getRouteDistanceKm(nextPt.transport, pt.location, nextPt.location);
-                distanceStr = `${distanceKm.toFixed(1)} km`;
+                if (distanceKm > 0) distanceStr = `${distanceKm.toFixed(1)} km`;
               }
 
               return (

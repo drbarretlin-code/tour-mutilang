@@ -458,8 +458,9 @@
       },
       "phrases": {
         "title": "☕ Useful Phrases",
-        "translator": "1. Two-way Voice Translator",
-        "openTool": "Open Tool"
+        "translator": "Two-way Voice Translator",
+        "openTool": "Open Tool",
+        "applyApiKey": "Get API KEY"
       }
     },
     "expenseSplitter": {

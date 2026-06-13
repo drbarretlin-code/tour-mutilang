@@ -458,8 +458,9 @@
       },
       "phrases": {
         "title": "☕ 實用語通",
-        "translator": "1. 雙向語音翻譯網頁",
-        "openTool": "開啟工具"
+        "translator": "雙向語音翻譯網頁",
+        "openTool": "開啟工具",
+        "applyApiKey": "申請 API KEY"
       }
     },
     "expenseSplitter": {

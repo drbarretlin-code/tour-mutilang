@@ -32,7 +32,7 @@ export function Itinerary3DMap({ itinerary, activeDay, height = 300 }: Itinerary
     if (index < dayActivities.length - 1) {
       const nextAct = dayActivities[index + 1];
       const distKm = getRouteDistanceKm(nextAct.transport, act.location, nextAct.location);
-      distToNext = `${distKm.toFixed(1)} km`;
+      if (distKm > 0) distToNext = `${distKm.toFixed(1)} km`;
     }
 
     return {

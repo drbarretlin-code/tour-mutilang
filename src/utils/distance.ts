@@ -25,8 +25,11 @@ export function haversineDistanceKm(from: LatLng, to: LatLng): number {
 /**
  * 取得兩個行程節點間的路線距離（公里）。
  * 優先順序：transport.distance（規劃時已標註的實際距離）
- *          > 兩節點座標的 Haversine 直線距離（避免每天顯示相同的固定距離）
- *          > 依交通方式與時間估算的距離（無座標資料時的最終備援）。
+ *          > 兩節點座標的 Haversine 直線距離。
+ *
+ * 重要：若兩節點皆退回城市中心而座標相同（缺乏真實 POI 座標），則回傳 0，
+ * 代表「距離不明」——呼叫端應隱藏距離標籤，而非顯示以「時間×速度」捏造的
+ * 固定估算值（過去會造成每天每段顯示相同且不可信的距離）。
  */
 export function getRouteDistanceKm(transport: any, from?: LatLng, to?: LatLng): number {
   if (transport?.distance > 0) {
@@ -38,17 +41,6 @@ export function getRouteDistanceKm(transport: any, from?: LatLng, to?: LatLng): 
     if (geoDist > 0.1) return geoDist;
   }
 
-  const duration = transport?.duration || 10;
-  const mode = transport?.mode || 'drive';
-
-  let speedKmh = 40;
-  if (mode === 'walk') {
-    speedKmh = 4.5;
-  } else if (mode === 'public') {
-    speedKmh = 20;
-  } else if (mode === 'taxi' || mode === 'charter' || mode === 'drive') {
-    speedKmh = 40;
-  }
-
-  return (duration / 60) * speedKmh;
+  // 無可信來源（無標註距離、且座標缺失或相同）→ 距離不明
+  return 0;
 }

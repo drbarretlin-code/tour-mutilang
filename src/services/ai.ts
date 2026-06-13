@@ -702,6 +702,11 @@ export const aiService = {
               '浅草寺是东京都内历史最悠久的寺庙，创建于公元628年。其标志性的巨型红灯笼“雷门”是江户文化的象征，两侧的仲见世通商店街贩售各式传统小吃与工艺品，是体验日本传统佛教底蕴的必访之地。',
               '涩谷是东京乃至全球时尚与青年文化的发源地。著名的涩谷站前十字路口在绿灯亮起时，成百上千的人潮交织穿梭，极具震撼感。周边林立着百货公司、潮流品牌与特色居酒屋。',
               '明治神宫是为了供奉明治天皇与昭宪皇太后而建的神社。神宫掩映在占地70公顷的巨大人工森林中，踏入神宫，尘嚣顿消，是繁华东京市中心难得的静谧绿洲与神圣之所。'
+            ],
+            coords: [
+              { lat: 35.7148, lon: 139.7967 },
+              { lat: 35.6595, lon: 139.7004 },
+              { lat: 35.6764, lon: 139.6993 }
             ]
           };
         } else if (isEn) {
@@ -717,6 +722,11 @@ export const aiService = {
               'Sensō-ji is Tokyo\\\'s oldest temple, founded in 628. Its iconic red lantern at the Kaminarimon Gate symbolizes Edo culture. The Nakamise-dori street is filled with traditional snacks and crafts, making it a must-visit to experience Japan\\\'s Buddhist heritage.',
               'Shibuya is the birthplace of fashion and youth culture in Tokyo. The famous Shibuya Crossing sees hundreds of people crossing in all directions simultaneously when the lights turn green. Surrounding areas are packed with shopping malls, trend brands, and izakayas.',
               'Meiji Jingu is a Shinto shrine dedicated to the deified spirits of Emperor Meiji and his consort. Enclosed in a 70-hectare forest, entering the shrine grounds makes you forget the busy city, providing a rare green oasis in Tokyo.'
+            ],
+            coords: [
+              { lat: 35.7148, lon: 139.7967 },
+              { lat: 35.6595, lon: 139.7004 },
+              { lat: 35.6764, lon: 139.6993 }
             ]
           };
         } else {
@@ -733,6 +743,11 @@ export const aiService = {
               '淺草寺是東京都內歷史最悠久的寺廟，創建於公元628年。其標誌性的巨型紅燈籠「雷門」是江戶文化的象徵，兩側的仲見世通商店街販售各式傳統小吃與工藝品，是體驗日本傳統佛教底蘊的必訪之地。',
               '澀谷是東京乃至全球時尚與青年文化的發源地。著名的澀谷站前十字路口在綠燈亮起時，成百上千的人潮交織穿梭，極具震撼感。周邊林立著百貨公司、潮流品牌與特色居酒屋。',
               '明治神宮是為了供奉明治天皇與昭憲皇太后而建的神社。神宮掩映在佔地70公頃的巨大人工森林中，踏入神宮，塵囂頓消，是繁華東京市中心難得的靜謐綠洲與神聖之所。'
+            ],
+            coords: [
+              { lat: 35.7148, lon: 139.7967 }, // 淺草寺
+              { lat: 35.6595, lon: 139.7004 }, // 澀谷十字路口
+              { lat: 35.6764, lon: 139.6993 }  // 明治神宮
             ]
           };
         }
@@ -752,6 +767,11 @@ export const aiService = {
               '大皇宫是曼谷王朝的象征，自1782年建立起便是暹罗王室的官方官邸。其内部建筑融合了泰式传统与欧式风情，雕梁画栋、极尽奢华。供奉于玉佛寺的翡翠玉佛更是泰国最崇高的国宝。',
               '水上市场是泰国古老运河文化的缩影。商家划着装满新鲜水果、椰子烤肉的小船在河道上穿梭兜售，空气中弥漫着地道泰式调味料的香气，是体验泰国常民风情与美食的绝佳去处。',
               '郑王庙又称黎明寺，座落于昭批耶河畔。其主塔高达82米，塔身镶嵌了无数碎陶瓷与贝壳，在阳光下熠熠生辉。黄昏时分，夕阳将塔影拉长，倒映在河面上，极具诗意。'
+            ],
+            coords: [
+              { lat: 13.7500, lon: 100.4915 }, // 大皇宮
+              { lat: 13.4253, lon: 99.9558 },  // 安帕瓦水上市場
+              { lat: 13.7437, lon: 100.4889 }  // 鄭王廟
             ]
           };
         } else if (isEn) {
@@ -767,6 +787,11 @@ export const aiService = {
               'The Grand Palace is a complex of buildings at the heart of Bangkok, serving as the official residence of the Kings of Siam since 1782. Its architecture blends traditional Thai and European styles. The Emerald Buddha housed in Wat Phra Kaew is Thailand\\\'s most sacred object.',
               'The floating markets showcase Thailand\\\'s ancient canal culture. Merchants row small boats laden with fresh fruits and grilled food, selling directly to visitors. The air is filled with authentic Thai seasoning aroma, making it a perfect spot to experience local life.',
               'Wat Arun, also known as the Temple of Dawn, is situated on the west bank of the Chao Phraya River. Its central prang rises 82 meters high, decorated with colorful porcelain and seashells. At sunset, the golden light reflections on the river are exceptionally poetic.'
+            ],
+            coords: [
+              { lat: 13.7500, lon: 100.4915 },
+              { lat: 13.4253, lon: 99.9558 },
+              { lat: 13.7437, lon: 100.4889 }
             ]
           };
         } else {
@@ -783,6 +808,11 @@ export const aiService = {
               '大皇宮是曼谷王朝的象徵，自1782年建立起便是暹羅王室的官方官邸。其內部建築融合了泰式傳統與歐式風情，雕樑畫棟、極盡奢華。供奉於玉佛寺的翡翠玉佛更是泰國最崇高的國寶。',
               '水上市場是泰國古老運河文化的縮影。商家劃著裝滿新鮮水果、椰子烤肉的小船在河道上穿梭兜售，空氣中瀰漫著地道泰式調味料的香氣，是體驗泰國常民風情與美食的絕佳去處。',
               '鄭王廟又稱黎明寺，座落於昭批耶河畔。其主塔高達82米，塔身鑲嵌了無數碎陶瓷與貝殼，在陽光下熠熠生輝。黃昏時分，夕陽將塔影拉長，倒映在河面上，極具詩意。'
+            ],
+            coords: [
+              { lat: 13.7500, lon: 100.4915 },
+              { lat: 13.4253, lon: 99.9558 },
+              { lat: 13.7437, lon: 100.4889 }
             ]
           };
         }
@@ -802,6 +832,11 @@ export const aiService = {
             '台北101曾是世界第一高楼，是台湾现代科技的里程碑。搭乘超高速电梯仅需37秒即可直达89楼观景台，俯瞰台北盆地壮丽的城市天际线，并近距离观察重达660公吨的风阻尼器巨大钢球。',
             '九份是一座依山面海的古老矿业小镇，因李安导演《悲情城市》与传闻中神似宫崎骏《千与千寻》场景而声名大噪。窄小的石阶、错落有致的红灯笼与茶楼，漫步其间，仿佛时空倒流。',
             '夜市是台湾最具代表性的饮食文化核心。士林夜市历史悠久，汇聚了超大鸡排、蚵仔煎、大肠包小肠与珍珠奶茶等全球知名的饭餐美食，是感受台北夜生活与热情民风的必选地。'
+          ],
+          coords: [
+            { lat: 25.0339, lon: 121.5645 }, // 台北101
+            { lat: 25.1095, lon: 121.8443 }, // 九份老街
+            { lat: 25.0879, lon: 121.5240 }  // 士林夜市
           ]
         };
       } else if (isEn) {
@@ -817,6 +852,11 @@ export const aiService = {
             'Taipei 101 was once the tallest building in the world and is a milestone of Taiwan\\\'s modern technology. An ultra-high-speed elevator whisks you to the 89th-floor observatory in just 37 seconds for a breathtaking 360-degree view of Taipei Basin.',
             'Jiufen is a historic mountainside gold-mining town famous for its atmospheric teahouses and narrow cobblestone alleys. It inspired the film A City of Sadness and draws comparison to Spirited Away scenery.',
             'Night markets are the core of Taiwan\\\'s culinary culture. Shilin Night Market is historical, serving famous foods like giant fried chicken cutlets, oyster omelets, and bubble tea. A must-visit to experience local life.'
+          ],
+          coords: [
+            { lat: 25.0339, lon: 121.5645 },
+            { lat: 25.1095, lon: 121.8443 },
+            { lat: 25.0879, lon: 121.5240 }
           ]
         };
       } else {
@@ -833,6 +873,11 @@ export const aiService = {
             '台北101曾是世界第一高樓，是台灣現代科技的里程碑。搭乘超高速電梯僅需37秒即可直達89樓觀景台，俯瞰台北盆地壯麗的城市天際線，並近距離觀察重達660公噸的風阻尼器巨大鋼球。',
             '九份是一座依山面海的古老礦業小鎮，因李安導演《悲情城市》與傳聞中神似宮崎駿《神隱少女》場景而聲名大噪。窄小的石階、錯落有致的紅燈籠與茶樓，漫步其間，彷彿時空倒流。',
             '夜市是台灣最具代表性的飲食文化核心。士林夜市歷史悠久，匯聚了超大雞排、蚵仔煎、大腸包小腸與珍珠奶茶等全球知名的庶民美食，是感受台北夜生活與熱情民風的必選地。'
+          ],
+          coords: [
+            { lat: 25.0339, lon: 121.5645 },
+            { lat: 25.1095, lon: 121.8443 },
+            { lat: 25.0879, lon: 121.5240 }
           ]
         };
       }
