@@ -27,6 +27,7 @@ import { dbService } from '../../src/services/db';
 import { aiService } from '../../src/services/ai';
 import { syncService } from '../../src/services/sync';
 import { regenerateActivityAlternatives } from '../../src/services/ai';
+import { verifyOpenTripMapKey, OtmKeyDiagnostic } from '../../src/services/poi';
 import { auth } from '../../src/services/firebase';
 import { useResponsive } from '../../src/hooks/useResponsive';
 import * as Print from 'expo-print';
@@ -82,6 +83,17 @@ export default function ItineraryScreen() {
   const [reRollLoading, setReRollLoading] = useState(false);
   const [reRollAlternatives, setReRollAlternatives] = useState<Activity[]>([]);
   const [reRollTargetActivityId, setReRollTargetActivityId] = useState<string | null>(null);
+
+  // OpenTripMap 金鑰診斷（用於提示金鑰是否生效並引導解決方案）
+  const [otmDiag, setOtmDiag] = useState<OtmKeyDiagnostic | null>(null);
+  const [otmBannerDismissed, setOtmBannerDismissed] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    verifyOpenTripMapKey()
+      .then(d => { if (!cancelled) setOtmDiag(d); })
+      .catch(() => { /* ignore */ });
+    return () => { cancelled = true; };
+  }, []);
 
   const itineraryRef = useRef(itinerary);
   useEffect(() => {
@@ -747,6 +759,44 @@ export default function ItineraryScreen() {
             </View>
           </View>
 
+          {/* OpenTripMap 金鑰診斷提示：金鑰缺失/無效時提醒並引導解決方案 */}
+          {otmDiag && otmDiag.status !== 'ok' && !otmBannerDismissed && (
+            <View style={{
+              marginHorizontal: spacing.md,
+              marginBottom: spacing.sm,
+              padding: spacing.md,
+              borderRadius: borderRadius.md,
+              backgroundColor: otmDiag.status === 'invalid' ? '#FEF2F2' : '#FFFBEB',
+              borderWidth: 1,
+              borderColor: otmDiag.status === 'invalid' ? '#FCA5A5' : '#FCD34D',
+            }}>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                <Ionicons
+                  name={otmDiag.status === 'invalid' ? 'alert-circle' : 'information-circle'}
+                  size={18}
+                  color={otmDiag.status === 'invalid' ? '#DC2626' : '#D97706'}
+                  style={{ marginRight: 8, marginTop: 1 }}
+                />
+                <View style={{ flex: 1 }}>
+                  <Text style={[typography.labelMedium, { color: '#92400E', fontWeight: '700', marginBottom: 4 }]}>
+                    {otmDiag.message}
+                  </Text>
+                  <Text style={[typography.caption, { color: '#92400E', lineHeight: 18 }]}>
+                    {otmDiag.hint}
+                  </Text>
+                  <View style={{ flexDirection: 'row', gap: 12, marginTop: 8 }}>
+                    <TouchableOpacity onPress={() => Linking.openURL('https://opentripmap.io/product')}>
+                      <Text style={[typography.caption, { color: '#2563EB', fontWeight: '700' }]}>取得 / 確認金鑰</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setOtmBannerDismissed(true)}>
+                      <Text style={[typography.caption, { color: '#6B7280', fontWeight: '700' }]}>知道了</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </View>
+          )}
+
           {/* Row 2 & 3: View Modes + Days (Visible only when expanded) */}
           {isNavExpanded && (
             <View style={{ padding: spacing.md }}>
@@ -756,8 +806,6 @@ export default function ItineraryScreen() {
                   { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
                   { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
                   { code: 'checklist', label: t('itinerary.tabs.checklist'), icon: 'checkbox-outline' },
-                  { code: 'expenses', label: t('itinerary.tabs.expenses'), icon: 'wallet-outline' },
-                  { code: 'translator', label: t('itinerary.tabs.translator'), icon: 'language-outline' },
                 ].map((mode) => {
                   const isSelected = viewMode === mode.code;
                   return (

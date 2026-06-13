@@ -85,6 +85,80 @@ export async function setOpenTripMapKey(key: string): Promise<void> {
   await AsyncStorage.setItem(OTM_KEY_STORAGE, key);
 }
 
+export type OtmKeyStatus =
+  | 'ok'            // 金鑰存在且通過 API 驗證
+  | 'missing'       // 完全找不到金鑰（環境變數與本機皆無）
+  | 'invalid'       // 有金鑰但 API 回傳 401/403（金鑰錯誤或未啟用）
+  | 'network';      // 網路/逾時等暫時性問題，無法判定
+
+export interface OtmKeyDiagnostic {
+  status: OtmKeyStatus;
+  source: 'env' | 'storage' | 'none';
+  message: string;
+  hint: string;
+}
+
+/**
+ * 驗證 OpenTripMap 金鑰是否「真的會生效」：實際打一個輕量 API（geoname）來檢查。
+ * 供設定畫面或行程畫面呼叫，以明確告知使用者金鑰狀態並給出對應的解決指引。
+ */
+export async function verifyOpenTripMapKey(): Promise<OtmKeyDiagnostic> {
+  const envKey = (typeof process !== 'undefined' && process.env.EXPO_PUBLIC_OPENTRIPMAP_KEY) || null;
+  let source: 'env' | 'storage' | 'none' = 'none';
+  let key: string | null = envKey || null;
+  if (key) {
+    source = 'env';
+  } else {
+    try {
+      const stored = await AsyncStorage.getItem(OTM_KEY_STORAGE);
+      if (stored) { key = stored; source = 'storage'; }
+    } catch { /* ignore */ }
+  }
+
+  if (!key) {
+    return {
+      status: 'missing',
+      source: 'none',
+      message: '尚未設定 OpenTripMap 金鑰，行程將改用內建範本（景點不會即時更新）。',
+      hint: 'Web 部署請於 Vercel 環境變數設定 EXPO_PUBLIC_OPENTRIPMAP_KEY 後重新部署；桌面/行動版請於設定畫面填入金鑰。注意：EXPO_PUBLIC_ 變數是「建置時」注入，設定後務必重新建置。',
+    };
+  }
+
+  try {
+    const url = `${OTM_BASE}/geoname?name=Bangkok&apikey=${encodeURIComponent(key)}`;
+    const res = await fetchWithTimeout(url, 6000);
+    if (res.status === 401 || res.status === 403) {
+      return {
+        status: 'invalid',
+        source,
+        message: '偵測到 OpenTripMap 金鑰，但 API 回報金鑰無效或未獲授權。',
+        hint: '請至 opentripmap.io 確認金鑰是否正確、是否已啟用，並檢查是否有複製到多餘空白字元。',
+      };
+    }
+    if (!res.ok) {
+      return {
+        status: 'network',
+        source,
+        message: `OpenTripMap 回應狀態 ${res.status}，暫時無法確認金鑰是否生效。`,
+        hint: '可能為服務暫時不穩或達到頻率限制，請稍後再試。',
+      };
+    }
+    return {
+      status: 'ok',
+      source,
+      message: `OpenTripMap 金鑰生效中（來源：${source === 'env' ? '環境變數' : '本機設定'}）。`,
+      hint: '行程將以即時 POI 資料生成。',
+    };
+  } catch {
+    return {
+      status: 'network',
+      source,
+      message: '無法連線至 OpenTripMap 以驗證金鑰（網路或逾時）。',
+      hint: '請確認網路連線後再試；若問題持續，行程將自動退回內建範本。',
+    };
+  }
+}
+
 async function fetchWithTimeout(url: string, ms: number): Promise<Response> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), ms);
