@@ -69,7 +69,7 @@ function deriveCategory(kinds: string): PoiCategory {
 
 async function resolveApiKey(): Promise<string | null> {
   // 1) 環境變數（營運者於部署環境設定，Expo 會將 EXPO_PUBLIC_* 注入前端）
-  const envKey = (typeof process !== 'undefined' && (process as any)?.env?.EXPO_PUBLIC_OPENTRIPMAP_KEY) || null;
+  const envKey = (typeof process !== 'undefined' && process.env.EXPO_PUBLIC_OPENTRIPMAP_KEY) || null;
   if (envKey) return envKey as string;
   // 2) 本機儲存（可由設定畫面填入）
   try {

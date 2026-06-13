@@ -1,0 +1,43 @@
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pinA" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#A78BFA"/>
+      <stop offset="0.55" stop-color="#7C3AED"/>
+      <stop offset="1" stop-color="#5B21B6"/>
+    </linearGradient>
+    <linearGradient id="pinB" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#5EEAD4"/>
+      <stop offset="0.55" stop-color="#14B8A6"/>
+      <stop offset="1" stop-color="#0F766E"/>
+    </linearGradient>
+    <radialGradient id="hiA" cx="0.35" cy="0.3" r="0.6">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hiB" cx="0.35" cy="0.3" r="0.6">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#1E1B4B" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+
+  <path d="M384 736 Q480 416 736 352" fill="none" stroke="#CBD5E1" stroke-width="18" stroke-dasharray="14 38" stroke-linecap="round"/>
+
+  <g filter="url(#softShadow)">
+    <path d="M384 304 c-108.8 0 -198.4 83.2 -198.4 192 c0 140.8 198.4 336 198.4 336 s198.4 -195.2 198.4 -336 c0 -108.8 -89.6 -192 -198.4 -192 Z" fill="url(#pinA)"/>
+    <path d="M384 304 c-108.8 0 -198.4 83.2 -198.4 192 c0 140.8 198.4 336 198.4 336 s198.4 -195.2 198.4 -336 c0 -108.8 -89.6 -192 -198.4 -192 Z" fill="url(#hiA)"/>
+    <circle cx="384" cy="505.6" r="70.4" fill="#FFFFFF"/>
+    <circle cx="384" cy="505.6" r="70.4" fill="none" stroke="#5B21B6" stroke-width="9" opacity="0.35"/>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <path d="M742.4 192 c-83.2 0 -150.4 64 -150.4 144 c0 105.6 150.4 252.8 150.4 252.8 s150.4 -147.2 150.4 -252.8 c0 -80 -67.2 -144 -150.4 -144 Z" fill="url(#pinB)"/>
+    <path d="M742.4 192 c-83.2 0 -150.4 64 -150.4 144 c0 105.6 150.4 252.8 150.4 252.8 s150.4 -147.2 150.4 -252.8 c0 -80 -67.2 -144 -150.4 -144 Z" fill="url(#hiB)"/>
+    <circle cx="742.4" cy="342.4" r="54.4" fill="#FFFFFF"/>
+    <circle cx="742.4" cy="342.4" r="54.4" fill="none" stroke="#0F766E" stroke-width="9" opacity="0.35"/>
+  </g>
+</svg>
