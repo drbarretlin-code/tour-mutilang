@@ -57,6 +57,48 @@ const CATEGORY_LABEL: Record<string, Record<PoiCategory, string>> = {
   },
 };
 
+/**
+ * 為真實 POI 產生較豐富的引言介紹（約 300 字）。OpenTripMap 的 radius 端點不附帶長文，
+ * 故依分類組合具實質內容的段落，並對齊使用者語系；若有 localName 一併提示官方當地名稱。
+ */
+function buildPoiDescription(p: POI, destName: string, label: string, locale: string): string {
+  const zh = locale.startsWith('zh');
+  const isCn = locale === 'zh-CN';
+  const local = p.localName && p.localName !== p.name ? p.localName : '';
+
+  // 各分類的特色描述（繁中／簡中／英文）
+  const traitMap: Record<string, [string, string, string]> = {
+    religion: ['是當地重要的宗教與信仰場所，建築與雕飾往往承載著深厚的歷史與藝術價值，氣氛莊嚴而靜謐', '是当地重要的宗教与信仰场所，建筑与雕饰往往承载着深厚的历史与艺术价值，气氛庄严而宁静', 'an important place of worship whose architecture and ornamentation often carry deep historical and artistic value, with a solemn, serene atmosphere'],
+    historic: ['見證了當地數百年的歷史變遷，是認識這座城市文化脈絡與往昔風華的重要窗口', '见证了当地数百年的历史变迁，是认识这座城市文化脉络与往昔风华的重要窗口', 'a witness to centuries of local history and a key window into the city\\\'s cultural roots and bygone splendor'],
+    museum: ['典藏與展示了豐富的文物與藝術作品，適合放慢腳步細細品味，深入理解在地的歷史與創作能量', '典藏与展示了丰富的文物与艺术作品，适合放慢脚步细细品味，深入理解在地的历史与创作能量', 'home to rich collections and exhibits, ideal for a slow, immersive visit into local history and creativity'],
+    architecture: ['以獨特的建築設計與工藝細節聞名，是建築愛好者與攝影者捕捉光影與線條的絕佳題材', '以独特的建筑设计与工艺细节闻名，是建筑爱好者与摄影者捕捉光影与线条的绝佳题材', 'renowned for its distinctive design and craftsmanship, a favorite subject for architecture lovers and photographers'],
+    nature: ['擁有怡人的自然景觀，是遠離城市喧囂、親近山水、放鬆身心的理想去處', '拥有怡人的自然景观，是远离城市喧嚣、亲近山水、放松身心的理想去处', 'blessed with pleasant natural scenery, an ideal place to escape the city and unwind in nature'],
+    park: ['綠意盎然、空間開闊，是當地人散步、野餐與休憩的日常生活場景，四季各有風情', '绿意盎然、空间开阔，是当地人散步、野餐与休憩的日常生活场景，四季各有风情', 'lush and spacious, a part of everyday local life for strolling and picnics, with charm in every season'],
+    viewpoint: ['擁有絕佳的眺望視野，可將周邊景致一覽無遺，尤以日出、日落與夜景時分最為迷人', '拥有绝佳的眺望视野，可将周边景致一览无遗，尤以日出、日落与夜景时分最为迷人', 'offering sweeping panoramic views, especially magical at sunrise, sunset and after dark'],
+    beach: ['擁有迷人的海岸線與水域，適合戲水、漫步沙灘或欣賞海天一色的開闊景致', '拥有迷人的海岸线与水域，适合戏水、漫步沙滩或欣赏海天一色的开阔景致', 'graced with an alluring coastline and waters, perfect for swimming, beach walks and wide ocean views'],
+    market: ['匯聚琳瑯滿目的在地商品與小吃，是感受常民生活、人情味與道地風味的最佳場所', '汇聚琳琅满目的在地商品与小吃，是感受常民生活、人情味与道地风味的最佳场所', 'packed with local goods and street food — the best place to feel everyday life and authentic flavors'],
+    shopping: ['集結眾多店家與品牌，從在地特產到國際精品一應俱全，是購物與閒逛的熱門去處', '集结众多店家与品牌，从在地特产到国际精品一应俱全，是购物与闲逛的热门去处', 'gathering numerous shops and brands from local specialties to international labels, a popular spot to browse and shop'],
+    food: ['以道地的在地美食聞名，是品嚐當地風味、滿足味蕾的必訪去處', '以道地的在地美食闻名，是品尝当地风味、满足味蕾的必访去处', 'famous for authentic local cuisine, a must-visit to taste the flavors of the region'],
+    amusement: ['充滿歡樂與活力，無論親子同遊或好友結伴，都能在此盡情享受多采多姿的體驗', '充满欢乐与活力，无论亲子同游或好友结伴，都能在此尽情享受多采多姿的体验', 'full of fun and energy, offering colorful experiences for families and friends alike'],
+    entertainment: ['是當地藝文與娛樂活動的重要舞台，常有精彩的表演與展演活動輪番上演', '是当地艺文与娱乐活动的重要舞台，常有精彩的表演与展演活动轮番上演', 'a key stage for local arts and entertainment, often hosting wonderful performances and events'],
+  };
+  const trait = traitMap[p.category] || (zh
+    ? ['是當地頗具人氣的造訪地點，融合了在地特色與獨特氛圍，值得細細探索', '是当地颇具人气的造访地点，融合了在地特色与独特氛围，值得细细探索', '']
+    : ['', '', 'a popular local attraction blending regional character with a distinctive atmosphere, well worth exploring']);
+  const traitText = zh ? (isCn ? trait[1] : trait[0]) : trait[2];
+
+  if (zh) {
+    const localHint = local ? `當地多以「${local}」稱之，現場叫車或使用地圖導航時可直接使用此名稱。` : '';
+    return `「${p.name}」是位於${destName}、名列${label}的人氣景點，${traitText}。${localHint}` +
+      `此地深受國內外旅客喜愛，無論是初次造訪或重遊，都能從不同角度感受其魅力。建議您預留充裕的時間，放慢腳步細細品味周邊的環境與氛圍，並留意現場的指示牌與參觀禮儀；若逢假日或旅遊旺季，人潮可能較多，宜避開尖峰時段以獲得更從容的體驗。` +
+      `周邊通常亦有值得順道走訪的店家、餐飲與景點，可一併規劃延伸行程。實際的開放時間、票價、公休日與最新參觀規定可能隨季節調整，出發前請務必透過官方管道再次確認，以免向隅。`;
+  }
+  const localHint = local ? ` Locally it is commonly known as "${local}", a name you can use directly when hailing a ride or searching on maps.` : '';
+  return `${p.name} is a popular ${label} in ${destName}, ${traitText}.${localHint}` +
+    ` Beloved by both local and international travelers, it rewards first-time visitors and returning guests alike with something new from every angle. Allow yourself ample time to slow down and take in the surroundings and atmosphere, and be mindful of on-site signage and visitor etiquette; during weekends and peak seasons it can get crowded, so consider avoiding peak hours for a more relaxed experience.` +
+    ` The area usually offers nearby shops, dining and sights worth combining into an extended outing. Opening hours, ticket prices, closing days and the latest visiting rules may change with the season, so please re-confirm via official channels before you go.`;
+}
+
 /** 由真實 POI 清單組裝出與 getDestTemplates 相容的範本物件 */
 function buildDestTemplateFromPOIs(pois: POI[], destName: string, locale: string): DestTemplate {
   const labels = CATEGORY_LABEL[locale] || CATEGORY_LABEL['en'];
@@ -67,11 +109,7 @@ function buildDestTemplateFromPOIs(pois: POI[], destName: string, locale: string
     tpl.localTitles.push(p.localName || p.name);
     tpl.images.push(CATEGORY_IMAGE[p.category] || CATEGORY_IMAGE.other);
     tpl.coords!.push({ lat: p.lat, lon: p.lon });
-    if (locale.startsWith('zh')) {
-      tpl.descs.push(`「${p.name}」是${destName}著名的${label}，深受旅客喜愛。建議安排充裕的時間細細探訪，感受當地獨特的氛圍與風情。實際開放時間與票價請於出發前再次確認。`);
-    } else {
-      tpl.descs.push(`${p.name} is a well-known ${label} in ${destName}, popular with travelers. Allow enough time to explore it and soak in the local atmosphere. Please re-confirm opening hours and ticket prices before you go.`);
-    }
+    tpl.descs.push(buildPoiDescription(p, destName, label, locale));
   }
   return tpl;
 }
@@ -699,9 +737,9 @@ export const aiService = {
             titles: ['浅草寺与雷门江户风情', '涩谷十字路口与潮流探索', '明治神宫森呼吸'],
             localTitles: ['浅草寺 (雷門)', '渋谷スクランブル交差点', '明治神宮'],
             descs: [
-              '浅草寺是东京都内历史最悠久的寺庙，创建于公元628年。其标志性的巨型红灯笼“雷门”是江户文化的象征，两侧的仲见世通商店街贩售各式传统小吃与工艺品，是体验日本传统佛教底蕴的必访之地。',
-              '涩谷是东京乃至全球时尚与青年文化的发源地。著名的涩谷站前十字路口在绿灯亮起时，成百上千的人潮交织穿梭，极具震撼感。周边林立着百货公司、潮流品牌与特色居酒屋。',
-              '明治神宫是为了供奉明治天皇与昭宪皇太后而建的神社。神宫掩映在占地70公顷的巨大人工森林中，踏入神宫，尘嚣顿消，是繁华东京市中心难得的静谧绿洲与神圣之所。'
+              '浅草寺是东京都内历史最悠久的寺庙，相传创建于公元628年，源于两位渔夫在隅田川中捞起一尊观音像的传说，至今仍是东京香火最鼎盛的信仰中心。寺庙的门面是著名的“雷门”，悬挂着一盏高约4米、重达700公斤的巨型红灯笼，两侧伫立着守护寺院的风神与雷神像，是江户文化最具代表性的象征，也是旅人必拍的地标。穿过雷门后，便是长约250米的“仲见世通”商店街，两旁近百间店铺自江户时代延续至今，贩售人形烧、雷おこし米菓、煎饼、和风小物与手工艺品，空气中飘散着现烤点心的甜香。走到底则是庄严的宝藏门与本堂，旅客可在此参拜、求签（おみくじ），体验日本传统的祈福文化。一旁高耸的五重塔与不远处的晴空塔交相辉映，呈现古典与现代并存的独特东京风景，建议安排半日细细游览周边的浅草老街风情。',
+              '涩谷是东京乃至全球时尚与青年文化的发源地，永远走在潮流的最前线。最著名的景象莫过于涩谷站前的全向十字路口（Shibuya Scramble Crossing）：当四面信号同时转为绿灯，来自各方的人潮如潮水般交错穿梭，据估算高峰时段单次可有逾三千人同时通过，那种秩序与混乱并存的震撼，已成为东京最具代表性的都市意象，也是无数电影取景之地。十字路口旁矗立着忠犬八公的铜像，是日本最知名的等待与忠诚故事，更是当地人气约定碰面的地标。周边巷弄林立着百货公司、潮流选物店、唱片行、特色居酒屋与深夜咖啡馆，从西武、PARCO到109辣妹文化发源地，无不引领着日本年轻世代的穿搭与消费风向。无论是登上周边高楼的观景台俯瞰车水马龙，或钻进小巷探索独立店家，涩谷都能让人深刻感受东京脉动的速度与能量。',
+              '明治神宫是为了供奉明治天皇与昭宪皇太后而建的神社，于1920年落成，是东京最重要的神道信仰圣地之一。最令人惊叹的是，神宫并非坐落于荒野，而是被一片占地约70公顷、由全国各地献纳的约十万棵树木所构成的巨大人工森林环抱——这片“永恒之森”历经百年生长，如今已演替成生机盎然、近乎天然的都市林相，与一墙之隔的繁华原宿、涩谷形成强烈对比。踏入高耸的木造鸟居，沿着铺满碎石的参道缓步前行，两旁古木参天、绿荫蔽日，城市的喧嚣仿佛瞬间被隔绝，只余鸟鸣与踩踏碎石的沙沙声，令人身心沉淀。本殿庄严肃穆，旅客可在此体验投赛钱、二拜二拍手一拜的参拜礼仪，或在绘马上书写愿望、选购御守。每逢新年，这里更是全日本参拜人数最多的神社。是繁华东京市中心难得的静谧绿洲与神圣之所。'
             ],
             coords: [
               { lat: 35.7148, lon: 139.7967 },
@@ -719,9 +757,9 @@ export const aiService = {
             titles: ['Sensō-ji Temple and Kaminarimon Gate', 'Shibuya Crossing and Trendy Exploration', 'Meiji Jingu Forest Walk'],
             localTitles: ['浅草寺 (雷門)', '渋谷スクランブル交差点', '明治神宮'],
             descs: [
-              'Sensō-ji is Tokyo\\\'s oldest temple, founded in 628. Its iconic red lantern at the Kaminarimon Gate symbolizes Edo culture. The Nakamise-dori street is filled with traditional snacks and crafts, making it a must-visit to experience Japan\\\'s Buddhist heritage.',
-              'Shibuya is the birthplace of fashion and youth culture in Tokyo. The famous Shibuya Crossing sees hundreds of people crossing in all directions simultaneously when the lights turn green. Surrounding areas are packed with shopping malls, trend brands, and izakayas.',
-              'Meiji Jingu is a Shinto shrine dedicated to the deified spirits of Emperor Meiji and his consort. Enclosed in a 70-hectare forest, entering the shrine grounds makes you forget the busy city, providing a rare green oasis in Tokyo.'
+              'Sensō-ji is Tokyo\\\'s oldest temple, said to have been founded in 628 after two fishermen pulled a statue of the Kannon goddess from the Sumida River — a legend that still makes it the city\\\'s most visited place of worship. Its face is the famous Kaminarimon (Thunder Gate), hung with a giant red lantern nearly 4 meters tall and weighing some 700kg, flanked by the guardian statues of the gods of wind and thunder; it is the definitive symbol of Edo culture and a must-photograph landmark. Beyond the gate stretches Nakamise-dori, a 250-meter shopping street whose nearly one hundred stalls have operated since the Edo period, selling ningyo-yaki cakes, rice crackers, senbei, Japanese trinkets and crafts amid the sweet aroma of freshly baked treats. At its end stand the imposing Hozomon Gate and the main hall, where visitors pray and draw omikuji fortune slips to experience traditional Japanese blessing customs. The towering five-story pagoda nearby and the Tokyo Skytree in the distance create a striking blend of classical and modern Tokyo — allow half a day to savor the old-town atmosphere of Asakusa.',
+              'Shibuya is the birthplace of fashion and youth culture in Tokyo, perpetually at the cutting edge of trends. Its most famous sight is the Shibuya Scramble Crossing: when all the signals turn green at once, crowds surge across from every direction — an estimated three thousand-plus people in a single peak crossing — a spectacle of order and chaos that has become Tokyo\\\'s defining urban image and a backdrop for countless films. Beside the crossing stands the bronze statue of Hachiko, the loyal dog whose story of devotion is among Japan\\\'s most beloved, and a popular local meeting point. The surrounding lanes brim with department stores, boutique select shops, record stores, izakayas and late-night cafes; from Seibu and PARCO to the birthplace of the 109 gyaru culture, Shibuya sets the pace for how young Japan dresses and spends. Whether viewing the bustle from a rooftop observation deck or exploring independent shops in the back streets, Shibuya lets you feel the speed and energy of Tokyo\\\'s pulse.',
+              'Meiji Jingu, completed in 1920, is a Shinto shrine dedicated to the deified spirits of Emperor Meiji and Empress Shoken, and one of Tokyo\\\'s most important sacred sites. Remarkably, the shrine does not sit in open wilderness but is embraced by a vast man-made forest of about 70 hectares, planted with some 100,000 trees donated from across Japan. This "eternal forest" has matured over a century into a lush, almost natural woodland — a stark contrast to bustling Harajuku and Shibuya just beyond its walls. Passing through the towering wooden torii gate and walking the gravel approach beneath a canopy of ancient trees, the noise of the city seems to vanish, leaving only birdsong and the crunch of gravel underfoot — a deeply calming experience. At the solemn main hall, visitors can offer coins and perform the two-bow, two-clap, one-bow ritual, write wishes on ema plaques, or buy protective omamori charms. At New Year it draws the largest number of worshippers of any shrine in Japan — a rare tranquil green oasis and sacred space in the heart of Tokyo.'
             ],
             coords: [
               { lat: 35.7148, lon: 139.7967 },
@@ -740,9 +778,9 @@ export const aiService = {
             titles: ['淺草寺與雷門江戶風情', '澀谷十字路口與潮流探索', '明治神宮森呼吸'],
             localTitles: ['淺草寺 (雷門)', '渋谷スクランブル交差点', '明治神宮'],
             descs: [
-              '淺草寺是東京都內歷史最悠久的寺廟，創建於公元628年。其標誌性的巨型紅燈籠「雷門」是江戶文化的象徵，兩側的仲見世通商店街販售各式傳統小吃與工藝品，是體驗日本傳統佛教底蘊的必訪之地。',
-              '澀谷是東京乃至全球時尚與青年文化的發源地。著名的澀谷站前十字路口在綠燈亮起時，成百上千的人潮交織穿梭，極具震撼感。周邊林立著百貨公司、潮流品牌與特色居酒屋。',
-              '明治神宮是為了供奉明治天皇與昭憲皇太后而建的神社。神宮掩映在佔地70公頃的巨大人工森林中，踏入神宮，塵囂頓消，是繁華東京市中心難得的靜謐綠洲與神聖之所。'
+              '淺草寺是東京都內歷史最悠久的寺廟，相傳創建於公元628年，源於兩位漁夫在隅田川中撈起一尊觀音像的傳說，至今仍是東京香火最鼎盛的信仰中心。寺廟的門面是著名的「雷門」，懸掛著一盞高約4公尺、重達700公斤的巨型紅燈籠，兩側佇立著守護寺院的風神與雷神像，是江戶文化最具代表性的象徵，也是旅人必拍的地標。穿過雷門後，便是長約250公尺的「仲見世通」商店街，兩旁近百間店鋪自江戶時代延續至今，販售人形燒、雷おこし米菓、煎餅、和風小物與手工藝品，空氣中飄散著現烤點心的甜香。走到底則是莊嚴的寶藏門與本堂，旅客可在此參拜、求籤（おみくじ），體驗日本傳統的祈福文化。一旁高聳的五重塔與不遠處的晴空塔交相輝映，呈現古典與現代並存的獨特東京風景，建議安排半日細細遊覽周邊的淺草老街風情。',
+              '澀谷是東京乃至全球時尚與青年文化的發源地，永遠走在潮流的最前線。最著名的景象莫過於澀谷站前的全向十字路口（Shibuya Scramble Crossing）：當四面號誌同時轉為綠燈，來自各方的人潮如潮水般交錯穿梭，據估算尖峰時段單次可有逾三千人同時通過，那種秩序與混亂並存的震撼，已成為東京最具代表性的都市意象，也是無數電影取景之地。十字路口旁矗立著忠犬八公的銅像，是日本最知名的等待與忠誠故事，更是當地人氣約定碰面的地標。周邊巷弄林立著百貨公司、潮流選物店、唱片行、特色居酒屋與深夜咖啡館，從西武、PARCO到109辣妹文化發源地，無不引領著日本年輕世代的穿搭與消費風向。無論是登上周邊高樓的觀景台俯瞰車水馬龍，或鑽進小巷探索獨立店家，澀谷都能讓人深刻感受東京脈動的速度與能量。',
+              '明治神宮是為了供奉明治天皇與昭憲皇太后而建的神社，於1920年落成，是東京最重要的神道信仰聖地之一。最令人驚嘆的是，神宮並非坐落於荒野，而是被一片佔地約70公頃、由全國各地獻納的約十萬棵樹木所構成的巨大人工森林環抱——這片「永恆之森」歷經百年生長，如今已演替成生機盎然、近乎天然的都市林相，與一牆之隔的繁華原宿、澀谷形成強烈對比。踏入高聳的木造鳥居，沿著鋪滿碎石的參道緩步前行，兩旁古木參天、綠蔭蔽日，城市的喧囂彷彿瞬間被隔絕，只餘鳥鳴與踩踏碎石的沙沙聲，令人身心沉澱。本殿莊嚴肅穆，旅客可在此體驗投賽錢、二拜二拍手一拜的參拜禮儀，或在繪馬上書寫願望、選購御守。每逢新年，這裡更是全日本參拜人數最多的神社。是繁華東京市中心難得的靜謐綠洲與神聖之所。'
             ],
             coords: [
               { lat: 35.7148, lon: 139.7967 }, // 淺草寺
@@ -764,9 +802,9 @@ export const aiService = {
             titles: ['大皇宫与玉佛寺金碧辉煌', '安帕瓦水上市场热闹体验', '郑王庙夕阳光辉'],
             localTitles: ['พระบรมมหาราชวังและวัดพระแก้ว', 'ตลาดน้ำอัมพวา', 'วัดอรุณราชวราราม'],
             descs: [
-              '大皇宫是曼谷王朝的象征，自1782年建立起便是暹罗王室的官方官邸。其内部建筑融合了泰式传统与欧式风情，雕梁画栋、极尽奢华。供奉于玉佛寺的翡翠玉佛更是泰国最崇高的国宝。',
-              '水上市场是泰国古老运河文化的缩影。商家划着装满新鲜水果、椰子烤肉的小船在河道上穿梭兜售，空气中弥漫着地道泰式调味料的香气，是体验泰国常民风情与美食的绝佳去处。',
-              '郑王庙又称黎明寺，座落于昭批耶河畔。其主塔高达82米，塔身镶嵌了无数碎陶瓷与贝壳，在阳光下熠熠生辉。黄昏时分，夕阳将塔影拉长，倒映在河面上，极具诗意。'
+              '大皇宫坐落于昭披耶河东岸，自1782年拉玛一世将首都迁至曼谷后，便成为暹罗王室两百余年的官方居所与行政中心。整座宫殿群占地逾二十一万平方米，由数十栋风格各异的建筑构成，巧妙融合泰式传统尖顶、高棉式佛塔与十九世纪引进的欧式新古典立面，金箔、彩色玻璃与陶瓷碎片在烈日下交织出令人屏息的奢华光辉。宫内最神圣的核心是玉佛寺（Wat Phra Kaew），供奉着以整块翡翠雕成、高约66公分的玉佛，是泰国地位最崇高的国宝，泰王会依寒、暑、雨三季亲自为玉佛更换金缕衣袍。漫步其间，可见描绘《罗摩衍那》史诗的回廊壁画、守护宫门的巨型夜叉雕像，以及金光灿烂的舍利塔。参观时请务必遵守服装规定，穿着覆盖肩膀与膝盖的衣物，并预留至少两小时细细品味这座泰国历史与信仰的中心。',
+              '安帕瓦水上市场是泰国古老运河文化最生动的缩影，距曼谷市区约一个半小时车程，座落于夜功府宁静的水乡之间。每逢周末午后至夜晚，狭窄的河道便热闹起来：商家划着木船在水道上穿梭，船上架着炭火现烤海鲜、现炒河粉、椰糖甜点与南洋水果，买卖双方隔着河岸与船舷交易，空气中弥漫着炭香与泰式香料的气味。沿岸的老木屋商铺贩售手工艺品、衣饰与在地小吃，傍晚还可搭乘长尾船游河，欣赏两岸寺庙与传统高脚屋，并在入夜后观赏河畔萤火虫在红树林间明灭闪烁的梦幻景象。相较于观光化严重的丹嫩莎朵，安帕瓦更贴近泰国人真实的常民生活，是体验在地饮食、人情与运河风情的绝佳去处，建议安排于下午前往，衔接黄昏与夜市时段。',
+              '郑王庙又称黎明寺，座落于昭披耶河西岸，是曼谷最具代表性的地标之一，得名自郑信大帝（达信王）在此登基立国的历史。寺庙的主体是一座高达约82米的高棉式中央佛塔（prang），象征着佛教宇宙观中的须弥山，四周环绕四座较小的卫星塔。最令人惊叹的是，整座塔身并非以单纯的石材砌成，而是镶嵌了数以万计的中国彩瓷碎片与贝壳——这些原是早年商船压舱的瓷器，工匠将之拼贴成繁复的花卉与神兽图案，在阳光下闪烁着细致而斑斓的光泽。旅客可沿着陡峭的阶梯攀上塔身平台，俯瞰昭披耶河与对岸大皇宫的壮丽景致。郑王庙之美在黄昏时分达到极致：当夕阳西下，金红色的霞光为塔身镀上暖色，倒影映于河面，与往来的船只交织成一幅极具诗意的画面，是摄影与赏景的不二之选。'
             ],
             coords: [
               { lat: 13.7500, lon: 100.4915 }, // 大皇宮
@@ -784,9 +822,9 @@ export const aiService = {
             titles: ['Grand Palace and Temple of the Emerald Buddha', 'Amphawa Floating Market Experience', 'Wat Arun Golden Sunset'],
             localTitles: ['พระบรมมหาราชวังและวัดพระแก้ว', 'ตลาดน้ำอัมพวา', 'วัดอรุณราชวราราม'],
             descs: [
-              'The Grand Palace is a complex of buildings at the heart of Bangkok, serving as the official residence of the Kings of Siam since 1782. Its architecture blends traditional Thai and European styles. The Emerald Buddha housed in Wat Phra Kaew is Thailand\\\'s most sacred object.',
-              'The floating markets showcase Thailand\\\'s ancient canal culture. Merchants row small boats laden with fresh fruits and grilled food, selling directly to visitors. The air is filled with authentic Thai seasoning aroma, making it a perfect spot to experience local life.',
-              'Wat Arun, also known as the Temple of Dawn, is situated on the west bank of the Chao Phraya River. Its central prang rises 82 meters high, decorated with colorful porcelain and seashells. At sunset, the golden light reflections on the river are exceptionally poetic.'
+              'Standing on the east bank of the Chao Phraya River, the Grand Palace has been the official residence and administrative seat of the Kings of Siam for over two centuries since King Rama I moved the capital to Bangkok in 1782. Sprawling across more than 210,000 square meters, the complex comprises dozens of buildings that fuse traditional Thai spires, Khmer-style prangs and nineteenth-century European neoclassical facades, all shimmering with gold leaf, colored glass and porcelain mosaic under the tropical sun. Its sacred heart is Wat Phra Kaew, the Temple of the Emerald Buddha, which enshrines a 66cm statue carved from a single block of jade — Thailand\\\'s most revered national treasure, whose golden robes are ceremonially changed by the King three times a year for the cool, hot and rainy seasons. Visitors can admire mural-lined cloisters depicting the Ramakien epic, towering yaksha guardian statues, and gilded stupas. A strict dress code applies (shoulders and knees must be covered); allow at least two hours to take in this center of Thai history and faith.',
+              'Amphawa Floating Market is the most vivid surviving expression of Thailand\\\'s old canal culture, set among the tranquil waterways of Samut Songkhram province about ninety minutes from central Bangkok. From weekend afternoons into the evening the narrow canal comes alive: vendors paddle wooden boats laden with charcoal-grilled seafood, freshly fried noodles, palm-sugar desserts and tropical fruit, trading with customers lining the banks. Riverside wooden shophouses sell handicrafts, clothing and local snacks, and at dusk you can board a long-tail boat to cruise past riverside temples and stilt houses, then watch fireflies twinkle through the mangroves after dark. Far less touristy than Damnoen Saduak, Amphawa offers an authentic glimpse of everyday Thai life, food and riverine charm — best visited in the afternoon to flow naturally into the sunset and night-market hours.',
+              'Wat Arun, the Temple of Dawn, rises on the west bank of the Chao Phraya River and is one of Bangkok\\\'s most iconic landmarks, named for the era when King Taksin the Great founded his reign here. Its centerpiece is a Khmer-style central prang soaring roughly 82 meters high, symbolizing Mount Meru of Buddhist cosmology and ringed by four smaller satellite towers. Remarkably, the spire is not built of plain stone but encrusted with tens of thousands of fragments of Chinese porcelain and seashells — originally ballast from trading ships — which artisans pieced into intricate floral and mythical-creature patterns that glitter in fine, multicolored detail under the sun. Visitors can climb the steep steps to a viewing terrace overlooking the river and the Grand Palace opposite. Wat Arun is at its most beautiful at dusk, when the setting sun bathes the tower in warm golden-red light and its reflection shimmers on the water amid passing boats — a uniquely poetic scene and a photographer\\\'s favorite.'
             ],
             coords: [
               { lat: 13.7500, lon: 100.4915 },
@@ -805,9 +843,9 @@ export const aiService = {
             titles: ['大皇宮與玉佛寺金碧輝煌', '安帕瓦水上市場熱鬧體驗', '鄭王廟夕陽光輝'],
             localTitles: ['พระบรมมหาราชวังและวัดพระแก้ว', 'ตลาดน้ำอัมพวา', 'วัดอรุณราชวราราม'],
             descs: [
-              '大皇宮是曼谷王朝的象徵，自1782年建立起便是暹羅王室的官方官邸。其內部建築融合了泰式傳統與歐式風情，雕樑畫棟、極盡奢華。供奉於玉佛寺的翡翠玉佛更是泰國最崇高的國寶。',
-              '水上市場是泰國古老運河文化的縮影。商家劃著裝滿新鮮水果、椰子烤肉的小船在河道上穿梭兜售，空氣中瀰漫著地道泰式調味料的香氣，是體驗泰國常民風情與美食的絕佳去處。',
-              '鄭王廟又稱黎明寺，座落於昭批耶河畔。其主塔高達82米，塔身鑲嵌了無數碎陶瓷與貝殼，在陽光下熠熠生輝。黃昏時分，夕陽將塔影拉長，倒映在河面上，極具詩意。'
+              '大皇宮坐落於昭披耶河東岸，自1782年拉瑪一世將首都遷至曼谷後，便成為暹羅王室兩百餘年的官方居所與行政中心。整座宮殿群佔地逾二十一萬平方公尺，由數十棟風格各異的建築構成，巧妙融合泰式傳統尖頂、高棉式佛塔與十九世紀引進的歐式新古典立面，金箔、彩色玻璃與陶瓷碎片在烈日下交織出令人屏息的奢華光輝。宮內最神聖的核心是玉佛寺（Wat Phra Kaew），供奉著以整塊翡翠雕成、高約66公分的玉佛，是泰國地位最崇高的國寶，泰王會依寒、暑、雨三季親自為玉佛更換金縷衣袍。漫步其間，可見描繪《羅摩衍那》史詩的迴廊壁畫、守護宮門的巨型夜叉雕像，以及金光燦爛的舍利塔。參觀時請務必遵守服裝規定，穿著覆蓋肩膀與膝蓋的衣物，並預留至少兩小時細細品味這座泰國歷史與信仰的中心。',
+              '安帕瓦水上市場是泰國古老運河文化最生動的縮影，距曼谷市區約一個半小時車程，座落於夜功府寧靜的水鄉之間。每逢週末午後至夜晚，狹窄的河道便熱鬧起來：商家划著木船在水道上穿梭，船上架著炭火現烤海鮮、現炒河粉、椰糖甜點與南洋水果，買賣雙方隔著河岸與船舷交易，空氣中瀰漫著炭香與泰式香料的氣味。沿岸的老木屋商鋪販售手工藝品、衣飾與在地小吃，傍晚還可搭乘長尾船遊河，欣賞兩岸寺廟與傳統高腳屋，並在入夜後觀賞河畔螢火蟲在紅樹林間明滅閃爍的夢幻景象。相較於觀光化嚴重的丹嫩莎朵，安帕瓦更貼近泰國人真實的常民生活，是體驗在地飲食、人情與運河風情的絕佳去處，建議安排於下午前往，銜接黃昏與夜市時段。',
+              '鄭王廟又稱黎明寺，座落於昭披耶河西岸，是曼谷最具代表性的地標之一，得名自鄭信大帝（達信王）在此登基立國的歷史。寺廟的主體是一座高達約82公尺的高棉式中央佛塔（prang），象徵著佛教宇宙觀中的須彌山，四周環繞四座較小的衛星塔。最令人驚嘆的是，整座塔身並非以單純的石材砌成，而是鑲嵌了數以萬計的中國彩瓷碎片與貝殼——這些原是早年商船壓艙的瓷器，工匠將之拼貼成繁複的花卉與神獸圖案，在陽光下閃爍著細緻而斑斕的光澤。旅客可沿著陡峭的階梯攀上塔身平台，俯瞰昭披耶河與對岸大皇宮的壯麗景致。鄭王廟之美在黃昏時分達到極致：當夕陽西下，金紅色的霞光為塔身鍍上暖色，倒影映於河面，與往來的船隻交織成一幅極具詩意的畫面，是攝影與賞景的不二之選。'
             ],
             coords: [
               { lat: 13.7500, lon: 100.4915 },
@@ -829,9 +867,9 @@ export const aiService = {
           titles: ['台北 101 与信义商圈俯瞰', '九份老街悲情城市茶香', '士林夜市在地美食巡礼'],
           localTitles: ['台北101', '九份老街', '士林夜市'],
           descs: [
-            '台北101曾是世界第一高楼，是台湾现代科技的里程碑。搭乘超高速电梯仅需37秒即可直达89楼观景台，俯瞰台北盆地壮丽的城市天际线，并近距离观察重达660公吨的风阻尼器巨大钢球。',
-            '九份是一座依山面海的古老矿业小镇，因李安导演《悲情城市》与传闻中神似宫崎骏《千与千寻》场景而声名大噪。窄小的石阶、错落有致的红灯笼与茶楼，漫步其间，仿佛时空倒流。',
-            '夜市是台湾最具代表性的饮食文化核心。士林夜市历史悠久，汇聚了超大鸡排、蚵仔煎、大肠包小肠与珍珠奶茶等全球知名的饭餐美食，是感受台北夜生活与热情民风的必选地。'
+            '台北101落成于2004年，曾以508米的高度蝉联世界第一高楼宝座长达数年，至今仍是台湾最具辨识度的地标与现代科技的里程碑。其造型灵感取自竹节，以八层为一节、节节高升，蕴含中华文化中“生生不息”的吉祥寓意，外墙采用双层隔热帷幕玻璃。搭乘金氏世界纪录认证的超高速电梯，仅需约37秒便能从5楼直达89楼室内观景台，将台北盆地壮丽的城市天际线、蜿蜒的基隆河与远处的群山尽收眼底；天气晴朗时还可登上91楼户外观景台感受高空的风。塔内最受瞩目的，是一颗悬挂于87至92楼之间、重达660公吨的金色风阻尼器钢球，能在强风与地震时摆动以抵消大楼晃动，是建筑工学的精彩展示。楼下的购物中心汇聚国际精品、餐厅与美食街，而每年跨年的101烟火秀更是闻名全球，吸引数十万人共同迎接新年。',
+            '九份是一座依山面海的古老矿业小镇，座落于新北市瑞芳的山城之间。日治时期因发现金矿而盛极一时，淘金人潮涌入，造就了“小上海”“小香港”的繁华景象；金矿没落后归于沉寂，却因此完整保留了昔日的山城聚落风貌。九份真正声名大噪，源于侯孝贤导演的电影《悲情城市》在此取景，加上其层叠错落的红灯笼、蜿蜒陡峭的石阶与古朴茶楼，被许多游客联想为宫崎骏动画《神隐少女》的场景（尽管官方并未证实）。漫步狭窄的基山街，两旁挤满贩售芋圆、草仔粿、鱼丸汤与古早味点心的店家，香气四溢；走累了便可步入面海的茶楼，点一壶高山茶，在氤氲茶香与窗外山海交织的景致中虚度一个慵懒的午后。傍晚时分华灯初上，红灯笼次第亮起，整座山城笼罩在金黄而怀旧的光晕里，宛如时光倒流，是摄影与漫游的绝佳去处。',
+            '夜市是台湾最具代表性的饮食文化核心，而士林夜市正是台北规模最大、历史最悠久的夜市之一，自清代慈諴宫庙口的小吃摊集结发展至今，已超过百年。这里汇聚了数百摊琳琅满目的庶民美食：超大片现炸鸡排、淋上蛋液的蚵仔煎、香气十足的大肠包小肠、生炒花枝、药炖排骨，以及风靡全球、源自台湾的珍珠奶茶，几乎囊括了所有经典台味，让人一路吃到撑。除了美食，士林夜市的地下美食街与周边街区还林立着服饰、鞋包、美妆与各式新奇小物的摊位，价格亲民、讨价还价之间充满人情味；穿插其中的还有套圈圈、弹珠台、射气球等怀旧夜市游戏，洋溢着浓厚的庶民欢乐气氛。无论是想大快朵颐、采买伴手礼，还是单纯感受台北入夜后熙来攘往的热闹与热情民风，士林夜市都是不可错过的必访之地。'
           ],
           coords: [
             { lat: 25.0339, lon: 121.5645 }, // 台北101
@@ -849,9 +887,9 @@ export const aiService = {
           titles: ['Taipei 101 and Xinyi Shopping District', 'Jiufen Old Street Tea Tasting', 'Shilin Night Market Food Tour'],
           localTitles: ['台北101', '九份老街', '士林夜市'],
           descs: [
-            'Taipei 101 was once the tallest building in the world and is a milestone of Taiwan\\\'s modern technology. An ultra-high-speed elevator whisks you to the 89th-floor observatory in just 37 seconds for a breathtaking 360-degree view of Taipei Basin.',
-            'Jiufen is a historic mountainside gold-mining town famous for its atmospheric teahouses and narrow cobblestone alleys. It inspired the film A City of Sadness and draws comparison to Spirited Away scenery.',
-            'Night markets are the core of Taiwan\\\'s culinary culture. Shilin Night Market is historical, serving famous foods like giant fried chicken cutlets, oyster omelets, and bubble tea. A must-visit to experience local life.'
+            'Completed in 2004, Taipei 101 held the title of the world\\\'s tallest building for several years at 508 meters and remains Taiwan\\\'s most recognizable landmark and a milestone of modern engineering. Its silhouette is inspired by a stalk of bamboo, rising in eight-floor segments that evoke the auspicious idea of ceaseless growth in Chinese culture, clad in a double-layer insulating curtain wall. A Guinness World Record-certified ultra-high-speed elevator whisks visitors from the 5th floor to the 89th-floor indoor observatory in about 37 seconds, unveiling a sweeping view of the Taipei Basin, the winding Keelung River and the surrounding mountains; on clear days you can step out onto the 91st-floor outdoor deck to feel the high-altitude wind. The tower\\\'s star attraction is a 660-tonne golden tuned mass damper suspended between the 87th and 92nd floors, which sways to counteract building movement during typhoons and earthquakes — a fascinating display of structural engineering. The mall below gathers international luxury brands, restaurants and a food court, while the annual New Year\\\'s Eve fireworks launched from the tower are world-famous, drawing hundreds of thousands to welcome the new year.',
+            'Jiufen is a historic mountainside town nestled in the hills of Ruifang, New Taipei City, facing the sea. It boomed during the Japanese colonial era after gold was discovered, drawing waves of prospectors and earning nicknames like "Little Shanghai" and "Little Hong Kong"; when the mines declined it fell quiet, which is precisely why its old hillside settlement has been so well preserved. Jiufen rose to fame through Hou Hsiao-hsien\\\'s film A City of Sadness, and with its tiers of red lanterns, steep winding stone steps and rustic teahouses, many visitors associate it with the scenery of Miyazaki\\\'s Spirited Away (though this has never been officially confirmed). Strolling the narrow Jishan Street, you pass shop after shop selling taro balls, herbal rice cakes, fish-ball soup and old-fashioned snacks amid mouth-watering aromas; when tired, you can step into a sea-facing teahouse, order a pot of high-mountain tea and idle away a lazy afternoon enveloped in fragrant steam and views of mountains meeting ocean. At dusk the lanterns flicker on one by one, bathing the whole town in a nostalgic golden glow as if time has rewound — a wonderful place for photography and wandering.',
+            'Night markets are the heart of Taiwan\\\'s culinary culture, and Shilin is one of Taipei\\\'s largest and most historic, having grown from the food stalls around the Cixian Temple since the Qing dynasty — more than a century of history. Here hundreds of stalls serve a dazzling array of street food: oversized deep-fried chicken cutlets, egg-laden oyster omelets, fragrant "big sausage wrapped in small sausage," stir-fried squid, herbal pork-rib soup, and the globally beloved Taiwan-born bubble tea — virtually every classic Taiwanese flavor, enough to eat your way to bursting. Beyond food, the underground food court and surrounding streets are lined with stalls of clothing, shoes and bags, cosmetics and novelty goods at friendly prices, where good-natured haggling adds to the warmth; interspersed are nostalgic carnival games like ring toss, pinball and balloon darts, brimming with cheerful local energy. Whether you want to feast, shop for souvenirs, or simply soak up the bustle and warm hospitality of Taipei after dark, Shilin Night Market is an unmissable destination.'
           ],
           coords: [
             { lat: 25.0339, lon: 121.5645 },
@@ -870,9 +908,9 @@ export const aiService = {
           titles: ['台北 101 與信義商圈俯瞰', '九份老街悲情城市茶香', '士林夜市在地美食巡禮'],
           localTitles: ['台北101', '九份老街', '士林夜市'],
           descs: [
-            '台北101曾是世界第一高樓，是台灣現代科技的里程碑。搭乘超高速電梯僅需37秒即可直達89樓觀景台，俯瞰台北盆地壯麗的城市天際線，並近距離觀察重達660公噸的風阻尼器巨大鋼球。',
-            '九份是一座依山面海的古老礦業小鎮，因李安導演《悲情城市》與傳聞中神似宮崎駿《神隱少女》場景而聲名大噪。窄小的石階、錯落有致的紅燈籠與茶樓，漫步其間，彷彿時空倒流。',
-            '夜市是台灣最具代表性的飲食文化核心。士林夜市歷史悠久，匯聚了超大雞排、蚵仔煎、大腸包小腸與珍珠奶茶等全球知名的庶民美食，是感受台北夜生活與熱情民風的必選地。'
+            '台北101落成於2004年，曾以508公尺的高度蟬聯世界第一高樓寶座長達數年，至今仍是台灣最具辨識度的地標與現代科技的里程碑。其造型靈感取自竹節，以八層為一節、節節高升，蘊含中華文化中「生生不息」的吉祥寓意，外牆採用雙層隔熱帷幕玻璃。搭乘金氏世界紀錄認證的超高速電梯，僅需約37秒便能從5樓直達89樓室內觀景台，將台北盆地壯麗的城市天際線、蜿蜒的基隆河與遠處的群山盡收眼底；天氣晴朗時還可登上91樓戶外觀景台感受高空的風。塔內最受矚目的，是一顆懸掛於87至92樓之間、重達660公噸的金色風阻尼器鋼球，能在強風與地震時擺動以抵消大樓晃動，是建築工學的精彩展示。樓下的購物中心匯聚國際精品、餐廳與美食街，而每年跨年的101煙火秀更是聞名全球，吸引數十萬人共同迎接新年。',
+            '九份是一座依山面海的古老礦業小鎮，座落於新北市瑞芳的山城之間。日治時期因發現金礦而盛極一時，淘金人潮湧入，造就了「小上海」「小香港」的繁華景象；金礦沒落後歸於沉寂，卻因此完整保留了昔日的山城聚落風貌。九份真正聲名大噪，源於侯孝賢導演的電影《悲情城市》在此取景，加上其層疊錯落的紅燈籠、蜿蜒陡峭的石階與古樸茶樓，被許多遊客聯想為宮崎駿動畫《神隱少女》的場景（儘管官方並未證實）。漫步狹窄的基山街，兩旁擠滿販售芋圓、草仔粿、魚丸湯與古早味點心的店家，香氣四溢；走累了便可步入面海的茶樓，點一壺高山茶，在氤氳茶香與窗外山海交織的景致中虛度一個慵懶的午後。傍晚時分華燈初上，紅燈籠次第亮起，整座山城籠罩在金黃而懷舊的光暈裡，宛如時光倒流，是攝影與漫遊的絕佳去處。',
+            '夜市是台灣最具代表性的飲食文化核心，而士林夜市正是台北規模最大、歷史最悠久的夜市之一，自清代慈諴宮廟口的小吃攤集結發展至今，已超過百年。這裡匯聚了數百攤琳瑯滿目的庶民美食：超大片現炸雞排、淋上蛋液的蚵仔煎、香氣十足的大腸包小腸、生炒花枝、藥燉排骨，以及風靡全球、源自台灣的珍珠奶茶，幾乎囊括了所有經典台味，讓人一路吃到撐。除了美食，士林夜市的地下美食街與周邊街區還林立著服飾、鞋包、美妝與各式新奇小物的攤位，價格親民、討價還價之間充滿人情味；穿插其中的還有套圈圈、彈珠台、射氣球等懷舊夜市遊戲，洋溢著濃厚的庶民歡樂氣氛。無論是想大快朵頤、採買伴手禮，還是單純感受台北入夜後熙來攘往的熱鬧與熱情民風，士林夜市都是不可錯過的必訪之地。'
           ],
           coords: [
             { lat: 25.0339, lon: 121.5645 },
