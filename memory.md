@@ -119,3 +119,18 @@
   - **泰國**：推薦 **Grab / Bolt** (開啟 `grab://` / `bolt://`)，按鈕為綠色。
   - **其他**：推薦 **Uber / Google Maps 叫車**。
 - [TimelineView.tsx](file:///Users/barretlin/GitProjects/tour-mutilang/src/components/itinerary/TimelineView.tsx) 中同步優化 `handleOpenUrl`，支援 yoxi App 與 GO App 的 Deep Link 跳轉。
+---
+
+## 2026-06-13（續）— 機場地圖指引動態化與部落客風格景點名翻譯
+
+### 全球機場指引動態本地化 (不再硬編碼 BKK)
+- 重構了 `TimelineView.tsx` 中的 `getAirportData` 函式，其宣告現在接收 `regionName`, `locationName`, `activityTitle`, `isArrival`, `isEn` 五個參數。
+- 內建全球主要熱門機場的 Lookup 資料庫（涵蓋日本成田 NRT / 羽田 HND / 關西 KIX、台灣桃園 TPE / 松山 TSA、泰國蘇凡納布 BKK / 廊曼 DMK、韓國仁川 ICN / 金浦 GMP、新加坡樟宜 SIN、英國倫敦希斯洛 LHR、美國紐約甘迺迪 JFK、法國巴黎戴高樂 CDG 等），自動加載正確的機場三字碼、國旗 Emoji 及詳細出入境指引。
+- 新增 Generic Fallback 動態解析器，若目的地不在預設庫中，會自動從文字中提取 3 字機場碼（透過 regex），依國家關鍵字判斷國旗，並動態組裝對應 UI 語系（雙語）的抵達/離境指引，徹底解決了先前硬編碼泰國 BKK 的問題。
+- 配合更新了 `TimelineView.tsx` 中兩處呼叫 `getAirportData` 的參數傳遞。
+
+### 景點名稱附加 UI 語系顯示名稱 (部落客風格接地氣翻譯)
+- 於 `destinations.ts` 中實作了 `translateAndEnhancePoiName` 輔助函式與 `translatePrefix` 首碼字典。
+- 當系統透過 OpenTripMap (OTM) 線上 API 抓取 POI，且本地離線 `destinations.json` 查無相符景點時，會自動調用此規則式翻譯器進行美化轉換。
+- 針對英文名稱中的常用字根（如 `Museum of Art` 轉為 `市立美術館 (藝術美學巡禮)`、`Cathedral` 轉為 `大教堂 (莊嚴歐風聖地)`、`Castle` 轉為 `歷史古城 (壯麗城堡遺跡)`）以及熱門地標名進行「部落客風格」潤飾，並附加 UI 語系的中文地標名稱（如 `Kyoto Imperial Palace` 翻譯成 `京都御所 古典宮殿 (皇家歷史漫步)`）。
+- 在 UI 介面（`TimelineView.tsx`）上維持 `景點美化名稱 [原名/英文名]` 的附加形式，完全避免了生硬的字面音譯，符合觀光指南風格。

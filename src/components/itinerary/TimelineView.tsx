@@ -8,71 +8,283 @@ import { Ionicons } from '@expo/vector-icons';
 import { getRouteDistanceKm } from '../../utils/distance';
 import { useResponsive } from '../../hooks/useResponsive';
 
-function getAirportData(regionName: string, isArrival: boolean, isEn: boolean) {
+function getAirportData(regionName: string, locationName: string, activityTitle: string, isArrival: boolean, isEn: boolean) {
   const rName = (regionName || '').toLowerCase();
-  
-  if (rName.includes('東京') || rName.includes('日本') || rName.includes('tokyo') || rName.includes('japan') || rName.includes('成田') || rName.includes('羽田') || rName.includes('nrt') || rName.includes('hnd')) {
-    const isHaneda = rName.includes('羽田') || rName.includes('hnd') || rName.includes('haneda');
-    if (isHaneda) {
+  const lName = (locationName || '').toLowerCase();
+  const aTitle = (activityTitle || '').toLowerCase();
+  const combined = `${rName} ${lName} ${aTitle}`;
+
+  // 1. 主要機場資料庫
+  const airportsDb = [
+    {
+      keys: ['narita', '成田', 'nrt'],
+      flag: '🇯🇵',
+      code: 'NRT',
+      names: { tw: '東京成田國際機場', en: 'Narita International Airport' },
+      arrival: {
+        tw: '💡 抵達指引：下飛機後順著「Arrival (入境)」指標前進，至入境審查處辦理入境手續與提取行李。通關後，出口位於抵達大廳。若欲搭乘成田特快 (NEX) 或京成電鐵 (Keisei Skyliner)，請搭手扶梯下至 B1 層乘車。',
+        en: '💡 Arrival Guide: Follow the "Arrival / Immigration" signs after deplaning to proceed to immigration and baggage claim. After exiting, take the Narita Express (NEX) or Keisei Skyliner from the B1 train station.'
+      },
+      departure: {
+        tw: '💡 離境指引：接送專車或計程車將在出境大廳入口停靠。請依據您的航空公司前往對應的航廈與 Check-in 櫃檯辦理登機與行李託運。完成安檢與證照查驗後即可前往登機門。',
+        en: '💡 Departure Guide: Taxis or airport transfers will drop you off at the departure floor entrance. Proceed to the check-in counters of your airline (Terminal 1/2/3). Security and passport control are located in the center.'
+      }
+    },
+    {
+      keys: ['haneda', '羽田', 'hnd'],
+      flag: '🇯🇵',
+      code: 'HND',
+      names: { tw: '東京羽田國際機場', en: 'Haneda Airport' },
+      arrival: {
+        tw: '💡 抵達指引：下飛機後順著「Arrival (入境)」指標前進，至入境審查處辦理入境手續與提取行李。通關後，出口位於抵達大廳。若欲搭乘東京單軌電車 (Tokyo Monorail) 或京急線，請往聯絡通道前進搭乘。',
+        en: '💡 Arrival Guide: Follow the "Arrival / Immigration" signs after deplaning to proceed to immigration and baggage claim. After exiting, take the Tokyo Monorail or Keikyu Line at the underground railway station.'
+      },
+      departure: {
+        tw: '💡 離境指引：接送專車或計程車將在出境大廳入口停靠。請前往第三航廈 (或對應航廈) 的 Check-in 櫃檯辦理登機與行李託運。完成安檢與證照查驗後即可前往登機門。',
+        en: '💡 Departure Guide: Taxis or airport transfers will drop you off at the departure floor entrance. Proceed to the check-in counters of your airline (usually Terminal 3). Security and passport control are located in the center.'
+      }
+    },
+    {
+      keys: ['kansai', '關西', 'kix'],
+      flag: '🇯🇵',
+      code: 'KIX',
+      names: { tw: '大阪關西國際機場', en: 'Kansai International Airport' },
+      arrival: {
+        tw: '💡 抵達指引：下飛機後搭乘航廈接駁電車前往主航廈，辦理入境審查與行李提取。通關後，可前往關西機場車站搭乘 JR 關空特急 (Haruka) 或南海電鐵 (Nankai Railway) 前往大阪/京都。',
+        en: '💡 Arrival Guide: Take the wing shuttle to the main terminal building after deplaning, proceed through immigration and baggage claim. After customs, head to Kansai-Airport Station to take JR Haruka or Nankai Railway.'
+      },
+      departure: {
+        tw: '💡 離境指引：前往第一航廈（或第二航廈國際線）出境大廳。在航空公司櫃檯辦理登機與行李託運，隨後通過安全檢查與出境審查，前往登機門。',
+        en: '💡 Departure Guide: Proceed to the international departure floor (Terminal 1 or 2). Check in and drop baggage at your airline counters. Pass through security and customs to reach your gate.'
+      }
+    },
+    {
+      keys: ['taoyuan', '桃園', 'tpe'],
+      flag: '🇹🇼',
+      code: 'TPE',
+      names: { tw: '台灣桃園國際機場', en: 'Taoyuan International Airport' },
+      arrival: {
+        tw: '💡 抵達指引：下飛機後順著「Immigration (證照查驗)」指標前進，通關並提取行李。出關後即為抵達大廳。若欲搭乘桃園機場捷運，請依指標下樓前往捷運站乘車。',
+        en: '💡 Arrival Guide: Follow the "Immigration" signs after deplaning, clear customs and retrieve your baggage. After exiting, proceed downstairs to take the Taoyuan Airport MRT.'
+      },
+      departure: {
+        tw: '💡 離境指引：專車或計程車將在出境大廳入口停靠。進入航廈後請至對應的航空公司 Check-in 櫃檯辦理登機與行李託運。安檢與證照查驗位於出境大廳後方。',
+        en: '💡 Departure Guide: Taxis or airport transfers will drop you off at the departure floor. Proceed to your airline check-in counters for check-in and baggage drop. Security and passport control are located at the back.'
+      }
+    },
+    {
+      keys: ['songshan', '松山', 'tsa'],
+      flag: '🇹🇼',
+      code: 'TSA',
+      names: { tw: '台北松山機場', en: 'Taipei Songshan Airport' },
+      arrival: {
+        tw: '💡 抵達指引：通關並提取行李後即可步入抵達大廳。松山機場緊鄰台北市區，出站後可直接搭乘台北捷運文湖線（松山機場站），或在門口搭乘計程車。',
+        en: '💡 Arrival Guide: Clear customs, retrieve baggage and exit to the arrival hall. Conveniently located inside Taipei, you can take Taipei Metro Wenhu Line (Songshan Airport Station) or catch a taxi at the gate.'
+      },
+      departure: {
+        tw: '💡 離境指引：前往第一航廈（國際線）或第二航廈（國內線）辦理登機。完成行李託運後通過安檢與證照查驗即可。',
+        en: '💡 Departure Guide: Proceed to Terminal 1 (International) or Terminal 2 (Domestic) for check-in. Complete baggage drop, then pass through security and passport control.'
+      }
+    },
+    {
+      keys: ['suvarnabhumi', '蘇凡納布', 'bkk'],
+      flag: '🇹🇭',
+      code: 'BKK',
+      names: { tw: '曼谷蘇凡納布機場', en: 'Suvarnabhumi Airport' },
+      arrival: {
+        tw: '💡 抵達指引：下飛機後順著「Immigration (入境)」指標前進，至 Level 2 辦理入境與行李提取。提取行李後，出口位於 Level 2 大廳。若欲搭乘機場快線 (ARL)，請搭手扶梯下至 B1 層。',
+        en: '💡 Arrival Guide: Follow the "Immigration" signs after deplaning to Level 2 for passport control and baggage claim. Exits are on Level 2. For Airport Rail Link (ARL), go down to B1.'
+      },
+      departure: {
+        tw: '💡 離境指引：專車或 Grab 將在 Level 4 離境大廳入口停靠。進入航廈後請尋找對應航空公司的 Check-in 櫃檯辦理登機。安檢與證照查驗位於 Level 4 後方中央。',
+        en: '💡 Departure Guide: Taxis or Grab will drop you off at the Level 4 departure gates. Check in at your airline counter. Security and passport control are at the rear of Level 4.'
+      }
+    },
+    {
+      keys: ['don mueang', '廊曼', 'dmk'],
+      flag: '🇹🇭',
+      code: 'DMK',
+      names: { tw: '曼谷廊曼國際機場', en: 'Don Mueang International Airport' },
+      arrival: {
+        tw: '💡 抵達指引：下飛機後前往入境大廳，完成證照查驗並提取行李。若欲前往市區，可在航廈門口搭乘機場巴士 A1/A2，或前往 SRT 紅線火車站搭乘捷運。',
+        en: '💡 Arrival Guide: Proceed to immigration and baggage claim after deplaning. To head to the city, take Airport Bus A1/A2 outside the terminal or walk to the SRT Red Line station.'
+      },
+      departure: {
+        tw: '💡 離境指引：前往第一航廈（國際線）或第二航廈（國內線）出境大廳辦理登機。安檢後辦理出境審查即可。',
+        en: '💡 Departure Guide: Go to Terminal 1 (International) or Terminal 2 (Domestic) check-in counters. After baggage drop, pass through security and immigration.'
+      }
+    },
+    {
+      keys: ['incheon', '仁川', 'icn'],
+      flag: '🇰🇷',
+      code: 'ICN',
+      names: { tw: '首爾仁川國際機場', en: 'Incheon International Airport' },
+      arrival: {
+        tw: '💡 抵達指引：下飛機後若在登機廊，需搭乘接駁軌道電車至第一航廈，通過入境審查與提取行李。出關後可前往交通中心搭乘機場鐵路 (AREX) 直達首爾站。',
+        en: '💡 Arrival Guide: If arriving at Concourse, take the shuttle train to Terminal 1, then proceed to immigration and baggage claim. Take the Airport Railroad (AREX) from the Transportation Center to Seoul Station.'
+      },
+      departure: {
+        tw: '💡 離境指引：請至第一或第二航廈 3 樓出境大廳辦理航空公司登機與行李託運。通過安全檢查與海關手續後，即可前往登機門。',
+        en: '💡 Departure Guide: Head to the 3rd-floor departure hall of Terminal 1 or 2. Complete check-in and baggage drop, then clear security and customs before heading to your gate.'
+      }
+    },
+    {
+      keys: ['gimpo', '金浦', 'gmp'],
+      flag: '🇰🇷',
+      code: 'GMP',
+      names: { tw: '首爾金浦國際機場', en: 'Gimpo International Airport' },
+      arrival: {
+        tw: '💡 抵達指引：下飛機後前往入境大廳，完成證照查驗與行李提取。金浦機場距離首爾市區非常近，您可以直接搭乘地鐵 5 號線、9 號線或機場鐵道 (AREX) 前往市區。',
+        en: '💡 Arrival Guide: Clear immigration and retrieve baggage. Gimpo Airport is very close to downtown Seoul; you can take subway line 5, line 9, or the AREX train directly to the city.'
+      },
+      departure: {
+        tw: '💡 離境指引：前往國際線或國內線出境大廳。在航空公司櫃檯辦理登機與行李託運，隨後通過安全檢查與出境審查即可前往登機口。',
+        en: '💡 Departure Guide: Go to the departure floor. Check in and drop baggage at your airline counters. Clear security and customs, then proceed to your gate.'
+      }
+    },
+    {
+      keys: ['changi', '樟宜', 'sin'],
+      flag: '🇸🇬',
+      code: 'SIN',
+      names: { tw: '新加坡樟宜機場', en: 'Changi Airport' },
+      arrival: {
+        tw: '💡 抵達指引：通關與提取行李後，出口即為入境大廳。樟宜機場各航廈與星耀樟宜 (Jewel) 相連，可在此觀賞雨漩渦瀑布。若欲搭乘地鐵 (MRT)，可依指標前往 Terminal 2/3 地下地鐵站。',
+        en: '💡 Arrival Guide: Pass through automated immigration, claim baggage, and exit. Explore Jewel Changi (famous rain vortex waterfall) connected to terminals. Walk to Terminal 2/3 basement to board the MRT.'
+      },
+      departure: {
+        tw: '💡 離境指引：依航空前往第一至第四航廈，至出境大廳辦理自助或櫃檯登機與行李託運。樟宜機場的安檢通常設在各個登機門前，請預留充足時間。',
+        en: '💡 Departure Guide: Go to the departure hall of Terminal 1-4. Check in at counters or self-service kiosks. Note that security checks at Changi are usually performed at individual boarding gates.'
+      }
+    },
+    {
+      keys: ['heathrow', '希斯洛', 'lhr'],
+      flag: '🇬🇧',
+      code: 'LHR',
+      names: { tw: '倫敦希斯洛機場', en: 'Heathrow Airport' },
+      arrival: {
+        tw: '💡 抵達指引：遵循「Arrivals」指標前往入境大廳，完成英國邊境證照查驗（eGates）與行李提取。可搭乘希斯洛機場快線 (Heathrow Express) 或地鐵皮卡迪利線 (Piccadilly Line) 前往倫敦市區。',
+        en: '💡 Arrival Guide: Follow "Arrivals" signs for passport control (UK border eGates) and baggage claim. Take the Heathrow Express or London Underground (Piccadilly Line) to central London.'
+      },
+      departure: {
+        tw: '💡 離境指引：前往第二、三、四或五航廈出境大廳。辦理航空公司登機與行李託運後，通過安全檢查即可前往登機門。',
+        en: '💡 Departure Guide: Head to the departure floor of Terminal 2, 3, 4, or 5. Complete airline check-in and bag drop, then proceed through security to your gate.'
+      }
+    },
+    {
+      keys: ['kennedy', 'jfk', '甘迺迪'],
+      flag: '🇺🇸',
+      code: 'JFK',
+      names: { tw: '紐約甘迺迪國際機場', en: 'John F. Kennedy International Airport' },
+      arrival: {
+        tw: '💡 抵達指引：通過美國海關與邊境保護局（CBP）審查並提取行李。通關後，可搭乘機場輕軌 (AirTrain JFK) 連接至牙買加站 (Jamaica) 轉乘紐約地鐵或長島鐵路。',
+        en: '💡 Arrival Guide: Clear US Customs (CBP) and retrieve your baggage. Take the AirTrain JFK to Jamaica Station or Howard Beach Station to transfer to the NYC Subway or LIRR.'
+      },
+      departure: {
+        tw: '💡 離境指引：前往對應的航廈（JFK 有多個航廈，請務必確認）。在航空公司櫃檯辦理登機，隨後進行 TSA 安全檢查並前往登機口。',
+        en: '💡 Departure Guide: Arrive at your specific terminal (JFK has multiple active terminals). Check in at your airline counter, pass through TSA security checkpoint and head to your gate.'
+      }
+    },
+    {
+      keys: ['charles de gaulle', 'roissy', '戴高樂', 'cdg'],
+      flag: '🇫🇷',
+      code: 'CDG',
+      names: { tw: '巴黎戴高樂機場', en: 'Charles de Gaulle Airport' },
+      arrival: {
+        tw: '💡 抵達指引：跟隨「Sortie / Baggage」指標完成入境證照查驗與行李領取。可搭乘 RER B 線輕軌火車或 RoissyBus 機場巴士前往巴黎市中心。',
+        en: '💡 Arrival Guide: Follow the "Sortie / Baggage" signs for passport control and baggage claim. You can take the RER B train or RoissyBus from the terminal station to central Paris.'
+      },
+      departure: {
+        tw: '💡 離境指引：前往第一、二或三航廈的出境層辦理登機。完成行李託運後，通過邊境警察證照查驗與安全檢查。',
+        en: '💡 Departure Guide: Head to the departure level of Terminal 1, 2, or 3. Check in and drop baggage, then proceed through border control and security screening.'
+      }
+    }
+  ];
+
+  // 2. 比對資料庫
+  for (const ap of airportsDb) {
+    if (ap.keys.some(k => combined.includes(k))) {
       return {
-        code: 'HND',
+        code: ap.code,
         title: isEn
-          ? `🇯🇵 Haneda Airport (HND) ${isArrival ? 'Arrival Terminal' : 'Departure Terminal'} Guide`
-          : `🇯🇵 東京羽田國際機場 (HND) ${isArrival ? '入境大廳指引' : '出境大廳指引'}`,
+          ? `${ap.flag} ${ap.names.en} (${ap.code}) ${isArrival ? 'Arrival Guide' : 'Departure Guide'}`
+          : `${ap.flag} ${ap.names.tw} (${ap.code}) ${isArrival ? '入境大廳指引' : '出境大廳指引'}`,
         description: isArrival
-          ? (isEn 
-              ? '💡 Arrival Guide: Follow the "Arrival / Immigration" signs after deplaning to proceed to immigration and baggage claim. After exiting, take the Tokyo Monorail or Keikyu Line at the underground railway station.'
-              : '💡 抵達指引：下飛機後順著「Arrival (入境)」指標前進，至入境審查處辦理入境手續與提取行李。通關後，出口位於抵達大廳。若欲搭乘東京單軌電車 (Tokyo Monorail) 或京急線，請往聯絡通道前進搭乘。')
-          : (isEn
-              ? '💡 Departure Guide: Taxis or airport transfers will drop you off at the departure floor entrance. Proceed to the check-in counters of your airline (usually Terminal 3). Security and passport control are located in the center.'
-              : '💡 離境指引：接送專車或計程車將在出境大廳入口停靠。請前往第三航廈 (或對應航廈) 的 Check-in 櫃檯辦理登機與行李託運。完成安檢與證照查驗後即可前往登機門。'),
-      };
-    } else {
-      return {
-        code: 'NRT',
-        title: isEn
-          ? `🇯🇵 Narita Airport (NRT) ${isArrival ? 'Arrival Terminal' : 'Departure Terminal'} Guide`
-          : `🇯🇵 東京成田國際機場 (NRT) ${isArrival ? '入境大廳指引' : '出境大廳指引'}`,
-        description: isArrival
-          ? (isEn
-              ? '💡 Arrival Guide: Follow the "Arrival / Immigration" signs after deplaning to proceed to immigration and baggage claim. After exiting, take the Narita Express (NEX) or Keisei Skyliner from the B1 train station.'
-              : '💡 抵達指引：下飛機後順著「Arrival (入境)」指標前進，至入境審查處辦理入境手續與提取行李。通關後，出口位於抵達大廳。若欲搭乘成田特快 (NEX) 或京成電鐵 (Keisei Skyliner)，請搭手扶梯下至 B1 層乘車。')
-          : (isEn
-              ? '💡 Departure Guide: Taxis or airport transfers will drop you off at the departure floor entrance. Proceed to the check-in counters of your airline (Terminal 1/2/3). Security and passport control are located in the center.'
-              : '💡 離境指引：接送專車或計程車將在出境大廳入口停靠。請依據您的航空公司前往對應的航廈與 Check-in 櫃檯辦理登機與行李託運。完成安檢與證照查驗後即可前往登機門。'),
+          ? (isEn ? ap.arrival.en : ap.arrival.tw)
+          : (isEn ? ap.departure.en : ap.departure.tw)
       };
     }
   }
-  
-  if (rName.includes('台灣') || rName.includes('台北') || rName.includes('taiwan') || rName.includes('taipei') || rName.includes('桃園') || rName.includes('tpe')) {
-    return {
-      code: 'TPE',
-      title: isEn
-        ? `🇹🇼 Taoyuan Airport (TPE) ${isArrival ? 'Arrival Terminal' : 'Departure Terminal'} Guide`
-        : `🇹🇼 桃園國際機場 (TPE) ${isArrival ? '入境大廳指引' : '出境大廳指引'}`,
-      description: isArrival
-        ? (isEn
-            ? '💡 Arrival Guide: Follow the "Immigration" signs after deplaning, clear customs and retrieve your baggage. After exiting, proceed downstairs to take the Taoyuan Airport MRT.'
-            : '💡 抵達指引：下飛機後順著「Immigration (證照查驗)」指標前進，通關並提取行李。出關後即為抵達大廳。若欲搭乘桃園機場捷運，請依指標下樓前往捷運站乘車。')
-        : (isEn
-            ? '💡 Departure Guide: Taxis or airport transfers will drop you off at the departure floor. Proceed to your airline check-in counters for check-in and baggage drop. Security and passport control are located at the back.'
-            : '💡 離境指引：專車或計程車將在出境大廳入口停靠。進入航廈後請至對應的航空公司 Check-in 櫃檯辦理登機與行李託運。安檢與證照查驗位於出境大廳後方。'),
-    };
+
+  // 3. 通用解析器 fallback
+  // 3.1 嘗試從字串中擷取連續的 3 個大寫英文字母，當作機場三字代碼
+  let matchedCode = 'APT';
+  const codeRegex = /\b([a-z]{3})\b/i;
+  const codesInString = combined.match(codeRegex);
+  if (codesInString && codesInString[1]) {
+    matchedCode = codesInString[1].toUpperCase();
   }
 
-  // Default: Thailand (Bangkok / Suvarnabhumi BKK)
+  // 3.2 判斷國旗
+  let flag = '🌐';
+  if (combined.includes('japan') || combined.includes('日本') || combined.includes('tokyo') || combined.includes('東京') || combined.includes('osaka') || combined.includes('大阪') || combined.includes('kyoto') || combined.includes('京都')) {
+    flag = '🇯🇵';
+  } else if (combined.includes('taiwan') || combined.includes('台灣') || combined.includes('taipei') || combined.includes('台北') || combined.includes('kaohsiung') || combined.includes('高雄')) {
+    flag = '🇹🇼';
+  } else if (combined.includes('thailand') || combined.includes('泰國') || combined.includes('bangkok') || combined.includes('曼谷')) {
+    flag = '🇹🇭';
+  } else if (combined.includes('korea') || combined.includes('韓國') || combined.includes('seoul') || combined.includes('首爾')) {
+    flag = '🇰🇷';
+  } else if (combined.includes('singapore') || combined.includes('新加坡')) {
+    flag = '🇸🇬';
+  } else if (combined.includes('uk') || combined.includes('united kingdom') || combined.includes('英國') || combined.includes('london') || combined.includes('倫敦')) {
+    flag = '🇬🇧';
+  } else if (combined.includes('usa') || combined.includes('america') || combined.includes('美國') || combined.includes('new york') || combined.includes('紐約')) {
+    flag = '🇺🇸';
+  } else if (combined.includes('france') || combined.includes('法國') || combined.includes('paris') || combined.includes('巴黎')) {
+    flag = '🇫🇷';
+  } else if (combined.includes('australia') || combined.includes('澳洲') || combined.includes('sydney') || combined.includes('雪梨')) {
+    flag = '🇦🇺';
+  } else if (combined.includes('vietnam') || combined.includes('越南')) {
+    flag = '🇻🇳';
+  } else if (combined.includes('hong kong') || combined.includes('香港')) {
+    flag = '🇭🇰';
+  } else if (combined.includes('malaysia') || combined.includes('馬來西亞') || combined.includes('kuala lumpur')) {
+    flag = '🇲🇾';
+  }
+
+  // 3.3 產生機場美化名稱
+  let aptTwName = '';
+  let aptEnName = '';
+  
+  const nameToClean = activityTitle || locationName || regionName || '當地';
+  const cleanName = nameToClean.replace(/(airport|international airport|機場|國際機場|的)/ig, '').trim();
+  
+  if (isEn) {
+    aptEnName = `${cleanName} Airport`;
+    aptTwName = `${cleanName}機場`;
+  } else {
+    aptTwName = `${cleanName}國際機場`;
+    aptEnName = `${cleanName} International Airport`;
+  }
+
+  const arrivalGuide = {
+    tw: `💡 抵達指引：下飛機後順著「Arrival (入境)」指標前進，至證照查驗處辦理入境審查與行李提取。通關後，出口即為抵達大廳。您可以選擇搭乘機場捷運、快捷巴士或計程車前往市區。`,
+    en: `💡 Arrival Guide: Follow the "Arrival / Immigration" signs after deplaning to proceed to immigration and baggage claim. After exiting, take the airport express train, shuttle bus, or taxi to the city center.`
+  };
+
+  const departureGuide = {
+    tw: `💡 離境指引：接送專車或計程車將在出境大廳入口停靠。進入航廈後，請至對應的航空公司 Check-in 櫃檯辦理登機與行李託運。完成安檢與證照查驗後，即可前往登機門。`,
+    en: `💡 Departure Guide: Taxis or airport transfers will drop you off at the departure floor entrance. Proceed to the check-in counters of your airline for check-in and baggage drop. Security and passport control are located in the center.`
+  };
+
   return {
-    code: 'BKK',
+    code: matchedCode,
     title: isEn
-      ? `🇹🇭 Suvarnabhumi Airport (BKK) ${isArrival ? 'Arrival Terminal' : 'Departure Terminal'} Guide`
-      : `🇹🇭 曼谷蘇凡納布機場 (BKK) ${isArrival ? '入境大廳指引 (Level 2)' : '出境大廳指引 (Level 4)'}`,
+      ? `${flag} ${aptEnName} (${matchedCode}) ${isArrival ? 'Arrival Guide' : 'Departure Guide'}`
+      : `${flag} ${aptTwName} (${matchedCode}) ${isArrival ? '入境大廳指引' : '出境大廳指引'}`,
     description: isArrival
-      ? (isEn
-          ? '💡 Arrival Guide: Follow the "Immigration" signs after deplaning to Level 2 for passport control and baggage claim. Exits are on Level 2. For Airport Rail Link (ARL), go down to B1.'
-          : '💡 抵達指引：下飛機後順著「Immigration (入境)」指標前進，至 Level 2 辦理入境與行李提取。提取行李後，出口位於 Level 2 大廳。若欲搭乘機場快線 (ARL)，請搭手扶梯下至 B1 層。')
-      : (isEn
-          ? '💡 Departure Guide: Taxis or Grab will drop you off at the Level 4 departure gates. Check in at your airline counter. Security and passport control are at the rear of Level 4.'
-          : '💡 離境指引：專車或 Grab 將在 Level 4 離境大廳入口停靠。進入航廈後請尋找對應航空公司的 Check-in 櫃檯辦理登機。安檢與證照查驗位於 Level 4 後方中央。'),
+      ? (isEn ? arrivalGuide.en : arrivalGuide.tw)
+      : (isEn ? departureGuide.en : departureGuide.tw)
   };
 }
 
@@ -394,7 +606,7 @@ export function TimelineView({
 
                     {(() => {
                       const isArrival = day.dayNumber === 1;
-                      const airportInfo = getAirportData(day.region, isArrival, isEn);
+                      const airportInfo = getAirportData(day.region, act.location?.name || '', act.title || '', isArrival, isEn);
                       const hailingInfo = getRideHailingInfo(day.region, isEn);
                       const isAirport = act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport');
                       
@@ -533,7 +745,7 @@ export function TimelineView({
 
                     {(() => {
                       const isArrival = day.dayNumber === 1;
-                      const airportInfo = getAirportData(day.region, isArrival, isEn);
+                      const airportInfo = getAirportData(day.region, act.location?.name || '', act.title || '', isArrival, isEn);
                       const isAirport = act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport');
                       
                       if (!isAirport) return null;
