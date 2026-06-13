@@ -280,6 +280,330 @@
           }
         }
       ]
+    },
+    {
+      "keywords": ["首爾", "首尔", "seoul", "韓國", "韩国", "korea"],
+      "images": [
+        "https://images.unsplash.com/photo-1538485399081-7191377e8241?w=600",
+        "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=600",
+        "https://images.unsplash.com/photo-1506816612038-2bfd7d8de58e?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "경복궁",
+          "lat": 37.5796,
+          "lon": 126.977,
+          "title": { "zh-TW": "景福宮古典宮闕巡禮", "zh-CN": "景福宫古典宫阙巡礼", "en": "Gyeongbokgung Palace" },
+          "desc": {
+            "zh-TW": "景福宮是朝鮮王朝於1395年建立的正宮，也是首爾五大宮闕中規模最大、最具代表性的一座，「景福」二字寓意「享受太平盛世的洪福」。宮殿坐北朝南、背倚北岳山，氣勢恢宏，中軸線上依序排列著光化門、勤政殿、思政殿與康寧殿，飛簷斗拱、丹青彩繪盡顯朝鮮王宮的莊嚴典雅。雖歷經壬辰倭亂與日據時期的破壞，韓國政府已長期推動復原工程，再現昔日風貌。最受遊客喜愛的，是每日上演的「守門將換崗儀式」，身著傳統服飾的儀仗隊伴隨鼓樂列隊，重現古代宮廷場景。穿著韓服入場可免費參觀，因此宮內四處可見租借韓服拍照的遊客，與古色古香的建築相映成趣。宮後方還有香遠亭與慶會樓等優美的池上樓閣，是攝影的絕佳取景地，建議預留半日細細遊覽並順道走訪鄰近的北村與三清洞。",
+            "zh-CN": "景福宫是朝鲜王朝于1395年建立的正宫，也是首尔五大宫阙中规模最大、最具代表性的一座，“景福”二字寓意“享受太平盛世的洪福”。宫殿坐北朝南、背倚北岳山，气势恢宏，中轴线上依序排列着光化门、勤政殿、思政殿与康宁殿，飞檐斗拱、丹青彩绘尽显朝鲜王宫的庄严典雅。虽历经壬辰倭乱与日据时期的破坏，韩国政府已长期推动复原工程，再现昔日风貌。最受游客喜爱的，是每日上演的“守门将换岗仪式”，身着传统服饰的仪仗队伴随鼓乐列队，重现古代宫廷场景。穿着韩服入场可免费参观，因此宫内四处可见租借韩服拍照的游客，与古色古香的建筑相映成趣。宫后方还有香远亭与庆会楼等优美的池上楼阁，是摄影的绝佳取景地，建议预留半日细细游览并顺道走访邻近的北村与三清洞。",
+            "en": "Gyeongbokgung, built in 1395, was the main royal palace of the Joseon dynasty and is the largest and most iconic of Seoul's five grand palaces; its name means \"palace greatly blessed by Heaven.\" Facing south with Bugaksan Mountain at its back, it unfolds along a grand central axis — Gwanghwamun Gate, Geunjeongjeon throne hall, Sajeongjeon and Gangnyeongjeon — whose sweeping eaves and vivid dancheong paintwork epitomize the dignity of Joseon royal architecture. Though damaged during the Japanese invasions and the colonial era, it has been extensively restored. A visitor favorite is the daily Royal Guard Changing Ceremony, in which costumed guards parade to drums and music, recreating courtly scenes. Admission is free for those in hanbok, so the grounds are full of visitors in rented traditional dress posing against the historic backdrop. Behind the palace, elegant pavilions like Hyangwonjeong and Gyeonghoeru sit over tranquil ponds — superb photo spots. Allow half a day, and combine it with nearby Bukchon and Samcheong-dong."
+          }
+        },
+        {
+          "localTitle": "북촌한옥마을",
+          "lat": 37.5826,
+          "lon": 126.9831,
+          "title": { "zh-TW": "北村韓屋村古今交織", "zh-CN": "北村韩屋村古今交织", "en": "Bukchon Hanok Village" },
+          "desc": {
+            "zh-TW": "北村韓屋村坐落於景福宮與昌德宮兩大宮闕之間，自朝鮮王朝起便是兩班貴族與王室官員的居住地，至今仍保留著數百棟傳統「韓屋」建築，是首爾市區內最完整的歷史聚落。韓屋以木構樑柱、瓦頂曲線與「溫突」地暖系統著稱，依山勢層層而建的巷弄錯落有致，從高處俯瞰，灰瓦屋頂與遠方的現代高樓同框，形成古今交織的獨特畫面，正是北村最迷人的標誌性風景。漫步其間，可見許多韓屋已改建為傳統工藝體驗坊、茶館、藝廊與精品民宿，遊客能親手體驗韓紙工藝、結繩或品茶。由於此處仍有居民實際居住，參觀時請放低音量、勿擅闖民宅，做個體貼的旅人。建議清晨或傍晚前往，避開人潮並捕捉柔和光線下的韓屋之美，再順遊鄰近的三清洞咖啡街與仁寺洞文化街。",
+            "zh-CN": "北村韩屋村坐落于景福宫与昌德宫两大宫阙之间，自朝鲜王朝起便是两班贵族与王室官员的居住地，至今仍保留着数百栋传统“韩屋”建筑，是首尔市区内最完整的历史聚落。韩屋以木构梁柱、瓦顶曲线与“温突”地暖系统著称，依山势层层而建的巷弄错落有致，从高处俯瞰，灰瓦屋顶与远方的现代高楼同框，形成古今交织的独特画面，正是北村最迷人的标志性风景。漫步其间，可见许多韩屋已改建为传统工艺体验坊、茶馆、艺廊与精品民宿，游客能亲手体验韩纸工艺、结绳或品茶。由于此处仍有居民实际居住，参观时请放低音量、勿擅闯民宅，做个体贴的旅人。建议清晨或傍晚前往，避开人潮并捕捉柔和光线下的韩屋之美，再顺游邻近的三清洞咖啡街与仁寺洞文化街。",
+            "en": "Bukchon Hanok Village sits between the grand palaces of Gyeongbokgung and Changdeokgung. Home to aristocratic yangban and royal officials since the Joseon dynasty, it still preserves hundreds of traditional hanok houses, making it the most intact historic neighborhood in central Seoul. Hanok are known for their timber frames, gracefully curved tiled roofs and ondol underfloor heating; the alleys climb the hillside in tiers, and from the high points the grey-tiled roofs framed against distant modern skyscrapers create Bukchon's signature old-meets-new vista. Many hanok have been converted into craft studios, teahouses, galleries and boutique guesthouses where visitors can try hanji paper crafts, knot-tying or tea ceremonies. As residents still live here, keep your voice down and do not enter private homes — be a considerate traveler. Visit early morning or late afternoon to avoid crowds and catch the soft light, then continue to nearby Samcheong-dong's cafe street and the cultural lanes of Insadong."
+          }
+        },
+        {
+          "localTitle": "N서울타워 (남산)",
+          "lat": 37.5512,
+          "lon": 126.9882,
+          "title": { "zh-TW": "南山N首爾塔夜景", "zh-CN": "南山N首尔塔夜景", "en": "N Seoul Tower" },
+          "desc": {
+            "zh-TW": "N首爾塔矗立於南山之巔，塔高約237公尺、加上山體海拔後總高逾480公尺，自1980年代起便是首爾最具代表性的天際線地標。登上塔頂的數位觀景台，可360度俯瞰整座首爾盆地：白晝可遠眺漢江蜿蜒、群山環抱的城市全景，入夜後則化身一片璀璨無垠的燈海，是公認首爾最浪漫的賞夜景據點。前往南山可選擇搭乘復古的南山纜車、循環巴士或沿登山步道健行而上，沿途林木蓊鬱、空氣清新。塔下平台最著名的，是綴滿成千上萬「愛情鎖」的圍欄——情侶們將寫上誓言的鎖頭扣於此處，象徵永恆不渝，已成為韓劇與情侶必訪的朝聖地。塔內另設有餐廳、咖啡廳與紀念品店，建議於日落前一小時抵達，一次飽覽白晝、黃昏與夜景三種截然不同的首爾面貌。",
+            "zh-CN": "N首尔塔矗立于南山之巅，塔高约237米、加上山体海拔后总高逾480米，自1980年代起便是首尔最具代表性的天际线地标。登上塔顶的数位观景台，可360度俯瞰整座首尔盆地：白昼可远眺汉江蜿蜒、群山环抱的城市全景，入夜后则化身一片璀璨无垠的灯海，是公认首尔最浪漫的赏夜景据点。前往南山可选择搭乘复古的南山缆车、循环巴士或沿登山步道健行而上，沿途林木蓊郁、空气清新。塔下平台最著名的，是缀满成千上万“爱情锁”的围栏——情侣们将写上誓言的锁头扣于此处，象征永恒不渝，已成为韩剧与情侣必访的朝圣地。塔内另设有餐厅、咖啡厅与纪念品店，建议于日落前一小时抵达，一次饱览白昼、黄昏与夜景三种截然不同的首尔面貌。",
+            "en": "N Seoul Tower crowns the summit of Namsan; at about 237 meters — over 480 meters including the mountain's elevation — it has been Seoul's defining skyline landmark since the 1980s. Its digital observatory offers a 360-degree panorama of the Seoul basin: by day, the winding Han River and a mountain-ringed cityscape; by night, an endless sea of glittering lights that make it the city's most romantic night-view spot. You can reach Namsan by the retro Namsan cable car, a circular shuttle bus, or hiking trails through fresh, wooded slopes. The terrace below is famous for railings smothered in tens of thousands of \"love locks,\" where couples fasten inscribed padlocks as a symbol of everlasting devotion — a pilgrimage site for K-drama fans and couples. The tower also houses restaurants, cafes and gift shops. Arrive about an hour before sunset to enjoy daylight, dusk and the night view all in one visit."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "광장시장",
+          "lat": 37.5701,
+          "lon": 126.9997,
+          "cost": 12000,
+          "title": { "zh-TW": "廣藏市場在地小吃", "zh-CN": "广藏市场在地小吃", "en": "Gwangjang Market" },
+          "desc": {
+            "zh-TW": "百年歷史的傳統市場，以綠豆煎餅、生拌牛肉、紫菜飯捲與血腸聞名，攤位林立、煙火氣十足，是體驗首爾庶民美食的首選。",
+            "zh-CN": "百年历史的传统市场，以绿豆煎饼、生拌牛肉、紫菜饭卷与血肠闻名，摊位林立、烟火气十足，是体验首尔庶民美食的首选。",
+            "en": "A century-old traditional market famed for mung-bean pancakes, raw beef tartare, gimbap and blood sausage — bustling stalls and the top pick for authentic Seoul street food."
+          }
+        },
+        {
+          "localTitle": "토속촌 삼계탕",
+          "lat": 37.5765,
+          "lon": 126.9722,
+          "cost": 18000,
+          "title": { "zh-TW": "土俗村蔘雞湯", "zh-CN": "土俗村参鸡汤", "en": "Tosokchon Samgyetang" },
+          "desc": {
+            "zh-TW": "鄰近景福宮的蔘雞湯名店，以韓屋為店面，整隻童子雞燉入糯米、人蔘與紅棗，湯頭濃郁滋補，是韓國總統都曾造訪的人氣老店。",
+            "zh-CN": "邻近景福宫的参鸡汤名店，以韩屋为店面，整只童子鸡炖入糯米、人参与红枣，汤头浓郁滋补，是韩国总统都曾造访的人气老店。",
+            "en": "A renowned samgyetang restaurant near Gyeongbokgung set in a hanok, serving whole young chicken stuffed with rice, ginseng and jujube in a rich, restorative broth — a favorite even of Korean presidents."
+          }
+        },
+        {
+          "localTitle": "명동교자",
+          "lat": 37.5634,
+          "lon": 126.9856,
+          "cost": 11000,
+          "title": { "zh-TW": "明洞餃子刀削麵", "zh-CN": "明洞饺子刀削面", "en": "Myeongdong Kyoja" },
+          "desc": {
+            "zh-TW": "明洞排隊名店，招牌刀削麵湯頭以雞骨慢熬、配上飽滿的肉餃與蒜香泡菜，份量實在、價格親民，深受在地人與遊客喜愛。",
+            "zh-CN": "明洞排队名店，招牌刀削面汤头以鸡骨慢熬、配上饱满的肉饺与蒜香泡菜，份量实在、价格亲民，深受在地人与游客喜爱。",
+            "en": "A queue-worthy Myeongdong institution whose signature kalguksu noodle soup is slow-simmered from chicken bones and served with plump dumplings and garlicky kimchi — generous portions at friendly prices."
+          }
+        }
+      ]
+    },
+    {
+      "keywords": ["大阪", "osaka", "難波", "难波", "namba", "梅田", "umeda"],
+      "images": [
+        "https://images.unsplash.com/photo-1590559899731-a382839e5549?w=600",
+        "https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=600",
+        "https://images.unsplash.com/photo-1505069446780-4ef442b5207f?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "大阪城",
+          "lat": 34.6873,
+          "lon": 135.5259,
+          "title": { "zh-TW": "大阪城天守閣與護城河", "zh-CN": "大阪城天守阁与护城河", "en": "Osaka Castle" },
+          "desc": {
+            "zh-TW": "大阪城是日本戰國名將豐臣秀吉於1583年所築，曾是當時全日本規模最大、最具權勢象徵的城郭，見證了豐臣與德川兩大勢力交替的關鍵歷史。雄偉的天守閣巍然矗立於高聳的石垣之上，外觀金碧輝煌、黑瓦白牆相間，內部現已改建為歷史博物館，展示豐臣秀吉生平、戰國文物與大阪變遷史，登上頂層展望台還可俯瞰大阪市區全景。環繞天守的雙重護城河與巨型石垣氣勢磅礴，其中部分石塊重達上百噸，展現當年築城工程的浩大。城郭外圍是廣達一百餘公頃的大阪城公園，遍植櫻花與梅花，每逢春季粉櫻夾道、遊人如織，是關西最負盛名的賞櫻名所之一。建議搭配公園散步，從不同角度欣賞天守閣與護城河相映的經典畫面。",
+            "zh-CN": "大阪城是日本战国名将丰臣秀吉于1583年所筑，曾是当时全日本规模最大、最具权势象征的城郭，见证了丰臣与德川两大势力交替的关键历史。雄伟的天守阁巍然矗立于高耸的石垣之上，外观金碧辉煌、黑瓦白墙相间，内部现已改建为历史博物馆，展示丰臣秀吉生平、战国文物与大阪变迁史，登上顶层展望台还可俯瞰大阪市区全景。环绕天守的双重护城河与巨型石垣气势磅礴，其中部分石块重达上百吨，展现当年筑城工程的浩大。城郭外围是广达一百余公顷的大阪城公园，遍植樱花与梅花，每逢春季粉樱夹道、游人如织，是关西最负盛名的赏樱名所之一。建议搭配公园散步，从不同角度欣赏天守阁与护城河相映的经典画面。",
+            "en": "Osaka Castle was built in 1583 by the warlord Toyotomi Hideyoshi and was then the largest, most powerful castle in all Japan, a witness to the pivotal transition between the Toyotomi and Tokugawa powers. The majestic donjon rises atop towering stone ramparts, gleaming with gold accents against black tiles and white walls; inside it now houses a history museum on Hideyoshi's life, Sengoku-era artifacts and Osaka's evolution, with a top-floor observation deck overlooking the city. The double moats and colossal stone walls encircling the keep are awe-inspiring — some stones weigh over a hundred tonnes, attesting to the scale of the original construction. Surrounding it is the 100-plus-hectare Osaka Castle Park, planted with cherry and plum trees; in spring the blossom-lined paths draw enormous crowds, making it one of Kansai's most celebrated hanami spots. Combine your visit with a stroll through the park to admire the keep mirrored in the moat from every angle."
+          }
+        },
+        {
+          "localTitle": "道頓堀",
+          "lat": 34.6687,
+          "lon": 135.5013,
+          "title": { "zh-TW": "道頓堀霓虹美食街", "zh-CN": "道顿堀霓虹美食街", "en": "Dotonbori" },
+          "desc": {
+            "zh-TW": "道頓堀是大阪最具代表性的繁華街區，沿著開鑿於十七世紀的道頓堀川兩岸延伸，自古便是商賈雲集、戲院林立的歡樂之地，如今更是大阪「食倒れ」（吃到傾家蕩產）飲食文化的核心象徵。入夜後，運河兩側巨型立體招牌與璀璨霓虹齊放光彩——奔跑的固力果跑者廣告看板、張牙舞爪的螃蟹道樂大蟹、巨型河豚燈籠，無一不令人目不暇給，是遊客必拍的經典畫面。街上章魚燒、大阪燒、串炸、拉麵與各式小吃香氣四溢，從平價攤車到名店餐廳應有盡有，可一路吃遍道地關西美味。亦可搭乘觀光遊船從水上欣賞兩岸燈火，或步行至鄰近的心齋橋商店街盡情購物。建議傍晚至夜間造訪，最能感受道頓堀那份喧鬧鼎沸、活力四射的獨特魅力。",
+            "zh-CN": "道顿堀是大阪最具代表性的繁华街区，沿着开凿于十七世纪的道顿堀川两岸延伸，自古便是商贾云集、戏院林立的欢乐之地，如今更是大阪“吃倒”饮食文化的核心象征。入夜后，运河两侧巨型立体招牌与璀璨霓虹齐放光彩——奔跑的固力果跑者广告看板、张牙舞爪的螃蟹道乐大蟹、巨型河豚灯笼，无一不令人目不暇给，是游客必拍的经典画面。街上章鱼烧、大阪烧、串炸、拉面与各式小吃香气四溢，从平价摊车到名店餐厅应有尽有，可一路吃遍道地关西美味。亦可搭乘观光游船从水上欣赏两岸灯火，或步行至邻近的心斋桥商店街尽情购物。建议傍晚至夜间造访，最能感受道顿堀那份喧闹鼎沸、活力四射的独特魅力。",
+            "en": "Dotonbori is Osaka's most iconic entertainment district, stretching along both banks of the Dotonbori canal dug in the 17th century. Long a hub of merchants and theaters, it is today the beating heart of Osaka's kuidaore (\"eat until you drop\") food culture. After dark the canal blazes with giant 3D signs and dazzling neon — the running Glico man, the menacing Kani Doraku crab, the huge pufferfish lantern — an unmissable photo scene. The streets overflow with the aromas of takoyaki, okonomiyaki, kushikatsu, ramen and more, from cheap stalls to famous restaurants, letting you eat your way through authentic Kansai flavors. You can also take a sightseeing boat to admire the lights from the water, or walk to the adjacent Shinsaibashi shopping arcade. Visit from evening into night to feel Dotonbori's raucous, electric energy at its best."
+          }
+        },
+        {
+          "localTitle": "通天閣",
+          "lat": 34.6525,
+          "lon": 135.5063,
+          "title": { "zh-TW": "通天閣與新世界懷舊街", "zh-CN": "通天阁与新世界怀旧街", "en": "Tsutenkaku Tower" },
+          "desc": {
+            "zh-TW": "通天閣是大阪南區「新世界」的精神象徵，初建於1912年、現存塔身為1956年重建，高約103公尺，名稱意為「通往天空的高塔」，曾是東洋第一高建築。塔頂展望台供奉著大阪獨有的幸運之神「比利肯」（Billiken），相傳撫摸其腳底便能帶來好運，是遊客爭相朝聖的招牌。塔身夜間點亮的霓虹燈色還會依隔日天氣變化，成為市民熟知的氣象預報。環繞塔下的新世界街區散發著濃濃昭和懷舊氣息：老式彈珠台店、將棋會所與一間間飄香的串炸老店比鄰而立，這裡正是大阪庶民美食「串カツ」（炸串）的發源地，沾醬絕不能沾兩次的規矩更是趣味十足。建議在此一邊大啖平價炸串、一邊感受老大阪的人情味與市井活力，是體驗道地下町文化的絕佳去處。",
+            "zh-CN": "通天阁是大阪南区“新世界”的精神象征，初建于1912年、现存塔身为1956年重建，高约103米，名称意为“通往天空的高塔”，曾是东洋第一高建筑。塔顶展望台供奉着大阪独有的幸运之神“比利肯”（Billiken），相传抚摸其脚底便能带来好运，是游客争相朝圣的招牌。塔身夜间点亮的霓虹灯色还会依隔日天气变化，成为市民熟知的气象预报。环绕塔下的新世界街区散发着浓浓昭和怀旧气息：老式弹珠台店、将棋会所与一间间飘香的串炸老店比邻而立，这里正是大阪庶民美食“串カツ”（炸串）的发源地，沾酱绝不能沾两次的规矩更是趣味十足。建议在此一边大啖平价炸串、一边感受老大阪的人情味与市井活力，是体验道地下町文化的绝佳去处。",
+            "en": "Tsutenkaku is the spiritual symbol of the Shinsekai district in southern Osaka. First built in 1912 and rebuilt in 1956, the roughly 103-meter tower's name means \"tower reaching the heavens,\" and it was once the tallest structure in the East. Its observation deck enshrines Osaka's own god of fortune, Billiken, whose feet you rub for good luck — a beloved must-touch for visitors. At night the tower's neon colors change to forecast the next day's weather, a quirk well known to locals. The Shinsekai streets around it exude nostalgic Showa-era charm: old pinball parlors, shogi halls and fragrant kushikatsu eateries stand side by side. This is the birthplace of Osaka's working-class kushikatsu (deep-fried skewers), where the strict \"no double-dipping the sauce\" rule adds to the fun. Feast on cheap skewers while soaking up old Osaka's warmth and downtown vitality — a wonderful taste of authentic shitamachi culture."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "美津の お好み焼き",
+          "lat": 34.6685,
+          "lon": 135.5009,
+          "cost": 1500,
+          "title": { "zh-TW": "美津大阪燒", "zh-CN": "美津大阪烧", "en": "Mizuno Okonomiyaki" },
+          "desc": {
+            "zh-TW": "道頓堀創業逾七十年的大阪燒名店，以山藥取代麵粉的招牌「山藥燒」口感蓬鬆綿密，現場鐵板煎製、香氣四溢，每日大排長龍。",
+            "zh-CN": "道顿堀创业逾七十年的大阪烧名店，以山药取代面粉的招牌“山药烧”口感蓬松绵密，现场铁板煎制、香气四溢，每日大排长龙。",
+            "en": "A 70-year-old Dotonbori okonomiyaki institution whose signature yamaimo-yaki uses grated yam instead of flour for a fluffy, melt-in-the-mouth texture — griddled to order and worth the daily queue."
+          }
+        },
+        {
+          "localTitle": "かに道楽 道頓堀本店",
+          "lat": 34.6686,
+          "lon": 135.5016,
+          "cost": 5000,
+          "title": { "zh-TW": "螃蟹道樂 道頓堀本店", "zh-CN": "螃蟹道乐 道顿堀本店", "en": "Kani Doraku Dotonbori" },
+          "desc": {
+            "zh-TW": "門口巨型動態大蟹招牌聞名全日本的螃蟹專門店，提供火鍋、燒烤、刺身與蟹肉壽司等全蟹宴，新鮮肥美，是大阪指標性的螃蟹料理名店。",
+            "zh-CN": "门口巨型动态大蟹招牌闻名全日本的螃蟹专门店，提供火锅、烧烤、刺身与蟹肉寿司等全蟹宴，新鲜肥美，是大阪指标性的螃蟹料理名店。",
+            "en": "The crab specialist famous nationwide for its giant moving crab sign, serving full crab courses — hotpot, grilled, sashimi and crab sushi — fresh and succulent; an Osaka landmark restaurant."
+          }
+        },
+        {
+          "localTitle": "自由軒 難波本店",
+          "lat": 34.6669,
+          "lon": 135.5045,
+          "cost": 900,
+          "title": { "zh-TW": "自由軒名物咖哩", "zh-CN": "自由轩名物咖喱", "en": "Jiyuken Curry" },
+          "desc": {
+            "zh-TW": "創業逾百年的大阪老字號，招牌「名物咖哩」將咖哩與飯拌炒、中央打上一顆生蛋，拌勻後濃郁香辣，是充滿懷舊風情的庶民美味。",
+            "zh-CN": "创业逾百年的大阪老字号，招牌“名物咖喱”将咖喱与饭拌炒、中央打上一颗生蛋，拌匀后浓郁香辣，是充满怀旧风情的庶民美味。",
+            "en": "A century-old Osaka classic whose signature \"meibutsu curry\" stir-fries curry into the rice and tops it with a raw egg to mix in — rich, spicy and full of nostalgic working-class charm."
+          }
+        }
+      ]
+    },
+    {
+      "keywords": ["新加坡", "singapore", "獅城", "狮城"],
+      "images": [
+        "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600",
+        "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=600",
+        "https://images.unsplash.com/photo-1496939376851-89342e90adcd?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "Gardens by the Bay",
+          "lat": 1.2816,
+          "lon": 103.8636,
+          "title": { "zh-TW": "濱海灣花園擎天樹", "zh-CN": "滨海湾花园擎天树", "en": "Gardens by the Bay" },
+          "desc": {
+            "zh-TW": "濱海灣花園是新加坡「花園城市」願景的極致展現，佔地逾百公頃，巧妙融合自然生態與未來科技。園區最具標誌性的，是高達25至50公尺的巨型「擎天樹」（Supertree）——這些以鋼骨打造的垂直花園遍植蕨類與蘭花，白晝是壯觀的綠色塔林，入夜後則上演聲光交織的「花園狂想曲」燈光秀，璀璨奪目、震撼人心。園內兩座巨型玻璃溫室同樣不容錯過：「花穹」收藏來自地中海與半乾旱地區的奇花異卉，是金氏世界紀錄認證最大的玻璃溫室；「雲霧林」則以一座高達35公尺、奔流而下的室內瀑布與雲霧繚繞的垂直植被令人驚嘆。連接擎天樹之間的空中步道更可俯瞰整座花園與濱海灣金沙的天際線。建議傍晚前往，一次飽覽白晝、夜景與燈光秀，是新加坡最具代表性的必訪地標。",
+            "zh-CN": "滨海湾花园是新加坡“花园城市”愿景的极致展现，占地逾百公顷，巧妙融合自然生态与未来科技。园区最具标志性的，是高达25至50米的巨型“擎天树”（Supertree）——这些以钢骨打造的垂直花园遍植蕨类与兰花，白昼是壮观的绿色塔林，入夜后则上演声光交织的“花园狂想曲”灯光秀，璀璨夺目、震撼人心。园内两座巨型玻璃温室同样不容错过：“花穹”收藏来自地中海与半干旱地区的奇花异卉，是吉尼斯世界纪录认证最大的玻璃温室；“云雾林”则以一座高达35米、奔流而下的室内瀑布与云雾缭绕的垂直植被令人惊叹。连接擎天树之间的空中步道更可俯瞰整座花园与滨海湾金沙的天际线。建议傍晚前往，一次饱览白昼、夜景与灯光秀，是新加坡最具代表性的必访地标。",
+            "en": "Gardens by the Bay is the ultimate expression of Singapore's \"City in a Garden\" vision — over 100 hectares blending nature and futuristic technology. Its most iconic feature is the cluster of 25-to-50-meter Supertrees: steel-framed vertical gardens draped in ferns and orchids that form a spectacular grove by day and stage the dazzling \"Garden Rhapsody\" sound-and-light show after dark. Two giant glass conservatories are equally unmissable: the Flower Dome, the Guinness-record largest glass greenhouse, showcasing flora from Mediterranean and semi-arid regions; and the Cloud Forest, awe-inspiring with its 35-meter indoor waterfall and mist-shrouded vertical greenery. The OCBC Skyway linking the Supertrees offers views over the whole garden and the Marina Bay Sands skyline. Visit in the late afternoon to take in daylight, the night view and the light show all at once — Singapore's most iconic must-see landmark."
+          }
+        },
+        {
+          "localTitle": "Merlion Park",
+          "lat": 1.2868,
+          "lon": 103.8545,
+          "title": { "zh-TW": "魚尾獅公園與濱海灣", "zh-CN": "鱼尾狮公园与滨海湾", "en": "Merlion Park" },
+          "desc": {
+            "zh-TW": "魚尾獅是新加坡最家喻戶曉的國家象徵：獅頭代表傳說中發現此島的「獅城」由來，魚身則呼應其昔日作為小漁村的歷史。坐落於濱海灣畔的魚尾獅公園內，這座高8.6公尺、重達70噸的白色雕像晝夜不停地從口中噴出水柱注入海灣，已成為遊客來訪新加坡必拍的招牌畫面。公園正對著濱海灣，視野極佳：對岸即是宛如巨船凌空的濱海灣金沙酒店、貝殼造型的濱海藝術中心與摩天輪「新加坡飛行者」，構成一幅集現代建築之大成的壯麗天際線。每晚金沙酒店外牆與濱海灣花園還會上演免費的燈光水舞秀，從魚尾獅公園眺望最為清晰。建議於黃昏時分前來，欣賞華燈初上、海灣由暮色轉入璀璨夜景的迷人變化，並與經典的魚尾獅「接水」趣味合影。",
+            "zh-CN": "鱼尾狮是新加坡最家喻户晓的国家象征：狮头代表传说中发现此岛的“狮城”由来，鱼身则呼应其昔日作为小渔村的历史。坐落于滨海湾畔的鱼尾狮公园内，这座高8.6米、重达70吨的白色雕像昼夜不停地从口中喷出水柱注入海湾，已成为游客来访新加坡必拍的招牌画面。公园正对着滨海湾，视野极佳：对岸即是宛如巨船凌空的滨海湾金沙酒店、贝壳造型的滨海艺术中心与摩天轮“新加坡飞行者”，构成一幅集现代建筑之大成的壮丽天际线。每晚金沙酒店外墙与滨海湾花园还会上演免费的灯光水舞秀，从鱼尾狮公园眺望最为清晰。建议于黄昏时分前来，欣赏华灯初上、海湾由暮色转入璀璨夜景的迷人变化，并与经典的鱼尾狮“接水”趣味合影。",
+            "en": "The Merlion is Singapore's most recognizable national emblem: its lion head recalls the legend of the \"Lion City\" where the island was discovered, while its fish body nods to its origins as a humble fishing village. In Merlion Park on the Marina Bay waterfront, this 8.6-meter, 70-tonne white statue spouts an endless jet of water into the bay day and night — the definitive must-photograph scene for visitors. The park faces Marina Bay with superb views: across the water stand the ship-topped Marina Bay Sands, the durian-shaped Esplanade theatres and the Singapore Flyer observation wheel, forming a magnificent skyline of modern architecture. Each night a free light-and-water show plays across the Sands facade and Gardens by the Bay, best seen from here. Come at dusk to watch the bay shift from twilight into glittering night, and pose for the classic shot \"catching\" the Merlion's spout."
+          }
+        },
+        {
+          "localTitle": "Sentosa",
+          "lat": 1.2494,
+          "lon": 103.8303,
+          "title": { "zh-TW": "聖淘沙度假島嶼", "zh-CN": "圣淘沙度假岛屿", "en": "Sentosa Island" },
+          "desc": {
+            "zh-TW": "聖淘沙是新加坡南端的度假勝地，名稱在馬來語中意為「和平與寧靜」，由一座昔日的軍事要塞與漁村蛻變為今日集主題樂園、海灘、高爾夫與奢華度假村於一身的歡樂之島。島上最吸睛的是「新加坡環球影城」，七大主題園區與變形金剛、木乃伊等刺激遊樂設施深受闔家喜愛；緊鄰的「海洋館」（S.E.A. Aquarium）則是全球最大水族館之一，巨型觀景窗前魟魚與鯊魚悠游而過，令人屏息。此外還有海濱沙灘、空中纜車、斜坡滑車、iFly室內跳傘與夜間燈光水舞秀「Wings of Time」等多元體驗，從刺激冒險到悠閒戲水一應俱全。前往聖淘沙可搭乘纜車、輕軌或步行跨海天橋，沿途已是風景。建議規劃一整日，依同行對象（親子、情侶或好友）挑選重點設施，盡享這座度假島嶼的繽紛樂趣。",
+            "zh-CN": "圣淘沙是新加坡南端的度假胜地，名称在马来语中意为“和平与宁静”，由一座昔日的军事要塞与渔村蜕变为今日集主题乐园、海滩、高尔夫与奢华度假村于一身的欢乐之岛。岛上最吸睛的是“新加坡环球影城”，七大主题园区与变形金刚、木乃伊等刺激游乐设施深受阖家喜爱；紧邻的“海洋馆”（S.E.A. Aquarium）则是全球最大水族馆之一，巨型观景窗前魟鱼与鲨鱼悠游而过，令人屏息。此外还有海滨沙滩、空中缆车、斜坡滑车、iFly室内跳伞与夜间灯光水舞秀“Wings of Time”等多元体验，从刺激冒险到悠闲戏水一应俱全。前往圣淘沙可搭乘缆车、轻轨或步行跨海天桥，沿途已是风景。建议规划一整日，依同行对象（亲子、情侣或好友）挑选重点设施，尽享这座度假岛屿的缤纷乐趣。",
+            "en": "Sentosa is Singapore's resort island off the southern tip; its name means \"peace and tranquility\" in Malay, and it has transformed from a former military fort and fishing village into a pleasure island combining theme parks, beaches, golf and luxury resorts. Its biggest draw is Universal Studios Singapore, with seven themed zones and thrilling rides like Transformers and The Mummy that families love; the adjacent S.E.A. Aquarium, one of the world's largest, takes your breath away as rays and sharks glide past its giant viewing panel. There are also beaches, cable cars, a luge, iFly indoor skydiving and the nighttime Wings of Time light-and-water show — everything from adventure to leisurely seaside fun. Reach Sentosa by cable car, monorail or the pedestrian boardwalk, scenic in itself. Plan a full day and pick your key attractions based on your group — families, couples or friends — to enjoy all this resort island offers."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "天天海南鸡饭 (Maxwell)",
+          "lat": 1.2803,
+          "lon": 103.8447,
+          "cost": 6,
+          "title": { "zh-TW": "天天海南雞飯", "zh-CN": "天天海南鸡饭", "en": "Tian Tian Hainanese Chicken Rice" },
+          "desc": {
+            "zh-TW": "麥士威熟食中心的人氣攤位，雞肉嫩滑、油飯香氣四溢、辣椒醬畫龍點睛，是新加坡國民美食海南雞飯的代表名店。",
+            "zh-CN": "麦士威熟食中心的人气摊位，鸡肉嫩滑、油饭香气四溢、辣椒酱画龙点睛，是新加坡国民美食海南鸡饭的代表名店。",
+            "en": "The famous Maxwell Food Centre stall whose silky chicken, fragrant rice and zingy chili sauce make it the definitive name in Singapore's national dish, Hainanese chicken rice."
+          }
+        },
+        {
+          "localTitle": "松发肉骨茶",
+          "lat": 1.288,
+          "lon": 103.853,
+          "cost": 12,
+          "title": { "zh-TW": "松發肉骨茶", "zh-CN": "松发肉骨茶", "en": "Song Fa Bak Kut Teh" },
+          "desc": {
+            "zh-TW": "創立於1969年的肉骨茶名店，以胡椒風味的清澈湯頭燉煮排骨，湯鮮肉嫩、暖胃開胃，搭配油條與白飯是經典吃法。",
+            "zh-CN": "创立于1969年的肉骨茶名店，以胡椒风味的清澈汤头炖煮排骨，汤鲜肉嫩、暖胃开胃，搭配油条与白饭是经典吃法。",
+            "en": "A bak kut teh institution since 1969, simmering pork ribs in a clear, peppery broth — savory and warming, classically eaten with dough fritters and rice."
+          }
+        },
+        {
+          "localTitle": "Lau Pa Sat 老巴刹",
+          "lat": 1.2807,
+          "lon": 103.8504,
+          "cost": 10,
+          "title": { "zh-TW": "老巴剎沙嗲街", "zh-CN": "老巴刹沙嗲街", "en": "Lau Pa Sat Satay Street" },
+          "desc": {
+            "zh-TW": "坐落於金融區的維多利亞式古蹟熟食中心，入夜後鄰街化身炭烤沙嗲一條街，串串飄香的烤肉配上花生醬，是體驗新加坡多元小吃的好去處。",
+            "zh-CN": "坐落于金融区的维多利亚式古迹熟食中心，入夜后邻街化身炭烤沙嗲一条街，串串飘香的烤肉配上花生酱，是体验新加坡多元小吃的好去处。",
+            "en": "A Victorian-era heritage food hall in the financial district; after dark the adjacent street becomes a charcoal satay lane where fragrant skewers with peanut sauce make it a great spot for Singapore's diverse street food."
+          }
+        }
+      ]
+    },
+    {
+      "keywords": ["巴黎", "paris", "法國", "法国", "france"],
+      "images": [
+        "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600",
+        "https://images.unsplash.com/photo-1431274172761-fca41d930114?w=600",
+        "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "Tour Eiffel",
+          "lat": 48.8584,
+          "lon": 2.2945,
+          "title": { "zh-TW": "艾菲爾鐵塔浪漫地標", "zh-CN": "埃菲尔铁塔浪漫地标", "en": "Eiffel Tower" },
+          "desc": {
+            "zh-TW": "艾菲爾鐵塔是巴黎乃至整個法國最舉世聞名的象徵，由工程師古斯塔夫·艾菲爾為1889年世界博覽會而建，高約330公尺，落成時曾是全世界最高的人造建築。這座以鏤空鍛鐵桁架打造的龐然巨塔，當年被部分藝術家視為怪物般的存在，如今卻成為全球公認最浪漫優雅的地標，每年吸引近七百萬遊客登塔。鐵塔共設三層觀景台，遊客可搭乘電梯或徒步登上，將塞納河、戰神廣場、凱旋門與巴黎櫛比鱗次的奧斯曼式街景盡收眼底；頂層更附設香檳吧，可在高空舉杯。每當夜幕低垂，整座鐵塔披上金黃燈光，並於每個整點上演持續五分鐘、由兩萬顆燈泡交織而成的閃爍燈光秀，璀璨夢幻、教人屏息。建議於黃昏前抵達戰神廣場或夏佑宮平台，一次飽覽白晝、日落與夜間燈光秀的鐵塔之美。",
+            "zh-CN": "埃菲尔铁塔是巴黎乃至整个法国最举世闻名的象征，由工程师古斯塔夫·埃菲尔为1889年世界博览会而建，高约330米，落成时曾是全世界最高的人造建筑。这座以镂空锻铁桁架打造的庞然巨塔，当年被部分艺术家视为怪物般的存在，如今却成为全球公认最浪漫优雅的地标，每年吸引近七百万游客登塔。铁塔共设三层观景台，游客可搭乘电梯或徒步登上，将塞纳河、战神广场、凯旋门与巴黎栉比鳞次的奥斯曼式街景尽收眼底；顶层更附设香槟吧，可在高空举杯。每当夜幕低垂，整座铁塔披上金黄灯光，并于每个整点上演持续五分钟、由两万颗灯泡交织而成的闪烁灯光秀，璀璨梦幻、教人屏息。建议于黄昏前抵达战神广场或夏约宫平台，一次饱览白昼、日落与夜间灯光秀的铁塔之美。",
+            "en": "The Eiffel Tower is the most famous symbol of Paris and indeed of France. Built by engineer Gustave Eiffel for the 1889 World's Fair, the roughly 330-meter structure was the tallest man-made building in the world when completed. This colossal lattice of wrought iron was scorned by some artists at the time as a monstrosity, yet has become the world's most beloved romantic landmark, drawing nearly seven million visitors up its heights each year. It has three observation levels reachable by elevator or on foot, offering views over the Seine, the Champ de Mars, the Arc de Triomphe and Paris's sea of Haussmann rooftops; the top floor even has a Champagne bar. At nightfall the whole tower glows golden and, on the hour, sparkles for five minutes with 20,000 twinkling bulbs — a breathtaking, dreamlike spectacle. Arrive before dusk at the Champ de Mars or the Trocadéro terrace to enjoy the tower by day, at sunset and during the night sparkle all at once."
+          }
+        },
+        {
+          "localTitle": "Musée du Louvre",
+          "lat": 48.8606,
+          "lon": 2.3376,
+          "title": { "zh-TW": "羅浮宮藝術殿堂", "zh-CN": "卢浮宫艺术殿堂", "en": "Louvre Museum" },
+          "desc": {
+            "zh-TW": "羅浮宮是全世界參觀人數最多、典藏最豐富的藝術博物館，前身為十二世紀的中世紀城堡，歷經數百年擴建後成為法國王室宮殿，1793年法國大革命後正式對公眾開放。館藏橫跨古文明至十九世紀，逾三萬八千件展品中，鎮館三寶最為人津津樂道：神秘微笑的《蒙娜麗莎》、優雅斷臂的《米洛的維納斯》與展翅欲飛的《薩莫色雷斯的勝利女神》，吸引全球藝術愛好者朝聖。建築本身亦是藝術——華麗的宮殿迴廊與貝聿銘設計、矗立於拿破崙廣場中央的玻璃金字塔，形成古典與現代交融的經典畫面，入夜後金字塔點燈倒映於水池，美不勝收。由於館藏浩瀚，難以一日看盡，建議出發前先鎖定欲參觀的展區與作品、預先網路購票以免大排長龍，並善用語音導覽，方能在有限時間內細細品味這座人類文明的藝術寶庫。",
+            "zh-CN": "卢浮宫是全世界参观人数最多、典藏最丰富的艺术博物馆，前身为十二世纪的中世纪城堡，历经数百年扩建后成为法国王室宫殿，1793年法国大革命后正式对公众开放。馆藏横跨古文明至十九世纪，逾三万八千件展品中，镇馆三宝最为人津津乐道：神秘微笑的《蒙娜丽莎》、优雅断臂的《米洛的维纳斯》与展翅欲飞的《萨莫色雷斯的胜利女神》，吸引全球艺术爱好者朝圣。建筑本身亦是艺术——华丽的宫殿回廊与贝聿铭设计、矗立于拿破仑广场中央的玻璃金字塔，形成古典与现代交融的经典画面，入夜后金字塔点灯倒映于水池，美不胜收。由于馆藏浩瀚，难以一日看尽，建议出发前先锁定欲参观的展区与作品、预先网络购票以免大排长龙，并善用语音导览，方能在有限时间内细细品味这座人类文明的艺术宝库。",
+            "en": "The Louvre is the world's most visited and most richly endowed art museum. Originally a 12th-century medieval fortress, it grew over centuries into a royal palace and opened to the public in 1793 after the French Revolution. Its collection spans ancient civilizations to the 19th century; among its 38,000-plus works, three treasures are most celebrated: the enigmatically smiling Mona Lisa, the gracefully armless Venus de Milo, and the soaring Winged Victory of Samothrace, which draw art lovers from around the globe. The building itself is a work of art — ornate palace galleries paired with I. M. Pei's glass pyramid at the center of the Napoleon Courtyard create an iconic fusion of classical and modern, especially lovely when the lit pyramid mirrors in the pools at night. Because the collection is vast, it's impossible to see in a day: decide on your priority wings and works in advance, buy tickets online to skip the queues, and use an audio guide to savor this treasury of human civilization within your time."
+          }
+        },
+        {
+          "localTitle": "Basilique du Sacré-Cœur",
+          "lat": 48.8867,
+          "lon": 2.3431,
+          "title": { "zh-TW": "蒙馬特聖心堂", "zh-CN": "蒙马特圣心堂", "en": "Sacré-Cœur & Montmartre" },
+          "desc": {
+            "zh-TW": "聖心堂矗立於巴黎市區最高點——海拔約130公尺的蒙馬特山丘之巔，於1875至1914年間興建，以潔白的石灰華石材打造，融合羅馬與拜占庭風格的圓頂在陽光下潔白耀眼，是巴黎最上鏡的地標之一。登上教堂前的階梯平台，整座巴黎市景一覽無遺，是欣賞日落與夜景的絕佳去處；教堂內部則以巨幅的基督鑲嵌畫穹頂令人仰望讚嘆。山丘下的蒙馬特街區，自十九世紀末便是藝術家與波希米亞文化的搖籃，畢卡索、梵谷、雷諾瓦等大師都曾在此居住創作。如今漫步於蜿蜒石板巷弄間，仍可見小丘廣場（Place du Tertre）上為遊客作畫的街頭藝術家、復古咖啡館與葡萄園，處處流淌著濃郁的藝術與浪漫氣息。建議搭配纜索車登頂，留意此區人潮較多、扒手出沒，妥善保管隨身財物。",
+            "zh-CN": "圣心堂矗立于巴黎市区最高点——海拔约130米的蒙马特山丘之巅，于1875至1914年间兴建，以洁白的石灰华石材打造，融合罗马与拜占庭风格的圆顶在阳光下洁白耀眼，是巴黎最上镜的地标之一。登上教堂前的阶梯平台，整座巴黎市景一览无遗，是欣赏日落与夜景的绝佳去处；教堂内部则以巨幅的基督镶嵌画穹顶令人仰望赞叹。山丘下的蒙马特街区，自十九世纪末便是艺术家与波希米亚文化的摇篮，毕加索、梵高、雷诺阿等大师都曾在此居住创作。如今漫步于蜿蜒石板巷弄间，仍可见小丘广场（Place du Tertre）上为游客作画的街头艺术家、复古咖啡馆与葡萄园，处处流淌着浓郁的艺术与浪漫气息。建议搭配缆索车登顶，留意此区人潮较多、扒手出没，妥善保管随身财物。",
+            "en": "The Sacré-Cœur Basilica crowns the summit of Montmartre, at about 130 meters the highest point in central Paris. Built between 1875 and 1914 from gleaming travertine stone, its Romano-Byzantine domes shine brilliantly white in the sun, making it one of Paris's most photogenic landmarks. From the steps in front, the whole city spreads out below — a superb spot for sunset and night views — while inside, a vast mosaic of Christ on the dome inspires awe. The Montmartre district below the hill has been a cradle of artists and bohemian culture since the late 19th century, home at times to Picasso, Van Gogh and Renoir. Wandering its winding cobbled lanes today you'll still find street artists painting visitors on the Place du Tertre, vintage cafes and even a vineyard, all steeped in art and romance. Consider taking the funicular up, and stay alert in this crowded area for pickpockets — keep your belongings secure."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "Bouillon Chartier",
+          "lat": 48.8718,
+          "lon": 2.3431,
+          "cost": 20,
+          "title": { "zh-TW": "Chartier 百年平價餐館", "zh-CN": "Chartier 百年平价餐馆", "en": "Bouillon Chartier" },
+          "desc": {
+            "zh-TW": "創業於1896年的巴黎老牌大眾餐館，金碧輝煌的美好年代裝潢搭配親民價格，供應法式蝸牛、油封鴨等經典家常菜，氣氛熱鬧、值得一訪。",
+            "zh-CN": "创业于1896年的巴黎老牌大众餐馆，金碧辉煌的美好年代装潢搭配亲民价格，供应法式蜗牛、油封鸭等经典家常菜，气氛热闹、值得一访。",
+            "en": "A Parisian institution since 1896, this grand Belle Époque dining hall pairs ornate decor with affordable prices, serving classics like escargots and duck confit in a lively atmosphere."
+          }
+        },
+        {
+          "localTitle": "Le Comptoir du Relais",
+          "lat": 48.853,
+          "lon": 2.338,
+          "cost": 35,
+          "title": { "zh-TW": "Le Comptoir 小酒館", "zh-CN": "Le Comptoir 小酒馆", "en": "Le Comptoir du Relais" },
+          "desc": {
+            "zh-TW": "聖日耳曼德佩區的人氣小酒館，由名廚 Yves Camdeborde 主理，以精緻又道地的現代法式小酒館料理聞名，午間較易入座。",
+            "zh-CN": "圣日耳曼德佩区的人气小酒馆，由名厨 Yves Camdeborde 主理，以精致又道地的现代法式小酒馆料理闻名，午间较易入座。",
+            "en": "A popular Saint-Germain bistro by acclaimed chef Yves Camdeborde, known for refined yet authentic modern bistro cooking — easier to get a table at lunch."
+          }
+        },
+        {
+          "localTitle": "L'As du Fallafel",
+          "lat": 48.8575,
+          "lon": 2.359,
+          "cost": 10,
+          "title": { "zh-TW": "瑪黑區 L'As 法拉費", "zh-CN": "玛黑区 L'As 法拉费", "en": "L'As du Fallafel" },
+          "desc": {
+            "zh-TW": "瑪黑區猶太街上的傳奇沙威瑪/法拉費小店，份量飽滿、酥脆多汁、價格實惠，常見大排長龍，是平價快食的人氣首選。",
+            "zh-CN": "玛黑区犹太街上的传奇沙威玛/法拉费小店，份量饱满、酥脆多汁、价格实惠，常见大排长龙，是平价快食的人气首选。",
+            "en": "A legendary falafel and shawarma spot on the Marais's Jewish street — generous, crisp and juicy at a fair price, with frequent queues; a top pick for affordable quick eats."
+          }
+        }
+      ]
     }
   ]
 }
