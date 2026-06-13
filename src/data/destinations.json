@@ -604,6 +604,330 @@
           }
         }
       ]
+    },
+    {
+      "keywords": ["紐約", "纽约", "new york", "newyork", "nyc", "曼哈頓", "曼哈顿", "manhattan"],
+      "images": [
+        "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600",
+        "https://images.unsplash.com/photo-1538970272646-f61fabb3a8a2?w=600",
+        "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "Statue of Liberty",
+          "lat": 40.6892,
+          "lon": -74.0445,
+          "title": { "zh-TW": "自由女神像", "zh-CN": "自由女神像", "en": "Statue of Liberty" },
+          "desc": {
+            "zh-TW": "自由女神像矗立於紐約港自由島之上，是法國於1886年為慶祝美國獨立百年所贈的禮物，象徵自由、民主與美法友誼，1984年獲列為聯合國世界文化遺產。雕像由設計師巴托爾迪操刀、艾菲爾鐵塔的工程師艾菲爾負責內部鋼骨結構，全高（含基座）逾93公尺，女神右手高舉火炬、左手捧著刻有美國獨立日期的法典，腳邊則是斷裂的鎖鏈，寓意掙脫壓迫。對十九、二十世紀飄洋過海的數百萬移民而言，這座女神是抵達新大陸時望見的第一道希望之光，承載著「美國夢」的深刻情感。遊客可搭乘渡輪登島，近距離仰望女神，並可預約登上基座或皇冠展望台俯瞰曼哈頓天際線；鄰近的艾利斯島移民博物館亦值得一訪。建議提前網路購票、預留半日，搭船途中還能飽覽紐約港與下城摩天樓群的壯麗景致。",
+            "zh-CN": "自由女神像矗立于纽约港自由岛之上，是法国于1886年为庆祝美国独立百年所赠的礼物，象征自由、民主与美法友谊，1984年获列为联合国世界文化遗产。雕像由设计师巴托尔迪操刀、埃菲尔铁塔的工程师埃菲尔负责内部钢骨结构，全高（含基座）逾93米，女神右手高举火炬、左手捧着刻有美国独立日期的法典，脚边则是断裂的锁链，寓意挣脱压迫。对十九、二十世纪飘洋过海的数百万移民而言，这座女神是抵达新大陆时望见的第一道希望之光，承载着“美国梦”的深刻情感。游客可搭乘渡轮登岛，近距离仰望女神，并可预约登上基座或皇冠展望台俯瞰曼哈顿天际线；邻近的埃利斯岛移民博物馆亦值得一访。建议提前网络购票、预留半日，搭船途中还能饱览纽约港与下城摩天楼群的壮丽景致。",
+            "en": "The Statue of Liberty stands on Liberty Island in New York Harbor, a gift from France in 1886 marking the centennial of American independence and a symbol of freedom, democracy and Franco-American friendship; it became a UNESCO World Heritage Site in 1984. Designed by Bartholdi with an internal steel framework engineered by Gustave Eiffel, it rises over 93 meters including the pedestal. Lady Liberty raises a torch in her right hand and cradles a tablet inscribed with the date of independence in her left, while broken chains at her feet signify liberation from oppression. For the millions of immigrants who crossed the ocean in the 19th and 20th centuries, she was the first beacon of hope on reaching the New World, embodying the American Dream. Visitors take a ferry to the island to gaze up at the statue and can reserve access to the pedestal or crown for views of the Manhattan skyline; the nearby Ellis Island immigration museum is also worth a visit. Book online, allow half a day, and enjoy harbor and downtown-skyscraper views from the boat."
+          }
+        },
+        {
+          "localTitle": "Times Square",
+          "lat": 40.758,
+          "lon": -73.9855,
+          "title": { "zh-TW": "時代廣場霓虹不夜城", "zh-CN": "时代广场霓虹不夜城", "en": "Times Square" },
+          "desc": {
+            "zh-TW": "時代廣場位於曼哈頓中城百老匯與第七大道交會處，得名自昔日《紐約時報》總部所在地，是全世界最知名、人潮最洶湧的商業與娛樂中心之一，素有「世界的十字路口」之稱。廣場最震撼的景象，是四面八方鋪天蓋地的巨型 LED 廣告看板與霓虹燈牆，日夜不息地閃爍流轉，將整片夜空映得亮如白晝，置身其中能強烈感受紐約的繁華與能量。這裡同時是百老匯劇院區的心臟，周邊匯聚數十家頂級劇院，《獅子王》《歌劇魅影》等經典音樂劇長年上演；街頭則充滿扮裝藝人、街頭表演與各國遊客的喧鬧。每年除夕夜的「水晶球降落」跨年倒數，更吸引全球數十億人透過轉播共同迎接新年。建議白天與夜晚各造訪一次感受不同氛圍，並提前購買百老匯戲票，留意此區人潮擁擠、保管好隨身物品。",
+            "zh-CN": "时代广场位于曼哈顿中城百老汇与第七大道交会处，得名自昔日《纽约时报》总部所在地，是全世界最知名、人潮最汹涌的商业与娱乐中心之一，素有“世界的十字路口”之称。广场最震撼的景象，是四面八方铺天盖地的巨型 LED 广告看板与霓虹灯墙，日夜不息地闪烁流转，将整片夜空映得亮如白昼，置身其中能强烈感受纽约的繁华与能量。这里同时是百老汇剧院区的心脏，周边汇聚数十家顶级剧院，《狮子王》《歌剧魅影》等经典音乐剧长年上演；街头则充满扮装艺人、街头表演与各国游客的喧闹。每年除夕夜的“水晶球降落”跨年倒数，更吸引全球数十亿人透过转播共同迎接新年。建议白天与夜晚各造访一次感受不同氛围，并提前购买百老汇戏票，留意此区人潮拥挤、保管好随身物品。",
+            "en": "Times Square sits at the crossing of Broadway and Seventh Avenue in Midtown Manhattan, named for the former headquarters of The New York Times. It is one of the world's most famous and crowded commercial and entertainment hubs, dubbed \"the Crossroads of the World.\" Its most dazzling feature is the wall-to-wall sweep of giant LED billboards and neon that flicker day and night, lighting the sky as bright as day and pulsing with New York's energy. It is also the heart of the Broadway theater district, ringed by dozens of top theaters where classics like The Lion King and The Phantom of the Opera run for years; the streets teem with costumed performers, buskers and visitors from around the globe. The New Year's Eve ball drop draws billions of viewers worldwide. Visit once by day and once by night for contrasting moods, buy Broadway tickets in advance, and mind the crowds and your belongings."
+          }
+        },
+        {
+          "localTitle": "Central Park",
+          "lat": 40.7829,
+          "lon": -73.9654,
+          "title": { "zh-TW": "中央公園都會綠洲", "zh-CN": "中央公园都会绿洲", "en": "Central Park" },
+          "desc": {
+            "zh-TW": "中央公園是紐約曼哈頓心臟地帶的一片廣達約340公頃的巨型綠地，於1857年起依景觀建築師奧姆斯特德與沃克斯的設計開闢，是全美第一座大型景觀公園，更是世界上最著名的都會公園。在高樓林立的曼哈頓中央闢出如此遼闊的自然空間，本身就是都市規劃史上的壯舉。園內景致豐富多變：開闊的綿羊草原、波光粼粼的湖泊與水庫、林蔭步道、貝塞斯達噴泉、草莓園（紀念約翰·藍儂）、城堡瞭望台與動物園等，四季風情各異——春櫻、夏綠、秋楓、冬雪皆美不勝收。這裡是紐約客日常慢跑、野餐、划船、溜冰與舉辦露天音樂會的生活舞台，也是無數電影的取景地。漫步園中，抬頭即見綠樹環抱中的摩天樓天際線，自然與都會交融的畫面正是紐約的經典印象。建議租輛單車或悠閒步行，依時間挑選重點區域細細品味。",
+            "zh-CN": "中央公园是纽约曼哈顿心脏地带的一片广达约340公顷的巨型绿地，于1857年起依景观建筑师奥姆斯特德与沃克斯的设计开辟，是全美第一座大型景观公园，更是世界上最著名的都会公园。在高楼林立的曼哈顿中央辟出如此辽阔的自然空间，本身就是都市规划史上的壮举。园内景致丰富多变：开阔的绵羊草原、波光粼粼的湖泊与水库、林荫步道、贝塞斯达喷泉、草莓园（纪念约翰·列侬）、城堡瞭望台与动物园等，四季风情各异——春樱、夏绿、秋枫、冬雪皆美不胜收。这里是纽约客日常慢跑、野餐、划船、溜冰与举办露天音乐会的生活舞台，也是无数电影的取景地。漫步园中，抬头即见绿树环抱中的摩天楼天际线，自然与都会交融的画面正是纽约的经典印象。建议租辆单车或悠闲步行，依时间挑选重点区域细细品味。",
+            "en": "Central Park is a vast 340-hectare green space in the heart of Manhattan, laid out from 1857 to the design of landscape architects Olmsted and Vaux. It was the first major landscaped park in the United States and is the world's most famous urban park; carving out such an expanse of nature amid Manhattan's towers was a landmark feat of city planning. Its scenery is wonderfully varied: the open Sheep Meadow, glittering lakes and reservoir, shaded paths, Bethesda Fountain, Strawberry Fields (honoring John Lennon), Belvedere Castle and a zoo, each season distinct — cherry blossoms in spring, greenery in summer, foliage in autumn and snow in winter. It is where New Yorkers jog, picnic, row boats, skate and hold open-air concerts, and the backdrop of countless films. Stroll here and look up to see the skyline framed by trees — the fusion of nature and city that defines New York. Rent a bike or walk at leisure, choosing key areas to savor based on your time."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "Katz's Delicatessen",
+          "lat": 40.7223,
+          "lon": -73.9874,
+          "cost": 25,
+          "title": { "zh-TW": "Katz's 燻牛肉三明治", "zh-CN": "Katz's 熏牛肉三明治", "en": "Katz's Delicatessen" },
+          "desc": {
+            "zh-TW": "創業於1888年的紐約傳奇熟食店，招牌手切煙燻牛肉（pastrami）三明治份量驚人、肥嫩多汁，是下東城百年不墜的人氣名店。",
+            "zh-CN": "创业于1888年的纽约传奇熟食店，招牌手切烟熏牛肉（pastrami）三明治份量惊人、肥嫩多汁，是下东城百年不坠的人气名店。",
+            "en": "A legendary New York deli since 1888, famous for its enormous, juicy hand-carved pastrami sandwich — a century-old Lower East Side icon."
+          }
+        },
+        {
+          "localTitle": "Joe's Pizza",
+          "lat": 40.7305,
+          "lon": -74.0027,
+          "cost": 5,
+          "title": { "zh-TW": "Joe's 經典紐約披薩", "zh-CN": "Joe's 经典纽约披萨", "en": "Joe's Pizza" },
+          "desc": {
+            "zh-TW": "格林威治村創立逾五十年的人氣披薩店，現烤薄脆的經典紐約式起司切片，平價快速、外帶站著吃最對味，是道地紐約日常滋味。",
+            "zh-CN": "格林威治村创立逾五十年的人气披萨店，现烤薄脆的经典纽约式起司切片，平价快速、外带站着吃最对味，是道地纽约日常滋味。",
+            "en": "A Greenwich Village favorite for over 50 years, serving freshly baked thin, crisp classic New York cheese slices — cheap, fast and best eaten standing; quintessential everyday New York."
+          }
+        },
+        {
+          "localTitle": "Shake Shack (Madison Square Park)",
+          "lat": 40.7414,
+          "lon": -73.9882,
+          "cost": 12,
+          "title": { "zh-TW": "Shake Shack 漢堡", "zh-CN": "Shake Shack 汉堡", "en": "Shake Shack" },
+          "desc": {
+            "zh-TW": "發跡於麥迪遜廣場公園的人氣漢堡品牌，多汁的安格斯牛肉漢堡搭配奶昔與起司薯條，新鮮現做、風靡全球，是紐約速食新經典。",
+            "zh-CN": "发迹于麦迪逊广场公园的人气汉堡品牌，多汁的安格斯牛肉汉堡搭配奶昔与起司薯条，新鲜现做、风靡全球，是纽约速食新经典。",
+            "en": "The cult burger brand born in Madison Square Park: juicy Angus beef burgers with shakes and cheese fries, made fresh and beloved worldwide — a modern New York fast-food classic."
+          }
+        }
+      ]
+    },
+    {
+      "keywords": ["倫敦", "伦敦", "london", "英國", "英国"],
+      "images": [
+        "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600",
+        "https://images.unsplash.com/photo-1543832923-44667a44c804?w=600",
+        "https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "Big Ben & Houses of Parliament",
+          "lat": 51.4995,
+          "lon": -0.1248,
+          "title": { "zh-TW": "西敏宮與大笨鐘", "zh-CN": "威斯敏斯特宫与大本钟", "en": "Big Ben & Houses of Parliament" },
+          "desc": {
+            "zh-TW": "西敏宮（國會大廈）矗立於泰晤士河畔，是英國國會上、下議院的所在地，也是哥德復興式建築的傑作，與西敏寺、聖瑪格麗特教堂共同列為世界文化遺產。其最著名的標誌，是位於宮殿北端、高約96公尺的鐘樓「伊莉莎白塔」，塔內那口重逾13噸的巨大報時鐘即是世人熟知的「大笨鐘」（Big Ben），其渾厚悠揚的鐘聲透過廣播傳遍全球，早已成為倫敦乃至英國的聽覺象徵。整座宮殿擁有逾千個房間、繁複精緻的尖塔與雕飾，臨河立面在夕陽與夜燈映照下格外壯麗。遊客可於西敏橋上取景，將大笨鐘與往來紅色雙層巴士一同入鏡，是倫敦最經典的明信片畫面；對岸的倫敦眼摩天輪則提供俯瞰全景的絕佳視角。建議搭配鄰近的西敏寺、白廳與聖詹姆斯公園一併步行遊覽。",
+            "zh-CN": "威斯敏斯特宫（国会大厦）矗立于泰晤士河畔，是英国国会上、下议院的所在地，也是哥特复兴式建筑的杰作，与威斯敏斯特教堂、圣玛格丽特教堂共同列为世界文化遗产。其最著名的标志，是位于宫殿北端、高约96米的钟楼“伊丽莎白塔”，塔内那口重逾13吨的巨大报时钟即是世人熟知的“大本钟”（Big Ben），其浑厚悠扬的钟声透过广播传遍全球，早已成为伦敦乃至英国的听觉象征。整座宫殿拥有逾千个房间、繁复精致的尖塔与雕饰，临河立面在夕阳与夜灯映照下格外壮丽。游客可于威斯敏斯特桥上取景，将大本钟与往来红色双层巴士一同入镜，是伦敦最经典的明信片画面；对岸的伦敦眼摩天轮则提供俯瞰全景的绝佳视角。建议搭配邻近的威斯敏斯特教堂、白厅与圣詹姆斯公园一并步行游览。",
+            "en": "The Palace of Westminster (Houses of Parliament) stands on the bank of the Thames as the seat of the UK's House of Commons and House of Lords and a masterpiece of Gothic Revival architecture, inscribed as a World Heritage Site together with Westminster Abbey and St Margaret's Church. Its most famous feature is the roughly 96-meter Elizabeth Tower at the north end, housing the great 13-tonne bell known to the world as Big Ben, whose deep, resonant chimes — broadcast globally — are an auditory symbol of London and Britain. The palace has over a thousand rooms and intricate spires and ornament, its riverside facade especially magnificent at sunset and under night lights. Visitors frame Big Ben with passing red double-decker buses from Westminster Bridge for London's most classic postcard shot, while the London Eye opposite offers superb panoramic views. Combine it with nearby Westminster Abbey, Whitehall and St James's Park on foot."
+          }
+        },
+        {
+          "localTitle": "Tower Bridge",
+          "lat": 51.5055,
+          "lon": -0.0754,
+          "title": { "zh-TW": "倫敦塔橋", "zh-CN": "伦敦塔桥", "en": "Tower Bridge" },
+          "desc": {
+            "zh-TW": "倫敦塔橋橫跨泰晤士河，於1894年落成，是倫敦最具辨識度的地標之一，常被誤稱為「倫敦橋」。這座結合吊橋與懸索橋結構的維多利亞式建築，以兩座高聳的哥德復興式塔樓與天藍色鋼骨橋身著稱，造型典雅而雄偉。塔橋最精彩之處在於其可開合的橋面設計：當大型船隻需要通過時，中央橋面會向上掀起讓道，這項百年機械工程至今仍定期上演，是遊客爭相目睹的奇景（開橋時刻表可於官網查詢）。遊客可購票進入塔內的展覽館，了解塔橋的建造歷史與維多利亞時代的蒸汽機房，並登上連接兩塔、高懸於河面之上的玻璃地板天橋，腳下車船往來、河景盡收眼底，刺激又震撼。鄰近即是倫敦塔、市政廳與河岸步道。建議於黃昏前後造訪，欣賞塔橋燈光點亮、倒映河面的迷人景致。",
+            "zh-CN": "伦敦塔桥横跨泰晤士河，于1894年落成，是伦敦最具辨识度的地标之一，常被误称为“伦敦桥”。这座结合吊桥与悬索桥结构的维多利亚式建筑，以两座高耸的哥特复兴式塔楼与天蓝色钢骨桥身著称，造型典雅而雄伟。塔桥最精彩之处在于其可开合的桥面设计：当大型船只需要通过时，中央桥面会向上掀起让道，这项百年机械工程至今仍定期上演，是游客争相目睹的奇景（开桥时刻表可于官网查询）。游客可购票进入塔内的展览馆，了解塔桥的建造历史与维多利亚时代的蒸汽机房，并登上连接两塔、高悬于河面之上的玻璃地板天桥，脚下车船往来、河景尽收眼底，刺激又震撼。邻近即是伦敦塔、市政厅与河岸步道。建议于黄昏前后造访，欣赏塔桥灯光点亮、倒映河面的迷人景致。",
+            "en": "Tower Bridge spans the Thames and, completed in 1894, is one of London's most recognizable landmarks — often mistaken for London Bridge. This Victorian combined bascule and suspension bridge is famous for its two soaring Gothic Revival towers and sky-blue steelwork, elegant yet grand. Its highlight is the opening roadway: when tall ships need to pass, the central deck lifts to let them through, a century-old feat of engineering still performed regularly and a sight visitors flock to see (lift times are posted online). You can buy tickets to the in-tower exhibition on its construction history and Victorian steam engine rooms, and walk the high-level glass-floored walkways between the towers, with traffic and boats passing far below — thrilling and spectacular. The Tower of London, City Hall and riverside walks are nearby. Visit around dusk to see the bridge lit up and mirrored in the river."
+          }
+        },
+        {
+          "localTitle": "British Museum",
+          "lat": 51.5194,
+          "lon": -0.127,
+          "title": { "zh-TW": "大英博物館", "zh-CN": "大英博物馆", "en": "British Museum" },
+          "desc": {
+            "zh-TW": "大英博物館創立於1753年，是世界上歷史最悠久、館藏最浩瀚的綜合性博物館之一，珍藏逾八百萬件橫跨兩百萬年人類文明的文物，且常年免費開放，堪稱認識世界歷史的殿堂。館內鎮館之寶不勝枚舉：解開古埃及象形文字之謎的「羅塞塔石碑」、雅典帕德嫩神廟的「埃爾金大理石雕」、古埃及法老木乃伊與石棺、亞述帝國的人面飛獅浮雕，以及來自中國、希臘、美索不達米亞等地的稀世珍品，令人目不暇給。建築本身亦極具看點，由諾曼·福斯特設計、覆以巨型玻璃鋼構穹頂的「大中庭」是歐洲最大的有頂廣場，明亮通透、氣勢恢宏。由於館藏太過龐大，難以一次看完，建議行前先選定感興趣的文明展區、善用免費地圖與導覽，集中參觀重點精華，方能在有限時間內滿載而歸。",
+            "zh-CN": "大英博物馆创立于1753年，是世界上历史最悠久、馆藏最浩瀚的综合性博物馆之一，珍藏逾八百万件横跨两百万年人类文明的文物，且常年免费开放，堪称认识世界历史的殿堂。馆内镇馆之宝不胜枚举：解开古埃及象形文字之谜的“罗塞塔石碑”、雅典帕特农神庙的“埃尔金大理石雕”、古埃及法老木乃伊与石棺、亚述帝国的人面飞狮浮雕，以及来自中国、希腊、美索不达米亚等地的稀世珍品，令人目不暇给。建筑本身亦极具看点，由诺曼·福斯特设计、覆以巨型玻璃钢构穹顶的“大中庭”是欧洲最大的有顶广场，明亮通透、气势恢宏。由于馆藏太过庞大，难以一次看完，建议行前先选定感兴趣的文明展区、善用免费地图与导览，集中参观重点精华，方能在有限时间内满载而归。",
+            "en": "Founded in 1753, the British Museum is one of the world's oldest and most encyclopedic museums, holding over eight million objects spanning two million years of human civilization — and it is free to enter year-round, a true hall for understanding world history. Its treasures are countless: the Rosetta Stone that unlocked Egyptian hieroglyphs, the Elgin Marbles from the Parthenon in Athens, Egyptian pharaoh mummies and sarcophagi, the winged human-headed lions of Assyria, and rare masterpieces from China, Greece and Mesopotamia. The building itself is a highlight: the Great Court, roofed by Norman Foster's vast glass-and-steel canopy, is the largest covered square in Europe — bright, airy and grand. Because the collection is so immense, it can't be seen in one go: choose the civilizations that interest you in advance, use the free map and tours, and focus on the highlights to make the most of your time."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "Borough Market",
+          "lat": 51.5055,
+          "lon": -0.0909,
+          "cost": 15,
+          "title": { "zh-TW": "波羅市場美食", "zh-CN": "波罗市场美食", "en": "Borough Market" },
+          "desc": {
+            "zh-TW": "倫敦最古老的食材市集之一，匯聚來自英國與世界各地的鮮食攤位，從現煎牛排三明治、生蠔到各國熟食小吃應有盡有，是美食愛好者的天堂。",
+            "zh-CN": "伦敦最古老的食材市集之一，汇聚来自英国与世界各地的鲜食摊位，从现煎牛排三明治、生蚝到各国熟食小吃应有尽有，是美食爱好者的天堂。",
+            "en": "One of London's oldest food markets, gathering fresh produce and stalls from Britain and around the world — from griddled steak sandwiches and oysters to global street food; a foodie's paradise."
+          }
+        },
+        {
+          "localTitle": "Dishoom",
+          "lat": 51.5118,
+          "lon": -0.13,
+          "cost": 25,
+          "title": { "zh-TW": "Dishoom 孟買咖哩館", "zh-CN": "Dishoom 孟买咖喱馆", "en": "Dishoom" },
+          "desc": {
+            "zh-TW": "重現舊孟買波斯咖啡館風情的人氣印度餐廳，招牌黑豆咖哩與培根馬薩拉麵包卷令人難忘，氣氛復古迷人，常需排隊候位。",
+            "zh-CN": "重现旧孟买波斯咖啡馆风情的人气印度餐厅，招牌黑豆咖喱与培根马萨拉面包卷令人难忘，气氛复古迷人，常需排队候位。",
+            "en": "A wildly popular Indian restaurant evoking old Bombay's Irani cafes; its signature black daal and bacon naan roll are unforgettable, with charming retro decor and frequent queues."
+          }
+        },
+        {
+          "localTitle": "The Ivy",
+          "lat": 51.5126,
+          "lon": -0.1289,
+          "cost": 40,
+          "title": { "zh-TW": "The Ivy 經典英式餐廳", "zh-CN": "The Ivy 经典英式餐厅", "en": "The Ivy" },
+          "desc": {
+            "zh-TW": "西區劇院區的百年名店，以優雅裝潢與經典英式料理聞名，從炸魚薯條到週日烤肉一應俱全，是體驗倫敦正統餐飲氛圍的好選擇。",
+            "zh-CN": "西区剧院区的百年名店，以优雅装潢与经典英式料理闻名，从炸鱼薯条到周日烤肉一应俱全，是体验伦敦正统餐饮氛围的好选择。",
+            "en": "A century-old West End theater-district institution famed for elegant decor and classic British fare — from fish and chips to Sunday roast — a fine way to experience traditional London dining."
+          }
+        }
+      ]
+    },
+    {
+      "keywords": ["香港", "hong kong", "hongkong", "尖沙咀", "中環", "中环"],
+      "images": [
+        "https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=600",
+        "https://images.unsplash.com/photo-1518599807935-37015b9cefcb?w=600",
+        "https://images.unsplash.com/photo-1576788369575-4ab045b9287a?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "太平山頂 (The Peak)",
+          "lat": 22.2759,
+          "lon": 114.1455,
+          "title": { "zh-TW": "太平山頂維港夜景", "zh-CN": "太平山顶维港夜景", "en": "Victoria Peak" },
+          "desc": {
+            "zh-TW": "太平山頂（俗稱「山頂」）海拔約552公尺，是香港島的最高峰，自殖民時期便是達官顯貴的居住勝地，如今更是俯瞰維多利亞港璀璨夜景的世界級觀景台。從山頂遠眺，香港島與九龍兩岸鱗次櫛比的摩天大樓沿著維港兩側展開，入夜後萬家燈火與大樓霓虹交相輝映，被譽為「世界三大夜景」之一，景象令人屏息。前往山頂最經典的方式，是搭乘擁有逾130年歷史的「山頂纜車」——這條陡峭的登山纜車沿途以傾斜視角掠過林立高樓，本身就是一趟難忘的體驗。抵達後可登上造型獨特的「凌霄閣」摩天台428觀景平台，將全景盡收眼底；周邊亦有商場、餐廳與山頂環迴步道，可悠閒散步賞景。建議於日落前抵達，一次飽覽白晝、黃昏與夜景三種風貌，並提前購票避開排隊人潮。",
+            "zh-CN": "太平山顶（俗称“山顶”）海拔约552米，是香港岛的最高峰，自殖民时期便是达官显贵的居住胜地，如今更是俯瞰维多利亚港璀璨夜景的世界级观景台。从山顶远眺，香港岛与九龙两岸鳞次栉比的摩天大楼沿着维港两侧展开，入夜后万家灯火与大楼霓虹交相辉映，被誉为“世界三大夜景”之一，景象令人屏息。前往山顶最经典的方式，是搭乘拥有逾130年历史的“山顶缆车”——这条陡峭的登山缆车沿途以倾斜视角掠过林立高楼，本身就是一趟难忘的体验。抵达后可登上造型独特的“凌霄阁”摩天台428观景平台，将全景尽收眼底；周边亦有商场、餐厅与山顶环回步道，可悠闲散步赏景。建议于日落前抵达，一次饱览白昼、黄昏与夜景三种风貌，并提前购票避开排队人潮。",
+            "en": "Victoria Peak (\"The Peak\"), at about 552 meters the highest point on Hong Kong Island, has been a prestigious residential area since colonial times and is today a world-class viewpoint over the dazzling Victoria Harbour. Looking out from the summit, the skyscraper-packed shores of Hong Kong Island and Kowloon line both sides of the harbour; after dark the countless lights and tower neon shimmer together in what is hailed as one of the world's three great night views — a breathtaking sight. The classic way up is the 130-plus-year-old Peak Tram, whose steep ascent past leaning skyscrapers is itself an unforgettable ride. At the top, the distinctive Peak Tower's Sky Terrace 428 offers a full panorama; there are also malls, restaurants and the Peak Circle Walk for a leisurely stroll. Arrive before sunset to enjoy day, dusk and night views in one visit, and buy tickets in advance to skip the queues."
+          }
+        },
+        {
+          "localTitle": "尖沙咀星光大道",
+          "lat": 22.2937,
+          "lon": 114.1722,
+          "title": { "zh-TW": "尖沙咀星光大道海濱", "zh-CN": "尖沙咀星光大道海滨", "en": "Tsim Sha Tsui & Victoria Harbour" },
+          "desc": {
+            "zh-TW": "尖沙咀位於九龍半島南端，是香港最繁華的購物、文化與觀光樞紐，臨海的「星光大道」沿維多利亞港鋪展，是欣賞港島天際線最熱門的海濱長廊。漫步其間，可見仿效好萊塢、鑲嵌香港影壇巨星手印與名牌的地磚，以及李小龍、梅艷芳的紀念銅像，向香港璀璨的電影黃金年代致敬。每晚八點，維港兩岸數十棟摩天大樓會聯合上演金氏世界紀錄認證的「幻彩詠香江」燈光音樂秀，雷射與燈光隨樂曲在夜空中舞動，從星光大道觀賞最為震撼。周邊匯聚香港文化中心、太空館、藝術館、半島酒店與廣東道名店街，文化與購物一應俱全；亦可搭乘百年「天星小輪」橫渡維港至中環，以平實票價飽覽海上風光。建議傍晚前往，散步、賞景並守候八點的燈光秀。",
+            "zh-CN": "尖沙咀位于九龙半岛南端，是香港最繁华的购物、文化与观光枢纽，临海的“星光大道”沿维多利亚港铺展，是欣赏港岛天际线最热门的海滨长廊。漫步其间，可见仿效好莱坞、镶嵌香港影坛巨星手印与名牌的地砖，以及李小龙、梅艳芳的纪念铜像，向香港璀璨的电影黄金年代致敬。每晚八点，维港两岸数十栋摩天大楼会联合上演吉尼斯世界纪录认证的“幻彩咏香江”灯光音乐秀，镭射与灯光随乐曲在夜空中舞动，从星光大道观赏最为震撼。周边汇聚香港文化中心、太空馆、艺术馆、半岛酒店与广东道名店街，文化与购物一应俱全；亦可搭乘百年“天星小轮”横渡维港至中环，以平实票价饱览海上风光。建议傍晚前往，散步、赏景并守候八点的灯光秀。",
+            "en": "Tsim Sha Tsui, at the southern tip of the Kowloon Peninsula, is Hong Kong's busiest shopping, cultural and tourism hub. Its waterfront Avenue of Stars stretches along Victoria Harbour as the most popular promenade for admiring the island skyline. Strolling here you'll find Hollywood-style paving inset with the handprints and plaques of Hong Kong film stars, plus memorial statues of Bruce Lee and Anita Mui honoring the golden age of Hong Kong cinema. Every night at 8pm dozens of skyscrapers on both shores stage the Guinness-record \"A Symphony of Lights\" show, lasers and lights dancing to music across the night sky — most spectacular from the Avenue of Stars. Nearby are the Cultural Centre, Space Museum, Museum of Art, the Peninsula Hotel and the boutiques of Canton Road, blending culture and shopping; you can also ride the century-old Star Ferry across the harbour to Central for a cheap, scenic crossing. Visit in the evening to walk, take in the views and catch the 8pm light show."
+          }
+        },
+        {
+          "localTitle": "天壇大佛 (寶蓮禪寺)",
+          "lat": 22.254,
+          "lon": 113.905,
+          "title": { "zh-TW": "昂坪天壇大佛", "zh-CN": "昂坪天坛大佛", "en": "Tian Tan Buddha" },
+          "desc": {
+            "zh-TW": "天壇大佛坐落於大嶼山昂坪高地，鄰近百年古剎寶蓮禪寺，於1993年落成，是一尊高約34公尺、重逾250噸的戶外青銅釋迦牟尼佛坐像，落成時為全球最大的同類佛像，莊嚴宏偉、俯瞰四方。大佛端坐於蓮花寶座之上，右手作「施無畏印」、左手結「與願印」，面容慈祥安詳，象徵為眾生消災賜福。參拜者需拾級而上268級石階方能抵達佛像基座，沿途俯瞰群山與雲海，更添朝聖的虔敬之感；基座內部設有展廳，珍藏佛舍利。前往昂坪最具特色的方式，是搭乘「昂坪360」纜車，約25分鐘的空中旅程橫越山海與機場，飽覽大嶼山壯麗風光。周邊還有寶蓮禪寺、心經簡林與昂坪市集等景點。建議安排一整日，從喧囂都市走進這片清幽的佛教淨土。",
+            "zh-CN": "天坛大佛坐落于大屿山昂坪高地，邻近百年古刹宝莲禅寺，于1993年落成，是一尊高约34米、重逾250吨的户外青铜释迦牟尼佛坐像，落成时为全球最大的同类佛像，庄严宏伟、俯瞰四方。大佛端坐于莲花宝座之上，右手作“施无畏印”、左手结“与愿印”，面容慈祥安详，象征为众生消灾赐福。参拜者需拾级而上268级石阶方能抵达佛像基座，沿途俯瞰群山与云海，更添朝圣的虔敬之感；基座内部设有展厅，珍藏佛舍利。前往昂坪最具特色的方式，是搭乘“昂坪360”缆车，约25分钟的空中旅程横越山海与机场，饱览大屿山壮丽风光。周边还有宝莲禅寺、心经简林与昂坪市集等景点。建议安排一整日，从喧嚣都市走进这片清幽的佛教净土。",
+            "en": "The Tian Tan Buddha sits on the Ngong Ping plateau of Lantau Island beside the century-old Po Lin Monastery. Completed in 1993, this outdoor bronze seated statue of Sakyamuni Buddha stands about 34 meters tall and weighs over 250 tonnes — the largest of its kind in the world when built — majestic and overlooking all directions. The Buddha sits on a lotus throne, its right hand in the abhaya (fear-not) mudra and left in the varada (wish-granting) mudra, with a serene, compassionate face symbolizing blessing and protection for all beings. Pilgrims climb 268 stone steps to reach the base, with views of mountains and seas of cloud along the way deepening the sense of reverence; inside the base, a hall enshrines a relic of the Buddha. The most scenic way to Ngong Ping is the Ngong Ping 360 cable car, a roughly 25-minute aerial journey across mountains, sea and the airport with magnificent Lantau views. Nearby are Po Lin Monastery, the Wisdom Path and Ngong Ping Village. Allow a full day to step from the bustling city into this tranquil Buddhist haven."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "添好運",
+          "lat": 22.305,
+          "lon": 114.17,
+          "cost": 80,
+          "title": { "zh-TW": "添好運點心", "zh-CN": "添好运点心", "en": "Tim Ho Wan" },
+          "desc": {
+            "zh-TW": "以平價米其林一星聞名全球的港式點心店，招牌酥皮焗叉燒包外酥內嫩、甜鹹交融，蝦餃、腸粉同樣出色，是體驗香港飲茶文化的人氣首選。",
+            "zh-CN": "以平价米其林一星闻名全球的港式点心店，招牌酥皮焗叉烧包外酥内嫩、甜咸交融，虾饺、肠粉同样出色，是体验香港饮茶文化的人气首选。",
+            "en": "World-famous as an affordable Michelin-starred dim sum house; its signature baked BBQ pork buns are crisp outside and tender within, with excellent har gow and rice rolls — a top pick for Hong Kong yum cha."
+          }
+        },
+        {
+          "localTitle": "麥奀雲吞麵世家",
+          "lat": 22.2825,
+          "lon": 114.1547,
+          "cost": 60,
+          "title": { "zh-TW": "麥奀記雲吞麵", "zh-CN": "麦奀记云吞面", "en": "Mak's Noodle" },
+          "desc": {
+            "zh-TW": "中環老字號雲吞麵名店，以彈牙的銀絲細麵、鮮甜的大地魚湯頭與飽滿的鮮蝦雲吞聞名，是香港傳統麵食的經典代表。",
+            "zh-CN": "中环老字号云吞面名店，以弹牙的银丝细面、鲜甜的大地鱼汤头与饱满的鲜虾云吞闻名，是香港传统面食的经典代表。",
+            "en": "A long-established Central wonton noodle house famed for springy thin noodles, a sweet dried-flounder broth and plump shrimp wontons — a classic of traditional Hong Kong noodles."
+          }
+        },
+        {
+          "localTitle": "蓮香樓",
+          "lat": 22.2845,
+          "lon": 114.1545,
+          "cost": 90,
+          "title": { "zh-TW": "蓮香樓懷舊茶樓", "zh-CN": "莲香楼怀旧茶楼", "en": "Lin Heung Tea House" },
+          "desc": {
+            "zh-TW": "百年歷史的傳統廣式茶樓，保留推車叫賣點心的懷舊風情，蓮蓉包、雞球大包與各式燒賣現點現取，氣氛喧鬧熱絡，充滿老香港情懷。",
+            "zh-CN": "百年历史的传统广式茶楼，保留推车叫卖点心的怀旧风情，莲蓉包、鸡球大包与各式烧卖现点现取，气氛喧闹热络，充满老香港情怀。",
+            "en": "A century-old traditional Cantonese tea house keeping the nostalgic push-cart dim sum tradition alive; lotus-paste buns, large chicken buns and assorted siu mai picked fresh from the carts amid a lively, bustling atmosphere full of old Hong Kong charm."
+          }
+        }
+      ]
+    },
+    {
+      "keywords": ["羅馬", "罗马", "rome", "roma", "義大利", "意大利", "italy"],
+      "images": [
+        "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600",
+        "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=600",
+        "https://images.unsplash.com/photo-1525874684015-58379d421a52?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "Colosseo",
+          "lat": 41.8902,
+          "lon": 12.4922,
+          "title": { "zh-TW": "羅馬競技場", "zh-CN": "罗马斗兽场", "en": "Colosseum" },
+          "desc": {
+            "zh-TW": "羅馬競技場（鬥獸場）是古羅馬帝國最宏偉的建築傑作與永恆象徵，於公元80年由維斯帕先與提圖斯皇帝建成，是史上規模最大的圓形競技場，可容納約五萬至八萬名觀眾。這座橢圓形巨構以拱券與多立克、愛奧尼、科林斯三式柱式層層堆疊，展現古羅馬登峰造極的工程與美學成就。當年此處上演角鬥士搏鬥、人獸對決與盛大公開表演，看台依社會階級分區而坐，地底下則是關押猛獸與角鬥士的迷宮般通道與升降裝置。歷經地震與盜採石材的損毀，競技場雖已殘缺，斑駁的殘垣斷壁反而更添歲月的滄桑與震撼，被列為世界文化遺產與「新世界七大奇蹟」之一。遊客可購票入內，沿看台與競技場走道想像當年的喧囂盛況。建議預先網路購票或參加導覽避開長龍，並搭配鄰近的羅馬廣場與帕拉提諾山一併遊覽。",
+            "zh-CN": "罗马斗兽场（竞技场）是古罗马帝国最宏伟的建筑杰作与永恒象征，于公元80年由维斯帕先与提图斯皇帝建成，是史上规模最大的圆形竞技场，可容纳约五万至八万名观众。这座椭圆形巨构以拱券与多立克、爱奥尼、科林斯三式柱式层层堆叠，展现古罗马登峰造极的工程与美学成就。当年此处上演角斗士搏斗、人兽对决与盛大公开表演，看台依社会阶级分区而坐，地底下则是关押猛兽与角斗士的迷宫般通道与升降装置。历经地震与盗采石材的损毁，斗兽场虽已残缺，斑驳的残垣断壁反而更添岁月的沧桑与震撼，被列为世界文化遗产与“新世界七大奇迹”之一。游客可购票入内，沿看台与竞技场走道想象当年的喧嚣盛况。建议预先网络购票或参加导览避开长龙，并搭配邻近的罗马广场与帕拉蒂诺山一并游览。",
+            "en": "The Colosseum is ancient Rome's grandest architectural masterpiece and an eternal symbol of the empire. Completed in AD 80 under emperors Vespasian and Titus, it is the largest amphitheater ever built, seating an estimated 50,000 to 80,000 spectators. This colossal ellipse, layered with arches and Doric, Ionic and Corinthian orders, embodies the pinnacle of Roman engineering and aesthetics. Here gladiatorial combats, beast hunts and grand public spectacles were staged; the tiered seating was divided by social class, while beneath the arena lay a labyrinth of passages and lifts holding beasts and gladiators. Damaged by earthquakes and stone-robbing over the centuries, the Colosseum is now partly ruined, yet its weathered walls only deepen its sense of history and awe; it is a World Heritage Site and one of the New Seven Wonders of the World. Visitors can enter to walk the tiers and arena corridors and imagine the roar of the crowds. Book online or take a guided tour to skip the queues, and combine it with the nearby Roman Forum and Palatine Hill."
+          }
+        },
+        {
+          "localTitle": "Fontana di Trevi",
+          "lat": 41.9009,
+          "lon": 12.4833,
+          "title": { "zh-TW": "特雷維噴泉許願池", "zh-CN": "特雷维喷泉许愿池", "en": "Trevi Fountain" },
+          "desc": {
+            "zh-TW": "特雷維噴泉（許願池）是羅馬最華麗壯觀的巴洛克噴泉，於1762年完工，高約26公尺、寬約49公尺，幾乎占滿整座小廣場的立面，是無數遊客心目中羅馬最浪漫的地標。噴泉以海神尼普頓駕馭海馬戰車破浪而出的群雕為主體，兩側分別象徵「豐饒」與「健康」的女神，搭配翻騰奔流的清泉與蔚藍水池，動感十足、氣勢磅礴，背景則是典雅的波利宮立面。最為人津津樂道的，是流傳已久的擲幣傳說：背對噴泉、以右手越過左肩投入一枚硬幣，便能確保重返羅馬；投兩枚將邂逅愛情、三枚則會步入婚姻。每日從池中撈起的錢幣高達數千歐元，並悉數捐作慈善之用。由於此處終日人潮鼎沸，建議於清晨或深夜造訪，較能從容欣賞噴泉之美並拍下無人打擾的經典畫面。",
+            "zh-CN": "特雷维喷泉（许愿池）是罗马最华丽壮观的巴洛克喷泉，于1762年完工，高约26米、宽约49米，几乎占满整座小广场的立面，是无数游客心目中罗马最浪漫的地标。喷泉以海神尼普顿驾驭海马战车破浪而出的群雕为主体，两侧分别象征“丰饶”与“健康”的女神，搭配翻腾奔流的清泉与蔚蓝水池，动感十足、气势磅礴，背景则是典雅的波利宫立面。最为人津津乐道的，是流传已久的掷币传说：背对喷泉、以右手越过左肩投入一枚硬币，便能确保重返罗马；投两枚将邂逅爱情、三枚则会步入婚姻。每日从池中捞起的钱币高达数千欧元，并悉数捐作慈善之用。由于此处终日人潮鼎沸，建议于清晨或深夜造访，较能从容欣赏喷泉之美并拍下无人打扰的经典画面。",
+            "en": "The Trevi Fountain is Rome's most ornate and spectacular Baroque fountain. Completed in 1762, it stands about 26 meters tall and 49 meters wide, filling almost the entire facade of its small piazza, and is in many travelers' eyes Rome's most romantic landmark. Its centerpiece is a sculptural group of the sea god Neptune riding a chariot of seahorses bursting through the waves, flanked by goddesses symbolizing Abundance and Health, set against the elegant facade of the Palazzo Poli and animated by rushing water and a brilliant blue pool. Most beloved is the coin-tossing legend: with your back to the fountain, toss a coin over your left shoulder with your right hand to ensure a return to Rome; two coins bring romance, three a marriage. Thousands of euros are collected from the pool daily and donated to charity. As it's thronged all day, visit at dawn or late at night to admire the fountain at ease and capture the classic crowd-free shot."
+          }
+        },
+        {
+          "localTitle": "Basilica di San Pietro",
+          "lat": 41.9022,
+          "lon": 12.4539,
+          "title": { "zh-TW": "梵蒂岡聖彼得大教堂", "zh-CN": "梵蒂冈圣彼得大教堂", "en": "St. Peter's Basilica" },
+          "desc": {
+            "zh-TW": "聖彼得大教堂坐落於梵蒂岡城國，是天主教會最神聖的中心與全球最大的教堂之一，建於相傳為耶穌門徒聖彼得殉道與安葬之地。教堂歷經逾百年興建，匯聚了文藝復興與巴洛克時期最頂尖的藝術巨匠——布拉曼特、米開朗基羅、拉斐爾與貝尼尼皆參與其中。由米開朗基羅設計、高逾136公尺的巨型穹頂氣勢恢宏，是羅馬天際線的標誌，遊客可登頂俯瞰聖彼得廣場與整座永恆之城。教堂內部金碧輝煌、聖像林立，珍藏著米開朗基羅25歲完成的曠世傑作《聖殤》（哀悼基督）大理石雕，以及貝尼尼設計的青銅華蓋與宗座祭壇，藝術價值無與倫比。教堂前由貝尼尼設計的橢圓形柱廊廣場，兩臂環抱寓意教會擁抱信眾，宏偉而莊嚴。入內免費但需通過安檢且有嚴格服裝規定（須遮蓋肩膀與膝蓋），建議清晨前往避開人潮。",
+            "zh-CN": "圣彼得大教堂坐落于梵蒂冈城国，是天主教会最神圣的中心与全球最大的教堂之一，建于相传为耶稣门徒圣彼得殉道与安葬之地。教堂历经逾百年兴建，汇聚了文艺复兴与巴洛克时期最顶尖的艺术巨匠——布拉曼特、米开朗基罗、拉斐尔与贝尼尼皆参与其中。由米开朗基罗设计、高逾136米的巨型穹顶气势恢宏，是罗马天际线的标志，游客可登顶俯瞰圣彼得广场与整座永恒之城。教堂内部金碧辉煌、圣像林立，珍藏着米开朗基罗25岁完成的旷世杰作《圣殇》（哀悼基督）大理石雕，以及贝尼尼设计的青铜华盖与宗座祭坛，艺术价值无与伦比。教堂前由贝尼尼设计的椭圆形柱廊广场，两臂环抱寓意教会拥抱信众，宏伟而庄严。入内免费但需通过安检且有严格服装规定（须遮盖肩膀与膝盖），建议清晨前往避开人潮。",
+            "en": "St. Peter's Basilica stands in Vatican City as the holiest center of the Catholic Church and one of the largest churches in the world, built over the site where the apostle St. Peter is traditionally believed to have been martyred and buried. Constructed over more than a century, it brought together the greatest masters of the Renaissance and Baroque — Bramante, Michelangelo, Raphael and Bernini all contributed. Michelangelo's towering dome, over 136 meters high, is a defining feature of Rome's skyline, and visitors can climb to its top for views over St. Peter's Square and the Eternal City. The opulent, statue-filled interior holds Michelangelo's sublime Pietà, carved when he was 25, and Bernini's bronze baldachin over the papal altar — art of unrivaled value. The elliptical colonnaded square before it, also by Bernini, embraces visitors with two great arms symbolizing the Church welcoming the faithful, grand and solemn. Entry is free but subject to security checks and a strict dress code (shoulders and knees covered); visit early to avoid the crowds."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "Roscioli",
+          "lat": 41.8945,
+          "lon": 12.472,
+          "cost": 30,
+          "title": { "zh-TW": "Roscioli 義式餐館", "zh-CN": "Roscioli 意式餐馆", "en": "Roscioli" },
+          "desc": {
+            "zh-TW": "結合熟食店、餐廳與酒窖的羅馬名店，招牌培根蛋黃義大利麵與起司胡椒麵堪稱經典，食材講究、風味濃郁，常需提前訂位。",
+            "zh-CN": "结合熟食店、餐厅与酒窖的罗马名店，招牌培根蛋黄意大利面与起司胡椒面堪称经典，食材讲究、风味浓郁，常需提前订位。",
+            "en": "A famed Roman deli-restaurant-wine-cellar whose carbonara and cacio e pepe are benchmark classics, made with top ingredients and bold flavor — reservations recommended."
+          }
+        },
+        {
+          "localTitle": "Da Enzo al 29",
+          "lat": 41.889,
+          "lon": 12.472,
+          "cost": 25,
+          "title": { "zh-TW": "Da Enzo 家常羅馬菜", "zh-CN": "Da Enzo 家常罗马菜", "en": "Da Enzo al 29" },
+          "desc": {
+            "zh-TW": "特拉斯提弗列區的人氣家庭小館，以道地傳統羅馬菜聞名，炸節瓜花、培根蛋麵與烤羊排深受好評，氣氛溫馨、份量實在，常見排隊。",
+            "zh-CN": "特拉斯提弗列区的人气家庭小馆，以道地传统罗马菜闻名，炸节瓜花、培根蛋面与烤羊排深受好评，气氛温馨、份量实在，常见排队。",
+            "en": "A beloved family trattoria in Trastevere known for authentic traditional Roman dishes — fried zucchini flowers, carbonara and roast lamb — with a cozy feel, generous portions and frequent queues."
+          }
+        },
+        {
+          "localTitle": "Pizzarium Bonci",
+          "lat": 41.907,
+          "lon": 12.447,
+          "cost": 12,
+          "title": { "zh-TW": "Pizzarium 切片披薩", "zh-CN": "Pizzarium 切片披萨", "en": "Pizzarium Bonci" },
+          "desc": {
+            "zh-TW": "由「披薩界米開朗基羅」邦奇主理的羅馬式方形切片披薩名店，餅皮酥脆有勁、配料創意豐富，按重量計價、外帶站著吃，是平價美味之選。",
+            "zh-CN": "由“披萨界米开朗基罗”邦奇主理的罗马式方形切片披萨名店，饼皮酥脆有劲、配料创意丰富，按重量计价、外带站着吃，是平价美味之选。",
+            "en": "Run by Gabriele Bonci, the \"Michelangelo of pizza,\" this famed Roman pizza-by-the-slice spot serves crisp, springy focaccia-style bases with inventive toppings, sold by weight for a tasty, affordable standing bite."
+          }
+        }
+      ]
     }
   ]
 }
