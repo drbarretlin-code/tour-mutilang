@@ -545,6 +545,8 @@ export const aiService = {
         airportLink: 'Klook 機場接送預訂',
         airportNotes: '請備妥入境文件與護照。',
         airportHours: '24小時開放',
+        checkInHotel: '前往飯店辦理入住',
+        checkInHotelDesc: '抵達機場後，先搭乘交通工具前往飯店辦理入住手續並寄放行李，安頓妥當後再展開當日行程，免去拖著行李到處走的不便。',
         departHotel: '從飯店出發',
         departHotelDesc: '在飯店享用完豐盛的早餐後，整理行囊準備出發。今日行程較為豐富，建議攜帶足夠的飲用水與防曬用品。',
         hotelName: '精選特色飯店',
@@ -589,6 +591,8 @@ export const aiService = {
         airportLink: 'Klook 机场接送预订',
         airportNotes: '请备妥入境文件与护照。',
         airportHours: '24小时开放',
+        checkInHotel: '前往酒店办理入住',
+        checkInHotelDesc: '抵达机场后，先搭乘交通工具前往酒店办理入住手续并寄存行李，安顿妥当后再展开当日行程，免去拖着行李到处走的不便。',
         departHotel: '从酒店出发',
         departHotelDesc: '在酒店享用完丰盛的早餐后，整理行囊准备出发。今日行程较为丰富，建议携带足够的饮用水与防晒用品。',
         hotelName: '精选特色酒店',
@@ -633,6 +637,8 @@ export const aiService = {
         airportLink: 'Klook Airport Transfer Booking',
         airportNotes: 'Please prepare entry documents and passport.',
         airportHours: '24 Hours Open',
+        checkInHotel: 'Check in at Hotel',
+        checkInHotelDesc: 'After arriving at the airport, head straight to the hotel to check in and drop off your luggage before starting the day\\\'s itinerary, so you won\\\'t need to carry your bags around.',
         departHotel: 'Depart from Hotel',
         departHotelDesc: 'After enjoying a hearty breakfast at the hotel, organize your belongings and prepare to depart. Today\\\'s itinerary is rich, so carrying enough drinking water and sun protection is advised.',
         hotelName: 'Selected Premium Hotel',
@@ -860,11 +866,15 @@ export const aiService = {
       return { startStr, endStr };
     };
     // 找出涵蓋指定日期的住宿名稱（支援日期區間），作為當日 hotel loop 的起訖點。
-    const resolveHotelForDate = (dateStr: string): string | null => {
+    // excludeCheckoutDay：若該日恰為住宿區間的最後一天（退房日，且非單日入住），則不視為「當晚住宿」，
+    // 因現實邏輯中退房當日不會續住，當晚應改採下一段住宿（由呼叫端再查詢次日日期取得）。
+    const resolveHotelForDate = (dateStr: string, excludeCheckoutDay = false): string | null => {
       for (const loc of userSpecificLocations) {
         if (!isHotelItem(loc.value)) continue;
         const r = parseRange(loc.preferredDate);
-        if (r && dateStr >= r.startStr && dateStr <= r.endStr) return loc.value;
+        if (!r) continue;
+        if (excludeCheckoutDay && dateStr === r.endStr && r.endStr !== r.startStr) continue;
+        if (dateStr >= r.startStr && dateStr <= r.endStr) return loc.value;
       }
       return null;
     };
@@ -883,8 +893,16 @@ export const aiService = {
       const afternoonIdx2 = templates.titles.length ? (cursor + 1) % templates.titles.length : 0;
       destCursor[currentDest.name] = cursor + 2;
 
-      // 當日住宿（依日期區間解析），作為每日起訖點；找不到則退回通用名稱。
+      // 當日起點住宿（昨晚入住、今早從此處出發；依日期區間解析），找不到則退回通用名稱。
       const dayHotelName = resolveHotelForDate(dateStr) || strings.hotelName;
+
+      // 當晚住宿（今晚實際入住、回程終點；退房當日不續住，改查次日所屬住宿）。
+      let nightHotelName = strings.hotelName;
+      if (i < dayCount - 1) {
+        const nextDayDate = new Date(start.getTime() + (i + 1) * 86400000);
+        const nextDateStr = `${nextDayDate.getFullYear()}-${String(nextDayDate.getMonth() + 1).padStart(2, '0')}-${String(nextDayDate.getDate()).padStart(2, '0')}`;
+        nightHotelName = resolveHotelForDate(nextDateStr) || resolveHotelForDate(dateStr, true) || strings.hotelName;
+      }
 
       // Activities building
       const activities: Activity[] = [];
@@ -920,6 +938,31 @@ export const aiService = {
           photoUrl: 'local-asset://airport_map',
           cost: { amount: 0, currency },
           openingHours: strings.airportHours
+        });
+
+        // 1b. 抵達後直接前往飯店辦理入住（行李寄放/入住），符合「先安頓住宿再展開行程」之現實邏輯。
+        activities.push({
+          id: `act-${i}-checkin`,
+          order: 1,
+          startTime: '10:45',
+          endTime: '11:15',
+          title: `${strings.checkInHotel}（${nightHotelName}）`,
+          localTitle: nightHotelName,
+          type: 'hotel',
+          description: strings.checkInHotelDesc,
+          location: {
+            name: nightHotelName,
+            address: `${currentDest.name}${strings.hotelAddress}`,
+            latitude: currentDest.latitude || 0,
+            longitude: currentDest.longitude || 0
+          },
+          duration: 30,
+          transport: { mode: 'charter', duration: 30, distance: 15000, description: strings.hotelTransportDesc },
+          links: [{ label: strings.hotelLink, url: 'https://www.klook.com/', type: 'booking' }],
+          notes: '',
+          isMustVisit: false,
+          cost: { amount: 0, currency },
+          openingHours: '24小時開放'
         });
       } else {
         activities.push({
@@ -1115,17 +1158,24 @@ export const aiService = {
           openingHours: strings.airportHours
         });
       } else {
+        // 回到飯店的時間依當日最後一項活動的結束時間順延，避免與 CLAUDE.md 之每日 08:00-21:00
+        // 時間限制及「合理間隔」規範脫鉤；超出範圍將由 clampFallbackItineraryTimes 統一校正。
+        const lastAct = activities[activities.length - 1];
+        const returnTransportDuration = lastAct?.transport?.duration || 15;
+        const returnStartTime = lastAct ? addMinutesToTime(lastAct.endTime, returnTransportDuration) : '18:00';
+        const returnEndTime = addMinutesToTime(returnStartTime, 30);
+
         activities.push({
           id: `act-${i}-end`,
-          order: 4,
-          startTime: '18:00',
-          endTime: '18:30',
-          title: `${strings.returnHotel}（${dayHotelName}）`,
-          localTitle: dayHotelName,
+          order: activities.length,
+          startTime: returnStartTime,
+          endTime: returnEndTime,
+          title: `${strings.returnHotel}（${nightHotelName}）`,
+          localTitle: nightHotelName,
           type: 'hotel',
           description: strings.returnHotelDesc,
           location: {
-            name: dayHotelName,
+            name: nightHotelName,
             address: `${currentDest.name}${strings.hotelAddress}`,
             latitude: currentDest.latitude || 0,
             longitude: currentDest.longitude || 0
@@ -1224,7 +1274,7 @@ export const aiService = {
         walkingDistance: 5400,
         activities: clampedActivities,
         hotel: {
-          name: strings.hotelName,
+          name: i === dayCount - 1 ? dayHotelName : nightHotelName,
           address: `${currentDest.name}${strings.hotelAddress}`,
           ...(survey?.customBookingUrl ? { bookingUrl: survey.customBookingUrl } : {})
         },
