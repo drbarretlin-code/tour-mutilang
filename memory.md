@@ -134,3 +134,10 @@
 - 當系統透過 OpenTripMap (OTM) 線上 API 抓取 POI，且本地離線 `destinations.json` 查無相符景點時，會自動調用此規則式翻譯器進行美化轉換。
 - 針對英文名稱中的常用字根（如 `Museum of Art` 轉為 `市立美術館 (藝術美學巡禮)`、`Cathedral` 轉為 `大教堂 (莊嚴歐風聖地)`、`Castle` 轉為 `歷史古城 (壯麗城堡遺跡)`）以及熱門地標名進行「部落客風格」潤飾，並附加 UI 語系的中文地標名稱（如 `Kyoto Imperial Palace` 翻譯成 `京都御所 古典宮殿 (皇家歷史漫步)`）。
 - 在 UI 介面（`TimelineView.tsx`）上維持 `景點美化名稱 [原名/英文名]` 的附加形式，完全避免了生硬的字面音譯，符合觀光指南風格。
+
+### 叫車平台與終點交通指引不一致 Bug 修正
+- **問題分析**：截圖中日本行程下方按鈕顯示為日本專屬叫車應用「GO App / Uber App」，但上方交通指引文字與住宿接駁指南卻寫死泰國專屬的「Grab / Bolt」與「Bolt 或 Grab」。此原因為多國語系 json 檔（`en`, `es`, `ja`, `ko`, `ms`, `pt`, `th`, `vi`, `zh-CN`, `zh-TW`）中 `transportAdvice` 與 `shuttleGuideDesc` 欄位將平台名稱硬編碼。
+- **解決方案**：
+  - 將 `TimelineView.tsx` 中 `hailingInfo` 的定義提升至整個 `isLast` 區塊頂部（讓 JSX 範疇外與 IIFE 範疇皆能存取）。
+  - 將多語系呼叫 `t('itinerary.timelineView.endOfDay.transportAdvice')` 與 `t('itinerary.timelineView.endOfDay.shuttleGuideDesc')` 修改為動態傳入變數 `{ platforms: hailingInfo.transitLabel }`。
+  - 編寫自動化 Python 腳本對 10 個多國語系 JSON 檔案進行批次修改，將硬寫死「Grab / Bolt」或「Bolt 或 Grab」的句子轉化為動態佔位符 `%{platforms}`，使終點交通指引與下方按鈕叫車平台完全吻合。

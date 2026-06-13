@@ -354,9 +354,9 @@
       },
       "endOfDay": {
         "title": "🌙 结束今日行程：准备返回住宿地",
-        "transportAdvice": "建议交通方式：搭乘 Grab / Bolt，这段车程大约需要 15 分钟。",
+        "transportAdvice": "建议交通方式：搭乘 %{platforms}，这段车程大约需要 15 分钟。",
         "shuttleGuideTitle": "🚗 住宿接驳指南：",
-        "shuttleGuideDesc": "饭店若无接驳系统，请使用 Bolt 或 Grab 叫车。前往预设住宿地（%{hotelName}）。",
+        "shuttleGuideDesc": "饭店若无接驳系统，请使用 %{platforms} 叫车。前往预设住宿地（%{hotelName}）。",
         "yourHotel": "您的饭店",
         "tonightStay": "今晚住宿：%{hotelName}",
         "airportMapHint": "机场入出境大厅平面图参考",

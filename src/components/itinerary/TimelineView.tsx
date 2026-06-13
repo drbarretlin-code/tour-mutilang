@@ -572,6 +572,7 @@ export function TimelineView({
 
         // Special render for the very last item returning to hotel/airport
         if (isLast) {
+          const hailingInfo = getRideHailingInfo(day.region, isEn);
           return (
             <View key={act.id} style={styles.timelineRow}>
               <View style={styles.leftColumn}>
@@ -590,14 +591,14 @@ export function TimelineView({
                   
                   <View style={[styles.endContentBox, { borderColor: '#E9D5FF', backgroundColor: '#F5F3FF' }]}>
                     <Text style={[typography.labelSmall, { color: '#6B21A8', marginBottom: 6 }]}>
-                      {t('itinerary.timelineView.endOfDay.transportAdvice')}
+                      {t('itinerary.timelineView.endOfDay.transportAdvice', { platforms: hailingInfo.transitLabel })}
                     </Text>
                     <View style={[styles.transportGuideBox, { backgroundColor: '#FFFFFF', borderColor: '#DDD6FE' }]}>
                       <Text style={[typography.labelSmall, { color: '#581C87', fontWeight: '700', marginBottom: 4 }]}>
                         {t('itinerary.timelineView.endOfDay.shuttleGuideTitle')}
                       </Text>
                       <Text style={[typography.caption, { color: '#4C1D95' }]}>
-                        {t('itinerary.timelineView.endOfDay.shuttleGuideDesc', { hotelName: act.location?.name || t('itinerary.timelineView.endOfDay.yourHotel') })}
+                        {t('itinerary.timelineView.endOfDay.shuttleGuideDesc', { platforms: hailingInfo.transitLabel, hotelName: act.location?.name || t('itinerary.timelineView.endOfDay.yourHotel') })}
                       </Text>
                     </View>
                     <Text style={[typography.caption, { color: '#6B21A8', marginTop: 8 }]}>
@@ -607,7 +608,6 @@ export function TimelineView({
                     {(() => {
                       const isArrival = day.dayNumber === 1;
                       const airportInfo = getAirportData(day.region, act.location?.name || '', act.title || '', isArrival, isEn);
-                      const hailingInfo = getRideHailingInfo(day.region, isEn);
                       const isAirport = act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport');
                       
                       return (

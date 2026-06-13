@@ -340,9 +340,9 @@
       },
       "endOfDay": {
         "title": "🌙 Kết thúc hành trình hôm nay: chuẩn bị quay về chỗ ở",
-        "transportAdvice": "Phương tiện di chuyển đề xuất: Đi Grab/Bolt, hành trình mất khoảng 15 phút.",
+        "transportAdvice": "Phương tiện di chuyển đề xuất: Đi %{platforms}, hành trình mất khoảng 15 phút.",
         "shuttleGuideTitle": "🚗 Hướng dẫn chuyển chỗ ở:",
-        "shuttleGuideDesc": "Nếu khách sạn không có hệ thống đưa đón, vui lòng sử dụng Bolt hoặc Grab để gọi taxi. Đến chỗ ở mặc định (%{hotelName}).",
+        "shuttleGuideDesc": "Nếu khách sạn không có hệ thống đưa đón, vui lòng sử dụng %{platforms} để gọi taxi. Đến chỗ ở mặc định (%{hotelName}).",
         "yourHotel": "khách sạn của bạn",
         "tonightStay": "Chỗ ở tối nay: %{hotelName}",
         "airportMapHint": "Tham khảo sơ đồ mặt bằng sảnh đến và đi của sân bay",

@@ -340,9 +340,9 @@
       },
       "endOfDay": {
         "title": "🌙 今日の旅程の終了: 宿泊施設に戻る準備をします",
-        "transportAdvice": "推奨される交通機関: Grab/Bolt をご利用ください。所要時間は約 15 分です。",
+        "transportAdvice": "推奨される交通機関: %{platforms} をご利用ください。所要時間は約 15 分です。",
         "shuttleGuideTitle": "🚗 宿泊施設の移動ガイド:",
-        "shuttleGuideDesc": "ホテルにシャトルシステムがない場合は、Bolt または Grab を使用してタクシーを呼んでください。デフォルトの宿泊施設 (%{hotelName}) に移動します。",
+        "shuttleGuideDesc": "ホテルにシャトルシステムがない場合は、%{platforms} を使用してタクシーを呼んでください。デフォルトの宿泊施設 (%{hotelName}) に移動します。",
         "yourHotel": "あなたのホテル",
         "tonightStay": "今夜の宿泊施設: %{hotelName}",
         "airportMapHint": "空港発着ホール平面図参考",

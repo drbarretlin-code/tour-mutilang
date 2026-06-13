@@ -354,9 +354,9 @@
       },
       "endOfDay": {
         "title": "🌙 End of Day: Heading Back",
-        "transportAdvice": "Suggested Transport: Take Grab / Bolt, this ride takes about 15 minutes.",
+        "transportAdvice": "Suggested Transport: Take %{platforms}, this ride takes about 15 minutes.",
         "shuttleGuideTitle": "🚗 Hotel Transfer Guide:",
-        "shuttleGuideDesc": "If the hotel has no shuttle service, please use Bolt or Grab. Head to your accommodation (%{hotelName}).",
+        "shuttleGuideDesc": "If the hotel has no shuttle service, please use %{platforms} to hail a ride. Head to your accommodation (%{hotelName}).",
         "yourHotel": "your hotel",
         "tonightStay": "Tonight's stay: %{hotelName}",
         "airportMapHint": "Airport Terminal Map Reference",

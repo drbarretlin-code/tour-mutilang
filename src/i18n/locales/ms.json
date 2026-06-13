@@ -340,9 +340,9 @@
       },
       "endOfDay": {
         "title": "🌙 Tamat jadual perjalanan hari ini: bersedia untuk kembali ke penginapan anda",
-        "transportAdvice": "Pengangkutan yang disyorkan: Ambil Grab/Bolt, perjalanan mengambil masa lebih kurang 15 minit.",
+        "transportAdvice": "Pengangkutan yang disyorkan: Ambil %{platforms}, perjalanan mengambil masa lebih kurang 15 minit.",
         "shuttleGuideTitle": "🚗 Panduan pemindahan penginapan:",
-        "shuttleGuideDesc": "Jika hotel tidak mempunyai sistem pengangkutan ulang-alik, sila gunakan Bolt atau Grab untuk menghubungi teksi. Pergi ke penginapan lalai (%{hotelName}).",
+        "shuttleGuideDesc": "Jika hotel tidak mempunyai sistem pengangkutan ulang-alik, sila gunakan %{platforms} untuk menghubungi teksi. Pergi ke penginapan lalai (%{hotelName}).",
         "yourHotel": "hotel anda",
         "tonightStay": "Penginapan malam ini: %{hotelName}",
         "airportMapHint": "Rujukan pelan lantai dewan ketibaan dan pelepasan lapangan terbang",

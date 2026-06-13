@@ -340,9 +340,9 @@
       },
       "endOfDay": {
         "title": "🌙 Fin del itinerario de hoy: prepárate para regresar a tu alojamiento",
-        "transportAdvice": "Transporte recomendado: Tomar Grab/Bolt, el trayecto dura aproximadamente 15 minutos.",
+        "transportAdvice": "Transporte recomendado: Tomar %{platforms}, el trayecto dura aproximadamente 15 minutos.",
         "shuttleGuideTitle": "🚗 Guía de traslado de alojamiento:",
-        "shuttleGuideDesc": "Si el hotel no dispone de un sistema de transporte, utilice Bolt o Grab para llamar a un taxi. Vaya al alojamiento predeterminado (%{hotelName}).",
+        "shuttleGuideDesc": "Si el hotel no dispone de un sistema de transporte, utilice %{platforms} para llamar a un taxi. Vaya al alojamiento predeterminado (%{hotelName}).",
         "yourHotel": "tu hotel",
         "tonightStay": "Alojamiento esta noche: %{hotelName}",
         "airportMapHint": "Referencia del plano de planta de la sala de llegadas y salidas del aeropuerto",

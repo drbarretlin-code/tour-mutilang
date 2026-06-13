@@ -340,9 +340,9 @@
       },
       "endOfDay": {
         "title": "🌙 오늘 일정 마무리: 숙소로 돌아갈 준비",
-        "transportAdvice": "추천 교통수단: 그랩/볼트(Grab/Bolt)를 타고 약 15분 정도 소요됩니다.",
+        "transportAdvice": "추천 교통수단: %{platforms}를 타고 약 15분 정도 소요됩니다.",
         "shuttleGuideTitle": "🚗 숙소 이동 안내:",
-        "shuttleGuideDesc": "호텔에 셔틀 시스템이 없는 경우 Bolt 또는 Grab을 이용해 택시를 부르시기 바랍니다. 기본 숙소(%{hotelName})로 이동합니다.",
+        "shuttleGuideDesc": "호텔에 셔틀 시스템이 없는 경우 %{platforms}를 이용해 택시를 부르시기 바랍니다. 기본 숙소(%{hotelName})로 이동합니다.",
         "yourHotel": "당신의 호텔",
         "tonightStay": "오늘 밤 숙박: %{hotelName}",
         "airportMapHint": "공항 출국장 평면도 참고",
