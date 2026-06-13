@@ -20,12 +20,6 @@
     "greetingMorning": "早安",
     "greetingAfternoon": "午安",
     "greetingEvening": "晚安",
-    "apiKeySetupTitle": "設定您的 AI 引擎",
-    "apiKeySetupDesc": "為了提供個人化的專屬行程規劃，系統需要存取 Gemini AI。請輸入您的 API Key 來啟用智慧引擎。",
-    "apiKeyPlaceholder": "貼上您的 Gemini API Key (AIzaSy...)",
-    "apiKeySaveLocally": "儲存於本機裝置",
-    "apiKeySaveLocallyDesc": "若取消勾選，關閉網頁後將自動清除，不留存於記憶體。",
-    "getFreeApiKey": "👉 點此快速申請免費 Google Gemini API Key",
     "saveAndStart": "儲存並開始規劃",
     "myItineraries": "我的旅遊計畫"
   },
@@ -600,13 +594,6 @@
           "2": "警察局在哪？"
         }
       }
-    },
-    "apiKeyModal": {
-      "title": "解鎖 AI 智慧引擎",
-      "description": "為了提供您個人化的行程規劃且無須訂閱費用，本應用程式採用 BYOK 架構。請免費申請 Google Gemini API 金鑰並貼於下方。您的金鑰將被安全地加密儲存於您的設備中。",
-      "linkText": "前往 Google AI Studio 申請免費金鑰",
-      "cancelBtn": "取消 (使用離線範本)",
-      "saveBtn": "儲存並生成"
     },
     "activity": {
       "startTime": "開始時間",

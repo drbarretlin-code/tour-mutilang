@@ -1,0 +1,18 @@
+{
+  "currencyCode": "EUR",
+  "currencyName": "歐元",
+  "emergencyContacts": [
+    { "title": "報警/消防/救護車", "subTitle": "24小時免費服務", "phone": "112" },
+    { "title": "醫療急救", "subTitle": "24小時服務", "phone": "118" }
+  ],
+  "usefulPhrases": [
+    { "local": "Ciao", "zh": "你好", "isHighlight": false },
+    { "local": "Grazie", "zh": "謝謝", "isHighlight": false },
+    { "local": "Quanto costa?", "zh": "這多少錢？", "isHighlight": true }
+  ],
+  "guideItems": [
+    { "item": "Espresso 咖啡", "priceRange": "1 - 2 EUR" },
+    { "item": "披薩 (一片)", "priceRange": "3 - 6 EUR" },
+    { "item": "市區大眾運輸單程票", "priceRange": "1.5 EUR" }
+  ]
+}

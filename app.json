@@ -29,7 +29,6 @@
     "plugins": [
       "expo-router",
       "expo-localization",
-      "expo-secure-store",
       "expo-splash-screen",
       "expo-sharing",
       "expo-font"

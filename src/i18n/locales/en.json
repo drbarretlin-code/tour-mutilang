@@ -20,12 +20,6 @@
     "greetingMorning": "Good Morning",
     "greetingAfternoon": "Good Afternoon",
     "greetingEvening": "Good Evening",
-    "apiKeySetupTitle": "Setup Your AI Engine",
-    "apiKeySetupDesc": "To provide personalized itinerary planning, the system requires access to Gemini AI. Please enter your API Key to enable the smart engine.",
-    "apiKeyPlaceholder": "Paste your Gemini API Key (AIzaSy...)",
-    "apiKeySaveLocally": "Save to local device",
-    "apiKeySaveLocallyDesc": "If unchecked, it will be cleared upon exit and not saved in memory.",
-    "getFreeApiKey": "👉 Click here to get a free Google Gemini API Key",
     "saveAndStart": "Save & Start Planning",
     "myItineraries": "My Itineraries"
   },
@@ -600,13 +594,6 @@
           "2": "Where is the police station?"
         }
       }
-    },
-    "apiKeyModal": {
-      "title": "Unlock AI Engine",
-      "description": "To provide personalized itinerary planning without subscription fees, this app uses a BYOK (Bring Your Own Key) architecture. Please get a free Google Gemini API key and paste it below. Your key will be securely encrypted and stored on your device.",
-      "linkText": "Get a free key from Google AI Studio",
-      "cancelBtn": "Cancel (Use offline template)",
-      "saveBtn": "Save & Generate"
     },
     "activity": {
       "startTime": "Start Time",

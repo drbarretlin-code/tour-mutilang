@@ -1,18 +1,9 @@
 import { TripSurvey } from '../types/survey';
-import { Itinerary, ItineraryDay, Activity } from '../types/itinerary';
-import { PACEngine } from "./pac";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { settingsService } from './settings';
-import { verifyItineraryLinks, verifyUrlRAG } from '../utils/linkVerifier';
+import { Itinerary, ItineraryDay, Activity, TransportInfo } from '../types/itinerary';
 import i18n from '../i18n';
 import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
-import { TOUR_PLAN_RULES } from '../constants/tourRules';
 import { fetchDestinationPOIs, POI, PoiCategory } from './poi';
-
-// 注意：gemini-1.5-flash 系列已逐步退役，舊型號會回傳 404 並導致靜默掉到離線範本。
-// 統一改用目前 GA 的 gemini-2.0-flash（支援 system_instruction 與 JSON 輸出）。
-const GEMINI_MODEL = 'gemini-2.0-flash';
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=`;
+import { detectGuideCountryKey, isCoveredGuideCountry, getDownloadableGuideCountry } from './guidePacks';
 
 // ─── POI → 行程範本 轉換（規則式引擎使用） ───
 
@@ -83,6 +74,52 @@ function buildDestTemplateFromPOIs(pois: POI[], destName: string, locale: string
     }
   }
   return tpl;
+}
+
+/** 由貼入的單行文字（網址或景點名稱）推估出標題與原始網址，供批次分析使用 */
+function extractTitleFromLine(line: string): { title: string; url: string } {
+  const trimmed = line.trim();
+  if (!/^https?:\/\//i.test(trimmed)) {
+    return { title: trimmed, url: '' };
+  }
+  try {
+    const u = new URL(trimmed);
+    const segments = u.pathname.split('/').filter(Boolean);
+
+    // Google Maps: /maps/place/<NAME>/...
+    const placeIdx = segments.indexOf('place');
+    if (placeIdx !== -1 && segments[placeIdx + 1]) {
+      const name = decodeURIComponent(segments[placeIdx + 1]).replace(/\+/g, ' ');
+      return { title: name, url: trimmed };
+    }
+
+    // 一般網址：取最後一個有意義的路徑片段，去除前綴數字編號與分隔符號
+    let last = segments[segments.length - 1] || u.hostname;
+    last = decodeURIComponent(last).replace(/^\d+-/, '').replace(/[-_+]/g, ' ').trim();
+    if (!last) last = u.hostname;
+    return { title: last, url: trimmed };
+  } catch {
+    return { title: trimmed, url: trimmed };
+  }
+}
+
+/** 依關鍵字規則推估景點分類，供批次分析使用 */
+const BATCH_CATEGORY_KEYWORDS: { category: string; keywords: string[] }[] = [
+  { category: 'hotel', keywords: ['hotel', 'resort', 'inn', '飯店', '酒店', '民宿', '旅館'] },
+  { category: 'food', keywords: ['restaurant', 'food', 'noodle', 'cafe', 'coffee', 'bbq', 'buffet', '咖啡', '餐廳', '小吃', '美食', '料理', '燒肉'] },
+  { category: 'shopping', keywords: ['mall', 'market', 'shopping', 'outlet', '市場', '商場', '夜市', '百貨'] },
+  { category: 'transport', keywords: ['airport', 'station', 'transfer', 'taxi', '機場', '車站', '車程'] },
+  { category: 'spa', keywords: ['spa', 'massage', 'onsen', '按摩', '溫泉', 'spa'] },
+  { category: 'entertainment', keywords: ['museum', 'zoo', 'aquarium', 'theme park', '樂園', '博物館', '動物園', '水族館', '美術館'] },
+];
+
+function guessCategoryFromText(text: string): string {
+  const lower = text.toLowerCase();
+  for (const { category, keywords } of BATCH_CATEGORY_KEYWORDS) {
+    if (keywords.some(k => lower.includes(k))) return category;
+  }
+  if (lower.includes('klook') || lower.includes('kkday')) return 'activity';
+  return 'attraction';
 }
 
 function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
@@ -289,14 +326,12 @@ function getFallbackGuideInfo(country: string): any {
   const locale = i18n.locale || 'zh-TW';
   const isEn = !locale.startsWith('zh');
 
-  const normalized = safeCountry.toLowerCase();
-  
-  const isJapan = normalized.includes('日') || normalized.includes('japan') || normalized.includes('tokyo') || normalized.includes('東京') || normalized.includes('大阪') || normalized.includes('京都');
-  const isKorea = normalized.includes('韓') || normalized.includes('korea') || normalized.includes('seoul') || normalized.includes('首爾') || normalized.includes('釜山');
-  const isThailand = normalized.includes('泰') || normalized.includes('thai') || normalized.includes('bangkok') || normalized.includes('曼谷') || normalized.includes('清邁') || normalized.includes('芭達雅');
-  const isVietnam = normalized.includes('越') || normalized.includes('viet') || normalized.includes('hanoi') || normalized.includes('河內') || normalized.includes('胡志明');
-  const isTaiwan = normalized.includes('台') || normalized.includes('臺') || normalized.includes('taiwan') || normalized.includes('taipei') || normalized.includes('台北');
-  const isSingapore = normalized.includes('新') || normalized.includes('singapore') || normalized.includes('新加坡');
+  const key = detectGuideCountryKey(safeCountry);
+  const isJapan = key === 'japan';
+  const isKorea = key === 'korea';
+  const isVietnam = key === 'vietnam';
+  const isTaiwan = key === 'taiwan';
+  const isSingapore = key === 'singapore';
 
   if (isJapan) {
     return {
@@ -437,7 +472,7 @@ export const aiService = {
 
   /**
    * 主要行程生成入口：採「規則式引擎 + 免費 POI（OpenTripMap）」，完全不依賴 LLM／無配額問題。
-   * 排程完全依 tour_plan 規則（航班時間、飯店日期區間、每日起訖閉環、興趣、步調）由本程式控制。
+   * 排程完全依 CLAUDE.md 規則（航班時間、飯店日期區間、每日起訖閉環、興趣、步調）由本程式控制。
    */
   async generateItinerary(survey: TripSurvey): Promise<Itinerary> {
     return this.generateRuleBasedItinerary(survey);
@@ -480,381 +515,6 @@ export const aiService = {
     // 此為正式生成方式（非 AI 失敗備援），故不標記 generatedByFallback。
     healItineraryCoordinates(itinerary, alignedSurvey);
     return itinerary;
-  },
-
-  /**
-   * （保留）以 Gemini LLM 生成行程。目前預設不啟用；如需切換可改由 generateItinerary 呼叫此方法。
-   * @param survey The complete survey data gathered from the user
-   */
-  async generateItineraryWithGemini(survey: TripSurvey): Promise<Itinerary> {
-    // 強制將 survey.locale 對齊至當前 App 實體運作中的語系設定，避免語系未同步造成的英文行程
-    const appLocale = i18n.locale || survey.locale || 'zh-TW';
-    const alignedSurvey = { ...survey, locale: appLocale };
-
-    // 捕捉最後一次 AI 失敗原因，供備援行程在 UI 上明確顯示，終結「靜默掉到範本」的盲點。
-    let lastAiError: string | null = null;
-
-    const fetchItineraryAction = async (): Promise<Itinerary> => {
-      const apiKey = await settingsService.getApiKey();
-      if (!apiKey) {
-        throw new Error('MISSING_API_KEY');
-      }
-
-      // --- 預先計算每日日期對照表，並比對「特定地點需求」中指定的日期 ---
-      const tripStart = new Date(alignedSurvey?.dates?.startDate || Date.now());
-      const tripEnd = new Date(alignedSurvey?.dates?.endDate || Date.now() + 86400000 * 3);
-      const tripDayCount = Math.max(1, Math.ceil((tripEnd.getTime() - tripStart.getTime()) / (1000 * 60 * 60 * 24)) + 1);
-      const dayDateMap: { dayNumber: number; date: string }[] = [];
-      for (let i = 0; i < tripDayCount; i++) {
-        const d = new Date(tripStart);
-        d.setDate(d.getDate() + i);
-        dayDateMap.push({ dayNumber: i + 1, date: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` });
-      }
-      // 將使用者輸入的 preferredDate 正規化成日期範圍。支援單一日期 ("2026-07-15")
-      // 與區間 ("2026-07-14~2026-07-16" 或以 - 連接)。回傳該範圍涵蓋的所有 dayNumber。
-      const parseDateRangeToDays = (raw: string): { startDate: string; endDate: string; dayNumbers: number[] } | null => {
-        if (!raw) return null;
-        const parts = raw.split(/\s*[~]\s*|\s+to\s+/i).map(s => s.trim()).filter(Boolean);
-        // 若用「-」分隔且看起來像兩個完整日期 (YYYY-MM-DD-YYYY-MM-DD)，特別處理
-        let startStr = parts[0];
-        let endStr = parts[1] || parts[0];
-        if (parts.length === 1) {
-          const m = raw.match(/^(\d{4}-\d{2}-\d{2})\s*-\s*(\d{4}-\d{2}-\d{2})$/);
-          if (m) { startStr = m[1]; endStr = m[2]; }
-        }
-        const inRange = dayDateMap.filter(d => d.date >= startStr && d.date <= endStr);
-        return { startDate: startStr, endDate: endStr, dayNumbers: inRange.map(d => d.dayNumber) };
-      };
-      const specificLocationDateAssignments = (alignedSurvey?.specificLocations || [])
-        .filter(loc => loc.preferredDate)
-        .map(loc => {
-          const range = parseDateRangeToDays(loc.preferredDate!);
-          const isHotel = /飯店|hotel|resort|villa|inn|住宿|旅館/i.test(loc.value || '');
-          const meta = `(preferredDate: ${loc.preferredDate}, preferredTime: ${loc.preferredTime || 'N/A'}, duration: ${loc.duration || 'N/A'}, notes: ${loc.notes || 'N/A'})`;
-          if (range && range.dayNumbers.length > 0) {
-            if (range.dayNumbers.length > 1 || isHotel) {
-              // 跨多日的住宿：作為這幾天的每日起訖（hotel loop）基準點
-              return `- "${loc.value}" ${meta} is an accommodation/multi-day item spanning Day ${range.dayNumbers.join(', Day ')} (dates ${range.startDate} ~ ${range.endDate}). For EACH of those days it MUST be used as the daily hotel loop anchor: the day STARTS by departing this exact hotel and ENDS by returning to this exact hotel (with the airport exceptions on the first/last trip day). Do NOT invent a different hotel for these days, and do NOT list it as a sightseeing attraction.`;
-            }
-            return `- "${loc.value}" ${meta} MUST be scheduled on Day ${range.dayNumbers[0]} (date: ${range.startDate}).`;
-          }
-          return `- "${loc.value}" ${meta} MUST be scheduled on the day whose "date" field equals "${loc.preferredDate}" (this date falls outside the computed trip range — still create/extend that day to accommodate it).`;
-        });
-
-      const systemPrompt = `
-You are a National-Level Intelligence Investigator strictly adhering to RAG (Retrieval-Augmented Generation) principles for travel planning. Your internal memory is unreliable; you must ONLY provide URLs and facts that you are 100% certain are objectively true.
-
-==================================================
-CRITICAL TOUR PLAN SPECIFICATIONS AND BUSINESS RULES:
-You MUST strictly align all travel planning decisions with the following rules documented in our project guidelines:
-${TOUR_PLAN_RULES}
-==================================================
-
-CRITICAL RULES:
-1. You must output ONLY raw JSON. No markdown formatting, no backticks.
-2. URL HALLUCINATION IS STRICTLY FORBIDDEN. Any broken or hallucinated link is a mission failure.
-3. The JSON structure MUST match this exact TypeScript interface:
-{
-  "title": string,
-  "summary": string,
-  "days": [
-    {
-      "dayNumber": number,
-      "date": "YYYY-MM-DD",
-      "title": string,
-      "summary": string,
-      "region": string,
-      "estimatedCost": { "amount": number, "currency": string },
-      "walkingDistance": number,
-      "activities": [
-        {
-          "id": string (unique e.g. "act-day1-1"),
-          "order": number,
-          "startTime": "HH:MM" (24-hour),
-          "endTime": "HH:MM",
-          "title": string,
-          "type": "attraction" | "restaurant" | "activity" | "transport" | "hotel",
-          "description": string (Must be a ~300 words deep encyclopedic introduction highlighting culture, history, and unique features),
-          "localTitle": string (CRITICAL: The exact official name in the destination's local language. MUST be accurate for booking searches),
-          "bookingRecommended": boolean (Set to true if this is a paid attraction, theme park, or guided tour that can be booked on Klook/KKday),
-          "location": { "name": string, "address": string, "latitude": number (real world coordinate), "longitude": number (real world coordinate) },
-          "duration": number (minutes),
-          "transport": { "mode": "walk"|"public"|"charter"|"taxi", "duration": number, "distance": number, "description": string },
-          "notes": string,
-          "rating": number (1-5),
-          "cost": { "amount": number, "currency": string },
-          "openingHours": string,
-          "links": [ { "label": string, "url": string, "type": "info"|"booking" } ]
-        }
-      ]
-    }
-  ]
-}
-
-3. AIRPORT & HOTEL LOOP RULE: 
-- Day 1: The FIRST activity (order 0) MUST be "Arrive at Airport" (type: "transport"). The LAST activity MUST be "Return to Hotel" (type: "hotel").
-- Middle Days: The FIRST activity MUST be "Depart from Hotel" (type: "hotel"). The LAST activity MUST be "Return to Hotel" (type: "hotel").
-- Final Day: The FIRST activity MUST be "Depart from Hotel" (type: "hotel"). The LAST activity MUST be "Arrive at Airport for Departure" (type: "transport").
-4. TRANSPORT RULE: The transport.duration and transport.distance MUST be realistically estimated based on the actual road travel route (not straight-line distance) from the previous activity's location. DO NOT use static values. The distance must be in meters. If transport is 'public' or 'walk', provide EXTREMELY detailed routing in transport.description. If transport is 'charter' (包車), you MUST add a safe booking link (e.g. Klook/KKday) to the activity's "links" array, and add safety tips in transport.description.
-5. AIRPORT MAP RULE: For the "Arrive at Airport" and "Arrive at Airport for Departure" activities, you MUST set the "photoUrl" field to exactly "local-asset://airport_map".
-6. FLIGHT ALIGNMENT RULE: If the user provides flight information in "flights" (where isReturn = false for outgoing, isReturn = true for return):
-   - Outgoing Flight: Day 1's FIRST activity "Arrive at Airport" (order 0) MUST have its startTime aligned to the flight's arrivalTime. The activity title MUST be "Arrive at Airport (\${flightNumber})" and duration set to 90 minutes. Subsequent activities on Day 1 MUST begin after this airport clearance.
-   - Return Flight: The Final Day's LAST activity "Arrive at Airport for Departure" MUST end at the flight's departureTime. Its startTime MUST be set to 2.5 hours before the departureTime (duration: 150 minutes). The activity title MUST be "Arrive at Airport for Departure (\${flightNumber})". All previous Final Day activities MUST end by this time.
-7. LOGICAL TIMING: Pay strict attention to typical business hours. Night Markets MUST be in the evening.
-8. USER INPUT & COMPREHENSIVENESS:
-   - You MUST include 100% of the user's "specificLocations" (Specific Location Requirements) and "mustVisitAttractions" in the itinerary.
-   - CRITICAL PRIORITY: The "specificLocations" have a HIGHER priority than "mustVisitAttractions". You MUST arrange them first, strictly respecting the user's specified hotel, dates (preferredDate), times (preferredTime), suggested durations (duration), and distance/notes (notes).
-   - DAY-DATE BINDING RULE: Each output day's "date" field MUST exactly match the trip's day-by-day date table below. Any "specificLocations" entry with a "preferredDate" MUST be placed ONLY on the day whose "date" field equals that "preferredDate" - NOT on any other day, even if it would otherwise fit better. The exact day assignments are listed below in "SPECIFIC LOCATION DATE ASSIGNMENTS" - you MUST follow them precisely.
-   - If the user specifies an accommodation/hotel in "specificLocations" or via hotel fields, use it as the daily hotel loop starting and ending point for that day (and surrounding days where applicable, per the AIRPORT & HOTEL LOOP RULE).
-   - You MUST strictly follow the user's suggested durations (duration) and note requirements (e.g. distance details, special timings) for all specific locations.
-   - For every "referenceAttractions" (URLs) provided by the user, you MUST create or adapt an activity for it, and strictly inject that URL into the "links" array of that activity.
-9. OPTIMIZATION & FILLING GAPS: You MUST optimize the itinerary to be rich and fulfilling. There should be NO gaps longer than 90 minutes between activities (excluding sleep). If the user's requested attractions do not fill the entire day, you MUST proactively recommend and invent high-quality, logically located activities (e.g., highly-rated local cafes, hidden gem sightseeing, shopping districts) to fill the empty time slots.
-10. URL ACCURACY RULE: DO NOT guess or hallucinate official website URLs for hotels, restaurants, or attractions. If you do not know the EXACT official URL, you MUST generate a Google Search URL (e.g. https://www.google.com/search?q=URL+ENCODED+NAME) instead of a fake domain.
-11. The resulting JSON must be directly parseable.
-12. OUTPUT LANGUAGE RULE: You MUST output all textual fields in the JSON (such as "title", "summary", "description", "notes", and transport descriptions) in the language corresponding to the user's "locale" property in the survey data.
-- If locale is "zh-TW" or "zh-CN", use Traditional/Simplified Chinese.
-- If locale is "ja", use Japanese.
-- If locale is "th", use Thai.
-- If locale is "ko", use Korean.
-- If locale is "vi", use Vietnamese.
-- If locale is "ms", use Malay.
-- If locale is "es", use Spanish.
-- If locale is "pt", use Portuguese.
-- Default to English if the locale is unrecognized.
-13. COORDINATE RULE: You MUST provide realistic real-world geographic coordinates (latitude and longitude) for every activity's "location" object. Under no circumstances should latitude or longitude be 0 or omitted, as they are directly used for rendering the dynamic route maps and calculate distances. If you don't know the exact coordinates of a specific spot, estimate them based on its parent city/region.
-
-==================================================
-TRIP DAY-BY-DAY DATE TABLE (the output "days" array MUST contain exactly ${tripDayCount} entries, one per row, with "date" set EXACTLY as shown):
-${dayDateMap.map(d => `- Day ${d.dayNumber}: date = "${d.date}"`).join('\n')}
-
-SPECIFIC LOCATION DATE ASSIGNMENTS (mandatory - see Rule 8 DAY-DATE BINDING RULE):
-${specificLocationDateAssignments.length > 0 ? specificLocationDateAssignments.join('\n') : '- (No date-specific locations provided.)'}
-==================================================
-CRITICAL TOUR PLAN SPECIFICATIONS AND BUSINESS RULES WARNING:
-YOU MUST STRICTLY COMPLY WITH ALL TOUR PLAN SPECIFICATIONS AND RULES DEFINED ABOVE:
-1. THE DAILY ACTIVITIES TIME MUST BE STRICTLY WITHIN 08:00 - 21:00. NO ACTIVITY START TIME BEFORE 08:00 OR END TIME AFTER 21:00 (EXCEPT FLIGHT ARRIVALS/DEPARTURES MATCHING FLIGHT ALIGNMENT RULE).
-2. THE AIRPORT AND HOTEL LOOP RULES MUST BE 100% FOLLOWED.
-3. THE OUTPUT TEXTUAL FIELDS MUST BE ALIGNED WITH THE USER'S LOCALE: "${alignedSurvey.locale || 'zh-TW'}".
-4. THE "localTitle" FIELD MUST BE IN DESTINATION'S LOCAL LANGUAGE.
-FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
-==================================================`;
-
-      const response = await fetch(`${GEMINI_API_URL}${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemPrompt }] },
-          contents: [{ role: 'user', parts: [{ text: JSON.stringify(alignedSurvey) }] }],
-          // 注意：不可同時啟用 googleSearch 接地工具與 response_mime_type: 'application/json'，
-          // Gemini API 會回傳 400（兩者互斥）導致每次呼叫都失敗、靜默掉到離線範本。
-          // 我們需要可靠的 JSON 輸出，故保留 JSON 模式、移除 googleSearch；URL 正確性改由
-          // verifyItineraryLinks 事後驗證處理。
-          generationConfig: {
-            response_mime_type: 'application/json',
-            temperature: 0.7
-          }
-        }),
-      });
-
-      if (!response.ok) {
-        const errJson = await response.json().catch(() => ({}));
-        // 記錄完整錯誤內容，避免 AI 呼叫失敗時只看到靜默掉到離線範本而無從診斷。
-        console.error(`[generateItinerary] Gemini API error ${response.status}:`, errJson?.error?.message || errJson);
-        if (response.status === 400 && errJson.error?.message?.includes('API key not valid')) {
-          throw new Error('INVALID_API_KEY');
-        }
-        throw new Error(`Gemini API returned status ${response.status}: ${errJson?.error?.message || 'unknown error'}`);
-      }
-
-      const data = await response.json();
-      const textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      
-      if (!textOutput) {
-        throw new Error('Invalid response structure from Gemini API');
-      }
-
-      let parsedResult: any;
-      try {
-        parsedResult = JSON.parse(textOutput);
-      } catch (e) {
-        throw new Error('Failed to parse Gemini JSON output');
-      }
-
-      // --- 強制 RAG 超連結檢驗 (URL -> 原文 -> 分析) ---
-      // 非同步批次檢驗所有 AI 產生的網址，剔除幻覺並補上安全搜尋
-      parsedResult = await verifyItineraryLinks(parsedResult);
-
-      // --- 強制校正 LLM 經緯度座標 (Proactive Healing) ---
-      healItineraryCoordinates(parsedResult, alignedSurvey);
-
-      // --- 強制校正 LLM 行程起訖點 (Post-processing Guard) ---
-      if (parsedResult.days && parsedResult.days.length > 0) {
-        const days = parsedResult.days;
-        const firstDay = days[0];
-        const lastDay = days[days.length - 1];
-        const destName = firstDay.region || survey.destinations[0]?.name || '當地';
-        const currency = survey.currency || 'TWD';
-
-        const outgoingFlight = survey.flights?.find(f => !f.isReturn);
-        const returnFlight = survey.flights?.find(f => f.isReturn);
-
-        // 檢查第一天第一站 (去程對齊)
-        if (firstDay.activities && firstDay.activities.length > 0) {
-          const arrTime = (outgoingFlight && outgoingFlight.arrivalTime) ? outgoingFlight.arrivalTime : '08:30';
-          const arrEndTime = addMinutesToTime(arrTime, 90);
-          const firstAct = firstDay.activities[0];
-
-          if (!firstAct.title.includes('機場') && !firstAct.title.toLowerCase().includes('airport')) {
-            firstDay.activities.unshift({
-              id: `act-day1-start-forced`,
-              order: 0,
-              startTime: arrTime,
-              endTime: arrEndTime,
-              title: (outgoingFlight && outgoingFlight.flightNumber) ? `抵達當地機場 (${outgoingFlight.flightNumber})` : '抵達當地機場',
-              type: 'transport',
-              description: '順利抵達當地機場，完成通關手續並領取行李。建議您先在機場購買當地的網卡或兌換部分當地貨幣，為接下來的旅程做好準備。',
-              location: { name: `${destName}國際機場`, address: `${destName}機場航廈` },
-              duration: 90,
-              transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘機場接送專車直達市區。' },
-              links: [{ label: 'Klook 機場接送預訂', url: 'https://www.klook.com/', type: 'booking' }],
-              notes: '請備妥入境文件與護照。',
-              photoUrl: 'local-asset://airport_map',
-              cost: { amount: 0, currency },
-              openingHours: '24小時開放'
-            });
-          } else {
-            firstAct.photoUrl = 'local-asset://airport_map';
-            firstAct.startTime = arrTime;
-            firstAct.endTime = arrEndTime;
-            firstAct.duration = 90;
-            if (outgoingFlight && outgoingFlight.flightNumber) {
-              firstAct.title = `抵達當地機場 (${outgoingFlight.flightNumber})`;
-            }
-          }
-
-          // 重新排序與順延時間
-          firstDay.activities.forEach((a: any, idx: number) => a.order = idx);
-          for (let idx = 1; idx < firstDay.activities.length; idx++) {
-            const prev = firstDay.activities[idx - 1];
-            const curr = firstDay.activities[idx];
-            const transDuration = prev.transport?.duration || 15;
-            const earliestStart = addMinutesToTime(prev.endTime, transDuration);
-            if (curr.startTime < earliestStart) {
-              const duration = curr.duration || 60;
-              curr.startTime = earliestStart;
-              curr.endTime = addMinutesToTime(earliestStart, duration);
-            }
-          }
-        }
-
-        // 檢查最後一天最後一站 (回程對齊)
-        if (lastDay.activities && lastDay.activities.length > 0) {
-          const depTime = (returnFlight && returnFlight.departureTime) ? returnFlight.departureTime : '18:00';
-          const airportStart = subMinutesFromTime(depTime, 150);
-          let lastAct = lastDay.activities[lastDay.activities.length - 1];
-
-          if (!lastAct.title.includes('機場') && !lastAct.title.toLowerCase().includes('airport')) {
-            lastDay.activities.push({
-              id: `act-day${days.length}-end-forced`,
-              order: lastDay.activities.length,
-              startTime: airportStart,
-              endTime: depTime,
-              title: (returnFlight && returnFlight.flightNumber) ? `抵達機場準備返航 (${returnFlight.flightNumber})` : '抵達機場準備返國',
-              type: 'transport',
-              description: '帶著滿滿的美好回憶，抵達機場準備搭機返國。建議您預留足夠的時間辦理退稅手續，並在免稅店做最後的採購。',
-              location: { name: `${destName}國際機場`, address: `${destName}機場航廈` },
-              duration: 150,
-              transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘包車前往機場。' },
-              links: [{ label: '當地推薦安全叫車 App', url: 'https://www.grab.com/', type: 'info' }],
-              notes: returnFlight ? `航班時間：${depTime}。請務必再三確認護照與隨身行李是否帶齊。` : '請提早2-3小時抵達機場。',
-              photoUrl: 'local-asset://airport_map',
-              cost: { amount: 0, currency },
-              openingHours: '24小時開放'
-            });
-          } else {
-            lastAct.photoUrl = 'local-asset://airport_map';
-            lastAct.startTime = airportStart;
-            lastAct.endTime = depTime;
-            lastAct.duration = 150;
-            if (returnFlight && returnFlight.flightNumber) {
-              lastAct.title = `抵達機場準備返航 (${returnFlight.flightNumber})`;
-              lastAct.notes = `航班時間：${depTime}。請務必再三確認護照與隨身行李是否帶齊。`;
-            }
-          }
-
-          // 由後往前推算最後一天的活動時間，防止與返航機場時間衝突
-          let targetEnd = airportStart;
-          const remainingActivities = lastDay.activities.slice(0, -1);
-          
-          for (let idx = remainingActivities.length - 1; idx >= 0; idx--) {
-            const act = remainingActivities[idx];
-            const transDuration = act.transport?.duration || 15;
-            const latestEnd = subMinutesFromTime(targetEnd, transDuration);
-            if (act.endTime > latestEnd) {
-              act.endTime = latestEnd;
-              const duration = act.duration || 60;
-              act.startTime = subMinutesFromTime(latestEnd, duration);
-            }
-            targetEnd = act.startTime;
-          }
-
-          // 重新排序並過濾掉時間太早的中間活動 (例如 07:30 以前的中間景點活動)
-          const validActs = lastDay.activities.filter((act: any, idx: number) => {
-            if (idx === 0 || idx === lastDay.activities.length - 1) return true;
-            return act.startTime >= '07:30';
-          });
-          
-          validActs.forEach((a: any, idx: number) => a.order = idx);
-          lastDay.activities = validActs;
-        }
-      }
-      // ---------------------------------------------------
-
-      // Add missing metadata fields required by our type
-      const generatedItinerary: Itinerary = {
-        ...parsedResult,
-        id: `itinerary-${Date.now().toString(36)}`,
-        surveyId: survey.id,
-        userId: survey.userId,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        status: 'ready',
-        currency: survey.currency || 'TWD',
-        totalEstimatedCost: {
-          amount: parsedResult.days.reduce((acc: number, d: any) => acc + (d.estimatedCost?.amount || 0), 0),
-          currency: survey.currency || 'TWD'
-        }
-      };
-
-      return generatedItinerary;
-    };
-
-    const fallbackAction = (): Itinerary => {
-      const fallback = this.generateFallbackItinerary(alignedSurvey);
-      // 明確標記此行程來自離線範本，並附上 AI 失敗的真實原因，讓 UI 能提示使用者。
-      fallback.generatedByFallback = true;
-      fallback.fallbackReason = lastAiError || 'AI 服務暫時無法使用（未知原因）';
-      console.warn('[generateItinerary] 已改用離線範本，AI 失敗原因：', fallback.fallbackReason);
-      return fallback;
-    };
-
-    return PACEngine.executeWithHealing(
-      // 包一層 try/catch 以記錄 AI 失敗的真實原因（PACEngine 會吞掉錯誤改走備援）。
-      async () => {
-        try {
-          return await fetchItineraryAction();
-        } catch (e: any) {
-          lastAiError = e?.message || String(e);
-          throw e;
-        }
-      },
-      fallbackAction,
-      'generateItinerary',
-      // API key 相關錯誤已列為 fatalErrors、不受重試影響；此重試次數僅針對暫時性網路
-      // 失敗。設為 2 讓真正的 AI 路徑在抖動時有一次重試，而非立即掉到離線範本。
-      2,
-      ['MISSING_API_KEY', 'INVALID_API_KEY']
-    );
   },
 
   /**
@@ -1610,180 +1270,155 @@ FAILURE TO ADHERE TO THESE SPECIFICATIONS WILL CAUSE CRITICAL SYSTEM ERRORS.
     healItineraryCoordinates(generatedItinerary, survey);
     return generatedItinerary;
   },
+  /**
+   * 規則式批次分析：解析使用者貼入的網址或景點名稱，推估標題與分類，
+   * 並與既有行程比對是否重複，不依賴 LLM。
+   */
   async analyzeBatchUrls(urlsText: string, itinerary?: Itinerary | null): Promise<any> {
-    const itineraryContext = itinerary && itinerary.days 
-      ? `\n**既有行程摘要**：\n${JSON.stringify(
-          itinerary.days.map((d, index) => ({
-            day: index + 1,
-            date: d.date,
-            activities: d.activities.map(a => ({ id: a.id, title: a.title, time: a.startTime }))
-          }))
-        )}\n`
-      : '';
+    const region = itinerary?.days?.find(d => d.region)?.region || '';
+    const existingTitles = new Set(
+      (itinerary?.days || []).flatMap(d => d.activities.map(a => a.title.trim().toLowerCase()))
+    );
 
-    const prompt = `您是一位專業的旅遊行程規劃助手。現在使用者提供了一些想要新增的行程網址或景點名稱。
-請針對這些新增項目進行分析，評估它們的地理位置、景點分類，以及如果適用，與既有行程的同質性。
-${itineraryContext}
-**使用者貼入的新增網址/景點**：
-${urlsText}
+    const lines = urlsText.split('\n').map(l => l.trim()).filter(Boolean);
 
-**分析要求與限制**：
-1. 分析每一個輸入。如果使用者貼入的是網址，請根據網址推估出景點的實際中文名稱與細節。
-2. 進行以下評估：
-   - **分類與地理位置**：推估其主要區域及分類 (如: coffee/food/shopping/camera/hotel/transport/info)。
-   - **決策分類 (aiDecision)**：必須為 'adoptable' (可採用)、'not_recommended' (不建議) 或 'optional' (可選擇性)。
-   - **決策理由 (aiDecisionReason)**：詳細的中文評估理由。
-   - **同質性與地理警示 (warnings)**：分析是否與既有行程同質性太高、或地理位置太遠導致不順路。沒有則寫 "無"。
-   - **排程建議說明 (suggestion)**：建議怎麼安排。
-   
-3. 務必使用 JSON 格式回傳，直接輸出以 \`{ "analysisResults": [...] }\` 格式的 JSON，不要加上 \`\`\`json 等任何 markdown 標記。
+    const analysisResults = lines.map(line => {
+      const { title, url } = extractTitleFromLine(line);
+      const category = guessCategoryFromText(`${title} ${url}`);
+      const isDuplicate = existingTitles.has(title.trim().toLowerCase());
 
-JSON 結構樣式：
-{
-  "analysisResults": [
-    {
-      "title": "景點名稱",
-      "url": "輸入的原始網址",
-      "category": "分類",
-      "region": "地理區域",
-      "aiDecision": "adoptable | not_recommended | optional",
-      "aiDecisionReason": "詳細評估理由",
-      "warnings": "警示內容或無",
-      "suggestion": "排程建議說明"
-    }
-  ]
-}`;
+      return {
+        title,
+        url,
+        category,
+        region: region || '未知地區',
+        aiDecision: isDuplicate ? 'not_recommended' : 'optional',
+        aiDecisionReason: isDuplicate
+          ? '此名稱與既有行程中的景點相同或相近，建議確認是否重複後再考慮加入。'
+          : '已透過規則式系統解析名稱與分類，請自行確認地理位置與營業時間是否符合行程動線。',
+        warnings: isDuplicate ? '與既有行程項目同名，可能重複' : '無',
+        suggestion: '建議安排於鄰近既有景點的時段，並於出發前再次確認地點、營業時間與交通方式。',
+      };
+    });
 
-    try {
-      const apiKey = await settingsService.getApiKey();
-      if (!apiKey) {
-        throw new Error('MISSING_API_KEY');
-      }
-
-      const response = await fetch(`${GEMINI_API_URL}${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.2,
-            response_mime_type: "application/json",
-          }
-        }),
-      });
-
-      if (!response.ok) {
-        const errText = await response.text();
-        throw new Error(`Gemini API Error: ${response.status} ${errText}`);
-      }
-
-      const data = await response.json();
-      let textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      
-      if (!textOutput) throw new Error('No response content from Gemini');
-      
-      textOutput = textOutput.replace(/```json\n/g, '').replace(/```/g, '').trim();
-      return JSON.parse(textOutput);
-    } catch (error) {
-      console.error('analyzeBatchUrls error:', error);
-      throw error;
-    }
+    return { analysisResults };
   },
 
   /**
-   * Generates dynamic destination guide info (currency, emergency contacts, local phrases)
+   * 取得目的地旅遊指南資訊（貨幣、緊急聯絡電話、常用短語、消費參考）。
+   * 完全採用內建離線範本，不依賴 LLM。
    */
   async getDestinationGuideInfo(country: string): Promise<any> {
-    const locale = i18n.locale || 'zh-TW';
-    const langNames: Record<string, string> = {
-      'zh-TW': '繁體中文 (Traditional Chinese)',
-      'zh-CN': '簡體中文 (Simplified Chinese)',
-      'en': 'English',
-      'ja': '日本語 (Japanese)',
-      'ko': '韓國語 (Korean)',
-      'th': '泰語 (Thai)',
-      'vi': '越南語 (Vietnamese)',
-      'ms': '馬來語 (Malay)',
-      'es': '西班牙語 (Spanish)',
-      'pt': '葡萄牙語 (Portuguese)'
-    };
-    const targetLang = langNames[locale] || 'Traditional Chinese';
+    const fallback = getFallbackGuideInfo(country);
+    if (!fallback) return fallback;
 
-    const prompt = `您是一位專業的在地導遊。使用者準備前往「${country}」旅遊。
-請根據這個國家，整理出以下實用旅遊資訊。
-請特別注意，所有的文字內容（例如常用短語的 translation 對照 zh 欄位、消費項目 item 的名稱、emergencyContacts 的 title 和 subTitle）必須使用「${targetLang}」來呈現。
-請以嚴格的 JSON 格式回傳，不含任何 markdown 標記。
-
-要求：
-1. currencyCode: 當地官方貨幣的 3 碼 ISO 代碼 (如 JPY, THB, KRW)。如果是台灣，回傳 TWD。
-2. currencyName: 當地貨幣的中文名稱 (如 日圓, 泰銖, 韓元)。
-3. emergencyContacts: 陣列，提供 3 到 4 組最重要的緊急聯絡電話。欄位包含 title (使用 ${targetLang} 描述，如 觀光警察), subTitle (使用 ${targetLang} 描述，如 24小時英文服務), phone (如 1155)。
-4. usefulPhrases: 陣列，提供 3 句最實用的在地問候或結帳用語。欄位包含 local (當地拼音或寫法), zh (使用 ${targetLang} 呈現對照翻譯), isHighlight (boolean, 將結帳或最重要的設為 true)。
-5. guideItems: 陣列，提供 3 到 4 項當地具代表性的平民美食或按摩等服務的「預估價格」。欄位包含 item (使用 ${targetLang} 描述，如 路邊攤拉麵), priceRange (如 ~ 800 - 1000 ¥)。
-
-請以如下的 JSON 格式輸出：
-{
-  "currencyCode": "THB",
-  "currencyName": "泰銖",
-  "emergencyContacts": [
-    { "title": "...", "subTitle": "...", "phone": "..." }
-  ],
-  "usefulPhrases": [
-    { "local": "...", "zh": "...", "isHighlight": false }
-  ],
-  "guideItems": [
-    { "item": "...", "priceRange": "..." }
-  ]
-}`;
-
-    try {
-      const apiKey = await settingsService.getApiKey();
-      if (!apiKey) {
-        console.warn('[getDestinationGuideInfo] No API key available, using fallback directly.');
-        const fallback = getFallbackGuideInfo(country);
-        if (fallback) fallback.isFallback = true;
-        return fallback;
-      }
-      console.log('[getDestinationGuideInfo] API Key found (first 8:', apiKey.substring(0, 8), '...)');
-
-      console.log('[getDestinationGuideInfo] Calling Gemini API for:', country);
-      const response = await fetch(`${GEMINI_API_URL}${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.1,
-            response_mime_type: "application/json",
-          }
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Gemini API Error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      let textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!textOutput) throw new Error('No response content from Gemini');
-      
-      const jsonStart = textOutput.indexOf('{');
-      const jsonEnd = textOutput.lastIndexOf('}');
-      if (jsonStart !== -1 && jsonEnd !== -1) {
-        textOutput = textOutput.substring(jsonStart, jsonEnd + 1);
-      }
-      return JSON.parse(textOutput);
-    } catch (error) {
-      console.error('getDestinationGuideInfo error, returning fallback:', error);
-      const fallback = getFallbackGuideInfo(country);
-      if (fallback) fallback.isFallback = true;
-      return fallback;
-    }
+    const key = detectGuideCountryKey(country);
+    fallback.isFallback = true;
+    fallback.isCovered = isCoveredGuideCountry(key);
+    fallback.countryKey = key || undefined;
+    fallback.downloadableCountry = !fallback.isCovered ? getDownloadableGuideCountry(key) : undefined;
+    return fallback;
   }
 };
 
 export default aiService;
 
+/** 將活動類型對應到適合的 POI 分類，供「重新抽選」時篩選候選景點 */
+const ACTIVITY_TYPE_TO_POI_CATEGORIES: Record<string, PoiCategory[]> = {
+  attraction: ['cultural', 'historic', 'architecture', 'museum', 'viewpoint', 'other'],
+  restaurant: ['food'],
+  cafe: ['food'],
+  shopping: ['shopping', 'market'],
+  spa: ['other', 'entertainment'],
+  entertainment: ['entertainment', 'amusement'],
+  activity: ['amusement', 'entertainment', 'nature', 'park', 'viewpoint'],
+  hotel: ['other'],
+  transport: ['other'],
+};
+
+/** 兩座經緯度座標間的直線距離（公尺） */
+function haversineMeters(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371000;
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+/** 由真實 POI 組裝出一個「重新抽選」候選活動 */
+function buildAlternativeFromPOI(
+  poi: POI,
+  current: Activity,
+  next: Activity | undefined,
+  region: string,
+  locale: string,
+  labels: Record<PoiCategory, string>
+): Activity {
+  const label = labels[poi.category] || labels.other;
+  const isZh = locale.startsWith('zh');
+
+  const description = isZh
+    ? `「${poi.name}」是${region}著名的${label}，深受旅客喜愛。建議安排充裕的時間細細探訪，感受當地獨特的氛圍與風情。實際開放時間與票價請於出發前再次確認。`
+    : `${poi.name} is a well-known ${label} in ${region}, popular with travelers. Allow enough time to explore it and soak in the local atmosphere. Please re-confirm opening hours and ticket prices before you go.`;
+
+  const notes = isZh
+    ? `規則式系統依據您的興趣與行程節點，自當地真實景點資料庫中為您推薦此替代方案，可作為「${current.title}」的同時段選項。`
+    : `Recommended by the rule-based engine from local POI data as an alternative to "${current.title}" for the same time slot, based on your interests.`;
+
+  let transport = current.transport ? { ...current.transport } : undefined;
+  const nextLat = next?.location?.latitude;
+  const nextLon = next?.location?.longitude;
+  if (typeof nextLat === 'number' && typeof nextLon === 'number' && (nextLat !== 0 || nextLon !== 0)) {
+    const distance = Math.round(haversineMeters(poi.lat, poi.lon, nextLat, nextLon));
+    const mode: TransportInfo['mode'] = distance <= 1200 ? 'walk' : distance <= 6000 ? 'public' : 'taxi';
+    const speedMetersPerMin = mode === 'walk' ? 70 : mode === 'public' ? 300 : 500;
+    const duration = Math.max(5, Math.round(distance / speedMetersPerMin));
+    transport = {
+      mode,
+      duration,
+      distance,
+      description: isZh
+        ? `自「${poi.name}」前往「${next!.title}」，預估距離約 ${distance} 公尺，建議${mode === 'walk' ? '步行' : mode === 'public' ? '搭乘大眾運輸' : '搭乘計程車或叫車'}前往。`
+        : `From "${poi.name}" to "${next!.title}", approx. ${distance} m. Recommended: ${mode === 'walk' ? 'walk' : mode === 'public' ? 'public transit' : 'taxi/ride-hailing'}.`
+    };
+  }
+
+  return {
+    id: `alt-${poi.xid || Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    order: current.order,
+    startTime: current.startTime,
+    endTime: current.endTime,
+    title: poi.name,
+    localTitle: poi.localName || poi.name,
+    type: current.type,
+    description,
+    location: {
+      name: poi.name,
+      address: region,
+      latitude: poi.lat,
+      longitude: poi.lon,
+    },
+    duration: current.duration,
+    rating: current.rating,
+    cost: current.cost,
+    openingHours: current.openingHours,
+    links: [{
+      label: isZh ? `Google 地圖搜尋：${poi.name}` : `Google Maps: ${poi.name}`,
+      url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${poi.name} ${region}`)}`,
+      type: 'map',
+    }],
+    notes,
+    isMustVisit: false,
+    transport,
+  };
+}
+
+/**
+ * 規則式「重新抽選」：自當地真實 POI 資料庫（OpenTripMap）中，
+ * 篩選出與原活動同類型、且非重複的候選景點，組成 3 個替代方案。
+ * 完全不依賴 LLM。
+ */
 export async function regenerateActivityAlternatives(
   survey: TripSurvey,
   currentActivity: Activity,
@@ -1791,130 +1426,40 @@ export async function regenerateActivityAlternatives(
   nextActivity: Activity | undefined,
   region: string
 ): Promise<Activity[]> {
-  console.log('[regenerateActivityAlternatives] Starting for:', currentActivity.title, 'region:', region);
-  const apiKey = await settingsService.getApiKey();
-  if (!apiKey) {
-    console.error('[regenerateActivityAlternatives] MISSING_API_KEY: settingsService.getApiKey() returned null.');
-    throw new Error('MISSING_API_KEY');
-  }
-  console.log('[regenerateActivityAlternatives] API Key obtained (first 8 chars):', apiKey.substring(0, 8) + '...');
+  const locale = survey?.locale || i18n.locale || 'zh-TW';
+  const labels = CATEGORY_LABEL[locale] || CATEGORY_LABEL['en'];
+  const targetCategories = ACTIVITY_TYPE_TO_POI_CATEGORIES[currentActivity.type] || ['cultural', 'historic', 'viewpoint', 'other'];
 
-  const locale = survey.locale || 'zh-TW';
-  const systemPrompt = `
-You are a National-Level Intelligence Investigator strictly adhering to RAG (Retrieval-Augmented Generation) principles for travel planning.
-The user wants to RE-ROLL (replace) an existing activity in their itinerary.
-You MUST provide exactly 3 high-quality alternative activities that fit the same time slot and logical route.
+  const lat = currentActivity.location?.latitude;
+  const lon = currentActivity.location?.longitude;
 
-==================================================
-CRITICAL TOUR PLAN SPECIFICATIONS AND BUSINESS RULES:
-You MUST strictly align all travel planning decisions with the following rules documented in our project guidelines:
-${TOUR_PLAN_RULES}
-==================================================
-
-CRITICAL RULES:
-1. Output ONLY a raw JSON array of 3 Activity objects. No markdown formatting, no backticks.
-2. The JSON structure MUST match this exact TypeScript interface:
-[
-  {
-    "id": string (unique UUID e.g. "generate-a-unique-uuid"),
-    "startTime": "HH:MM" (24-hour time),
-    "endTime": "HH:MM" (24-hour time),
-    "title": string (Place Name),
-    "localTitle": string (CRITICAL: The exact official name in the destination's local language. MUST be accurate for booking/map searches),
-    "type": "attraction" | "restaurant" | "cafe" | "shopping" | "spa" | "entertainment" | "hotel" | "transport" | "activity",
-    "description": string (Must be a ~200 words deep introduction highlighting culture, history, and unique features),
-    "location": { "name": string, "address": string, "latitude": number, "longitude": number },
-    "duration": number (minutes),
-    "rating": number (1-5),
-    "cost": { "amount": number, "currency": string },
-    "openingHours": string,
-    "links": [ { "label": string, "url": string, "type": "info" | "booking" } ],
-    "notes": string (Explain why this is a good alternative and fits the user's plan),
-    "transport": { 
-      "mode": "walk" | "public" | "charter" | "taxi", 
-      "duration": number (minutes to travel to the next activity), 
-      "distance": number (meters to travel to the next activity), 
-      "description": string (Detailed routing details from this alternative activity to the next activity)
-    }
-  }
-]
-3. GEOGRAPHIC & ROUTE LOGIC: The new activities MUST logically fit geographically between the previous activity and the next activity.
-4. TIME WINDOW: The start and end times MUST fit the time window of the original activity being replaced.
-5. transport ESTIMATION: You MUST realistically estimate the transport duration, distance (in meters), and mode from this alternative activity to the next activity. Do NOT use static default values.
-6. URL HALLUCINATION IS FORBIDDEN. Only provide real official URLs or Google Search URLs.
-7. OUTPUT LANGUAGE RULE: You MUST output all textual fields in the JSON (such as "title", "description", "notes", and transport descriptions) in the language corresponding to the user's locale: "${locale}".
-   - If locale is "zh-TW" or "zh-CN", use Traditional/Simplified Chinese.
-   - If locale is "ja", use Japanese.
-   - If locale is "th", use Thai.
-   - If locale is "ko", use Korean.
-   - If locale is "vi", use Vietnamese.
-   - If locale is "ms", use Malay.
-   - If locale is "es", use Spanish.
-   - If locale is "pt", use Portuguese.
-   - Default to English if the locale is unrecognized.
-`;
-
-  const contextData = {
-    originalActivityToReplace: currentActivity,
-    previousActivity: prevActivity || "None (Start of day)",
-    nextActivity: nextActivity || "None (End of day)",
-    region: region,
-    userPreferences: {
-      budget: survey.budgetLevel,
-      travelStyle: survey.tripType,
-      interests: survey.interests,
-      dietary: survey.dietaryRestrictions
-    }
-  };
-
-  const response = await fetch(`${GEMINI_API_URL}${apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      system_instruction: { parts: [{ text: systemPrompt }] },
-      contents: [{ role: 'user', parts: [{ text: JSON.stringify(contextData) }] }],
-      tools: [{ googleSearch: {} }],
-      generationConfig: {
-        response_mime_type: 'application/json',
-        temperature: 0.8 // slightly higher for variety
-      }
-    }),
-  });
-
-  if (!response.ok) throw new Error(`Gemini API returned status ${response.status}`);
-
-  const data = await response.json();
-  const textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  
-  if (!textOutput) throw new Error('Invalid response structure from Gemini API');
-
-  let alternatives: Activity[];
+  let pois: POI[] = [];
   try {
-    alternatives = JSON.parse(textOutput);
-    if (!Array.isArray(alternatives) || alternatives.length === 0) {
-      throw new Error('Not an array');
-    }
+    pois = await fetchDestinationPOIs({
+      destName: region,
+      lat: lat && lat !== 0 ? lat : undefined,
+      lon: lon && lon !== 0 ? lon : undefined,
+      interests: survey?.interests || [],
+      limit: 40,
+    });
   } catch (e) {
-    throw new Error('Failed to parse Gemini JSON output for alternatives');
+    console.warn('[regenerateActivityAlternatives] POI 取得失敗', e);
   }
 
-  // Validating links for all alternatives
-  for (const alt of alternatives) {
-    if (alt.links && alt.links.length > 0) {
-      const validLinks = [];
-      for (const link of alt.links) {
-        const verification = await verifyUrlRAG(link.url, [alt.title, region]);
-        if (verification.isValid) {
-          validLinks.push(link);
-        } else if (verification.verifiedUrl) {
-          validLinks.push({ ...link, url: verification.verifiedUrl, label: `Search: ${alt.title}` });
-        }
-      }
-      alt.links = validLinks;
-    }
+  const excludeName = currentActivity.title.trim().toLowerCase();
+  let candidates = pois.filter(p =>
+    targetCategories.includes(p.category) && p.name.trim().toLowerCase() !== excludeName
+  );
+  if (candidates.length < 3) {
+    candidates = pois.filter(p => p.name.trim().toLowerCase() !== excludeName);
+  }
+  if (candidates.length === 0) {
+    throw new Error('NO_ALTERNATIVES_FOUND');
   }
 
-  return alternatives.slice(0, 3);
+  return candidates
+    .slice(0, 3)
+    .map(poi => buildAlternativeFromPOI(poi, currentActivity, nextActivity, region, locale, labels));
 }
 
 function clampFallbackItineraryTimes(activities: Activity[]): Activity[] {

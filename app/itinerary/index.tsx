@@ -376,9 +376,9 @@ export default function ItineraryScreen() {
       setReRollAlternatives(alternatives);
     } catch (error: any) {
       console.error('[ReRoll] Error:', error?.message || error);
-      const isMissingKey = error?.message === 'MISSING_API_KEY';
-      const msg = isMissingKey
-        ? '缺少 Gemini API Key。請先至首頁設定通道設定 API Key 以啟用智慧引擎。'
+      const noAlternatives = error?.message === 'NO_ALTERNATIVES_FOUND';
+      const msg = noAlternatives
+        ? '找不到適合的替代景點，請稍後再試或手動編輯此活動。'
         : t('itinerary.reroll.error', { defaultValue: '產生替代方案失敗，請稍後再試。' });
       showAlert(t('common.error'), msg);
       setReRollModalVisible(false);

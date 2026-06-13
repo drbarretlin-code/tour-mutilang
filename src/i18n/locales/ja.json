@@ -20,12 +20,6 @@
     "greetingMorning": "おはよう",
     "greetingAfternoon": "こんにちは",
     "greetingEvening": "こんばんは",
-    "apiKeySetupTitle": "AI エンジンをセットアップする",
-    "apiKeySetupDesc": "パーソナライズされた独自の旅程計画を提供するには、システムが Gemini AI にアクセスする必要があります。 API キーを入力してスマート エンジンを有効にしてください。",
-    "apiKeyPlaceholder": "Gemini API キー (AIzaSy...) を貼り付けます。",
-    "apiKeySaveLocally": "ローカルデバイスに保存",
-    "apiKeySaveLocallyDesc": "チェックを外した場合、Web ページを閉じると自動的に消去され、メモリには残りません。",
-    "getFreeApiKey": "👉 無料の Google Gemini API キーをすぐに申請するには、ここをクリックしてください",
     "saveAndStart": "保存して計画を開始する",
     "myItineraries": "私の旅行計画"
   },
@@ -588,13 +582,6 @@
           "2": "警察署はどこですか?"
         }
       }
-    },
-    "apiKeyModal": {
-      "title": "AI インテリジェンス エンジンのロックを解除する",
-      "description": "サブスクリプション料金なしでパーソナライズされた旅程計画を提供するために、このアプリケーションは BYOK アーキテクチャを使用しています。 Google Gemini API キーを無料で申請し、以下に投稿してください。キーは安全に暗号化され、デバイスに保存されます。",
-      "linkText": "Google AI Studio にアクセスして無料キーを申請します",
-      "cancelBtn": "キャンセル (オフラインテンプレートを使用)",
-      "saveBtn": "保存して生成する"
     },
     "activity": {
       "startTime": "開始時刻",

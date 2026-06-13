@@ -1,0 +1,18 @@
+{
+  "currencyCode": "GBP",
+  "currencyName": "英鎊",
+  "emergencyContacts": [
+    { "title": "報警/消防/救護車", "subTitle": "24小時免費服務", "phone": "999" },
+    { "title": "非緊急報案", "subTitle": "24小時服務", "phone": "101" }
+  ],
+  "usefulPhrases": [
+    { "local": "Hello", "zh": "你好", "isHighlight": false },
+    { "local": "Thank you", "zh": "謝謝", "isHighlight": false },
+    { "local": "How much is this?", "zh": "這多少錢？", "isHighlight": true }
+  ],
+  "guideItems": [
+    { "item": "炸魚薯條", "priceRange": "8 - 12 GBP" },
+    { "item": "咖啡 (中杯)", "priceRange": "2.5 - 4 GBP" },
+    { "item": "倫敦地鐵單程票", "priceRange": "2.8 - 6 GBP" }
+  ]
+}

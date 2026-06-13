@@ -1,0 +1,18 @@
+{
+  "currencyCode": "MYR",
+  "currencyName": "馬來西亞令吉",
+  "emergencyContacts": [
+    { "title": "報警/消防/救護車", "subTitle": "24小時免費服務", "phone": "999" },
+    { "title": "旅客協助熱線", "subTitle": "多國語系服務", "phone": "1-300-88-5050" }
+  ],
+  "usefulPhrases": [
+    { "local": "Selamat pagi", "zh": "早安/你好", "isHighlight": false },
+    { "local": "Terima kasih", "zh": "謝謝", "isHighlight": false },
+    { "local": "Berapa harganya?", "zh": "這多少錢？", "isHighlight": true }
+  ],
+  "guideItems": [
+    { "item": "椰漿飯 (Nasi Lemak)", "priceRange": "5 - 12 MYR" },
+    { "item": "拉茶", "priceRange": "2 - 4 MYR" },
+    { "item": "市區捷運單程票", "priceRange": "1 - 5 MYR" }
+  ]
+}

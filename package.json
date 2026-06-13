@@ -17,7 +17,6 @@
     "expo-localization": "~56.0.6",
     "expo-print": "~56.0.4",
     "expo-router": "~56.2.10",
-    "expo-secure-store": "~56.0.4",
     "expo-sharing": "~56.0.17",
     "expo-speech": "~56.0.3",
     "expo-splash-screen": "~56.0.10",
@@ -43,12 +42,6 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
-    "prestart": "node scripts/sync-rules.js",
-    "prebuild": "node scripts/sync-rules.js",
-    "preandroid": "node scripts/sync-rules.js",
-    "preios": "node scripts/sync-rules.js",
-    "preweb": "node scripts/sync-rules.js",
-    "prebuild:web": "node scripts/sync-rules.js",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",

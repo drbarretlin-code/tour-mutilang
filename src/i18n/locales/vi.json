@@ -20,12 +20,6 @@
     "greetingMorning": "Chào buổi sáng",
     "greetingAfternoon": "Chào buổi chiều",
     "greetingEvening": "Buổi tối vui vẻ",
-    "apiKeySetupTitle": "Thiết lập công cụ AI của bạn",
-    "apiKeySetupDesc": "Để cung cấp kế hoạch hành trình được cá nhân hóa và độc quyền, hệ thống cần truy cập vào Gemini AI. Vui lòng nhập Khóa API của bạn để kích hoạt công cụ thông minh.",
-    "apiKeyPlaceholder": "Dán Khóa API Gemini của bạn (AIzaSy...)",
-    "apiKeySaveLocally": "Lưu vào thiết bị cục bộ",
-    "apiKeySaveLocallyDesc": "Nếu bỏ chọn, nó sẽ tự động bị xóa sau khi đóng trang web và không được lưu giữ trong bộ nhớ.",
-    "getFreeApiKey": "👉 Click vào đây để đăng ký nhanh Google Gemini API Key miễn phí",
     "saveAndStart": "Lưu và bắt đầu lập kế hoạch",
     "myItineraries": "kế hoạch du lịch của tôi"
   },
@@ -588,13 +582,6 @@
           "2": "Đồn cảnh sát ở đâu?"
         }
       }
-    },
-    "apiKeyModal": {
-      "title": "Mở khóa công cụ trí tuệ AI",
-      "description": "Để cung cấp cho bạn kế hoạch hành trình được cá nhân hóa mà không tính phí đăng ký, ứng dụng này sử dụng kiến ​​trúc BYOK. Vui lòng đăng ký khóa API Google Gemini miễn phí và đăng nó bên dưới. Khóa của bạn sẽ được mã hóa và lưu trữ an toàn trên thiết bị của bạn.",
-      "linkText": "Vào Google AI Studio để đăng ký key miễn phí",
-      "cancelBtn": "Hủy (sử dụng mẫu ngoại tuyến)",
-      "saveBtn": "Lưu và tạo"
     },
     "activity": {
       "startTime": "thời gian bắt đầu",

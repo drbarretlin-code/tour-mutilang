@@ -14,7 +14,6 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { showAlert, showConfirm } from '../../utils/alert';
 import { useResponsive } from '../../hooks/useResponsive';
-import { ApiKeyModal } from '../settings/ApiKeyModal';
 import { dbService } from '../../services/db';
 
 export function SurveyForm() {
@@ -22,8 +21,7 @@ export function SurveyForm() {
   const { colors, spacing, borderRadius, typography } = useTheme();
   const { user, logout } = useAuth();
   const { isLargeScreen } = useResponsive();
-  const [showApiModal, setShowApiModal] = useState(false);
-  
+
   const [step, setStep] = useState(0);
   const stepDetailsRef = useRef<StepDetailsHandle>(null);
 
@@ -110,12 +108,8 @@ export function SurveyForm() {
       // Redirect to itinerary generation loader screen or layout
       router.replace('/itinerary');
     } catch (error: any) {
-      if (error?.message === 'MISSING_API_KEY' || error?.message === 'INVALID_API_KEY') {
-        setShowApiModal(true);
-      } else {
-        console.error('Error in handleSubmit:', error);
-        showAlert(t('common.error'), error?.message || t('errors.serverError'));
-      }
+      console.error('Error in handleSubmit:', error);
+      showAlert(t('common.error'), error?.message || t('errors.serverError'));
     }
   };
 
@@ -390,15 +384,6 @@ export function SurveyForm() {
           </TouchableOpacity>
         </View>
       </View>
-
-      <ApiKeyModal 
-        visible={showApiModal} 
-        onClose={() => setShowApiModal(false)} 
-        onSuccess={() => {
-          setShowApiModal(false);
-          handleSubmit();
-        }} 
-      />
 
       {/* Main Responsive Layout Body */}
       {isLargeScreen ? (

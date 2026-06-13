@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Linking, Platform, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Linking, Platform, ActivityIndicator, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { useSurvey } from '../../context/SurveyContext';
@@ -7,6 +7,7 @@ import { aiService } from '../../services/ai';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { t } from '../../i18n';
 import { usePAC } from '../../context/PACContext';
+import { COVERED_GUIDE_COUNTRIES, fetchGuidePack } from '../../services/guidePacks';
 
 // Web-safe cache helpers: bypass AsyncStorage on Web (unreliable) and use localStorage directly
 const cacheGet = async (key: string): Promise<string | null> => {
@@ -39,14 +40,17 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
   const [exchangeMode, setExchangeMode] = useState<'TWD_TO_LOCAL' | 'LOCAL_TO_TWD'>('TWD_TO_LOCAL');
   const [amountStr, setAmountStr] = useState('1000');
   const [errorMsg, setErrorMsg] = useState('');
+  const [downloading, setDownloading] = useState(false);
+
+  const getCountryName = () => countryName || (survey.destinations && survey.destinations.length > 0
+    ? survey.destinations[0].country || survey.destinations[0].name
+    : '泰國'); // fallback
 
   const loadGuideData = async () => {
     try {
       setLoading(true);
       setErrorMsg('');
-      const country = countryName || (survey.destinations && survey.destinations.length > 0 
-        ? survey.destinations[0].country || survey.destinations[0].name 
-        : '泰國'); // fallback
+      const country = getCountryName();
 
       // 1. 嘗試從 Cache 讀取 (Web 使用 localStorage，Native 使用 AsyncStorage)
       const cacheKey = `@guide_data_${country}`;
@@ -76,11 +80,27 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
       }
 
       if (!data) {
-        // 2. 呼叫 AI 產生
-        console.log('[DestinationGuide] No cache, calling AI for:', country);
+        // 2. 取得內建離線指南資料
+        console.log('[DestinationGuide] No cache, loading offline guide for:', country);
         data = await aiService.getDestinationGuideInfo(country);
+
+        // 2b. 若目的地未涵蓋於內建範本，檢查是否已下載過該國家的離線指南範本
+        if (data && !data.isCovered && data.countryKey) {
+          try {
+            const packCache = await cacheGet(`@guide_pack_${data.countryKey}`);
+            if (packCache) {
+              const pack = JSON.parse(packCache);
+              if (pack && pack.currencyCode && Array.isArray(pack.emergencyContacts)) {
+                data = { ...data, ...pack, isCovered: true, downloaded: true };
+              }
+            }
+          } catch (e) {
+            console.warn('[DestinationGuide] Guide pack cache read error:', e);
+          }
+        }
+
         if (data && data.currencyCode && Array.isArray(data.emergencyContacts)) {
-          console.log('[DestinationGuide] AI returned valid data, caching...');
+          console.log('[DestinationGuide] Guide data loaded, caching...');
           try {
             await cacheSet(cacheKey, JSON.stringify(data));
           } catch (e) {
@@ -106,13 +126,12 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
           console.warn('Failed to fetch exchange rate', error);
         }
       } else {
-        setErrorMsg('無法從 AI 獲取當地指南資料。');
+        setErrorMsg('無法取得當地指南資料。');
       }
 
     } catch (error) {
       console.error('Failed to load guide data', error);
-      const isMissingKey = error instanceof Error && error.message === 'MISSING_API_KEY';
-      setErrorMsg(isMissingKey ? '缺少 Gemini API Key。請先至首頁設定 API Key 以啟用智慧引擎。' : '載入當地指南時發生非預期的錯誤。');
+      setErrorMsg('載入當地指南時發生非預期的錯誤。');
     } finally {
       setLoading(false);
     }
@@ -132,9 +151,7 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
   }
 
   if (errorMsg || !guideData) {
-    const country = countryName || (survey.destinations && survey.destinations.length > 0 
-      ? survey.destinations[0].country || survey.destinations[0].name 
-      : '泰國');
+    const country = getCountryName();
     return (
       <View style={[styles.container, { justifyContent: 'center', alignItems: 'center', minHeight: 400 }]}>
         <Ionicons name="alert-circle-outline" size={48} color={colors.textTertiary} />
@@ -183,6 +200,26 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
     Linking.openURL(`tel:${phone}`);
   };
 
+  const handleDownloadGuidePack = async () => {
+    const downloadable = guideData?.downloadableCountry;
+    if (!downloadable || downloading) return;
+
+    setDownloading(true);
+    try {
+      const pack = await fetchGuidePack(downloadable.key);
+      await cacheSet(`@guide_pack_${downloadable.key}`, JSON.stringify(pack));
+      await cacheSet(`@guide_data_${getCountryName()}`, '');
+      await loadGuideData();
+    } catch (e) {
+      console.warn('[DestinationGuide] Guide pack download failed:', e);
+      const message = `下載「${downloadable.label}」離線指南失敗，請確認網路連線後再試一次。`;
+      if (Platform.OS === 'web') window.alert(message);
+      else Alert.alert('下載失敗', message);
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
       
@@ -206,6 +243,52 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
                 : '連線降級：目前為您顯示本地預設指南。'}
             </Text>
           </View>
+        </View>
+      )}
+
+      {/* 內建離線範本涵蓋範圍說明 + 下載額外國家指南 */}
+      {guideData?.isFallback && (
+        <View style={[
+          styles.offlineBanner,
+          {
+            backgroundColor: colors.primary50,
+            borderColor: colors.primary100,
+            borderRadius: borderRadius.md,
+            marginBottom: spacing.md,
+            padding: spacing.md
+          }
+        ]}>
+          <View style={styles.offlineBannerContent}>
+            <Ionicons name="information-circle-outline" size={18} color={colors.primary700} style={{ marginRight: 8 }} />
+            <Text style={[typography.bodySmall, { color: colors.primary700, flex: 1 }]}>
+              此頁為內建離線指南範本，目前涵蓋：{COVERED_GUIDE_COUNTRIES.map(c => c.label).join('／')}。
+            </Text>
+          </View>
+
+          {!guideData.isCovered && (
+            <View style={{ marginTop: 8 }}>
+              <Text style={[typography.bodySmall, { color: colors.primary700, marginBottom: guideData.downloadableCountry ? 8 : 0 }]}>
+                {guideData.downloadableCountry
+                  ? `目的地「${guideData.downloadableCountry.label}」尚未涵蓋，目前顯示泰國預設範本。`
+                  : '此目的地尚無對應的離線指南範本，目前顯示泰國預設範本。'}
+              </Text>
+              {guideData.downloadableCountry && (
+                <TouchableOpacity
+                  style={[styles.downloadBtn, { backgroundColor: colors.primary500, borderRadius: borderRadius.md, opacity: downloading ? 0.6 : 1 }]}
+                  onPress={handleDownloadGuidePack}
+                  disabled={downloading}
+                >
+                  {downloading
+                    ? <ActivityIndicator size="small" color="#fff" />
+                    : <Ionicons name="cloud-download-outline" size={16} color="#fff" style={{ marginRight: 6 }} />
+                  }
+                  <Text style={[typography.labelMedium, { color: '#fff', fontWeight: '700' }]}>
+                    {downloading ? '下載中...' : `下載「${guideData.downloadableCountry.label}」專屬指南`}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
         </View>
       )}
 
@@ -488,5 +571,13 @@ const styles = StyleSheet.create({
   offlineBannerContent: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  downloadBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    alignSelf: 'flex-start',
   },
 });

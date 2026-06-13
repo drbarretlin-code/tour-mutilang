@@ -46,3 +46,6 @@ yarn-error.*
 # user temp files
 1.docx
 check_results.txt
+
+# Claude Code local settings
+.claude/

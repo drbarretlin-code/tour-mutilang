@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator, FlatList, Text, TouchableOpacity, Alert, Platform, Image, TextInput, Switch, Linking, ScrollView } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, StyleSheet, ActivityIndicator, Text, TouchableOpacity, Alert, Platform, Image, ScrollView } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -8,7 +8,6 @@ import { useTheme } from '../src/context/ThemeContext';
 import { useSurvey } from '../src/context/SurveyContext';
 import { AuthForm } from '../src/components/auth/AuthForm';
 import { dbService } from '../src/services/db';
-import { settingsService } from '../src/services/settings';
 import { Itinerary } from '../src/types/itinerary';
 import { ItineraryCard } from '../src/components/dashboard/ItineraryCard';
 import { t } from '../src/i18n';
@@ -26,31 +25,6 @@ export default function HomeDashboard() {
 
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
   const [loadingList, setLoadingList] = useState(true);
-
-  // API Key State
-  const [hasApiKey, setHasApiKey] = useState(false);
-  const [loadingApiKey, setLoadingApiKey] = useState(true);
-  const [apiKeyInput, setApiKeyInput] = useState('');
-  const [persistKey, setPersistKey] = useState(false); // Default to not persist
-  const [savingKey, setSavingKey] = useState(false);
-  const [isApiPanelExpanded, setIsApiPanelExpanded] = useState(true);
-
-  // Check for API Key on mount
-  useEffect(() => {
-    settingsService.getApiKey().then(key => {
-      if (key) {
-        setHasApiKey(true);
-        setIsApiPanelExpanded(false);
-      } else {
-        setHasApiKey(false);
-        setIsApiPanelExpanded(true);
-      }
-      setLoadingApiKey(false);
-    }).catch(() => {
-      setLoadingApiKey(false);
-      setIsApiPanelExpanded(true);
-    });
-  }, []);
 
   // Fetch itineraries when the screen comes into focus - Offline-first loading
   useFocusEffect(
@@ -99,26 +73,11 @@ export default function HomeDashboard() {
   );
 
   // Derived display states - used to toggle visibility without changing DOM structure
-  const showLoading = authLoading || loadingApiKey;
+  const showLoading = authLoading;
   const showAuth = !showLoading && !user;
   const showDashboard = !showLoading && !!user;
 
   const displayName = user?.email ? user.email.split('@')[0] : 'Traveler';
-
-  const handleSaveApiKey = async () => {
-    if (!apiKeyInput.trim()) return;
-    setSavingKey(true);
-    try {
-      await settingsService.saveApiKey(apiKeyInput.trim(), persistKey);
-      setHasApiKey(true);
-      setIsApiPanelExpanded(false);
-    } catch (e) {
-      console.error(e);
-      Alert.alert(t('common.error'), 'Failed to save API Key');
-    } finally {
-      setSavingKey(false);
-    }
-  };
 
   const handleItineraryPress = (it: Itinerary) => {
     setActiveItinerary(it);
@@ -184,7 +143,6 @@ export default function HomeDashboard() {
       t('home.confirmLogoutMessage'),
       async () => {
         try {
-          await settingsService.clearApiKey();
           await logout();
         } catch (err) {
           console.error(err);
@@ -194,10 +152,6 @@ export default function HomeDashboard() {
   };
 
   const handleCreateNew = () => {
-    if (!hasApiKey) {
-      Alert.alert('API Key Required', t('home.apiKeySetupDesc'));
-      return;
-    }
     setActiveItinerary(null);
     router.push('/survey');
   };
@@ -215,150 +169,6 @@ export default function HomeDashboard() {
       </Text>
     </View>
   );
-
-  const renderApiKeySetup = () => {
-    const isExpanded = isApiPanelExpanded;
-
-    return (
-      <View style={[styles.apiCard, shadows.sm, { backgroundColor: colors.surface, borderRadius: borderRadius.xl, borderColor: colors.border, marginBottom: 20 }]}>
-        {/* Panel Header (Click to toggle) */}
-        <TouchableOpacity 
-          activeOpacity={0.7} 
-          onPress={() => setIsApiPanelExpanded(!isExpanded)}
-          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
-        >
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Ionicons name="hardware-chip" size={24} color={hasApiKey ? colors.primary500 : colors.warning500} />
-            <Text style={[typography.titleMedium, { color: colors.text, marginLeft: 12, fontWeight: '800' }]}>
-              {hasApiKey 
-                ? t('home.apiKeyEnabled', { defaultValue: 'AI 智慧引擎：已啟用' }) 
-                : t('home.apiKeyDisabled', { defaultValue: 'AI 智慧引擎：未啟用' })
-              }
-            </Text>
-          </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-            {!isExpanded && hasApiKey && (
-              <View style={{ backgroundColor: colors.primary50, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 12 }}>
-                <Text style={[typography.caption, { color: colors.primary700, fontWeight: '700' }]}>
-                  Gemini Active
-                </Text>
-              </View>
-            )}
-            <Ionicons name={isExpanded ? 'chevron-up' : 'chevron-down'} size={20} color={colors.textSecondary} />
-          </View>
-        </TouchableOpacity>
-
-        {/* Panel Content (Visible only when expanded) */}
-        <View style={{ display: isExpanded ? 'flex' : 'none', marginTop: 16, borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: 16 }}>
-          <Text style={[typography.bodyMedium, { color: colors.textSecondary, marginBottom: 16, lineHeight: 22 }]}>
-            {t('home.apiKeySetupDesc', { defaultValue: '為了提供個人化的專屬行程規劃，系統需要存取 Gemini AI。請輸入您的 API Key 來啟用智慧引擎。' })}
-          </Text>
-
-          <TouchableOpacity onPress={() => Linking.openURL('https://aistudio.google.com/app/apikey')} style={styles.linkContainer}>
-            <Text style={[typography.labelMedium, { color: colors.primary600, fontWeight: '600' }]}>
-              {t('home.getFreeApiKey', { defaultValue: '點此快速申請免費 Google Gemini API Key' })}
-            </Text>
-          </TouchableOpacity>
-
-          <View style={[styles.inputWrapper, { borderColor: colors.border, backgroundColor: colors.background, borderRadius: borderRadius.md, marginBottom: 16 }]}>
-            <Ionicons name="key" size={20} color={colors.textTertiary} style={{ marginRight: 12 }} />
-            <TextInput
-              style={[styles.input, typography.bodyLarge, { color: colors.text }]}
-              placeholder={t('home.apiKeyPlaceholder', { defaultValue: '貼上您的 Gemini API Key (AIzaSy...)' })}
-              placeholderTextColor={colors.textTertiary}
-              value={apiKeyInput}
-              onChangeText={setApiKeyInput}
-              autoCapitalize="none"
-              secureTextEntry
-            />
-          </View>
-
-          <View style={styles.switchContainer}>
-            <Switch
-              value={persistKey}
-              onValueChange={setPersistKey}
-              trackColor={{ false: colors.border, true: colors.primary400 }}
-              thumbColor={Platform.OS === 'ios' ? '#fff' : (persistKey ? colors.primary600 : '#f4f3f4')}
-            />
-            <View style={{ marginLeft: 12, flex: 1 }}>
-              <Text style={[typography.labelLarge, { color: colors.text, fontWeight: '600' }]}>
-                {t('home.apiKeySaveLocally', { defaultValue: '儲存於本機裝置' })}
-              </Text>
-              <Text style={[typography.bodySmall, { color: colors.textSecondary, marginTop: 2 }]}>
-                {t('home.apiKeySaveLocallyDesc', { defaultValue: '若取消勾選，關閉網頁後將自動清除，不留存於記憶體。' })}
-              </Text>
-            </View>
-          </View>
-
-          <View style={{ flexDirection: 'row', gap: 12 }}>
-            <TouchableOpacity 
-              style={[
-                styles.saveBtn, 
-                { 
-                  backgroundColor: apiKeyInput.trim() ? colors.primary500 : colors.border, 
-                  borderRadius: borderRadius.md,
-                  flex: 2,
-                  height: 56,
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }
-              ]}
-              disabled={!apiKeyInput.trim() || savingKey}
-              onPress={handleSaveApiKey}
-              activeOpacity={0.8}
-            >
-              {savingKey ? <ActivityIndicator color="#fff" /> : (
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Ionicons name="checkmark-circle" size={20} color="#fff" style={{ marginRight: 8 }} />
-                  <Text style={[typography.labelLarge, { color: '#fff', fontWeight: '700' }]}>
-                    {t('home.saveApiKey', { defaultValue: '儲存金鑰' })}
-                  </Text>
-                </View>
-              )}
-            </TouchableOpacity>
-
-            {hasApiKey && (
-              <TouchableOpacity 
-                style={[
-                  styles.saveBtn, 
-                  { 
-                    backgroundColor: colors.error50, 
-                    borderColor: colors.error200,
-                    borderWidth: 1,
-                    borderRadius: borderRadius.md,
-                    flex: 1,
-                    height: 56,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }
-                ]}
-                onPress={async () => {
-                  safeConfirm(
-                    t('home.clearApiKeyConfirmTitle', { defaultValue: '清除 API Key' }),
-                    t('home.clearApiKeyConfirmMsg', { defaultValue: '確定要清除已設定的 API Key 嗎？這將會暫停 AI 的推薦功能。' }),
-                    async () => {
-                      await settingsService.clearApiKey();
-                      setHasApiKey(false);
-                      setApiKeyInput('');
-                      setIsApiPanelExpanded(true);
-                    }
-                  );
-                }}
-                activeOpacity={0.8}
-              >
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <Ionicons name="trash-outline" size={20} color={colors.error600} style={{ marginRight: 8 }} />
-                  <Text style={[typography.labelLarge, { color: colors.error600, fontWeight: '700' }]}>
-                    {t('common.clear', { defaultValue: '清除' })}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-      </View>
-    );
-  };
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -411,11 +221,6 @@ export default function HomeDashboard() {
           showsVerticalScrollIndicator={false}
         >
           <View style={{ marginBottom: 32 }}>
-            {/* API Setup View */}
-            <View>
-              {renderApiKeySetup()}
-            </View>
-            
             {/* Dashboard Header View */}
             <View>
               <View style={styles.sectionHeader}>
@@ -534,47 +339,6 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
     backgroundColor: 'rgba(0,0,0,0.03)',
-  },
-  apiCard: {
-    padding: 24,
-    borderWidth: 1,
-  },
-  apiHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  linkContainer: {
-    backgroundColor: 'rgba(59, 130, 246, 0.05)',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    height: 56,
-    marginBottom: 24,
-  },
-  input: {
-    flex: 1,
-    height: '100%',
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 32,
-    backgroundColor: 'rgba(0,0,0,0.02)',
-    padding: 16,
-    borderRadius: 12,
-  },
-  saveBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 56,
   },
   sectionHeader: {
     flexDirection: 'row',

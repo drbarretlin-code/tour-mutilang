@@ -20,12 +20,6 @@
     "greetingMorning": "Bom dia",
     "greetingAfternoon": "boa tarde",
     "greetingEvening": "Boa noite",
-    "apiKeySetupTitle": "Configure seu mecanismo de IA",
-    "apiKeySetupDesc": "Para fornecer um planejamento de itinerário personalizado e exclusivo, o sistema precisa acessar o Gemini AI. Insira sua chave API para ativar o mecanismo inteligente.",
-    "apiKeyPlaceholder": "Cole sua chave API Gemini (AIzaSy...)",
-    "apiKeySaveLocally": "Salvar no dispositivo local",
-    "apiKeySaveLocallyDesc": "Se desmarcado, será apagado automaticamente após fechar a página da web e não será retido na memória.",
-    "getFreeApiKey": "👉 Clique aqui para solicitar rapidamente uma chave de API gratuita do Google Gemini",
     "saveAndStart": "Salve e comece a planejar",
     "myItineraries": "Meus planos de viagem"
   },
@@ -588,13 +582,6 @@
           "2": "Onde fica a delegacia?"
         }
       }
-    },
-    "apiKeyModal": {
-      "title": "Desbloqueie o mecanismo de inteligência AI",
-      "description": "Para lhe fornecer um planejamento de itinerário personalizado sem taxas de assinatura, este aplicativo utiliza uma arquitetura BYOK. Solicite uma chave de API do Google Gemini gratuitamente e publique-a abaixo. Suas chaves serão criptografadas com segurança e armazenadas em seu dispositivo.",
-      "linkText": "Acesse o Google AI Studio para solicitar uma chave gratuita",
-      "cancelBtn": "Cancelar (usar modelo off-line)",
-      "saveBtn": "Salvar e gerar"
     },
     "activity": {
       "startTime": "hora de início",

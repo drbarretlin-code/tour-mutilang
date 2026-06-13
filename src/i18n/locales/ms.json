@@ -20,12 +20,6 @@
     "greetingMorning": "selamat pagi",
     "greetingAfternoon": "selamat tengahari",
     "greetingEvening": "selamat petang",
-    "apiKeySetupTitle": "Sediakan enjin AI anda",
-    "apiKeySetupDesc": "Untuk menyediakan perancangan jadual perjalanan yang diperibadikan dan eksklusif, sistem perlu mengakses Gemini AI. Sila masukkan Kunci API anda untuk mendayakan enjin pintar.",
-    "apiKeyPlaceholder": "Tampalkan Kunci API Gemini anda (AIzaSy...)",
-    "apiKeySaveLocally": "Simpan ke peranti tempatan",
-    "apiKeySaveLocallyDesc": "Jika tidak ditanda, ia akan dipadam secara automatik selepas menutup halaman web dan tidak akan disimpan dalam ingatan.",
-    "getFreeApiKey": "👉 Klik di sini untuk memohon dengan pantas Kunci API Google Gemini secara percuma",
     "saveAndStart": "Simpan dan mula merancang",
     "myItineraries": "Rancangan perjalanan saya"
   },
@@ -588,13 +582,6 @@
           "2": "Di manakah balai polis?"
         }
       }
-    },
-    "apiKeyModal": {
-      "title": "Buka kunci enjin perisikan AI",
-      "description": "Untuk memberi anda perancangan jadual perjalanan yang diperibadikan tanpa yuran langganan, aplikasi ini menggunakan seni bina BYOK. Sila mohon kunci API Google Gemini secara percuma dan siarkan di bawah. Kunci anda akan disulitkan dengan selamat dan disimpan pada peranti anda.",
-      "linkText": "Pergi ke Google AI Studio untuk memohon kunci percuma",
-      "cancelBtn": "Batal (gunakan templat luar talian)",
-      "saveBtn": "Simpan dan jana"
     },
     "activity": {
       "startTime": "masa mula",

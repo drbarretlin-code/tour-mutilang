@@ -1,6 +1,21 @@
+# CLAUDE.md
+
+本檔案除作為 Claude Code 的專案說明文件外，亦為 App 行程規劃業務規則的**唯一來源（single source of truth）**。下方「旅遊行程規劃優先級與流程規範」為規則式行程引擎（[src/services/ai.ts](src/services/ai.ts)）設計與調整時所應遵循的規範依據。
+
 ---
-name: tour_plan
-description: 旅遊行程規劃優先級、每日起訖點、時間安排與多國語系規範
+
+## Claude Code 協作規範
+
+- 與使用者對話時，請一律使用繁體中文回覆。
+
+---
+
+## 目標平台規範
+
+- 本應用程式未來上架目標以 **Windows 與 macOS 兩大桌面平台**為主，並須**同步滿足 iOS 與 Android** 平台。
+- Web 版本僅作為**開發階段檢視（preview/debug）用途**，並非正式上架目標平台。
+- 因此，所有開發流程、相依套件選擇與程式邏輯設計，皆須以**同時滿足 Windows、macOS、iOS、Android 四大平台**為優先考量；Web 相容性僅為開發便利性的附帶效果，不可作為功能設計或取捨的主要依據。
+
 ---
 
 # 旅遊行程規劃優先級與流程規範

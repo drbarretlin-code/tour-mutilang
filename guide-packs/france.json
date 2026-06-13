@@ -1,0 +1,18 @@
+{
+  "currencyCode": "EUR",
+  "currencyName": "歐元",
+  "emergencyContacts": [
+    { "title": "報警/消防/救護車", "subTitle": "24小時免費服務", "phone": "112" },
+    { "title": "醫療急救 (SAMU)", "subTitle": "24小時服務", "phone": "15" }
+  ],
+  "usefulPhrases": [
+    { "local": "Bonjour", "zh": "你好", "isHighlight": false },
+    { "local": "Merci", "zh": "謝謝", "isHighlight": false },
+    { "local": "Combien ça coûte ?", "zh": "這多少錢？", "isHighlight": true }
+  ],
+  "guideItems": [
+    { "item": "可頌 + 咖啡", "priceRange": "4 - 7 EUR" },
+    { "item": "簡餐套餐", "priceRange": "12 - 20 EUR" },
+    { "item": "地鐵單程票", "priceRange": "2.1 EUR" }
+  ]
+}

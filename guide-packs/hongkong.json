@@ -1,0 +1,18 @@
+{
+  "currencyCode": "HKD",
+  "currencyName": "港幣",
+  "emergencyContacts": [
+    { "title": "報警/消防/救護車", "subTitle": "24小時免費服務", "phone": "999" },
+    { "title": "旅客熱線", "subTitle": "多國語系服務", "phone": "2508 1234" }
+  ],
+  "usefulPhrases": [
+    { "local": "你好", "zh": "你好", "isHighlight": false },
+    { "local": "多謝", "zh": "謝謝", "isHighlight": false },
+    { "local": "呢個幾錢？", "zh": "這多少錢？", "isHighlight": true }
+  ],
+  "guideItems": [
+    { "item": "茶餐廳套餐", "priceRange": "40 - 70 HKD" },
+    { "item": "港式奶茶", "priceRange": "18 - 25 HKD" },
+    { "item": "港鐵單程票", "priceRange": "5 - 15 HKD" }
+  ]
+}

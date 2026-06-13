@@ -1,0 +1,18 @@
+{
+  "currencyCode": "USD",
+  "currencyName": "美元",
+  "emergencyContacts": [
+    { "title": "報警/消防/救護車", "subTitle": "24小時免費服務", "phone": "911" },
+    { "title": "旅客協助熱線", "subTitle": "中文/英文諮詢服務", "phone": "1-800-879-1960" }
+  ],
+  "usefulPhrases": [
+    { "local": "Hello", "zh": "你好", "isHighlight": false },
+    { "local": "Thank you", "zh": "謝謝", "isHighlight": false },
+    { "local": "How much is this?", "zh": "這多少錢？", "isHighlight": true }
+  ],
+  "guideItems": [
+    { "item": "漢堡套餐", "priceRange": "8 - 14 USD" },
+    { "item": "咖啡 (中杯)", "priceRange": "3 - 6 USD" },
+    { "item": "地鐵/公車單程票", "priceRange": "2.5 - 3 USD" }
+  ]
+}

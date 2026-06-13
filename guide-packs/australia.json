@@ -1,0 +1,18 @@
+{
+  "currencyCode": "AUD",
+  "currencyName": "澳幣",
+  "emergencyContacts": [
+    { "title": "報警/消防/救護車", "subTitle": "24小時免費服務", "phone": "000" },
+    { "title": "旅客資訊熱線", "subTitle": "多國語系服務", "phone": "13 17 14" }
+  ],
+  "usefulPhrases": [
+    { "local": "Hello", "zh": "你好", "isHighlight": false },
+    { "local": "Thank you", "zh": "謝謝", "isHighlight": false },
+    { "local": "How much is this?", "zh": "這多少錢？", "isHighlight": true }
+  ],
+  "guideItems": [
+    { "item": "咖啡 (Flat White)", "priceRange": "4.5 - 6 AUD" },
+    { "item": "簡餐套餐", "priceRange": "15 - 25 AUD" },
+    { "item": "市區大眾運輸單程票", "priceRange": "3 - 5 AUD" }
+  ]
+}
