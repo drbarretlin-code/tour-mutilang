@@ -504,8 +504,9 @@ export function TimelineView({
                     </TouchableOpacity>
                   )}
 
-                  {onReRollActivity && (
-                    <TouchableOpacity 
+                  {/* 「換一個」僅適用於可替換的景點/餐飲/活動；住宿起訖點與機場接送不提供替換 */}
+                  {onReRollActivity && !['hotel', 'transport'].includes(act.type) && (
+                    <TouchableOpacity
                       style={[styles.actionBtn, { borderColor: '#FDE047', backgroundColor: '#FEF9C3' }]}
                       onPress={() => onReRollActivity(act.id)}
                     >

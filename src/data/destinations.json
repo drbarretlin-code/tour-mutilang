@@ -91,6 +91,42 @@
             "zh-CN": "邻近筑地市场的老字号寿司店，使用当日直送鲜鱼，江户前握寿司新鲜细致。",
             "en": "A long-established sushi house near Tsukiji using daily-fresh fish for refined Edomae nigiri."
           }
+        },
+        {
+          "localTitle": "金子半之助 日本橋本店",
+          "lat": 35.692,
+          "lon": 139.773,
+          "cost": 1500,
+          "title": { "zh-TW": "金子半之助天丼", "zh-CN": "金子半之助天丼", "en": "Kaneko Hannosuke Tendon" },
+          "desc": {
+            "zh-TW": "日本橋人氣天丼名店，現炸的星鰻、蝦與蔬菜天婦羅鋪滿丼飯，淋上祖傳醬汁，酥脆鹹甜、份量十足，常見排隊。",
+            "zh-CN": "日本桥人气天丼名店，现炸的星鳗、虾与蔬菜天妇罗铺满丼饭，淋上祖传酱汁，酥脆咸甜、份量十足，常见排队。",
+            "en": "A popular Nihonbashi tendon house piling freshly fried conger eel, prawn and vegetable tempura over rice with a secret-recipe sauce — crisp, savory-sweet and generous, often queued."
+          }
+        },
+        {
+          "localTitle": "六厘舎 (東京駅)",
+          "lat": 35.6812,
+          "lon": 139.7671,
+          "cost": 1200,
+          "title": { "zh-TW": "六厘舍沾麵", "zh-CN": "六厘舍蘸面", "en": "Rokurinsha Tsukemen" },
+          "desc": {
+            "zh-TW": "東京車站拉麵街的沾麵名店，濃厚魚介豚骨沾汁搭配彈牙粗麵，風味醇厚，是沾麵愛好者必訪，用餐時段常大排長龍。",
+            "zh-CN": "东京车站拉面街的蘸面名店，浓厚鱼介豚骨蘸汁搭配弹牙粗面，风味醇厚，是蘸面爱好者必访，用餐时段常大排长龙。",
+            "en": "A famed tsukemen shop on Tokyo Station's Ramen Street, its thick fish-and-pork dipping broth paired with springy noodles — rich and beloved by dipping-noodle fans, with long mealtime queues."
+          }
+        },
+        {
+          "localTitle": "うなぎ 野田岩",
+          "lat": 35.6585,
+          "lon": 139.7454,
+          "cost": 4000,
+          "title": { "zh-TW": "野田岩鰻魚飯", "zh-CN": "野田岩鳗鱼饭", "en": "Nodaiwa Unagi" },
+          "desc": {
+            "zh-TW": "創業逾兩百年的鰻魚飯老舖，以備長炭細火慢烤的蒲燒鰻外酥內嫩、香氣四溢，是品味江戶傳統鰻魚料理的經典之選。",
+            "zh-CN": "创业逾两百年的鳗鱼饭老铺，以备长炭细火慢烤的蒲烧鳗外酥内嫩、香气四溢，是品味江户传统鳗鱼料理的经典之选。",
+            "en": "A 200-year-old unagi restaurant whose binchotan-charcoal-grilled eel is crisp outside and tender within, fragrant throughout — a classic taste of traditional Edo eel cuisine."
+          }
         }
       ]
     },
@@ -183,6 +219,42 @@
             "zh-TW": "曾獲皇室御廚背書的家常泰菜餐廳，招牌咖哩蟹肉與炒水空心菜深受在地人喜愛。",
             "zh-CN": "曾获皇室御厨背书的家常泰菜餐厅，招牌咖喱蟹肉与炒水空心菜深受在地人喜爱。",
             "en": "A beloved home-style Thai restaurant endorsed by royal chefs, known for stir-fried crab with yellow curry."
+          }
+        },
+        {
+          "localTitle": "สมบูรณ์โภชนา (Somboon Seafood)",
+          "lat": 13.728,
+          "lon": 100.524,
+          "cost": 600,
+          "title": { "zh-TW": "建興酒家咖哩螃蟹", "zh-CN": "建兴酒家咖喱螃蟹", "en": "Somboon Seafood" },
+          "desc": {
+            "zh-TW": "創業逾五十年的曼谷海鮮名店，招牌咖哩炒蟹以濃郁蛋香咖哩裹覆肥美蟹肉，是必嚐的泰式海鮮經典。",
+            "zh-CN": "创业逾五十年的曼谷海鲜名店，招牌咖喱炒蟹以浓郁蛋香咖喱裹覆肥美蟹肉，是必尝的泰式海鲜经典。",
+            "en": "A 50-year-old Bangkok seafood institution whose signature curry crab coats succulent crab in a rich, eggy curry — an essential Thai seafood classic."
+          }
+        },
+        {
+          "localTitle": "ส้มตำนัว (Som Tam Nua)",
+          "lat": 13.744,
+          "lon": 100.534,
+          "cost": 200,
+          "title": { "zh-TW": "Som Tam Nua 青木瓜沙拉", "zh-CN": "Som Tam Nua 青木瓜沙拉", "en": "Som Tam Nua" },
+          "desc": {
+            "zh-TW": "暹羅商圈人氣泰式東北菜餐廳，招牌青木瓜沙拉酸辣開胃、炸雞酥脆多汁，平價道地、用餐時段常排隊。",
+            "zh-CN": "暹罗商圈人气泰式东北菜餐厅，招牌青木瓜沙拉酸辣开胃、炸鸡酥脆多汁，平价道地、用餐时段常排队。",
+            "en": "A popular Isan (northeastern Thai) restaurant in the Siam area, famed for tangy-spicy green papaya salad and crisp, juicy fried chicken — affordable, authentic and often queued at mealtimes."
+          }
+        },
+        {
+          "localTitle": "After You Dessert Cafe",
+          "lat": 13.73,
+          "lon": 100.569,
+          "cost": 250,
+          "title": { "zh-TW": "After You 甜點咖啡", "zh-CN": "After You 甜点咖啡", "en": "After You Dessert Cafe" },
+          "desc": {
+            "zh-TW": "風靡泰國的人氣甜點連鎖，招牌蜜糖吐司與澀谷刨冰綿密細緻、甜而不膩，是午後歇腳、滿足甜點控的最佳去處。",
+            "zh-CN": "风靡泰国的人气甜点连锁，招牌蜜糖吐司与涩谷刨冰绵密细致、甜而不腻，是午后歇脚、满足甜点控的最佳去处。",
+            "en": "A wildly popular Thai dessert chain whose signature honey toast and Shibuya shaved ice are fluffy and not too sweet — the perfect afternoon stop for dessert lovers."
           }
         }
       ]
@@ -277,6 +349,42 @@
             "zh-TW": "西門町站著吃的傳奇小吃，柴魚高湯麵線淋上滷大腸與香菜，是台北街頭代表味。",
             "zh-CN": "西门町站着吃的传奇小吃，柴鱼高汤面线淋上卤大肠与香菜，是台北街头代表味。",
             "en": "A legendary Ximending street snack: bonito-broth thin noodles topped with braised intestine."
+          }
+        },
+        {
+          "localTitle": "永康牛肉麵",
+          "lat": 25.033,
+          "lon": 121.53,
+          "cost": 280,
+          "title": { "zh-TW": "永康牛肉麵", "zh-CN": "永康牛肉面", "en": "Yongkang Beef Noodles" },
+          "desc": {
+            "zh-TW": "永康街的牛肉麵名店，紅燒湯頭濃郁醇厚、牛肉軟嫩入味，是台北最具代表性的牛肉麵之一，常吸引各國饕客排隊朝聖。",
+            "zh-CN": "永康街的牛肉面名店，红烧汤头浓郁醇厚、牛肉软嫩入味，是台北最具代表性的牛肉面之一，常吸引各国饕客排队朝圣。",
+            "en": "A famed beef noodle house on Yongkang Street whose rich braised broth and tender beef make it one of Taipei's most iconic bowls, drawing queues of food lovers from around the world."
+          }
+        },
+        {
+          "localTitle": "度小月",
+          "lat": 25.042,
+          "lon": 121.543,
+          "cost": 200,
+          "title": { "zh-TW": "度小月擔仔麵", "zh-CN": "度小月担仔面", "en": "Du Hsiao Yueh" },
+          "desc": {
+            "zh-TW": "源自台南、創業逾百年的擔仔麵名店，以肉燥、蝦湯與彈牙油麵交織出細緻古早味，份量小巧精緻，適合搭配多樣台式小點。",
+            "zh-CN": "源自台南、创业逾百年的担仔面名店，以肉燥、虾汤与弹牙油面交织出细致古早味，份量小巧精致，适合搭配多样台式小点。",
+            "en": "A century-old danzai noodle house originating in Tainan, blending minced pork, shrimp broth and springy noodles into a refined old-school flavor — small, elegant portions ideal with assorted Taiwanese bites."
+          }
+        },
+        {
+          "localTitle": "寧夏夜市",
+          "lat": 25.057,
+          "lon": 121.515,
+          "cost": 200,
+          "title": { "zh-TW": "寧夏夜市小吃", "zh-CN": "宁夏夜市小吃", "en": "Ningxia Night Market" },
+          "desc": {
+            "zh-TW": "台北最具古早味的夜市之一，以蚵仔煎、麻油雞、芋頭粥與各式經典台灣小吃聞名，攤位密集、價格親民，是體驗在地夜市文化的好去處。",
+            "zh-CN": "台北最具古早味的夜市之一，以蚵仔煎、麻油鸡、芋头粥与各式经典台湾小吃闻名，摊位密集、价格亲民，是体验在地夜市文化的好去处。",
+            "en": "One of Taipei's most nostalgic night markets, famed for oyster omelets, sesame-oil chicken, taro porridge and classic Taiwanese snacks — dense stalls at friendly prices, a great taste of local night-market culture."
           }
         }
       ]

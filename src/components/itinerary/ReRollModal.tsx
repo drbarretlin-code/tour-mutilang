@@ -54,12 +54,17 @@ export function ReRollModal({ visible, isLoading, alternatives, onClose, onSelec
                 onPress={() => onSelect(alt)}
               >
                 <View style={styles.altHeader}>
-                  <Text style={[typography.titleMedium, { color: colors.text, fontWeight: '700', flex: 1 }]}>{alt.title}</Text>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[typography.titleMedium, { color: colors.text, fontWeight: '700' }]}>{alt.title}</Text>
+                    {!!alt.localTitle && alt.localTitle !== alt.title && (
+                      <Text style={[typography.bodySmall, { color: colors.textSecondary, marginTop: 2 }]} numberOfLines={1}>{alt.localTitle}</Text>
+                    )}
+                  </View>
                   <View style={[styles.tag, { backgroundColor: colors.primary100 }]}>
                     <Text style={[typography.labelSmall, { color: colors.primary700 }]}>{alt.type}</Text>
                   </View>
                 </View>
-                
+
                 <View style={styles.altRow}>
                   <Ionicons name="time-outline" size={14} color={colors.textSecondary} />
                   <Text style={[typography.bodySmall, { color: colors.textSecondary, marginLeft: 4 }]}>
@@ -74,10 +79,11 @@ export function ReRollModal({ visible, isLoading, alternatives, onClose, onSelec
                   </Text>
                 </View>
 
-                <Text style={[typography.bodyMedium, { color: colors.text, marginTop: 8 }]} numberOfLines={3}>
-                  {alt.notes}
+                {/* 景點介紹（約300字）；無介紹時退回推薦說明 */}
+                <Text style={[typography.bodySmall, { color: colors.textSecondary, marginTop: 8, lineHeight: 20 }]} numberOfLines={6}>
+                  {alt.description || alt.notes}
                 </Text>
-                
+
                 <View style={[styles.selectBtn, { backgroundColor: colors.primary50 }]}>
                   <Text style={[typography.labelMedium, { color: colors.primary600, fontWeight: '700' }]}>
                     {t('itinerary.reroll.selectBtn', { defaultValue: '選擇此方案 (Select)' })}

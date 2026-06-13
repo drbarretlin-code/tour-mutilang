@@ -558,7 +558,12 @@ export const aiService = {
         if (!tpl?.titles?.length) return;
         const queryTitles = tpl.titles.map((t, idx) => (tpl.localTitles?.[idx] || t));
         const summaries = await fetchWikipediaSummaries(queryTitles, appLocale);
-        tpl.descs = tpl.descs.map((d, idx) => summaries[queryTitles[idx]] || d);
+        // 僅當維基摘要「不短於」既有的約300字引言時才覆寫，避免以較短的摘要取代而導致介紹變短；
+        // 否則沿用 buildPoiDescription 產生的完整長介紹，確保長度達標。
+        tpl.descs = tpl.descs.map((d, idx) => {
+          const wiki = summaries[queryTitles[idx]];
+          return (wiki && wiki.length >= (d?.length || 0)) ? wiki : d;
+        });
       }));
     } catch (e) {
       console.warn('[generateRuleBasedItinerary] 維基百科介紹補強失敗，沿用內建描述', e);
@@ -932,6 +937,17 @@ export const aiService = {
             url: ref.value,
             type: 'info' as const
           });
+        }
+      }
+
+      // 確保午餐能落在合理用餐時間（約12:00）：將上午活動最遲於中午結束，避免行程順延把午餐推遲到下午過晚。
+      // 使用者於「特定地點」明確指定停留時間者（matchedSpecific）優先尊重，不在此強制裁切。
+      if (!matchedSpecific) {
+        const NOON_MIN = 12 * 60;
+        const [msH, msM] = morningStartTime.split(':').map(Number);
+        const morningStartMin = (msH || 0) * 60 + (msM || 0);
+        if (morningStartMin < NOON_MIN && morningStartMin + morningDuration > NOON_MIN) {
+          morningDuration = Math.max(60, NOON_MIN - morningStartMin);
         }
       }
 
@@ -1321,9 +1337,8 @@ function buildAlternativeFromPOI(
   const label = labels[poi.category] || labels.other;
   const isZh = locale.startsWith('zh');
 
-  const description = isZh
-    ? `「${poi.name}」是${region}著名的${label}，深受旅客喜愛。建議安排充裕的時間細細探訪，感受當地獨特的氛圍與風情。實際開放時間與票價請於出發前再次確認。`
-    : `${poi.name} is a well-known ${label} in ${region}, popular with travelers. Allow enough time to explore it and soak in the local atmosphere. Please re-confirm opening hours and ticket prices before you go.`;
+  // 使用與主行程一致的約300字引言，使「換一個」替代方案也具備完整介紹。
+  const description = buildPoiDescription(poi, region, label, locale);
 
   const notes = isZh
     ? `規則式系統依據您的興趣與行程節點，自當地真實景點資料庫中為您推薦此替代方案，可作為「${current.title}」的同時段選項。`
