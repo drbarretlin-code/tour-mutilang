@@ -1,0 +1,285 @@
+{
+  "_comment": "內建目的地範本（離線/無 OpenTripMap 金鑰時的備援資料）。資料與邏輯解耦，新增目的地只需在此追加一筆物件，無需改動程式碼。keywords 為比對用關鍵字（小寫）。isDefault 標示找不到匹配時採用的預設目的地。title/desc 依語系 key 取值（zh-TW/zh-CN/en），缺值時退回 en。",
+  "destinations": [
+    {
+      "keywords": ["東京", "tokyo", "日本", "japan"],
+      "images": [
+        "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=600",
+        "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600",
+        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "浅草寺 (雷門)",
+          "lat": 35.7148,
+          "lon": 139.7967,
+          "title": {
+            "zh-TW": "淺草寺與雷門江戶風情",
+            "zh-CN": "浅草寺与雷门江户风情",
+            "en": "Sensō-ji Temple and Kaminarimon Gate"
+          },
+          "desc": {
+            "zh-TW": "淺草寺是東京都內歷史最悠久的寺廟，相傳創建於公元628年，源於兩位漁夫在隅田川中撈起一尊觀音像的傳說，至今仍是東京香火最鼎盛的信仰中心。寺廟的門面是著名的「雷門」，懸掛著一盞高約4公尺、重達700公斤的巨型紅燈籠，兩側佇立著守護寺院的風神與雷神像，是江戶文化最具代表性的象徵，也是旅人必拍的地標。穿過雷門後，便是長約250公尺的「仲見世通」商店街，兩旁近百間店鋪自江戶時代延續至今，販售人形燒、雷おこし米菓、煎餅、和風小物與手工藝品，空氣中飄散著現烤點心的甜香。走到底則是莊嚴的寶藏門與本堂，旅客可在此參拜、求籤（おみくじ），體驗日本傳統的祈福文化。一旁高聳的五重塔與不遠處的晴空塔交相輝映，呈現古典與現代並存的獨特東京風景，建議安排半日細細遊覽周邊的淺草老街風情。",
+            "zh-CN": "浅草寺是东京都内历史最悠久的寺庙，相传创建于公元628年，源于两位渔夫在隅田川中捞起一尊观音像的传说，至今仍是东京香火最鼎盛的信仰中心。寺庙的门面是著名的“雷门”，悬挂着一盏高约4米、重达700公斤的巨型红灯笼，两侧伫立着守护寺院的风神与雷神像，是江户文化最具代表性的象征，也是旅人必拍的地标。穿过雷门后，便是长约250米的“仲见世通”商店街，两旁近百间店铺自江户时代延续至今，贩售人形烧、雷おこし米菓、煎饼、和风小物与手工艺品，空气中飘散着现烤点心的甜香。走到底则是庄严的宝藏门与本堂，旅客可在此参拜、求签（おみくじ），体验日本传统的祈福文化。一旁高耸的五重塔与不远处的晴空塔交相辉映，呈现古典与现代并存的独特东京风景，建议安排半日细细游览周边的浅草老街风情。",
+            "en": "Sensō-ji is Tokyo's oldest temple, said to have been founded in 628 after two fishermen pulled a statue of the Kannon goddess from the Sumida River — a legend that still makes it the city's most visited place of worship. Its face is the famous Kaminarimon (Thunder Gate), hung with a giant red lantern nearly 4 meters tall and weighing some 700kg, flanked by the guardian statues of the gods of wind and thunder; it is the definitive symbol of Edo culture and a must-photograph landmark. Beyond the gate stretches Nakamise-dori, a 250-meter shopping street whose nearly one hundred stalls have operated since the Edo period, selling ningyo-yaki cakes, rice crackers, senbei, Japanese trinkets and crafts amid the sweet aroma of freshly baked treats. At its end stand the imposing Hozomon Gate and the main hall, where visitors pray and draw omikuji fortune slips to experience traditional Japanese blessing customs. The towering five-story pagoda nearby and the Tokyo Skytree in the distance create a striking blend of classical and modern Tokyo — allow half a day to savor the old-town atmosphere of Asakusa."
+          }
+        },
+        {
+          "localTitle": "渋谷スクランブル交差点",
+          "lat": 35.6595,
+          "lon": 139.7004,
+          "title": {
+            "zh-TW": "澀谷十字路口與潮流探索",
+            "zh-CN": "涩谷十字路口与潮流探索",
+            "en": "Shibuya Crossing and Trendy Exploration"
+          },
+          "desc": {
+            "zh-TW": "澀谷是東京乃至全球時尚與青年文化的發源地，永遠走在潮流的最前線。最著名的景象莫過於澀谷站前的全向十字路口（Shibuya Scramble Crossing）：當四面號誌同時轉為綠燈，來自各方的人潮如潮水般交錯穿梭，據估算尖峰時段單次可有逾三千人同時通過，那種秩序與混亂並存的震撼，已成為東京最具代表性的都市意象，也是無數電影取景之地。十字路口旁矗立著忠犬八公的銅像，是日本最知名的等待與忠誠故事，更是當地人氣約定碰面的地標。周邊巷弄林立著百貨公司、潮流選物店、唱片行、特色居酒屋與深夜咖啡館，從西武、PARCO到109辣妹文化發源地，無不引領著日本年輕世代的穿搭與消費風向。無論是登上周邊高樓的觀景台俯瞰車水馬龍，或鑽進小巷探索獨立店家，澀谷都能讓人深刻感受東京脈動的速度與能量。",
+            "zh-CN": "涩谷是东京乃至全球时尚与青年文化的发源地，永远走在潮流的最前线。最著名的景象莫过于涩谷站前的全向十字路口（Shibuya Scramble Crossing）：当四面信号同时转为绿灯，来自各方的人潮如潮水般交错穿梭，据估算高峰时段单次可有逾三千人同时通过，那种秩序与混乱并存的震撼，已成为东京最具代表性的都市意象，也是无数电影取景之地。十字路口旁矗立着忠犬八公的铜像，是日本最知名的等待与忠诚故事，更是当地人气约定碰面的地标。周边巷弄林立着百货公司、潮流选物店、唱片行、特色居酒屋与深夜咖啡馆，从西武、PARCO到109辣妹文化发源地，无不引领着日本年轻世代的穿搭与消费风向。无论是登上周边高楼的观景台俯瞰车水马龙，或钻进小巷探索独立店家，涩谷都能让人深刻感受东京脉动的速度与能量。",
+            "en": "Shibuya is the birthplace of fashion and youth culture in Tokyo, perpetually at the cutting edge of trends. Its most famous sight is the Shibuya Scramble Crossing: when all the signals turn green at once, crowds surge across from every direction — an estimated three thousand-plus people in a single peak crossing — a spectacle of order and chaos that has become Tokyo's defining urban image and a backdrop for countless films. Beside the crossing stands the bronze statue of Hachiko, the loyal dog whose story of devotion is among Japan's most beloved, and a popular local meeting point. The surrounding lanes brim with department stores, boutique select shops, record stores, izakayas and late-night cafes; from Seibu and PARCO to the birthplace of the 109 gyaru culture, Shibuya sets the pace for how young Japan dresses and spends. Whether viewing the bustle from a rooftop observation deck or exploring independent shops in the back streets, Shibuya lets you feel the speed and energy of Tokyo's pulse."
+          }
+        },
+        {
+          "localTitle": "明治神宮",
+          "lat": 35.6764,
+          "lon": 139.6993,
+          "title": {
+            "zh-TW": "明治神宮森呼吸",
+            "zh-CN": "明治神宫森呼吸",
+            "en": "Meiji Jingu Forest Walk"
+          },
+          "desc": {
+            "zh-TW": "明治神宮是為了供奉明治天皇與昭憲皇太后而建的神社，於1920年落成，是東京最重要的神道信仰聖地之一。最令人驚嘆的是，神宮並非坐落於荒野，而是被一片佔地約70公頃、由全國各地獻納的約十萬棵樹木所構成的巨大人工森林環抱——這片「永恆之森」歷經百年生長，如今已演替成生機盎然、近乎天然的都市林相，與一牆之隔的繁華原宿、澀谷形成強烈對比。踏入高聳的木造鳥居，沿著鋪滿碎石的參道緩步前行，兩旁古木參天、綠蔭蔽日，城市的喧囂彷彿瞬間被隔絕，只餘鳥鳴與踩踏碎石的沙沙聲，令人身心沉澱。本殿莊嚴肅穆，旅客可在此體驗投賽錢、二拜二拍手一拜的參拜禮儀，或在繪馬上書寫願望、選購御守。每逢新年，這裡更是全日本參拜人數最多的神社。是繁華東京市中心難得的靜謐綠洲與神聖之所。",
+            "zh-CN": "明治神宫是为了供奉明治天皇与昭宪皇太后而建的神社，于1920年落成，是东京最重要的神道信仰圣地之一。最令人惊叹的是，神宫并非坐落于荒野，而是被一片占地约70公顷、由全国各地献纳的约十万棵树木所构成的巨大人工森林环抱——这片“永恒之森”历经百年生长，如今已演替成生机盎然、近乎天然的都市林相，与一墙之隔的繁华原宿、涩谷形成强烈对比。踏入高耸的木造鸟居，沿着铺满碎石的参道缓步前行，两旁古木参天、绿荫蔽日，城市的喧嚣仿佛瞬间被隔绝，只余鸟鸣与踩踏碎石的沙沙声，令人身心沉淀。本殿庄严肃穆，旅客可在此体验投赛钱、二拜二拍手一拜的参拜礼仪，或在绘马上书写愿望、选购御守。每逢新年，这里更是全日本参拜人数最多的神社。是繁华东京市中心难得的静谧绿洲与神圣之所。",
+            "en": "Meiji Jingu, completed in 1920, is a Shinto shrine dedicated to the deified spirits of Emperor Meiji and Empress Shoken, and one of Tokyo's most important sacred sites. Remarkably, the shrine does not sit in open wilderness but is embraced by a vast man-made forest of about 70 hectares, planted with some 100,000 trees donated from across Japan. This \"eternal forest\" has matured over a century into a lush, almost natural woodland — a stark contrast to bustling Harajuku and Shibuya just beyond its walls. Passing through the towering wooden torii gate and walking the gravel approach beneath a canopy of ancient trees, the noise of the city seems to vanish, leaving only birdsong and the crunch of gravel underfoot — a deeply calming experience. At the solemn main hall, visitors can offer coins and perform the two-bow, two-clap, one-bow ritual, write wishes on ema plaques, or buy protective omamori charms. At New Year it draws the largest number of worshippers of any shrine in Japan — a rare tranquil green oasis and sacred space in the heart of Tokyo."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "一蘭 渋谷店",
+          "lat": 35.6614,
+          "lon": 139.7006,
+          "cost": 1200,
+          "title": { "zh-TW": "一蘭拉麵 澀谷店", "zh-CN": "一兰拉面 涩谷店", "en": "Ichiran Ramen Shibuya" },
+          "desc": {
+            "zh-TW": "以個人專注隔間與濃郁豚骨湯頭聞名的連鎖拉麵名店，可依喜好客製湯頭濃度與辣度。",
+            "zh-CN": "以个人专注隔间与浓郁豚骨汤头闻名的连锁拉面名店，可依喜好客制汤头浓度与辣度。",
+            "en": "Famous ramen chain with private focus booths and rich tonkotsu broth, customizable to taste."
+          }
+        },
+        {
+          "localTitle": "とんかつ まい泉 青山本店",
+          "lat": 35.6657,
+          "lon": 139.7106,
+          "cost": 2000,
+          "title": { "zh-TW": "邁泉豬排 青山總店", "zh-CN": "迈泉猪排 青山总店", "en": "Tonkatsu Maisen Aoyama" },
+          "desc": {
+            "zh-TW": "改建自老澡堂的炸豬排名店，豬排酥嫩多汁、入口即化，搭配自製醬汁堪稱東京一絕。",
+            "zh-CN": "改建自老澡堂的炸猪排名店，猪排酥嫩多汁、入口即化，搭配自制酱汁堪称东京一绝。",
+            "en": "Set in a former bathhouse, this tonkatsu institution serves famously tender, juicy cutlets."
+          }
+        },
+        {
+          "localTitle": "築地寿司清",
+          "lat": 35.6655,
+          "lon": 139.7707,
+          "cost": 3000,
+          "title": { "zh-TW": "築地壽司清", "zh-CN": "筑地寿司清", "en": "Tsukiji Sushiko" },
+          "desc": {
+            "zh-TW": "鄰近築地市場的老字號壽司店，使用當日直送鮮魚，江戶前握壽司新鮮細緻。",
+            "zh-CN": "邻近筑地市场的老字号寿司店，使用当日直送鲜鱼，江户前握寿司新鲜细致。",
+            "en": "A long-established sushi house near Tsukiji using daily-fresh fish for refined Edomae nigiri."
+          }
+        }
+      ]
+    },
+    {
+      "keywords": ["曼谷", "bangkok", "泰國", "泰国", "thai", "thailand", "芭達雅", "芭达雅", "pattaya"],
+      "images": [
+        "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600",
+        "https://images.unsplash.com/photo-1562790351-d273a961e0e9?w=600",
+        "https://images.unsplash.com/photo-1582967788606-a171c1080cb0?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "พระบรมมหาราชวังและวัดพระแก้ว",
+          "lat": 13.75,
+          "lon": 100.4915,
+          "title": {
+            "zh-TW": "大皇宮與玉佛寺金碧輝煌",
+            "zh-CN": "大皇宫与玉佛寺金碧辉煌",
+            "en": "Grand Palace and Temple of the Emerald Buddha"
+          },
+          "desc": {
+            "zh-TW": "大皇宮坐落於昭披耶河東岸，自1782年拉瑪一世將首都遷至曼谷後，便成為暹羅王室兩百餘年的官方居所與行政中心。整座宮殿群佔地逾二十一萬平方公尺，由數十棟風格各異的建築構成，巧妙融合泰式傳統尖頂、高棉式佛塔與十九世紀引進的歐式新古典立面，金箔、彩色玻璃與陶瓷碎片在烈日下交織出令人屏息的奢華光輝。宮內最神聖的核心是玉佛寺（Wat Phra Kaew），供奉著以整塊翡翠雕成、高約66公分的玉佛，是泰國地位最崇高的國寶，泰王會依寒、暑、雨三季親自為玉佛更換金縷衣袍。漫步其間，可見描繪《羅摩衍那》史詩的迴廊壁畫、守護宮門的巨型夜叉雕像，以及金光燦爛的舍利塔。參觀時請務必遵守服裝規定，穿著覆蓋肩膀與膝蓋的衣物，並預留至少兩小時細細品味這座泰國歷史與信仰的中心。",
+            "zh-CN": "大皇宫坐落于昭披耶河东岸，自1782年拉玛一世将首都迁至曼谷后，便成为暹罗王室两百余年的官方居所与行政中心。整座宫殿群占地逾二十一万平方米，由数十栋风格各异的建筑构成，巧妙融合泰式传统尖顶、高棉式佛塔与十九世纪引进的欧式新古典立面，金箔、彩色玻璃与陶瓷碎片在烈日下交织出令人屏息的奢华光辉。宫内最神圣的核心是玉佛寺（Wat Phra Kaew），供奉着以整块翡翠雕成、高约66公分的玉佛，是泰国地位最崇高的国宝，泰王会依寒、暑、雨三季亲自为玉佛更换金缕衣袍。漫步其间，可见描绘《罗摩衍那》史诗的回廊壁画、守护宫门的巨型夜叉雕像，以及金光灿烂的舍利塔。参观时请务必遵守服装规定，穿着覆盖肩膀与膝盖的衣物，并预留至少两小时细细品味这座泰国历史与信仰的中心。",
+            "en": "Standing on the east bank of the Chao Phraya River, the Grand Palace has been the official residence and administrative seat of the Kings of Siam for over two centuries since King Rama I moved the capital to Bangkok in 1782. Sprawling across more than 210,000 square meters, the complex comprises dozens of buildings that fuse traditional Thai spires, Khmer-style prangs and nineteenth-century European neoclassical facades, all shimmering with gold leaf, colored glass and porcelain mosaic under the tropical sun. Its sacred heart is Wat Phra Kaew, the Temple of the Emerald Buddha, which enshrines a 66cm statue carved from a single block of jade — Thailand's most revered national treasure, whose golden robes are ceremonially changed by the King three times a year for the cool, hot and rainy seasons. Visitors can admire mural-lined cloisters depicting the Ramakien epic, towering yaksha guardian statues, and gilded stupas. A strict dress code applies (shoulders and knees must be covered); allow at least two hours to take in this center of Thai history and faith."
+          }
+        },
+        {
+          "localTitle": "ตลาดน้ำอัมพวา",
+          "lat": 13.4253,
+          "lon": 99.9558,
+          "title": {
+            "zh-TW": "安帕瓦水上市場熱鬧體驗",
+            "zh-CN": "安帕瓦水上市场热闹体验",
+            "en": "Amphawa Floating Market Experience"
+          },
+          "desc": {
+            "zh-TW": "安帕瓦水上市場是泰國古老運河文化最生動的縮影，距曼谷市區約一個半小時車程，座落於夜功府寧靜的水鄉之間。每逢週末午後至夜晚，狹窄的河道便熱鬧起來：商家划著木船在水道上穿梭，船上架著炭火現烤海鮮、現炒河粉、椰糖甜點與南洋水果，買賣雙方隔著河岸與船舷交易，空氣中瀰漫著炭香與泰式香料的氣味。沿岸的老木屋商鋪販售手工藝品、衣飾與在地小吃，傍晚還可搭乘長尾船遊河，欣賞兩岸寺廟與傳統高腳屋，並在入夜後觀賞河畔螢火蟲在紅樹林間明滅閃爍的夢幻景象。相較於觀光化嚴重的丹嫩莎朵，安帕瓦更貼近泰國人真實的常民生活，是體驗在地飲食、人情與運河風情的絕佳去處，建議安排於下午前往，銜接黃昏與夜市時段。",
+            "zh-CN": "安帕瓦水上市场是泰国古老运河文化最生动的缩影，距曼谷市区约一个半小时车程，座落于夜功府宁静的水乡之间。每逢周末午后至夜晚，狭窄的河道便热闹起来：商家划着木船在水道上穿梭，船上架着炭火现烤海鲜、现炒河粉、椰糖甜点与南洋水果，买卖双方隔着河岸与船舷交易，空气中弥漫着炭香与泰式香料的气味。沿岸的老木屋商铺贩售手工艺品、衣饰与在地小吃，傍晚还可搭乘长尾船游河，欣赏两岸寺庙与传统高脚屋，并在入夜后观赏河畔萤火虫在红树林间明灭闪烁的梦幻景象。相较于观光化严重的丹嫩莎朵，安帕瓦更贴近泰国人真实的常民生活，是体验在地饮食、人情与运河风情的绝佳去处，建议安排于下午前往，衔接黄昏与夜市时段。",
+            "en": "Amphawa Floating Market is the most vivid surviving expression of Thailand's old canal culture, set among the tranquil waterways of Samut Songkhram province about ninety minutes from central Bangkok. From weekend afternoons into the evening the narrow canal comes alive: vendors paddle wooden boats laden with charcoal-grilled seafood, freshly fried noodles, palm-sugar desserts and tropical fruit, trading with customers lining the banks. Riverside wooden shophouses sell handicrafts, clothing and local snacks, and at dusk you can board a long-tail boat to cruise past riverside temples and stilt houses, then watch fireflies twinkle through the mangroves after dark. Far less touristy than Damnoen Saduak, Amphawa offers an authentic glimpse of everyday Thai life, food and riverine charm — best visited in the afternoon to flow naturally into the sunset and night-market hours."
+          }
+        },
+        {
+          "localTitle": "วัดอรุณราชวราราม",
+          "lat": 13.7437,
+          "lon": 100.4889,
+          "title": {
+            "zh-TW": "鄭王廟夕陽光輝",
+            "zh-CN": "郑王庙夕阳光辉",
+            "en": "Wat Arun Golden Sunset"
+          },
+          "desc": {
+            "zh-TW": "鄭王廟又稱黎明寺，座落於昭披耶河西岸，是曼谷最具代表性的地標之一，得名自鄭信大帝（達信王）在此登基立國的歷史。寺廟的主體是一座高達約82公尺的高棉式中央佛塔（prang），象徵著佛教宇宙觀中的須彌山，四周環繞四座較小的衛星塔。最令人驚嘆的是，整座塔身並非以單純的石材砌成，而是鑲嵌了數以萬計的中國彩瓷碎片與貝殼——這些原是早年商船壓艙的瓷器，工匠將之拼貼成繁複的花卉與神獸圖案，在陽光下閃爍著細緻而斑斕的光澤。旅客可沿著陡峭的階梯攀上塔身平台，俯瞰昭披耶河與對岸大皇宮的壯麗景致。鄭王廟之美在黃昏時分達到極致：當夕陽西下，金紅色的霞光為塔身鍍上暖色，倒影映於河面，與往來的船隻交織成一幅極具詩意的畫面，是攝影與賞景的不二之選。",
+            "zh-CN": "郑王庙又称黎明寺，座落于昭披耶河西岸，是曼谷最具代表性的地标之一，得名自郑信大帝（达信王）在此登基立国的历史。寺庙的主体是一座高达约82米的高棉式中央佛塔（prang），象征着佛教宇宙观中的须弥山，四周环绕四座较小的卫星塔。最令人惊叹的是，整座塔身并非以单纯的石材砌成，而是镶嵌了数以万计的中国彩瓷碎片与贝壳——这些原是早年商船压舱的瓷器，工匠将之拼贴成繁复的花卉与神兽图案，在阳光下闪烁着细致而斑斓的光泽。旅客可沿着陡峭的阶梯攀上塔身平台，俯瞰昭披耶河与对岸大皇宫的壮丽景致。郑王庙之美在黄昏时分达到极致：当夕阳西下，金红色的霞光为塔身镀上暖色，倒影映于河面，与往来的船只交织成一幅极具诗意的画面，是摄影与赏景的不二之选。",
+            "en": "Wat Arun, the Temple of Dawn, rises on the west bank of the Chao Phraya River and is one of Bangkok's most iconic landmarks, named for the era when King Taksin the Great founded his reign here. Its centerpiece is a Khmer-style central prang soaring roughly 82 meters high, symbolizing Mount Meru of Buddhist cosmology and ringed by four smaller satellite towers. Remarkably, the spire is not built of plain stone but encrusted with tens of thousands of fragments of Chinese porcelain and seashells — originally ballast from trading ships — which artisans pieced into intricate floral and mythical-creature patterns that glitter in fine, multicolored detail under the sun. Visitors can climb the steep steps to a viewing terrace overlooking the river and the Grand Palace opposite. Wat Arun is at its most beautiful at dusk, when the setting sun bathes the tower in warm golden-red light and its reflection shimmers on the water amid passing boats — a uniquely poetic scene and a photographer's favorite."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "ทิพย์สมัย ผัดไทยประตูผี",
+          "lat": 13.753,
+          "lon": 100.5063,
+          "cost": 120,
+          "title": { "zh-TW": "Thip Samai 鬼門炒河粉", "zh-CN": "Thip Samai 鬼门炒河粉", "en": "Thip Samai Pad Thai" },
+          "desc": {
+            "zh-TW": "曼谷公認最具代表性的炒河粉名店，以蛋包炒河粉聞名，創業逾七十年，每晚門庭若市。",
+            "zh-CN": "曼谷公认最具代表性的炒河粉名店，以蛋包炒河粉闻名，创业逾七十年，每晚门庭若市。",
+            "en": "Bangkok's most iconic pad thai institution, famous for its egg-wrapped noodles and over 70 years of history."
+          }
+        },
+        {
+          "localTitle": "เจ๊ไฝ",
+          "lat": 13.7536,
+          "lon": 100.5044,
+          "cost": 800,
+          "title": { "zh-TW": "Jay Fai 米其林一星街頭海鮮", "zh-CN": "Jay Fai 米其林一星街头海鲜", "en": "Jay Fai (1 Michelin Star)" },
+          "desc": {
+            "zh-TW": "戴著護目鏡掌廚的傳奇老闆娘，以炭火現炒的蟹肉蛋包與海鮮冬蔭功享譽國際，米其林一星。",
+            "zh-CN": "戴着护目镜掌厨的传奇老板娘，以炭火现炒的蟹肉蛋包与海鲜冬荫功享誉国际，米其林一星。",
+            "en": "Run by the legendary goggle-wearing chef, celebrated worldwide for charcoal-fired crab omelets; one Michelin star."
+          }
+        },
+        {
+          "localTitle": "ครัวอัปษร",
+          "lat": 13.7589,
+          "lon": 100.5043,
+          "cost": 350,
+          "title": { "zh-TW": "Krua Apsorn 家常泰菜名店", "zh-CN": "Krua Apsorn 家常泰菜名店", "en": "Krua Apsorn" },
+          "desc": {
+            "zh-TW": "曾獲皇室御廚背書的家常泰菜餐廳，招牌咖哩蟹肉與炒水空心菜深受在地人喜愛。",
+            "zh-CN": "曾获皇室御厨背书的家常泰菜餐厅，招牌咖喱蟹肉与炒水空心菜深受在地人喜爱。",
+            "en": "A beloved home-style Thai restaurant endorsed by royal chefs, known for stir-fried crab with yellow curry."
+          }
+        }
+      ]
+    },
+    {
+      "keywords": ["台北", "台灣", "台湾", "taipei", "taiwan"],
+      "isDefault": true,
+      "images": [
+        "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=600",
+        "https://images.unsplash.com/photo-1571474004502-c1def214ac6d?w=600",
+        "https://images.unsplash.com/photo-1555529669-e69e7aa0db9a?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "台北101",
+          "lat": 25.0339,
+          "lon": 121.5645,
+          "title": {
+            "zh-TW": "台北 101 與信義商圈俯瞰",
+            "zh-CN": "台北 101 与信义商圈俯瞰",
+            "en": "Taipei 101 and Xinyi Shopping District"
+          },
+          "desc": {
+            "zh-TW": "台北101落成於2004年，曾以508公尺的高度蟬聯世界第一高樓寶座長達數年，至今仍是台灣最具辨識度的地標與現代科技的里程碑。其造型靈感取自竹節，以八層為一節、節節高升，蘊含中華文化中「生生不息」的吉祥寓意，外牆採用雙層隔熱帷幕玻璃。搭乘金氏世界紀錄認證的超高速電梯，僅需約37秒便能從5樓直達89樓室內觀景台，將台北盆地壯麗的城市天際線、蜿蜒的基隆河與遠處的群山盡收眼底；天氣晴朗時還可登上91樓戶外觀景台感受高空的風。塔內最受矚目的，是一顆懸掛於87至92樓之間、重達660公噸的金色風阻尼器鋼球，能在強風與地震時擺動以抵消大樓晃動，是建築工學的精彩展示。樓下的購物中心匯聚國際精品、餐廳與美食街，而每年跨年的101煙火秀更是聞名全球，吸引數十萬人共同迎接新年。",
+            "zh-CN": "台北101落成于2004年，曾以508米的高度蝉联世界第一高楼宝座长达数年，至今仍是台湾最具辨识度的地标与现代科技的里程碑。其造型灵感取自竹节，以八层为一节、节节高升，蕴含中华文化中“生生不息”的吉祥寓意，外墙采用双层隔热帷幕玻璃。搭乘金氏世界纪录认证的超高速电梯，仅需约37秒便能从5楼直达89楼室内观景台，将台北盆地壮丽的城市天际线、蜿蜒的基隆河与远处的群山尽收眼底；天气晴朗时还可登上91楼户外观景台感受高空的风。塔内最受瞩目的，是一颗悬挂于87至92楼之间、重达660公吨的金色风阻尼器钢球，能在强风与地震时摆动以抵消大楼晃动，是建筑工学的精彩展示。楼下的购物中心汇聚国际精品、餐厅与美食街，而每年跨年的101烟火秀更是闻名全球，吸引数十万人共同迎接新年。",
+            "en": "Completed in 2004, Taipei 101 held the title of the world's tallest building for several years at 508 meters and remains Taiwan's most recognizable landmark and a milestone of modern engineering. Its silhouette is inspired by a stalk of bamboo, rising in eight-floor segments that evoke the auspicious idea of ceaseless growth in Chinese culture, clad in a double-layer insulating curtain wall. A Guinness World Record-certified ultra-high-speed elevator whisks visitors from the 5th floor to the 89th-floor indoor observatory in about 37 seconds, unveiling a sweeping view of the Taipei Basin, the winding Keelung River and the surrounding mountains; on clear days you can step out onto the 91st-floor outdoor deck to feel the high-altitude wind. The tower's star attraction is a 660-tonne golden tuned mass damper suspended between the 87th and 92nd floors, which sways to counteract building movement during typhoons and earthquakes — a fascinating display of structural engineering. The mall below gathers international luxury brands, restaurants and a food court, while the annual New Year's Eve fireworks launched from the tower are world-famous, drawing hundreds of thousands to welcome the new year."
+          }
+        },
+        {
+          "localTitle": "九份老街",
+          "lat": 25.1095,
+          "lon": 121.8443,
+          "title": {
+            "zh-TW": "九份老街悲情城市茶香",
+            "zh-CN": "九份老街悲情城市茶香",
+            "en": "Jiufen Old Street Tea Tasting"
+          },
+          "desc": {
+            "zh-TW": "九份是一座依山面海的古老礦業小鎮，座落於新北市瑞芳的山城之間。日治時期因發現金礦而盛極一時，淘金人潮湧入，造就了「小上海」「小香港」的繁華景象；金礦沒落後歸於沉寂，卻因此完整保留了昔日的山城聚落風貌。九份真正聲名大噪，源於侯孝賢導演的電影《悲情城市》在此取景，加上其層疊錯落的紅燈籠、蜿蜒陡峭的石階與古樸茶樓，被許多遊客聯想為宮崎駿動畫《神隱少女》的場景（儘管官方並未證實）。漫步狹窄的基山街，兩旁擠滿販售芋圓、草仔粿、魚丸湯與古早味點心的店家，香氣四溢；走累了便可步入面海的茶樓，點一壺高山茶，在氤氳茶香與窗外山海交織的景致中虛度一個慵懶的午後。傍晚時分華燈初上，紅燈籠次第亮起，整座山城籠罩在金黃而懷舊的光暈裡，宛如時光倒流，是攝影與漫遊的絕佳去處。",
+            "zh-CN": "九份是一座依山面海的古老矿业小镇，座落于新北市瑞芳的山城之间。日治时期因发现金矿而盛极一时，淘金人潮涌入，造就了“小上海”“小香港”的繁华景象；金矿没落后归于沉寂，却因此完整保留了昔日的山城聚落风貌。九份真正声名大噪，源于侯孝贤导演的电影《悲情城市》在此取景，加上其层叠错落的红灯笼、蜿蜒陡峭的石阶与古朴茶楼，被许多游客联想为宫崎骏动画《神隐少女》的场景（尽管官方并未证实）。漫步狭窄的基山街，两旁挤满贩售芋圆、草仔粿、鱼丸汤与古早味点心的店家，香气四溢；走累了便可步入面海的茶楼，点一壶高山茶，在氤氲茶香与窗外山海交织的景致中虚度一个慵懒的午后。傍晚时分华灯初上，红灯笼次第亮起，整座山城笼罩在金黄而怀旧的光晕里，宛如时光倒流，是摄影与漫游的绝佳去处。",
+            "en": "Jiufen is a historic mountainside town nestled in the hills of Ruifang, New Taipei City, facing the sea. It boomed during the Japanese colonial era after gold was discovered, drawing waves of prospectors and earning nicknames like \"Little Shanghai\" and \"Little Hong Kong\"; when the mines declined it fell quiet, which is precisely why its old hillside settlement has been so well preserved. Jiufen rose to fame through Hou Hsiao-hsien's film A City of Sadness, and with its tiers of red lanterns, steep winding stone steps and rustic teahouses, many visitors associate it with the scenery of Miyazaki's Spirited Away (though this has never been officially confirmed). Strolling the narrow Jishan Street, you pass shop after shop selling taro balls, herbal rice cakes, fish-ball soup and old-fashioned snacks amid mouth-watering aromas; when tired, you can step into a sea-facing teahouse, order a pot of high-mountain tea and idle away a lazy afternoon enveloped in fragrant steam and views of mountains meeting ocean. At dusk the lanterns flicker on one by one, bathing the whole town in a nostalgic golden glow as if time has rewound — a wonderful place for photography and wandering."
+          }
+        },
+        {
+          "localTitle": "士林夜市",
+          "lat": 25.0879,
+          "lon": 121.524,
+          "title": {
+            "zh-TW": "士林夜市在地美食巡禮",
+            "zh-CN": "士林夜市在地美食巡礼",
+            "en": "Shilin Night Market Food Tour"
+          },
+          "desc": {
+            "zh-TW": "夜市是台灣最具代表性的飲食文化核心，而士林夜市正是台北規模最大、歷史最悠久的夜市之一，自清代慈諴宮廟口的小吃攤集結發展至今，已超過百年。這裡匯聚了數百攤琳瑯滿目的庶民美食：超大片現炸雞排、淋上蛋液的蚵仔煎、香氣十足的大腸包小腸、生炒花枝、藥燉排骨，以及風靡全球、源自台灣的珍珠奶茶，幾乎囊括了所有經典台味，讓人一路吃到撐。除了美食，士林夜市的地下美食街與周邊街區還林立著服飾、鞋包、美妝與各式新奇小物的攤位，價格親民、討價還價之間充滿人情味；穿插其中的還有套圈圈、彈珠台、射氣球等懷舊夜市遊戲，洋溢著濃厚的庶民歡樂氣氛。無論是想大快朵頤、採買伴手禮，還是單純感受台北入夜後熙來攘往的熱鬧與熱情民風，士林夜市都是不可錯過的必訪之地。",
+            "zh-CN": "夜市是台湾最具代表性的饮食文化核心，而士林夜市正是台北规模最大、历史最悠久的夜市之一，自清代慈諴宫庙口的小吃摊集结发展至今，已超过百年。这里汇聚了数百摊琳琅满目的庶民美食：超大片现炸鸡排、淋上蛋液的蚵仔煎、香气十足的大肠包小肠、生炒花枝、药炖排骨，以及风靡全球、源自台湾的珍珠奶茶，几乎囊括了所有经典台味，让人一路吃到撑。除了美食，士林夜市的地下美食街与周边街区还林立着服饰、鞋包、美妆与各式新奇小物的摊位，价格亲民、讨价还价之间充满人情味；穿插其中的还有套圈圈、弹珠台、射气球等怀旧夜市游戏，洋溢着浓厚的庶民欢乐气氛。无论是想大快朵颐、采买伴手礼，还是单纯感受台北入夜后熙来攘往的热闹与热情民风，士林夜市都是不可错过的必访之地。",
+            "en": "Night markets are the heart of Taiwan's culinary culture, and Shilin is one of Taipei's largest and most historic, having grown from the food stalls around the Cixian Temple since the Qing dynasty — more than a century of history. Here hundreds of stalls serve a dazzling array of street food: oversized deep-fried chicken cutlets, egg-laden oyster omelets, fragrant \"big sausage wrapped in small sausage,\" stir-fried squid, herbal pork-rib soup, and the globally beloved Taiwan-born bubble tea — virtually every classic Taiwanese flavor, enough to eat your way to bursting. Beyond food, the underground food court and surrounding streets are lined with stalls of clothing, shoes and bags, cosmetics and novelty goods at friendly prices, where good-natured haggling adds to the warmth; interspersed are nostalgic carnival games like ring toss, pinball and balloon darts, brimming with cheerful local energy. Whether you want to feast, shop for souvenirs, or simply soak up the bustle and warm hospitality of Taipei after dark, Shilin Night Market is an unmissable destination."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "鼎泰豐",
+          "lat": 25.033,
+          "lon": 121.563,
+          "cost": 400,
+          "title": { "zh-TW": "鼎泰豐 信義店", "zh-CN": "鼎泰丰 信义店", "en": "Din Tai Fung Xinyi" },
+          "desc": {
+            "zh-TW": "享譽國際的小籠包名店，十八摺薄皮湯包鮮美多汁，米其林推薦、觀光客必訪。",
+            "zh-CN": "享誉国际的小笼包名店，十八折薄皮汤包鲜美多汁，米其林推荐、观光客必访。",
+            "en": "World-renowned for its 18-fold xiaolongbao soup dumplings; Michelin-recommended."
+          }
+        },
+        {
+          "localTitle": "阜杭豆漿",
+          "lat": 25.0444,
+          "lon": 121.5197,
+          "cost": 120,
+          "title": { "zh-TW": "阜杭豆漿", "zh-CN": "阜杭豆浆", "en": "Fuhang Soy Milk" },
+          "desc": {
+            "zh-TW": "華山市場二樓的排隊名店，現烤厚燒餅夾蛋與鹹豆漿是台北經典早午餐。",
+            "zh-CN": "华山市场二楼的排队名店，现烤厚烧饼夹蛋与咸豆浆是台北经典早午餐。",
+            "en": "A famous queue spot serving thick baked flatbread and savory soy milk — a Taipei breakfast classic."
+          }
+        },
+        {
+          "localTitle": "阿宗麵線",
+          "lat": 25.0438,
+          "lon": 121.507,
+          "cost": 90,
+          "title": { "zh-TW": "阿宗麵線", "zh-CN": "阿宗面线", "en": "Ay-Chung Flour-Rice Noodles" },
+          "desc": {
+            "zh-TW": "西門町站著吃的傳奇小吃，柴魚高湯麵線淋上滷大腸與香菜，是台北街頭代表味。",
+            "zh-CN": "西门町站着吃的传奇小吃，柴鱼高汤面线淋上卤大肠与香菜，是台北街头代表味。",
+            "en": "A legendary Ximending street snack: bonito-broth thin noodles topped with braised intestine."
+          }
+        }
+      ]
+    }
+  ]
+}
