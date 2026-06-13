@@ -2,8 +2,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { InterestTag } from '../types/survey';
 import { createLogger } from './logger';
 import { recordAPIMetric } from './metrics';
+import { PACEngine } from './pac';
 
 const logger = createLogger('poi');
+
+/**
+ * 自適應超時：網路正常時給足裕度（避免「正常但偏慢」的 API 被誤殺，
+ * 例如實測 geoname 可能需 ~2s），偵測為弱網時再放寬。重試由 PAC 提供。
+ */
+function adaptiveTimeout(baseMs: number): number {
+  const net = PACEngine.getState().network;
+  if (net === 'weak') return Math.round(baseMs * 1.5);
+  return baseMs;
+}
 
 /**
  * POI（景點）資料服務 — 使用免費的 OpenTripMap API。
@@ -130,7 +141,7 @@ export async function verifyOpenTripMapKey(): Promise<OtmKeyDiagnostic> {
 
   try {
     const url = `${OTM_BASE}/geoname?name=Bangkok&apikey=${encodeURIComponent(key)}`;
-    const res = await fetchWithTimeout(url, 4000);
+    const res = await fetchWithTimeout(url, adaptiveTimeout(6000));
     if (res.status === 401 || res.status === 403) {
       return {
         status: 'invalid',
@@ -164,8 +175,8 @@ export async function verifyOpenTripMapKey(): Promise<OtmKeyDiagnostic> {
 }
 
 /**
- * 超時機制：激進策略，4 秒。
- * 原因：配合 PAC 的指數退避重試（1s → 2s → 4s），快速失敗更有效率。
+ * 超時機制：搭配 adaptiveTimeout 使用，網路正常時給足裕度、弱網再放寬，
+ * 並由 PAC 的指數退避重試（1s → 2s → 4s）補強，盡量讓即時資料成功取得。
  */
 async function fetchWithTimeout(url: string, ms: number): Promise<Response> {
   const controller = new AbortController();
@@ -189,7 +200,7 @@ async function resolveCenter(
   }
   try {
     const url = `${OTM_BASE}/geoname?name=${encodeURIComponent(destName)}&apikey=${apiKey}`;
-    const res = await fetchWithTimeout(url, 4000);
+    const res = await fetchWithTimeout(url, adaptiveTimeout(6000));
     if (!res.ok) return null;
     const data = await res.json();
     if (typeof data?.lat === 'number' && typeof data?.lon === 'number') {
@@ -233,6 +244,7 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
     if (cachedRaw) {
       const cached = JSON.parse(cachedRaw);
       if (cached?.ts && Date.now() - cached.ts < POI_CACHE_TTL_MS && Array.isArray(cached.pois)) {
+        recordAPIMetric('fetchDestinationPOIs', 0, true, 1, true);
         return cached.pois as POI[];
       }
     }
@@ -250,12 +262,14 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
     return [];
   }
 
+  const apiStart = Date.now();
   try {
     const url = `${OTM_BASE}/radius?radius=${radiusMeters}&lon=${center.lon}&lat=${center.lat}`
       + `&kinds=${encodeURIComponent(kindsParam)}&rate=2&format=json&limit=${limit}&apikey=${apiKey}`;
-    const res = await fetchWithTimeout(url, 4000);
+    const res = await fetchWithTimeout(url, adaptiveTimeout(8000));
     if (!res.ok) {
       logger.warn(`OpenTripMap radius 回傳 ${res.status}，改用內建範本。`);
+      recordAPIMetric('fetchDestinationPOIs', Date.now() - apiStart, false, 1, false);
       return [];
     }
     const raw = await res.json();
@@ -286,9 +300,11 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
       await AsyncStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), pois }));
     } catch { /* ignore */ }
 
+    recordAPIMetric('fetchDestinationPOIs', Date.now() - apiStart, true, 1, false);
     return pois;
   } catch (e) {
     logger.warn('OpenTripMap 查詢失敗，改用內建範本。', e);
+    recordAPIMetric('fetchDestinationPOIs', Date.now() - apiStart, false, 1, false);
     return [];
   }
 }

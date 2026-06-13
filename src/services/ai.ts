@@ -2,11 +2,14 @@ import { TripSurvey } from '../types/survey';
 import { Itinerary, ItineraryDay, Activity, TransportInfo } from '../types/itinerary';
 import i18n from '../i18n';
 import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
-import { fetchDestinationPOIs, POI, PoiCategory } from './poi';
+import { fetchDestinationPOIs, verifyOpenTripMapKey, POI, PoiCategory } from './poi';
 import { fetchWikipediaSummaries } from './enrich';
 import { getBuiltInTemplate, getBuiltInRestaurants, findLocalizedName, findLocalizedDescription } from '../data/destinations';
 import { detectGuideCountryKey, isCoveredGuideCountry, getDownloadableGuideCountry } from './guidePacks';
 import { PACEngine } from './pac';
+import { createLogger } from './logger';
+
+const logger = createLogger('itinerary');
 
 // ─── POI → 行程範本 轉換（規則式引擎使用） ───
 
@@ -554,7 +557,8 @@ export const aiService = {
             interests: alignedSurvey.interests || [],
             limit: limitPerDest,
           }),
-          () => getBuiltInTemplate(d.name)?.pois || [],
+          // 重試全數失敗時回傳空陣列，下游 generateFallbackItinerary 會自動為該地套用內建範本。
+          () => [] as POI[],
           `fetchDestinationPOIs_${d.name}`,
           2,
           []
@@ -581,7 +585,8 @@ export const aiService = {
             interests: ['food'],
             limit: Math.max(12, dayCount * 2),
           }),
-          () => getBuiltInRestaurants(d.name, appLocale),
+          // 重試全數失敗時回傳空陣列，下游午餐會自動退回內建餐廳清單（getDestRestaurants）。
+          () => [] as POI[],
           `fetchDestinationPOIs_food_${d.name}`,
           2,
           []
@@ -613,7 +618,7 @@ export const aiService = {
         const queryTitles = tpl.titles.map((t, idx) => (tpl.localTitles?.[idx] || t));
         const summaries = await PACEngine.executeWithHealing(
           () => fetchWikipediaSummaries(queryTitles, appLocale),
-          () => ({}),
+          () => ({} as Record<string, string>),
           'fetchWikipediaSummaries',
           2,
           []
@@ -630,7 +635,29 @@ export const aiService = {
     }
 
     const itinerary = this.generateFallbackItinerary(alignedSurvey, poiByDest, restByDest);
-    // 此為正式生成方式（非 AI 失敗備援），故不標記 generatedByFallback。
+
+    // 誠實標記是否真的用到即時 POI 資料：
+    // poiByDest 僅在即時抓取成功（pois.length > 0）時才會被填入，故可作為「即時資料是否生效」的依據。
+    const namedDests = Array.from(new Set(dests.map(d => d?.name).filter(Boolean)));
+    const liveDestCount = Object.keys(poiByDest).length;
+    const usedLiveData = liveDestCount > 0;
+    itinerary.generatedByFallback = namedDests.length > 0 && !usedLiveData;
+
+    if (itinerary.generatedByFallback) {
+      // 網路正常卻完全沒用到即時資料 —— 這才是真正該被診斷的降級。查明根因供營運者排除。
+      try {
+        const diag = await verifyOpenTripMapKey();
+        logger.warn(
+          `行程未使用任何即時 POI 資料（${namedDests.length} 個目的地全部退回內建範本）。` +
+          `金鑰狀態=${diag.status}（來源：${diag.source}）；網路=${PACEngine.getState().network}。${diag.message}`
+        );
+      } catch {
+        logger.warn(`行程未使用任何即時 POI 資料（${namedDests.length} 個目的地全部退回內建範本）；網路=${PACEngine.getState().network}。`);
+      }
+    } else {
+      logger.info(`行程已使用即時 POI 資料：${liveDestCount}/${namedDests.length} 個目的地命中即時資料。`);
+    }
+
     healItineraryCoordinates(itinerary, alignedSurvey);
     return itinerary;
   },

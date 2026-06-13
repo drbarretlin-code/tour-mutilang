@@ -234,11 +234,11 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
   return (
     <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
       
-      {/* 離線狀態/本地預設指南提示 Banner */}
-      {(pacState.network !== 'online' || guideData?.isFallback) && (
+      {/* 真正離線時才示警；網路正常時的內建精選指南並非「降級」，不顯示警示橫幅。 */}
+      {pacState.network !== 'online' && (
         <View style={[
           styles.offlineBanner,
-          { 
+          {
             backgroundColor: colors.warning50,
             borderColor: colors.warning200,
             borderRadius: borderRadius.md,
@@ -249,9 +249,7 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
           <View style={styles.offlineBannerContent}>
             <Ionicons name="cloud-offline-outline" size={18} color={colors.warning800} style={{ marginRight: 8 }} />
             <Text style={[typography.bodyMedium, { color: colors.warning800, fontWeight: '600', flex: 1 }]}>
-              {pacState.network !== 'online'
-                ? '離線模式：目前為您顯示已暫存之當地指南。'
-                : '連線降級：目前為您顯示本地預設指南。'}
+              離線模式：目前為您顯示已暫存之當地指南。
             </Text>
           </View>
         </View>
@@ -270,9 +268,16 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
           }
         ]}>
           <View style={styles.offlineBannerContent}>
-            <Ionicons name="information-circle-outline" size={18} color={colors.primary700} style={{ marginRight: 8 }} />
+            <Ionicons
+              name={guideData.isCovered ? 'shield-checkmark-outline' : 'information-circle-outline'}
+              size={18}
+              color={colors.primary700}
+              style={{ marginRight: 8 }}
+            />
             <Text style={[typography.bodySmall, { color: colors.primary700, flex: 1 }]}>
-              此頁為內建離線指南範本，目前涵蓋：{COVERED_GUIDE_COUNTRIES.map(c => c.label).join('／')}。
+              {guideData.isCovered
+                ? '本頁為精選離線指南，內容已為此目的地最佳化，離線亦可使用。'
+                : `此頁為內建離線指南範本，目前精選涵蓋：${COVERED_GUIDE_COUNTRIES.map(c => c.label).join('／')}。`}
             </Text>
           </View>
 

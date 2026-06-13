@@ -1,7 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createLogger } from './logger';
+import { PACEngine } from './pac';
 
 const logger = createLogger('wiki');
+
+/** 自適應超時：弱網時放寬，讓即時摘要更有機會成功取得（重試由 PAC 提供）。 */
+function adaptiveTimeout(baseMs: number): number {
+  return PACEngine.getState().network === 'weak' ? Math.round(baseMs * 1.5) : baseMs;
+}
 
 /**
  * 景點介紹動態補強服務 —— 使用維基百科免費的 REST Summary API（無金鑰、無配額限制）。
@@ -33,8 +39,7 @@ function zhVariant(locale: string): string | null {
 }
 
 /**
- * 超時機制：激進策略，4 秒。
- * 原因：配合 PAC 的指數退避重試（1s → 2s → 4s），快速失敗更有效率。
+ * 超時機制：搭配 adaptiveTimeout，並由 PAC 指數退避重試補強。
  */
 async function fetchWithTimeout(url: string, ms: number, headers?: Record<string, string>): Promise<Response> {
   const controller = new AbortController();
@@ -77,7 +82,7 @@ export async function fetchWikipediaSummary(
 
   try {
     const url = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.trim())}`;
-    const res = await fetchWithTimeout(url, 4000, headers);
+    const res = await fetchWithTimeout(url, adaptiveTimeout(6000), headers);
     if (!res.ok) {
       // 找不到條目時亦寫入空快取，避免重複查詢
       try { await AsyncStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), text: null })); } catch { /* ignore */ }
