@@ -1,5 +1,5 @@
 import { ref, onValue, set, update, off } from 'firebase/database';
-import { rtdb } from './firebase';
+import { rtdb, isFirebaseConfigured } from './firebase';
 import { Itinerary } from '../types/itinerary';
 import { TripSurvey } from '../types/survey';
 import { PACEngine } from './pac';
@@ -92,8 +92,9 @@ export const syncService = {
    * 監聽 Firebase Realtime Database 中行程的即時更新。
    */
   subscribeToItinerary(itineraryId: string, callback: (itinerary: Itinerary) => void): () => void {
+    if (!isFirebaseConfigured) return () => {}; // 未設定 Firebase：不建立雲端監聽。
     const itineraryRef = ref(rtdb, `itineraries/${itineraryId}`);
-    
+
     onValue(itineraryRef, (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val() as Itinerary;
@@ -112,6 +113,7 @@ export const syncService = {
    * 發布行程局部更新至 Firebase RTDB。
    */
   async updateItineraryRealtime(itineraryId: string, updates: Partial<Itinerary>): Promise<void> {
+    if (!isFirebaseConfigured) return; // 未設定 Firebase：略過雲端即時同步，純本機運作。
     const action = async () => {
       const itineraryRef = ref(rtdb, `itineraries/${itineraryId}`);
       const oldItin = lastPublishedItineraries[itineraryId];
@@ -160,6 +162,7 @@ export const syncService = {
    * 發布/發送完整的行程至 Firebase RTDB，內部自動轉換為增量更新。
    */
   async publishItinerary(itinerary: Itinerary): Promise<void> {
+    if (!isFirebaseConfigured) return; // 未設定 Firebase：略過雲端發布，純本機運作。
     const action = async () => {
       const itineraryRef = ref(rtdb, `itineraries/${itinerary.id}`);
       const oldItin = lastPublishedItineraries[itinerary.id];
@@ -201,8 +204,9 @@ export const syncService = {
    * 訂閱問卷狀態更新。
    */
   subscribeToSurveyStatus(surveyId: string, callback: (status: TripSurvey['status']) => void): () => void {
+    if (!isFirebaseConfigured) return () => {}; // 未設定 Firebase：不建立雲端監聽。
     const statusRef = ref(rtdb, `planning_requests/${surveyId}/status`);
-    
+
     onValue(statusRef, (snapshot) => {
       if (snapshot.exists()) {
         callback(snapshot.val() as TripSurvey['status']);

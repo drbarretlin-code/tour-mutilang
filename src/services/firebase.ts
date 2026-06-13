@@ -18,6 +18,10 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID || "mock-app-id"
 };
 
+// 是否已正確設定 Firebase：未設定環境變數時上方會套用 "mock-..." 佔位值，
+// 此時不應嘗試任何雲端讀寫（否則必然失敗、誤觸發 PAC「降級」橫幅）。
+export const isFirebaseConfigured = !String(firebaseConfig.apiKey).startsWith('mock-');
+
 // Initialize Firebase App
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 

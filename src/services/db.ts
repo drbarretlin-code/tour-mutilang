@@ -9,7 +9,7 @@ import {
   deleteDoc,
   updateDoc
 } from 'firebase/firestore';
-import { db } from './firebase';
+import { db, isFirebaseConfigured } from './firebase';
 import { TripSurvey } from '../types/survey';
 import { Itinerary } from '../types/itinerary';
 import { PACEngine } from './pac';
@@ -40,6 +40,7 @@ export const dbService = {
   // ─── Survey CRUD ───
   
   async saveSurvey(survey: TripSurvey): Promise<void> {
+    if (!isFirebaseConfigured) return; // 未設定 Firebase：純本機運作，不寫雲端。
     try {
       const docRef = doc(db, 'surveys', survey.id);
       const cleaned = cleanUndefined(survey);
@@ -93,6 +94,9 @@ export const dbService = {
   // ─── Itinerary CRUD ───
 
   async saveItinerary(itinerary: Itinerary): Promise<void> {
+    // 未設定 Firebase 時，純本機運作，不嘗試雲端寫入（避免必然失敗而誤觸發降級提示）。
+    if (!isFirebaseConfigured) return;
+
     const action = async () => {
       const docRef = doc(db, 'itineraries', itinerary.id);
       const cleaned = cleanUndefined(itinerary);
