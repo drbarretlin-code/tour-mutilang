@@ -846,9 +846,9 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
   }
 
   // 2. 針對字根進行翻譯美化 (Blogger 旅遊指南風格)
-  const suffixMap: { en: string; [locale: string]: string }[] = [
+  const suffixMap: { key: string; [locale: string]: string }[] = [
     {
-      en: 'falls',
+      key: 'falls',
       'zh-TW': '大飛瀑 (壯麗自然景致)',
       'zh-CN': '大飞瀑 (壮丽自然景致)',
       'en': 'Falls (Majestic Natural Scenery)',
@@ -861,7 +861,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Thác nước lớn (Cảnh quan thiên nhiên hùng vĩ)'
     },
     {
-      en: 'waterfall',
+      key: 'waterfall',
       'zh-TW': '大飛瀑 (壯麗自然景致)',
       'zh-CN': '大飞瀑 (壮丽自然景致)',
       'en': 'Falls (Majestic Natural Scenery)',
@@ -874,7 +874,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Thác nước lớn (Cảnh quan thiên nhiên hùng vĩ)'
     },
     {
-      en: 'sushi',
+      key: 'sushi',
       'zh-TW': '壽司料理名店 (品味在地旬鮮)',
       'zh-CN': '寿司料理名店 (品味当地旬鲜)',
       'en': 'Sushi (Savor Local Seasonal Freshness)',
@@ -887,7 +887,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Nhà hàng Sushi (Thưởng thức hải sản tươi ngon mùa vụ)'
     },
     {
-      en: 'museum of art',
+      key: 'museum of art',
       'zh-TW': '市立美術館 (藝術美學巡禮)',
       'zh-CN': '市立美术馆 (艺术美学礼)',
       'en': 'Museum of Art (Art & Aesthetics Tour)',
@@ -900,7 +900,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Bảo tàng Nghệ thuật (Hành trình nghệ thuật & thẩm mỹ)'
     },
     {
-      en: 'national museum',
+      key: 'national museum',
       'zh-TW': '國家博物館 (文化珍寶探索)',
       'zh-CN': '国家博物馆 (文化珍宝探索)',
       'en': 'National Museum (Cultural Treasures Exploration)',
@@ -913,7 +913,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Bảo tàng Quốc gia (Khám phá báu vật văn hóa)'
     },
     {
-      en: 'botanical garden',
+      key: 'botanical garden',
       'zh-TW': '植物園 (城市綠色芬多精)',
       'zh-CN': '植物园 (城市绿色芬多精)',
       'en': 'Botanical Garden (Urban Green Oasis)',
@@ -926,7 +926,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Vườn bách thảo (Ốc đảo xanh giữa lòng đô thị)'
     },
     {
-      en: 'night market',
+      key: 'night market',
       'zh-TW': '在地人氣夜市 (小吃尋禮)',
       'zh-CN': '当地人气夜市 (小吃寻礼)',
       'en': 'Night Market (Local Street Food Adventure)',
@@ -939,7 +939,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Chợ đêm (Khám phá ẩm thực đường phố địa phương)'
     },
     {
-      en: 'shopping mall',
+      key: 'shopping mall',
       'zh-TW': '購物中心 (時尚潮流天堂)',
       'zh-CN': '购物中心 (时尚潮流天堂)',
       'en': 'Shopping Mall (Fashion & Trend Paradise)',
@@ -952,7 +952,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Trung tâm mua sắm (Thiên đường thời trang & xu hướng)'
     },
     {
-      en: 'shopping street',
+      key: 'shopping street',
       'zh-TW': '購物步行街 (特色商圈)',
       'zh-CN': '購物步行街 (特色商圈)',
       'en': 'Shopping Street (Charming Local District)',
@@ -965,7 +965,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Phố mua sắm (Khu thương mại địa phương sầm uất)'
     },
     {
-      en: 'department store',
+      key: 'department store',
       'zh-TW': '百貨商場 (購物天堂)',
       'zh-CN': '百货商场 (购物天堂)',
       'en': 'Department Store (Shopping Paradise)',
@@ -978,7 +978,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Cửa hàng bách hóa (Thiên đường mua sắm)'
     },
     {
-      en: 'floating market',
+      key: 'floating market',
       'zh-TW': '水上市場 (在地風情體驗)',
       'zh-CN': '水上市场 (当地风情体验)',
       'en': 'Floating Market (Authentic Local Culture)',
@@ -991,7 +991,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Chợ nổi (Trải nghiệm văn hóa địa phương độc đáo)'
     },
     {
-      en: 'theme park',
+      key: 'theme park',
       'zh-TW': '主題樂園 (歡樂冒險世界)',
       'zh-CN': '主题乐园 (欢乐冒险世界)',
       'en': 'Theme Park (World of Fun & Adventure)',
@@ -1004,7 +1004,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Công viên chủ đề (Thế giới vui chơi & phiêu lưu)'
     },
     {
-      en: 'amusement park',
+      key: 'amusement park',
       'zh-TW': '遊樂園 (歡笑不間斷)',
       'zh-CN': '游乐园 (欢笑不间断)',
       'en': 'Amusement Park (Nonstop Fun & Laughs)',
@@ -1017,7 +1017,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Công viên giải trí (Vui chơi bất tận)'
     },
     {
-      en: 'national park',
+      key: 'national park',
       'zh-TW': '國家公園 (大自然壯麗景致)',
       'zh-CN': '国家公园 (大自然壮丽景致)',
       'en': 'National Park (Breathtaking Natural Wonder)',
@@ -1030,7 +1030,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Công viên quốc gia (Kỳ quan thiên nhiên kỳ vĩ)'
     },
     {
-      en: 'aquarium',
+      key: 'aquarium',
       'zh-TW': '海洋水族館 (奇幻藍色世界)',
       'zh-CN': '海洋水族馆 (奇幻蓝色世界)',
       'en': 'Aquarium (Magical Underwater Journey)',
@@ -1043,7 +1043,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Thủy cung (Hành trình dưới đại dương kỳ ảo)'
     },
     {
-      en: 'museum',
+      key: 'museum',
       'zh-TW': '博物館 (知性文藝之旅)',
       'zh-CN': '博物馆 (知性文艺之旅)',
       'en': 'Museum (Intellectual & Cultural Journey)',
@@ -1056,7 +1056,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Bảo tàng (Hành trình tri thức & văn hóa)'
     },
     {
-      en: 'palace',
+      key: 'palace',
       'zh-TW': '古典宮殿 (皇家歷史漫步)',
       'zh-CN': '古典宫殿 (皇家历史漫步)',
       'en': 'Palace (Royal History & Grandeur)',
@@ -1069,7 +1069,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Cung điện (Lịch sử hoàng gia & sự huy hoàng)'
     },
     {
-      en: 'castle',
+      key: 'castle',
       'zh-TW': '歷史古城 (壯麗城堡遺跡)',
       'zh-CN': '历史古城 (壮丽城堡遗迹)',
       'en': 'Castle (Magnificent Historic Fortress)',
@@ -1082,7 +1082,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Lâu đài (Pháo đài lịch sử tráng lệ)'
     },
     {
-      en: 'shrine',
+      key: 'shrine',
       'zh-TW': '神社參拜 (日式傳統文化)',
       'zh-CN': '神社参拜 (日式传统文化)',
       'en': 'Shrine (Traditional Spiritual Place)',
@@ -1095,7 +1095,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Đền thờ (Trải nghiệm văn hóa tâm linh truyền thống)'
     },
     {
-      en: 'temple',
+      key: 'temple',
       'zh-TW': '古寺祈福 (莊嚴心靈洗滌)',
       'zh-CN': '古寺祈福 (庄严心灵洗涤)',
       'en': 'Temple (Serene Spiritual Sanctuary)',
@@ -1108,7 +1108,7 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'vi': 'Chùa (Nơi thanh tịnh và cầu nguyện thanh bình)'
     },
     {
-      en: 'market',
+      key: 'market',
       'zh-TW': '傳統市集 (品嚐在地風味)',
       'zh-CN': '传统市集 (品尝当地风味)',
       'en': 'Market (Taste Authentic Local Flavors)',
@@ -1120,26 +1120,26 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
       'th': 'ตลาด (ลิ้มลองรสชาติท้องถิ่นแท้ๆ)',
       'vi': 'Chợ (Thưởng thức hương vị địa phương mộc mạc)'
     },
-    { en: 'beach', 'zh-TW': '純淨沙灘 (浪漫海天一色)', 'zh-CN': '纯净沙滩 (浪漫海天一色)', 'en': 'Beach (Romantic Sandy Shore)', 'ja': 'ビーチ (青い海と白い砂のロマンス)', 'ko': '해변 (낭만적인 푸른 바다와 모래사장)', 'es': 'Playa (Romántica Orilla de Arena)', 'ms': 'Pantai (Pemandangan Laut Biru yang Romantik)', 'pt': 'Praia (Orla de Areia Romântica)', 'th': 'ชายหาด (หาดทรายขาวและทะเลสีครามสุดโรแมนติก)', 'vi': 'Bãi biển (Bờ cát lãng mạn hòa cùng sắc biển)' },
-    { en: 'tower', 'zh-TW': '地標展望塔 (俯瞰壯麗市景)', 'zh-CN': '地标展望塔 (俯瞰壮丽市景)', 'en': 'Tower (Panoramic City Views)', 'ja': 'タワー (美しい街並みを一望)', 'ko': '타워 (아름다운 전망과 도시 전망)', 'es': 'Torre (Vistas Panorámicas de la Ciudad)', 'ms': 'Menara (Pemandangan Panoramik Bandar)', 'pt': 'Torre (Vistas Panorâmicas da Cidade)', 'th': 'หอคอย (จุดชมวิวทิวทัศน์เมืองแบบพาโนรามา)', 'vi': 'Tháp (Ngắm toàn cảnh thành phố tráng lệ)' },
-    { en: 'bridge', 'zh-TW': '景觀大橋 (浪漫河畔散步)', 'zh-CN': '景观大桥 (浪漫河畔散步)', 'en': 'Bridge (Scenic Riverside Walk)', 'ja': 'ブリッジ (美しい河畔をのんびり散策)', 'ko': '다리 (경치 좋은 강변 산책)', 'es': 'Puente (Paseo Escénico Junto al Río)', 'ms': 'Jambatan (Jalan-jalan Tepi Sungai yang Indah)', 'pt': 'Ponte (Passeio Cénico Junto ao Rio)', 'th': 'สะพาน (เดินเล่นชมวิวริมแม่น้ำสุดโรแมนติก)', 'vi': 'Cầu (Đi dạo ngắm cảnh ven sông lãng mạn)' },
-    { en: 'park', 'zh-TW': '休閒綠意公園 (散步漫遊)', 'zh-CN': '休闲绿意公园 (散步漫游)', 'en': 'Park (Relaxing Green Getaway)', 'ja': '公園 (緑豊かな憩いの広場)', 'ko': '공원 (푸른 녹음 속 여유로운 산책)', 'es': 'Parque (Relajante Escapada Verde)', 'ms': 'Taman (Santai di Kawasan Hijau)', 'pt': 'Parque (Refúgio Verde Descontraído)', 'th': 'สวนสาธารณะ (พักผ่อนหย่อนใจท่ามกลางธรรมชาติสีเขียว)', 'vi': 'Công viên (Thư giãn giữa không gian xanh mát)' },
-    { en: 'zoo', 'zh-TW': '生態動物園 (親近可愛動物)', 'zh-CN': '生态动物园 (亲近可爱动物)', 'en': 'Zoo (Up-Close Animal Encounters)', 'ja': '動物園 (可愛い動物たちとの出会い)', 'ko': '동물원 (귀여운 동물들과의 생태 체험)', 'es': 'Zoológico (Encuentros Cercanos con Animales)', 'ms': 'Zoo (Pertemuan Dekat dengan Haiwan Comel)', 'pt': 'Jardim Zoológico (Encontros Próximos com Animais)', 'th': 'สวนสัตว์ (ใกล้ชิดกับสัตว์โลกผู้น่ารัก)', 'vi': 'Vườn thú (Gặp gỡ các loài động vật đáng yêu)' },
-    { en: 'lake', 'zh-TW': '絕美湖畔 (湖光山色散策)', 'zh-CN': '绝美湖畔 (湖光山色散策)', 'en': 'Lake (Serene Lakeside Retreat)', 'ja': '湖 (穏やかな湖畔でのんびり)', 'ko': '호수 (고요한 호숫가의 낭만)', 'es': 'Lago (Sereno Retiro Junto al Lago)', 'ms': 'Tasik (Keindahan Tasik yang Tenang)', 'pt': 'Lago (Retiro Sereno Junto ao Lago)', 'th': 'ทะเลสาบ (พักผ่อนริมทะเลสาบอันเงียบสงบ)', 'vi': 'Hồ (Thư thái bên bờ hồ tĩnh lặng)' },
-    { en: 'mall', 'zh-TW': '購物中心 (時尚潮流天堂)', 'zh-CN': '购物中心 (时尚潮流天堂)', 'en': 'Shopping Mall (Fashion & Trend Paradise)', 'ja': 'ショッピングモール (トレンドファッションの殿堂)', 'ko': '쇼핑몰 (패션과 트렌드의 천국)', 'es': 'Centro Comercial (Paraíso de Moda y Tendencias)', 'ms': 'Pusat Beli-belah (Syurga Fesyen & Trend)', 'pt': 'Shopping Center (Paraíso de Moda e Tendências)', 'th': 'ห้างสรรพสินค้า (สวรรค์แห่งแฟชั่นและเทรนด์)', 'vi': 'Trung tâm mua sắm (Thiên đường thời trang & xu hướng)' },
-    { en: 'street', 'zh-TW': '購物步行街 (特色商圈)', 'zh-CN': '購物步行街 (特色商圈)', 'en': 'Shopping Street (Charming Local District)', 'ja': 'ショッピング街 (賑やかな商店街散策)', 'ko': '쇼핑 거리 (매력적인 로컬 상권)', 'es': 'Calle Comercial (Distrito Local con Encanto)', 'ms': 'Jalan Membeli-belah (Daerah Tempatan Menarik)', 'pt': 'Rua Comercial (Distrito Encantador)', 'th': 'ถนนคนเดิน (ย่านช้อปปิ้งท้องถิ่นมีเสน่ห์)', 'vi': 'Phố mua sắm (Khu thương mại địa phương sầm uất)' },
-    { en: 'restaurant', 'zh-TW': '推薦老字號餐廳', 'zh-CN': '推荐老字号餐厅', 'en': 'Restaurant (Recommended Dining)', 'ja': 'お食事処 (厳選グルメ)', 'ko': '식당 (추천 맛집)', 'es': 'Restaurante (Cena Recomendada)', 'ms': 'Restoran (Makan Terpilih)', 'pt': 'Restaurante (Refeição Recomendada)', 'th': 'ร้านอาหาร (เมนูแนะนำเลิศรส)', 'vi': 'Nhà hàng (Gợi ý ẩm thực đặc sắc)' },
-    { en: 'cafe', 'zh-TW': '質感精品咖啡廳', 'zh-CN': '質感精品咖啡厅', 'en': 'Cafe (Premium Boutique Coffee)', 'ja': 'カフェ (こだわり珈琲空間)', 'ko': '카페 (감성 충만精品 커피)', 'es': 'Cafetería (Café Boutique Premium)', 'ms': 'Kafe (Kopi Butik Premium)', 'pt': 'Cafetaria (Café Boutique Premium)', 'th': 'คาเฟ่ (ร้านกาแฟดีไซน์สวยรสชาติละมุน)', 'vi': 'Quán cà phê (Không gian cà phê tinh tế)' },
-    { en: 'station', 'zh-TW': '車站', 'zh-CN': '车站', 'en': 'Station', 'ja': '駅', 'ko': '역', 'es': 'Estación', 'ms': 'Stesen', 'pt': 'Estação', 'th': 'สถานี', 'vi': 'Nhà ga' },
-    { en: 'airport', 'zh-TW': '國際機場 (開啟旅程)', 'zh-CN': '国际机场 (开启旅程)', 'en': 'Airport (Journey Begins)', 'ja': '国際空港 (旅の始まり)', 'ko': '국제공항 (여행의 시작)', 'es': 'Aeropuerto (Comienza el Viaje)', 'ms': 'Lapangan Terbang (Permulaan Perjalanan)', 'pt': 'Aeroporto (Início da Viagem)', 'th': 'ท่าอากาศยาน (เริ่มต้นการเดินทาง)', 'vi': 'Sân bay quốc tế (Hành trình bắt đầu)' }
+    { key: 'beach', 'zh-TW': '純淨沙灘 (浪漫海天一色)', 'zh-CN': '纯净沙滩 (浪漫海天一色)', 'en': 'Beach (Romantic Sandy Shore)', 'ja': 'ビーチ (青い海と白い砂のロマンス)', 'ko': '해변 (낭만적인 푸른 바다와 모래사장)', 'es': 'Playa (Romántica Orilla de Arena)', 'ms': 'Pantai (Pemandangan Laut Biru yang Romantik)', 'pt': 'Praia (Orla de Areia Romântica)', 'th': 'ชายหาด (หาดทรายขาวและทะเลสีครามสุดโรแมนติก)', 'vi': 'Bãi biển (Bờ cát lãng mạn hòa cùng sắc biển)' },
+    { key: 'tower', 'zh-TW': '地標展望塔 (俯瞰壯麗市景)', 'zh-CN': '地标展望塔 (俯瞰壮丽市景)', 'en': 'Tower (Panoramic City Views)', 'ja': 'タワー (美しい街並みを一望)', 'ko': '타워 (아름다운 전망과 도시 전망)', 'es': 'Torre (Vistas Panorámicas de la Ciudad)', 'ms': 'Menara (Pemandangan Panoramik Bandar)', 'pt': 'Torre (Vistas Panorâmicas da Cidade)', 'th': 'หอคอย (จุดชมวิวทิวทัศน์เมืองแบบพาโนรามา)', 'vi': 'Tháp (Ngắm toàn cảnh thành phố tráng lệ)' },
+    { key: 'bridge', 'zh-TW': '景觀大橋 (浪漫河畔散步)', 'zh-CN': '景观大桥 (浪漫河畔散步)', 'en': 'Bridge (Scenic Riverside Walk)', 'ja': 'ブリッジ (美しい河畔をのんびり散策)', 'ko': '다리 (경치 좋은 강변 산책)', 'es': 'Puente (Paseo Escénico Junto al Río)', 'ms': 'Jambatan (Jalan-jalan Tepi Sungai yang Indah)', 'pt': 'Ponte (Passeio Cénico Junto ao Rio)', 'th': 'สะพาน (เดินเล่นชมวิวริมแม่น้ำสุดโรแมนติก)', 'vi': 'Cầu (Đi dạo ngắm cảnh ven sông lãng mạn)' },
+    { key: 'park', 'zh-TW': '休閒綠意公園 (散步漫遊)', 'zh-CN': '休闲绿意公园 (散步漫游)', 'en': 'Park (Relaxing Green Getaway)', 'ja': '公園 (緑豊かな憩いの広場)', 'ko': '공원 (푸른 녹음 속 여유로운 산책)', 'es': 'Parque (Relajante Escapada Verde)', 'ms': 'Taman (Santai di Kawasan Hijau)', 'pt': 'Parque (Refúgio Verde Descontraído)', 'th': 'สวนสาธารณะ (พักผ่อนหย่อนใจท่ามกลางธรรมชาติสีเขียว)', 'vi': 'Công viên (Thư giãn giữa không gian xanh mát)' },
+    { key: 'zoo', 'zh-TW': '生態動物園 (親近可愛動物)', 'zh-CN': '生态动物园 (亲近可爱动物)', 'en': 'Zoo (Up-Close Animal Encounters)', 'ja': '動物園 (可愛い動物たちとの出会い)', 'ko': '동물원 (귀여운 동물들과의 생태 체험)', 'es': 'Zoológico (Encuentros Cercanos con Animales)', 'ms': 'Zoo (Pertemuan Dekat dengan Haiwan Comel)', 'pt': 'Jardim Zoológico (Encontros Próximos com Animais)', 'th': 'สวนสัตว์ (ใกล้ชิดกับสัตว์โลกผู้น่ารัก)', 'vi': 'Vườn thú (Gặp gỡ các loài động vật đáng yêu)' },
+    { key: 'lake', 'zh-TW': '絕美湖畔 (湖光山色散策)', 'zh-CN': '绝美湖畔 (湖光山色散策)', 'en': 'Lake (Serene Lakeside Retreat)', 'ja': '湖 (穏やかな湖畔でのんびり)', 'ko': '호수 (고요한 호숫가의 낭만)', 'es': 'Lago (Sereno Retiro Junto al Lago)', 'ms': 'Tasik (Keindahan Tasik yang Tenang)', 'pt': 'Lago (Retiro Sereno Junto ao Lago)', 'th': 'ทะเลสาบ (พักผ่อนริมทะเลสาบอันเงียบสงบ)', 'vi': 'Hồ (Thư thái bên bờ hồ tĩnh lặng)' },
+    { key: 'mall', 'zh-TW': '購物中心 (時尚潮流天堂)', 'zh-CN': '购物中心 (时尚潮流天堂)', 'en': 'Shopping Mall (Fashion & Trend Paradise)', 'ja': 'ショッピングモール (トレンドファッションの殿堂)', 'ko': '쇼핑몰 (패션과 트렌드의 천국)', 'es': 'Centro Comercial (Paraíso de Moda y Tendencias)', 'ms': 'Pusat Beli-belah (Syurga Fesyen & Trend)', 'pt': 'Shopping Center (Paraíso de Moda e Tendências)', 'th': 'ห้างสรรพสินค้า (สวรรค์แห่งแฟชั่นและเทรนด์)', 'vi': 'Trung tâm mua sắm (Thiên đường thời trang & xu hướng)' },
+    { key: 'street', 'zh-TW': '購物步行街 (特色商圈)', 'zh-CN': '購物步行街 (特色商圈)', 'en': 'Shopping Street (Charming Local District)', 'ja': 'ショッピング街 (賑やかな商店街散策)', 'ko': '쇼핑 거리 (매력적인 로컬 상권)', 'es': 'Calle Comercial (Distrito Local con Encanto)', 'ms': 'Jalan Membeli-belah (Daerah Tempatan Menarik)', 'pt': 'Rua Comercial (Distrito Encantador)', 'th': 'ถนนคนเดิน (ย่านช้อปปิ้งท้องถิ่นมีเสน่ห์)', 'vi': 'Phố mua sắm (Khu thương mại địa phương sầm uất)' },
+    { key: 'restaurant', 'zh-TW': '推薦老字號餐廳', 'zh-CN': '推荐老字号餐厅', 'en': 'Restaurant (Recommended Dining)', 'ja': 'お食事処 (厳選グルメ)', 'ko': '식당 (추천 맛집)', 'es': 'Restaurante (Cena Recomendada)', 'ms': 'Restoran (Makan Terpilih)', 'pt': 'Restaurante (Refeição Recomendada)', 'th': 'ร้านอาหาร (เมนูแนะนำเลิศรส)', 'vi': 'Nhà hàng (Gợi ý ẩm thực đặc sắc)' },
+    { key: 'cafe', 'zh-TW': '質感精品咖啡廳', 'zh-CN': '質感精品咖啡厅', 'en': 'Cafe (Premium Boutique Coffee)', 'ja': 'カフェ (こだわり珈琲空間)', 'ko': '카페 (감성 충만精品 커피)', 'es': 'Cafetería (Café Boutique Premium)', 'ms': 'Kafe (Kopi Butik Premium)', 'pt': 'Cafetaria (Café Boutique Premium)', 'th': 'คาเฟ่ (ร้านกาแฟดีไซน์สวยรสชาติละมุน)', 'vi': 'Quán cà phê (Không gian cà phê tinh tế)' },
+    { key: 'station', 'zh-TW': '車站', 'zh-CN': '车站', 'en': 'Station', 'ja': '駅', 'ko': '역', 'es': 'Estación', 'ms': 'Stesen', 'pt': 'Estação', 'th': 'สถานี', 'vi': 'Nhà ga' },
+    { key: 'airport', 'zh-TW': '國際機場 (開啟旅程)', 'zh-CN': '国际机场 (开启旅程)', 'en': 'Airport (Journey Begins)', 'ja': '国際空港 (旅の始まり)', 'ko': '국제공항 (여행의 시작)', 'es': 'Aeropuerto (Comienza el Viaje)', 'ms': 'Lapangan Terbang (Permulaan Perjalanan)', 'pt': 'Aeroporto (Início da Viagem)', 'th': 'ท่าอากาศยาน (เริ่มต้นการเดินทาง)', 'vi': 'Sân bay quốc tế (Hành trình bắt đầu)' }
   ];
 
   for (const item of suffixMap) {
-    if (nameLower.includes(item.en)) {
+    if (nameLower.includes(item.key)) {
       // 提取字根前的名稱做音譯或直接保留，然後附加好聽的後綴
-      const rawPrefix = poiName.substring(0, poiName.toLowerCase().indexOf(item.en)).trim();
+      const rawPrefix = poiName.substring(0, poiName.toLowerCase().indexOf(item.key)).trim();
       const prefix = rawPrefix || (targetLocale.startsWith('zh') ? (targetLocale === 'zh-CN' ? '热门' : '熱門') : 'Popular');
-      const suffix = item[targetLocale] || item['en'] || item.en;
+      const suffix = item[targetLocale] || item['en'] || item.key;
       
       const translatedPrefix = translatePrefix(prefix, targetLocale);
       
