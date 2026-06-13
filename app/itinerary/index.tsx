@@ -73,6 +73,7 @@ export default function ItineraryScreen() {
   const [itinerary, setItinerary] = useState<Itinerary | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
+  const [regenerating, setRegenerating] = useState(false);
   const [viewMode, setViewMode] = useState<'timeline' | 'map' | 'checklist' | 'guide'>('timeline');
   const [activeDay, setActiveDay] = useState<number>(1);
   const [isNavExpanded, setIsNavExpanded] = useState<boolean>(true);
@@ -609,6 +610,46 @@ export default function ItineraryScreen() {
     }
   };
 
+  // 線上重新生成：當行程因即時資料硬失敗而降級時，讓使用者一鍵以即時資料重建，
+  // 救回非降級版本。離線時不提供（避免又生成出降級版覆蓋現有行程）。
+  const handleRegenerateItinerary = async () => {
+    if (isOffline || regenerating) return;
+    if (!contextSurvey) {
+      showAlert(t('itinerary.fallback.title'), t('itinerary.fallback.noSurvey'));
+      return;
+    }
+    setRegenerating(true);
+    try {
+      const fresh = await aiService.generateItinerary(contextSurvey);
+      // 沿用原行程的識別資訊以「覆蓋同一筆」而非新增，維持連續性。
+      if (itinerary?.id) fresh.id = itinerary.id;
+      if (itinerary?.surveyId) fresh.surveyId = itinerary.surveyId;
+      if (itinerary?.title) fresh.title = itinerary.title;
+
+      setItinerary(fresh);
+      await cacheSet(OFFLINE_ITINERARY_KEY, JSON.stringify(fresh));
+
+      if (auth.currentUser) {
+        try {
+          await dbService.saveItinerary(fresh);
+          await syncService.publishItinerary(fresh);
+        } catch (saveErr) {
+          console.warn('[Regenerate] 儲存/發佈失敗（已更新本機）：', saveErr);
+        }
+      }
+
+      if (fresh.generatedByFallback) {
+        // 仍降級：通常代表金鑰/網路問題仍在，提示使用者。
+        showAlert(t('itinerary.fallback.title'), t('itinerary.fallback.stillFallback'));
+      }
+    } catch (err) {
+      console.error('Regenerate failed:', err);
+      showAlert(t('itinerary.fallback.title'), t('itinerary.fallback.regenFailed'));
+    } finally {
+      setRegenerating(false);
+    }
+  };
+
   // Derived visibility states for ZERO conditional rendering
   const showLoading = loading;
   const showNoData = !loading && !itinerary;
@@ -671,6 +712,35 @@ export default function ItineraryScreen() {
               {!!itinerary?.fallbackReason && (
                 <Text style={[typography.caption, { color: colors.warning600, marginTop: 4 }]} selectable>
                   {t('itinerary.fallback.reason')}: {itinerary.fallbackReason}
+                </Text>
+              )}
+              {/* 線上時提供「重新生成」一鍵以即時資料重建；離線則提示先連網。 */}
+              {!isOffline ? (
+                <TouchableOpacity
+                  onPress={handleRegenerateItinerary}
+                  disabled={regenerating}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    alignSelf: 'flex-start',
+                    backgroundColor: colors.warning600,
+                    borderRadius: borderRadius.full,
+                    paddingHorizontal: spacing.md,
+                    paddingVertical: 8,
+                    marginTop: spacing.sm,
+                    opacity: regenerating ? 0.6 : 1,
+                  }}
+                >
+                  {regenerating
+                    ? <ActivityIndicator size="small" color="#fff" style={{ marginRight: 6 }} />
+                    : <Ionicons name="refresh" size={16} color="#fff" style={{ marginRight: 6 }} />}
+                  <Text style={[typography.labelMedium, { color: '#fff', fontWeight: '800' }]}>
+                    {regenerating ? t('itinerary.fallback.regenerating') : t('itinerary.fallback.regenerate')}
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <Text style={[typography.caption, { color: colors.warning600, marginTop: spacing.sm, fontWeight: '700' }]}>
+                  {t('itinerary.fallback.offlineHint')}
                 </Text>
               )}
             </View>

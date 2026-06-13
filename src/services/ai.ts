@@ -543,9 +543,14 @@ export const aiService = {
     const dayCount = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / 86400000) + 1);
     const limitPerDest = Math.max(12, dayCount * 3);
 
-    // 逐目的地抓取真實 POI（並行），組成範本；任何目的地失敗則該地退回內建範本。
+    // 逐目的地抓取真實 POI（並行），組成範本。
+    // 區分兩種「沒拿到即時資料」：
+    //   (a) 硬失敗（連線/金鑰/HTTP）—— fetchDestinationPOIs 會 throw，PAC 重試後仍失敗則記為降級。
+    //   (b) 該地真的查無景點 —— 回傳空陣列（成功），用內建範本屬合理，不算降級。
     const poiByDest: Record<string, DestTemplate> = {};
     const dests = alignedSurvey?.destinations || [];
+    let liveFetchFailed = false;       // 是否發生過 (a) 硬失敗
+    let liveFailureReason = '';        // 最後一筆硬失敗原因（供診斷橫幅）
     await Promise.all(dests.map(async (d) => {
       if (!d?.name || poiByDest[d.name]) return;
       try {
@@ -557,17 +562,20 @@ export const aiService = {
             interests: alignedSurvey.interests || [],
             limit: limitPerDest,
           }),
-          // 重試全數失敗時回傳空陣列，下游 generateFallbackItinerary 會自動為該地套用內建範本。
-          () => [] as POI[],
+          // 重試全數失敗（硬失敗）時，丟出訊號讓下方 catch 記為降級，而非默默吞掉。
+          () => { throw new Error('POI_LIVE_EXHAUSTED'); },
           `fetchDestinationPOIs_${d.name}`,
           2,
-          []
+          ['OTM_NO_KEY'] // 無金鑰無須重試，直接視為硬失敗
         );
         if (pois.length > 0) {
           poiByDest[d.name] = buildDestTemplateFromPOIs(pois, d.name, appLocale);
         }
-      } catch (e) {
-        console.warn(`[generateRuleBasedItinerary] 取得 ${d.name} POI 失敗，改用內建範本`, e);
+        // pois.length === 0：API 成功但查無景點（情況 b），維持非降級。
+      } catch (e: any) {
+        liveFetchFailed = true;
+        liveFailureReason = e?.message || String(e);
+        logger.warn(`取得 ${d.name} 即時 POI 硬失敗（${liveFailureReason}），該地暫用內建範本`);
       }
     }));
 
@@ -589,7 +597,7 @@ export const aiService = {
           () => [] as POI[],
           `fetchDestinationPOIs_food_${d.name}`,
           2,
-          []
+          ['OTM_NO_KEY'] // 無金鑰無須重試
         );
         const seeds = foodPois
           .filter(p => p.name && p.lat && p.lon)
@@ -636,26 +644,26 @@ export const aiService = {
 
     const itinerary = this.generateFallbackItinerary(alignedSurvey, poiByDest, restByDest);
 
-    // 誠實標記是否真的用到即時 POI 資料：
-    // poiByDest 僅在即時抓取成功（pois.length > 0）時才會被填入，故可作為「即時資料是否生效」的依據。
+    // 誠實標記降級：只有發生「硬失敗」（連線/金鑰/HTTP，情況 a）才算降級；
+    // 「該地查無景點」（情況 b）不算。如此可落實「只要網路存在就不該降級」的原則 ——
+    // 真有硬失敗時標記並附原因，讓畫面示警並提供「重新生成」。
     const namedDests = Array.from(new Set(dests.map(d => d?.name).filter(Boolean)));
     const liveDestCount = Object.keys(poiByDest).length;
-    const usedLiveData = liveDestCount > 0;
-    itinerary.generatedByFallback = namedDests.length > 0 && !usedLiveData;
+    itinerary.generatedByFallback = liveFetchFailed;
 
     if (itinerary.generatedByFallback) {
-      // 網路正常卻完全沒用到即時資料 —— 這才是真正該被診斷的降級。查明根因供營運者排除。
+      // 查明根因（金鑰/網路）寫入 fallbackReason，供診斷橫幅顯示與營運排查。
+      let diagMsg = '';
       try {
         const diag = await verifyOpenTripMapKey();
-        logger.warn(
-          `行程未使用任何即時 POI 資料（${namedDests.length} 個目的地全部退回內建範本）。` +
-          `金鑰狀態=${diag.status}（來源：${diag.source}）；網路=${PACEngine.getState().network}。${diag.message}`
-        );
+        diagMsg = `金鑰=${diag.status}（${diag.source}）；網路=${PACEngine.getState().network}`;
       } catch {
-        logger.warn(`行程未使用任何即時 POI 資料（${namedDests.length} 個目的地全部退回內建範本）；網路=${PACEngine.getState().network}。`);
+        diagMsg = `網路=${PACEngine.getState().network}`;
       }
+      itinerary.fallbackReason = `即時景點資料取得失敗（${liveFailureReason}）；${diagMsg}`;
+      logger.warn(`行程降級：${itinerary.fallbackReason}（即時命中 ${liveDestCount}/${namedDests.length}）`);
     } else {
-      logger.info(`行程已使用即時 POI 資料：${liveDestCount}/${namedDests.length} 個目的地命中即時資料。`);
+      logger.info(`行程未降級：即時命中 ${liveDestCount}/${namedDests.length} 個目的地（其餘為查無景點，使用內建範本屬合理）。`);
     }
 
     healItineraryCoordinates(itinerary, alignedSurvey);
@@ -1729,7 +1737,7 @@ export async function regenerateActivityAlternatives(
       () => [],
       `fetchDestinationPOIs_alternatives_${region}`,
       2,
-      []
+      ['OTM_NO_KEY'] // 無金鑰無須重試
     );
   } catch (e) {
     console.warn('[regenerateActivityAlternatives] POI 取得失敗', e);

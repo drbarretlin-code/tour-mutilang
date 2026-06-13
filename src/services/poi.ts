@@ -223,7 +223,12 @@ interface FetchPOIOptions {
 
 /**
  * 取得指定目的地的 POI 清單（依興趣過濾、依熱門度排序）。
- * 失敗（無金鑰／網路／無資料）時回傳空陣列，呼叫端應自行退回內建範本。
+ *
+ * 重要語意（供呼叫端區分「連線降級」與「該地真的沒景點」）：
+ * - **硬失敗**（無金鑰 OTM_NO_KEY／座標解析失敗 OTM_GEONAME_FAILED／HTTP 錯誤
+ *   OTM_HTTP_xxx／網路或逾時）一律 **throw**，讓 PAC 重試，並讓呼叫端得以標記降級。
+ * - **API 成功但查無景點**（真實的空結果）才回傳空陣列 `[]`，此情況使用內建範本屬合理，
+ *   不應視為降級。
  */
 export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]> {
   const { destName, lat, lon, interests, limit = 40, radiusMeters = 20000 } = opts;
@@ -252,14 +257,16 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
 
   const apiKey = await resolveApiKey();
   if (!apiKey) {
-    logger.warn('找不到 OpenTripMap API 金鑰（EXPO_PUBLIC_OPENTRIPMAP_KEY 或本機設定），改用內建範本。');
-    return [];
+    // 無金鑰屬不可重試的設定問題：拋出 fatal error，呼叫端據此明確標記降級並引導設定。
+    logger.warn('找不到 OpenTripMap API 金鑰（EXPO_PUBLIC_OPENTRIPMAP_KEY 或本機設定）。');
+    throw new Error('OTM_NO_KEY');
   }
 
   const center = await resolveCenter(destName, lat, lon, apiKey);
   if (!center) {
-    logger.warn(`無法解析「${destName}」的中心座標，改用內建範本。`);
-    return [];
+    // 座標解析失敗（多為網路問題）：拋錯讓 PAC 重試。
+    logger.warn(`無法解析「${destName}」的中心座標。`);
+    throw new Error('OTM_GEONAME_FAILED');
   }
 
   const apiStart = Date.now();
@@ -268,9 +275,9 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
       + `&kinds=${encodeURIComponent(kindsParam)}&rate=2&format=json&limit=${limit}&apikey=${apiKey}`;
     const res = await fetchWithTimeout(url, adaptiveTimeout(8000));
     if (!res.ok) {
-      logger.warn(`OpenTripMap radius 回傳 ${res.status}，改用內建範本。`);
+      logger.warn(`OpenTripMap radius 回傳 ${res.status}。`);
       recordAPIMetric('fetchDestinationPOIs', Date.now() - apiStart, false, 1, false);
-      return [];
+      throw new Error(`OTM_HTTP_${res.status}`);
     }
     const raw = await res.json();
     if (!Array.isArray(raw)) return [];
@@ -302,9 +309,11 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
 
     recordAPIMetric('fetchDestinationPOIs', Date.now() - apiStart, true, 1, false);
     return pois;
-  } catch (e) {
-    logger.warn('OpenTripMap 查詢失敗，改用內建範本。', e);
+  } catch (e: any) {
+    logger.warn('OpenTripMap 查詢失敗。', e);
     recordAPIMetric('fetchDestinationPOIs', Date.now() - apiStart, false, 1, false);
-    return [];
+    // 已是具語意的硬失敗代碼則原樣拋出；其餘（網路/逾時/JSON 解析）統一標記為連線失敗供重試。
+    if (typeof e?.message === 'string' && e.message.startsWith('OTM_')) throw e;
+    throw new Error('OTM_NETWORK_FAILED');
   }
 }
