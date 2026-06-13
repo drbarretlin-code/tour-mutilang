@@ -6,28 +6,7 @@ import { Itinerary3DMap } from './Itinerary3DMap';
 import { getDayRouteNavigationUrl } from './MapFallbackView';
 import { HorizontalActivityCard } from './HorizontalActivityCard';
 import { t } from '../../i18n';
-
-function getRouteDistance(transport: any): number {
-  const t = transport || { mode: 'drive', duration: 10 };
-  if (t.distance > 0) {
-    return t.distance / 1000;
-  }
-  
-  // Route distance estimation based on travel duration and transport mode
-  const duration = t.duration || 10; // default 10 mins
-  const mode = t.mode || 'drive';
-  
-  let speedKmh = 40; // Default drive speed
-  if (mode === 'walk') {
-    speedKmh = 4.5;
-  } else if (mode === 'public') {
-    speedKmh = 20;
-  } else if (mode === 'taxi' || mode === 'charter' || mode === 'drive') {
-    speedKmh = 40;
-  }
-  
-  return (duration / 60) * speedKmh; // distance in km
-}
+import { getRouteDistanceKm } from '../../utils/distance';
 
 interface Props {
   itinerary: Itinerary;
@@ -175,7 +154,7 @@ export const CombinedItineraryView: React.FC<Props> = ({ itinerary, activeDay, m
               let distanceStr = '';
               if (index < points.length - 1) {
                 const nextPt = points[index + 1];
-                const distanceKm = getRouteDistance(nextPt.transport);
+                const distanceKm = getRouteDistanceKm(nextPt.transport, pt.location, nextPt.location);
                 distanceStr = `${distanceKm.toFixed(1)} km`;
               }
 

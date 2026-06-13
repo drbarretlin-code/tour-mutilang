@@ -3,27 +3,7 @@ import { View, StyleSheet, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useTheme } from '../../context/ThemeContext';
 import { Itinerary } from '../../types/itinerary';
-
-function getRouteDistance(transport: any): number {
-  const t = transport || { mode: 'drive', duration: 10 };
-  if (t.distance > 0) {
-    return t.distance / 1000;
-  }
-  
-  const duration = t.duration || 10;
-  const mode = t.mode || 'drive';
-  
-  let speedKmh = 40;
-  if (mode === 'walk') {
-    speedKmh = 4.5;
-  } else if (mode === 'public') {
-    speedKmh = 20;
-  } else if (mode === 'taxi' || mode === 'charter' || mode === 'drive') {
-    speedKmh = 40;
-  }
-  
-  return (duration / 60) * speedKmh;
-}
+import { getRouteDistanceKm } from '../../utils/distance';
 
 interface Itinerary3DMapProps {
   itinerary: Itinerary;
@@ -51,7 +31,7 @@ export function Itinerary3DMap({ itinerary, activeDay, height = 300 }: Itinerary
     let distToNext = '';
     if (index < dayActivities.length - 1) {
       const nextAct = dayActivities[index + 1];
-      const distKm = getRouteDistance(nextAct.transport);
+      const distKm = getRouteDistanceKm(nextAct.transport, act.location, nextAct.location);
       distToNext = `${distKm.toFixed(1)} km`;
     }
 

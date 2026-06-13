@@ -5,28 +5,7 @@ import { Card } from '../common/Card';
 import { ItineraryDay, Activity } from '../../types/itinerary';
 import i18n, { t } from '../../i18n';
 import { Ionicons } from '@expo/vector-icons';
-
-function getRouteDistance(transport: any): number {
-  const t = transport || { mode: 'drive', duration: 10 };
-  if (t.distance > 0) {
-    return t.distance / 1000;
-  }
-  
-  // Route distance estimation based on travel duration and transport mode
-  const duration = t.duration || 10; // default 10 mins
-  const mode = t.mode || 'drive';
-  
-  let speedKmh = 40; // Default drive speed
-  if (mode === 'walk') {
-    speedKmh = 4.5;
-  } else if (mode === 'public') {
-    speedKmh = 20;
-  } else if (mode === 'taxi' || mode === 'charter' || mode === 'drive') {
-    speedKmh = 40;
-  }
-  
-  return (duration / 60) * speedKmh; // distance in km
-}
+import { getRouteDistanceKm } from '../../utils/distance';
 
 interface TimelineViewProps {
   day: ItineraryDay;
@@ -49,9 +28,9 @@ export function TimelineView({
 }: TimelineViewProps) {
   const { colors, spacing, borderRadius, typography, shadows } = useTheme();
 
-  const renderVerticalTransitBadge = (transport: any) => {
+  const renderVerticalTransitBadge = (transport: any, from?: any, to?: any) => {
     const tData = transport || { mode: 'drive', duration: 10 };
-    const distKm = getRouteDistance(tData);
+    const distKm = getRouteDistanceKm(tData, from, to);
     const distStr = `${distKm.toFixed(1)} km`;
     
     let iconName: any = 'car-outline';
@@ -379,7 +358,7 @@ export function TimelineView({
                   const transitDuration = nextTransport && nextTransport.duration 
                     ? nextTransport.duration 
                     : Math.max(10, gapMinutes);
-                  const transitDistance = nextTransport ? getRouteDistance(nextTransport) : 0;
+                  const transitDistance = nextTransport ? getRouteDistanceKm(nextTransport, act.location, nextAct?.location) : 0;
                   const transitDistStr = transitDistance > 0 ? `${transitDistance.toFixed(1)} km` : '';
                   const transitMode = nextTransport ? nextTransport.mode : 'drive';
 
@@ -535,7 +514,7 @@ export function TimelineView({
               {!showGapRecommendation && !isLast && (
                 <View style={styles.verticalTransitContainer}>
                   <View style={[styles.transitVerticalLine, { backgroundColor: '#E2E8F0', height: 48 }]} />
-                  {renderVerticalTransitBadge(activities[index + 1].transport)}
+                  {renderVerticalTransitBadge(activities[index + 1].transport, act.location, activities[index + 1].location)}
                 </View>
               )}
             </View>
