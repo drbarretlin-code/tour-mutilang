@@ -551,6 +551,35 @@ export const aiService = {
       }
     }));
 
+    // 逐目的地抓取真實「餐廳 POI」作為每日午餐的選池（有金鑰時提供充足變化，避免多日重複）；
+    // 失敗或無金鑰時，該地午餐退回內建餐廳清單（getDestRestaurants）。
+    const restByDest: Record<string, RestaurantSeed[]> = {};
+    await Promise.all(dests.map(async (d) => {
+      if (!d?.name || restByDest[d.name]) return;
+      try {
+        const foodPois = await fetchDestinationPOIs({
+          destName: d.name,
+          lat: d.latitude,
+          lon: d.longitude,
+          interests: ['food'],
+          limit: Math.max(12, dayCount * 2),
+        });
+        const seeds = foodPois
+          .filter(p => p.name && p.lat && p.lon)
+          .map((p): RestaurantSeed => ({
+            title: p.name,
+            localTitle: p.localName || p.name,
+            desc: buildPoiDescription(p, d.name, '餐廳', appLocale),
+            lat: p.lat,
+            lon: p.lon,
+            cost: 0,
+          }));
+        if (seeds.length > 0) restByDest[d.name] = seeds;
+      } catch (e) {
+        console.warn(`[generateRuleBasedItinerary] 取得 ${d.name} 餐廳 POI 失敗，午餐改用內建清單`, e);
+      }
+    }));
+
     // 以維基百科摘要動態補強各景點介紹（免金鑰），命中則覆寫較豐富的權威描述；
     // 失敗者沿用 buildPoiDescription 既有內容。優先以官方當地名稱查詢以提高命中率。
     try {
@@ -569,7 +598,7 @@ export const aiService = {
       console.warn('[generateRuleBasedItinerary] 維基百科介紹補強失敗，沿用內建描述', e);
     }
 
-    const itinerary = this.generateFallbackItinerary(alignedSurvey, poiByDest);
+    const itinerary = this.generateFallbackItinerary(alignedSurvey, poiByDest, restByDest);
     // 此為正式生成方式（非 AI 失敗備援），故不標記 generatedByFallback。
     healItineraryCoordinates(itinerary, alignedSurvey);
     return itinerary;
@@ -578,7 +607,7 @@ export const aiService = {
   /**
    * Generates a structural fallback itinerary matching survey inputs
    */
-  generateFallbackItinerary(survey: TripSurvey, poiByDest?: Record<string, DestTemplate>): Itinerary {
+  generateFallbackItinerary(survey: TripSurvey, poiByDest?: Record<string, DestTemplate>, restByDest?: Record<string, RestaurantSeed[]>): Itinerary {
     const start = new Date(survey?.dates?.startDate || Date.now());
     const end = new Date(survey?.dates?.endDate || Date.now() + 86400000 * 3);
     const dayCount = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
@@ -985,8 +1014,12 @@ export const aiService = {
       const activeLunchTitles = lunchTitles[locale] || lunchTitles['en'];
       const currentLunchTitle = activeLunchTitles[i % activeLunchTitles.length];
 
-      // 預設午餐改用內建實體餐廳（含真實座標），逐日輪替；無對應資料時退回通用佔位描述。
-      const destRestaurants = getDestRestaurants(currentDest.name, locale);
+      // 午餐優先採用即時抓取的真實餐廳 POI（變化充足、避免多日重複）；無金鑰/取得失敗時退回內建餐廳清單。
+      // 逐日以游標輪替，確保同一目的地連續多日不重複（池量足夠時）。
+      const realRestaurants = restByDest?.[currentDest.name];
+      const destRestaurants = (realRestaurants && realRestaurants.length > 0)
+        ? realRestaurants
+        : getDestRestaurants(currentDest.name, locale);
       const lunchPick = destRestaurants.length ? destRestaurants[i % destRestaurants.length] : null;
 
       activities.push({

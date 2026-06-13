@@ -72,8 +72,8 @@ function PACStatusBar({ state }: { state: PACState }) {
         bg: colors.warning50,
         border: colors.warning300,
         text: colors.warning800,
-        icon: 'warning-outline',
-        msg: '連線降級：正以本地離線服務接管運作',
+        icon: 'cloud-done-outline',
+        msg: '雲端同步暫時失敗，已改用本機儲存，資料安全無虞（不影響行程使用）',
       };
     }
     if (state.healing === 'healing') {
