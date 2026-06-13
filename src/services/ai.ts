@@ -1226,7 +1226,7 @@ export const aiService = {
         hotel: {
           name: strings.hotelName,
           address: `${currentDest.name}${strings.hotelAddress}`,
-          bookingUrl: survey?.customBookingUrl || undefined
+          ...(survey?.customBookingUrl ? { bookingUrl: survey.customBookingUrl } : {})
         },
         localTips: [
           {

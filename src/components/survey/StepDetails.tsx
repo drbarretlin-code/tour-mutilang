@@ -7,6 +7,7 @@ import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { t } from '../../i18n';
 import { Ionicons } from '@expo/vector-icons';
+import { formatTimeInput } from '../../utils/timeInput';
 import {
   InterestTag,
   TravelPace,
@@ -192,13 +193,17 @@ export const StepDetails = forwardRef<StepDetailsHandle>((_props, ref) => {
                 <Input
                   placeholder="Departure (e.g. 10:00)"
                   value={fDep}
-                  onChangeText={setFDep}
+                  onChangeText={(text) => setFDep(formatTimeInput(text))}
+                  keyboardType="numeric"
+                  maxLength={5}
                   containerStyle={{ width: '48%' }}
                 />
                 <Input
                   placeholder="Arrival (e.g. 14:30)"
                   value={fArr}
-                  onChangeText={setFArr}
+                  onChangeText={(text) => setFArr(formatTimeInput(text))}
+                  keyboardType="numeric"
+                  maxLength={5}
                   containerStyle={{ width: '48%' }}
                 />
               </View>
@@ -229,13 +234,17 @@ export const StepDetails = forwardRef<StepDetailsHandle>((_props, ref) => {
                     <Input
                       placeholder="Departure (e.g. 16:00)"
                       value={retFDep}
-                      onChangeText={setRetFDep}
+                      onChangeText={(text) => setRetFDep(formatTimeInput(text))}
+                      keyboardType="numeric"
+                      maxLength={5}
                       containerStyle={{ width: '48%' }}
                     />
                     <Input
                       placeholder="Arrival (e.g. 20:00)"
                       value={retFArr}
-                      onChangeText={setRetFArr}
+                      onChangeText={(text) => setRetFArr(formatTimeInput(text))}
+                      keyboardType="numeric"
+                      maxLength={5}
                       containerStyle={{ width: '48%' }}
                     />
                   </View>
