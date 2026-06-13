@@ -1116,30 +1116,34 @@ export const aiService = {
       };
       const activeLunchTitles = lunchTitles[locale] || lunchTitles['en'];
       const currentLunchTitle = activeLunchTitles[i % activeLunchTitles.length];
-      
+
+      // 預設午餐改用內建實體餐廳（含真實座標），逐日輪替；無對應資料時退回通用佔位描述。
+      const destRestaurants = getDestRestaurants(currentDest.name, locale);
+      const lunchPick = destRestaurants.length ? destRestaurants[i % destRestaurants.length] : null;
+
       activities.push({
         id: `act-${i}-2`,
         order: 2,
         startTime: '12:00',
         endTime: '13:30',
-        title: `${strings.lunchTitle}${currentLunchTitle}`,
-        localTitle: 'Local Restaurant',
+        title: lunchPick ? `${strings.lunchTitle}${lunchPick.title}` : `${strings.lunchTitle}${currentLunchTitle}`,
+        localTitle: lunchPick ? lunchPick.localTitle : 'Local Restaurant',
         type: 'restaurant',
-        description: strings.lunchDesc,
+        description: lunchPick ? lunchPick.desc : strings.lunchDesc,
         location: {
-          name: strings.lunchLocName,
+          name: lunchPick ? lunchPick.title : strings.lunchLocName,
           address: `${currentDest.name}${strings.lunchLocAddress}`,
-          latitude: currentDest.latitude || 0,
-          longitude: currentDest.longitude || 0
+          latitude: lunchPick ? lunchPick.lat : (currentDest.latitude || 0),
+          longitude: lunchPick ? lunchPick.lon : (currentDest.longitude || 0)
         },
         duration: 90,
-        transport: { mode: 'public', duration: 15, distance: 2000, description: strings.lunchTransportDesc },
-        links: [],
+        transport: { mode: 'public', duration: 15, distance: 0, description: strings.lunchTransportDesc },
+        links: lunchPick ? [{ label: strings.grabLink, url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lunchPick.localTitle)}`, type: 'info' as const }] : [],
         notes: strings.lunchNotes,
         isMustVisit: false,
         photoUrl: templates.images[2],
         rating: 4.7,
-        cost: { amount: 350, currency },
+        cost: { amount: lunchPick ? lunchPick.cost : 350, currency },
         openingHours: '11:00 - 21:00'
       });
 
@@ -1419,6 +1423,45 @@ export const aiService = {
 export default aiService;
 
 /** 將活動類型對應到適合的 POI 分類，供「重新抽選」時篩選候選景點 */
+interface RestaurantSeed {
+  title: string; localTitle: string; desc: string; lat: number; lon: number; cost: number;
+}
+
+/**
+ * 內建實體餐廳清單（含真實座標），作為每日午餐的預設建議與「換一個」的離線備援。
+ * title 對齊 UI 語系、localTitle 提供官方當地名稱（供現場叫車/地圖搜尋）。
+ */
+function getDestRestaurants(dest: string, lang: string): RestaurantSeed[] {
+  const lower = (dest || '').toLowerCase();
+  const isZhCn = lang === 'zh-CN';
+  const isEn = lang !== 'zh-TW' && lang !== 'zh-CN';
+  const pick = (tw: string, cn: string, en: string) => isEn ? en : (isZhCn ? cn : tw);
+
+  const isJapan = lower.includes('東京') || lower.includes('tokyo') || lower.includes('日本') || lower.includes('japan');
+  const isThailand = lower.includes('曼谷') || lower.includes('bangkok') || lower.includes('泰國') || lower.includes('thai') || lower.includes('芭達雅') || lower.includes('pattaya');
+
+  if (isThailand) {
+    return [
+      { title: pick('Thip Samai 鬼門炒河粉', 'Thip Samai 鬼门炒河粉', 'Thip Samai Pad Thai'), localTitle: 'ทิพย์สมัย ผัดไทยประตูผี', desc: pick('曼谷公認最具代表性的炒河粉名店，以蛋包炒河粉聞名，創業逾七十年，每晚門庭若市。', '曼谷公认最具代表性的炒河粉名店，以蛋包炒河粉闻名，创业逾七十年，每晚门庭若市。', 'Bangkok\\\'s most iconic pad thai institution, famous for its egg-wrapped noodles and over 70 years of history.'), lat: 13.7530, lon: 100.5063, cost: 120 },
+      { title: pick('Jay Fai 米其林一星街頭海鮮', 'Jay Fai 米其林一星街头海鲜', 'Jay Fai (1 Michelin Star)'), localTitle: 'เจ๊ไฝ', desc: pick('戴著護目鏡掌廚的傳奇老闆娘，以炭火現炒的蟹肉蛋包與海鮮冬蔭功享譽國際，米其林一星。', '戴着护目镜掌厨的传奇老板娘，以炭火现炒的蟹肉蛋包与海鲜冬荫功享誉国际，米其林一星。', 'Run by the legendary goggle-wearing chef, celebrated worldwide for charcoal-fired crab omelets; one Michelin star.'), lat: 13.7536, lon: 100.5044, cost: 800 },
+      { title: pick('Krua Apsorn 家常泰菜名店', 'Krua Apsorn 家常泰菜名店', 'Krua Apsorn'), localTitle: 'ครัวอัปษร', desc: pick('曾獲皇室御廚背書的家常泰菜餐廳，招牌咖哩蟹肉與炒水空心菜深受在地人喜愛。', '曾获皇室御厨背书的家常泰菜餐厅，招牌咖喱蟹肉与炒水空心菜深受在地人喜爱。', 'A beloved home-style Thai restaurant endorsed by royal chefs, known for stir-fried crab with yellow curry.'), lat: 13.7589, lon: 100.5043, cost: 350 }
+    ];
+  }
+  if (isJapan) {
+    return [
+      { title: pick('一蘭拉麵 澀谷店', '一兰拉面 涩谷店', 'Ichiran Ramen Shibuya'), localTitle: '一蘭 渋谷店', desc: pick('以個人專注隔間與濃郁豚骨湯頭聞名的連鎖拉麵名店，可依喜好客製湯頭濃度與辣度。', '以个人专注隔间与浓郁豚骨汤头闻名的连锁拉面名店，可依喜好客制汤头浓度与辣度。', 'Famous ramen chain with private focus booths and rich tonkotsu broth, customizable to taste.'), lat: 35.6614, lon: 139.7006, cost: 1200 },
+      { title: pick('邁泉豬排 青山總店', '迈泉猪排 青山总店', 'Tonkatsu Maisen Aoyama'), localTitle: 'とんかつ まい泉 青山本店', desc: pick('改建自老澡堂的炸豬排名店，豬排酥嫩多汁、入口即化，搭配自製醬汁堪稱東京一絕。', '改建自老澡堂的炸猪排名店，猪排酥嫩多汁、入口即化，搭配自制酱汁堪称东京一绝。', 'Set in a former bathhouse, this tonkatsu institution serves famously tender, juicy cutlets.'), lat: 35.6657, lon: 139.7106, cost: 2000 },
+      { title: pick('築地壽司清', '筑地寿司清', 'Tsukiji Sushiko'), localTitle: '築地寿司清', desc: pick('鄰近築地市場的老字號壽司店，使用當日直送鮮魚，江戶前握壽司新鮮細緻。', '邻近筑地市场的老字号寿司店，使用当日直送鲜鱼，江户前握寿司新鲜细致。', 'A long-established sushi house near Tsukiji using daily-fresh fish for refined Edomae nigiri.'), lat: 35.6655, lon: 139.7707, cost: 3000 }
+    ];
+  }
+  // 預設：台北 / 通用
+  return [
+    { title: pick('鼎泰豐 信義店', '鼎泰丰 信义店', 'Din Tai Fung Xinyi'), localTitle: '鼎泰豐', desc: pick('享譽國際的小籠包名店，十八摺薄皮湯包鮮美多汁，米其林推薦、觀光客必訪。', '享誉国际的小笼包名店，十八折薄皮汤包鲜美多汁，米其林推荐、观光客必访。', 'World-renowned for its 18-fold xiaolongbao soup dumplings; Michelin-recommended.'), lat: 25.0330, lon: 121.5630, cost: 400 },
+    { title: pick('阜杭豆漿', '阜杭豆浆', 'Fuhang Soy Milk'), localTitle: '阜杭豆漿', desc: pick('華山市場二樓的排隊名店，現烤厚燒餅夾蛋與鹹豆漿是台北經典早午餐。', '华山市场二楼的排队名店，现烤厚烧饼夹蛋与咸豆浆是台北经典早午餐。', 'A famous queue spot serving thick baked flatbread and savory soy milk — a Taipei breakfast classic.'), lat: 25.0444, lon: 121.5197, cost: 120 },
+    { title: pick('阿宗麵線', '阿宗面线', 'Ay-Chung Flour-Rice Noodles'), localTitle: '阿宗麵線', desc: pick('西門町站著吃的傳奇小吃，柴魚高湯麵線淋上滷大腸與香菜，是台北街頭代表味。', '西门町站着吃的传奇小吃，柴鱼高汤面线淋上卤大肠与香菜，是台北街头代表味。', 'A legendary Ximending street snack: bonito-broth thin noodles topped with braised intestine.'), lat: 25.0438, lon: 121.5070, cost: 90 }
+  ];
+}
+
 const ACTIVITY_TYPE_TO_POI_CATEGORIES: Record<string, PoiCategory[]> = {
   attraction: ['cultural', 'historic', 'architecture', 'museum', 'viewpoint', 'other'],
   restaurant: ['food'],
@@ -1549,6 +1592,27 @@ export async function regenerateActivityAlternatives(
     candidates = pois.filter(p => p.name.trim().toLowerCase() !== excludeName);
   }
   if (candidates.length === 0) {
+    // 餐廳/咖啡無 POI 資料時，退回內建實體餐廳清單，確保「換一個」仍能提供真實選擇。
+    if (currentActivity.type === 'restaurant' || currentActivity.type === 'cafe') {
+      const seeds = getDestRestaurants(region, locale)
+        .filter(s => s.title.trim().toLowerCase() !== excludeName && s.localTitle.trim().toLowerCase() !== excludeName);
+      if (seeds.length > 0) {
+        return seeds.slice(0, 3).map((s, idx) => ({
+          ...currentActivity,
+          id: `${currentActivity.id}-alt-${idx}`,
+          title: s.title,
+          localTitle: s.localTitle,
+          description: s.desc,
+          location: {
+            name: s.title,
+            address: region,
+            latitude: s.lat,
+            longitude: s.lon,
+          },
+          cost: { amount: s.cost, currency: currentActivity.cost?.currency || 'TWD' },
+        }));
+      }
+    }
     throw new Error('NO_ALTERNATIVES_FOUND');
   }
 

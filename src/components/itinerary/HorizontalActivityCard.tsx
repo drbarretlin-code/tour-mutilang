@@ -39,7 +39,13 @@ export const HorizontalActivityCard: React.FC<Props> = ({ activity, index, onPre
         <Text style={styles.title} numberOfLines={2}>
           {activity.title}
         </Text>
-        
+        {/* 官方當地語言名稱（供現場叫車/地圖搜尋），與 UI 語系標題並列顯示 */}
+        {activity.localTitle && activity.localTitle !== activity.title && (
+          <Text style={styles.localTitle} numberOfLines={1}>
+            {activity.localTitle}
+          </Text>
+        )}
+
         {onEdit && (
            <TouchableOpacity onPress={() => onEdit(activity.id)} style={styles.editButton}>
               <Ionicons name="pencil" size={16} color="#94A3B8" />
@@ -120,6 +126,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     lineHeight: 24,
+  },
+  localTitle: {
+    color: '#94A3B8',
+    fontSize: 13,
+    fontWeight: '500',
+    marginTop: 4,
   },
   editButton: {
     position: 'absolute',
