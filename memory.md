@@ -142,13 +142,32 @@
   - 將多語系呼叫 `t('itinerary.timelineView.endOfDay.transportAdvice')` 與 `t('itinerary.timelineView.endOfDay.shuttleGuideDesc')` 修改為動態傳入變數 `{ platforms: hailingInfo.transitLabel }`。
   - 編寫自動化 Python 腳本對 10 個多國語系 JSON 檔案進行批次修改，將硬寫死「Grab / Bolt」或「Bolt 或 Grab」的句子轉化為動態佔位符 `%{platforms}`，使終點交通指引與下方按鈕叫車平台完全吻合。
 
-### 景點名稱顯示順序修正與餐廳中文化補強
+### 景點名稱顯示順序修正與餐廳 UI 語系當地名稱補強
 - **問題分析**：截圖中景點顯示為 `Shinjuku Niagara Falls [Shinjuku Niagara Falls]` 且午餐顯示為 `Kyubei Sushi... [Kyubei Sushi...]`，此代表：
-  1. 顯示順序與使用者要求相反：使用者要求前面顯示當地語系文字，後面顯示 UI 語系接地氣中文化名稱。
-  2. 上游 `ai.ts` 的餐廳資料在產生 `seeds` 時漏掉了呼叫 `findLocalizedName` 進行美化中譯，導致 `title` 與 `localTitle` 都是英文原名。
+  1. 顯示順序與使用者要求相反：使用者要求前面顯示當地語系文字，後面顯示 UI 語系當地名稱。
+  2. 上游 `ai.ts` 的餐廳資料在產生 `seeds` 時漏掉了呼叫 `findLocalizedName` 進行翻譯美化，導致 `title` 與 `localTitle` 都是英文原名。
   3. `Shinjuku Niagara Falls` 及其詞根沒有在字典中，故落入 default 導致顯示為原名。
 - **解決方案**：
-  - **順序調整**：重構 [TimelineView.tsx](file:///Users/barretlin/GitProjects/tour-mutilang/src/components/itinerary/TimelineView.tsx) 中活動標題渲染，新增 `renderActivityTitle` 輔助函式，使常規卡片顯示為 `當地語系文字 [UI語系接地氣美化名稱]`。且在 UI 渲染層加上防禦性中文化翻譯自癒（若 `uiName` 不含中文且 `locale` 為中文時，動態重新嘗試呼叫 `findLocalizedName` 進行補強翻譯）。
-  - **餐廳種子翻譯補強**：在 [ai.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/services/ai.ts) 中產生 `foodPois` 的 `seeds` 時，補上 `findLocalizedName` 呼叫，使餐廳也能成功翻譯為中文化接地氣的店名。
-  - **補全熱門景點與字尾對照**：於 [destinations.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/data/destinations.ts) 中補強了知名景點與飯店（如 `Shinjuku Niagara Falls`、`Kyubei Sushi`、`Keio Plaza Hotel` 等）的精準 blogger 風格翻譯，並在 `suffixMap` 增加 `falls`、`waterfall`、`sushi` 的字尾比對規則。
+  - **順序調整**：重構 [TimelineView.tsx](file:///Users/barretlin/GitProjects/tour-mutilang/src/components/itinerary/TimelineView.tsx) 中活動標題渲染，新增 `renderActivityTitle` 輔助函式，使常規卡片顯示為 `當地語系文字 [UI 語系當地名稱]`。且在 UI 渲染層加上防禦性 UI 語系翻譯自癒（若 `uiName` 不含當地文字且 `locale` 符合時，動態重新嘗試呼叫 `findLocalizedName` 進行補強翻譯）。
+  - **餐廳種子翻譯補強**：在 [ai.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/services/ai.ts) 中產生 `foodPois` 的 `seeds` 時，補上 `findLocalizedName` 呼叫，使餐廳也能成功取得符合該 UI 語系之當地名稱。
+  - **補全熱門景點與字尾對照**：於 [destinations.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/data/destinations.ts) 中補強了知名景點與飯店（如 `Shinjuku Niagara Falls`、`Kyubei Sushi`、`Keio Plaza Hotel` 等）的精準 blogger 風格之 UI 語系語譯，並在 `suffixMap` 增加 `falls`、`waterfall`、`sushi` 的字尾比對規則。
+
+---
+
+## 2026-06-14 — 返回飯店時間 21:00 限制修正與景點描述個性化
+
+### 返回飯店時間強制遵循 21:00 規則
+- **問題分析**：中間天數（非首日、非尾日）的「返回飯店休息」活動節點，其時間是由當日最後一個活動的結束時間動態推算而來。然而原始邏輯僅做 `addMinutesToTime(lastAct.endTime, transportDuration)` 而未檢查是否超過每日活動截止時間 21:00，導致「緊湊步調 (packed)」模式下新增的晚間活動會將回程時間推至 21:30 甚至更晚，違反 CLAUDE.md 規範三（每日活動時間 08:00-21:00）。
+- **解決方案**：於 [ai.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/services/ai.ts) 中的「返回飯店」活動生成區段（原 line 1317-1321，現 line 1317-1340）新增 `RETURN_DEADLINE = '21:00'` 常數與回推校正邏輯：
+  1. 計算回程後若 `returnEndTime > '21:00'`，則將 `returnEndTime` 鉗制為 `'21:00'`、`returnStartTime` 回推為 `'20:30'`。
+  2. 若回推後 `returnStartTime` 仍與上一個活動的結束時間衝突（含交通車程），則自動壓縮上一個活動的 `endTime` 與 `duration`（最低 30 分鐘），確保整段時間鏈合理銜接。
+  3. 此修改與 `clampFallbackItineraryTimes` 的全域 08:00-21:00 校正互不衝突（clamp 為事後補網，此處為事前精準生成）。
+
+### 景點描述個性化（解決吃的、逛的介紹大同小異問題）
+- **問題分析**：當使用 OpenTripMap API 即時抓取 POI 後，`buildPoiDescription` 函式依「分類 (category)」組裝描述，導致同類型景點（如所有寺廟、所有公園）的介紹內容幾乎雷同，缺乏個別景點的獨特特色，使用者體驗差。然而 `destinations.json` 內建資料庫中每個景點都有量身撰寫的 300 字以上獨特描述（如淺草寺的 628 年創寺傳說、澀谷十字路口的三千人同時通過數據），卻未被 OTM 流程引用。
+- **解決方案**：
+  1. 於 [destinations.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/data/destinations.ts) 新增 `findLocalizedDescription(poiName, lat, lon, locale)` 匯出函式，採用與 `findLocalizedName` 相同的座標比對（經緯度差值 < 0.005）+ 文字名稱比對兩階段策略，查詢內建資料庫中的 `desc` 欄位。
+  2. 於 [ai.ts](file:///Users/barretlin/GitProjects/tour-mutilang/src/services/ai.ts) 的 `buildDestTemplateFromPOIs` 中，新增 `findLocalizedDescription` 優先查詢邏輯：匹配成功時直接使用內建的獨特描述，未匹配時才退回 `buildPoiDescription` 的分類式通用描述。
+  3. 餐廳種子 (`restByDest`) 的描述生成同步改用 `findLocalizedDescription || buildPoiDescription` 策略，確保餐廳也能取得個性化介紹。
+  4. 此修改與既有的維基百科摘要補強 (`fetchWikipediaSummaries`) 不衝突：維基百科補強在 `buildDestTemplateFromPOIs` 之後執行，僅當維基摘要更長時才覆寫，因此流程為「內建獨特描述 > 分類通用描述 > 維基百科摘要（擇長覆寫）」。
 

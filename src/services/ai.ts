@@ -4,7 +4,7 @@ import i18n from '../i18n';
 import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
 import { fetchDestinationPOIs, POI, PoiCategory } from './poi';
 import { fetchWikipediaSummaries } from './enrich';
-import { getBuiltInTemplate, getBuiltInRestaurants, findLocalizedName } from '../data/destinations';
+import { getBuiltInTemplate, getBuiltInRestaurants, findLocalizedName, findLocalizedDescription } from '../data/destinations';
 import { detectGuideCountryKey, isCoveredGuideCountry, getDownloadableGuideCountry } from './guidePacks';
 
 // ─── POI → 行程範本 轉換（規則式引擎使用） ───
@@ -118,7 +118,9 @@ function buildDestTemplateFromPOIs(pois: POI[], destName: string, locale: string
     tpl.localTitles.push(localTitleVal);
     tpl.images.push(CATEGORY_IMAGE[p.category] || CATEGORY_IMAGE.other);
     tpl.coords!.push({ lat: p.lat, lon: p.lon });
-    tpl.descs.push(buildPoiDescription(p, destName, label, locale, localized.title));
+    // 優先使用內建資料庫的特色描述（每個景點獨一無二），無匹配時退回分類式通用描述
+    const builtInDesc = findLocalizedDescription(p.name, p.lat, p.lon, locale);
+    tpl.descs.push(builtInDesc || buildPoiDescription(p, destName, label, locale, localized.title));
   }
   return tpl;
 }
@@ -578,7 +580,7 @@ export const aiService = {
             return {
               title: localized.title || p.name,
               localTitle: localized.localTitle || p.localName || p.name,
-              desc: buildPoiDescription(p, d.name, '餐廳', appLocale, localized.title),
+              desc: findLocalizedDescription(p.name, p.lat, p.lon, appLocale) || buildPoiDescription(p, d.name, '餐廳', appLocale, localized.title),
               lat: p.lat,
               lon: p.lon,
               cost: 0,
@@ -1317,8 +1319,27 @@ export const aiService = {
       } else {
         const lastAct = activities[activities.length - 1];
         const returnTransport = getTransitInfo(primaryMode, 15, 5000);
-        const returnStartTime = lastAct ? addMinutesToTime(lastAct.endTime, returnTransport.duration) : '18:00';
-        const returnEndTime = addMinutesToTime(returnStartTime, 30);
+        const RETURN_DEADLINE = '21:00';
+        const RETURN_DURATION = 30; // 回到飯店後安頓時間
+        let returnStartTime = lastAct ? addMinutesToTime(lastAct.endTime, returnTransport.duration) : '18:00';
+        let returnEndTime = addMinutesToTime(returnStartTime, RETURN_DURATION);
+
+        // 強制確保回到住宿點不超過 21:00（遵循 CLAUDE.md 三.3 規範）
+        if (returnEndTime > RETURN_DEADLINE) {
+          returnEndTime = RETURN_DEADLINE;
+          returnStartTime = subMinutesFromTime(RETURN_DEADLINE, RETURN_DURATION);
+
+          // 若回程起點仍早於上一個活動的結束時間，壓縮上一個非必訪活動的結束時間
+          if (lastAct && returnStartTime < addMinutesToTime(lastAct.endTime, returnTransport.duration)) {
+            const requiredEnd = subMinutesFromTime(returnStartTime, returnTransport.duration);
+            if (lastAct.endTime > requiredEnd) {
+              lastAct.endTime = requiredEnd;
+              const [eH, eM] = requiredEnd.split(':').map(Number);
+              const [sH, sM] = lastAct.startTime.split(':').map(Number);
+              lastAct.duration = Math.max(30, ((eH || 0) * 60 + (eM || 0)) - ((sH || 0) * 60 + (sM || 0)));
+            }
+          }
+        }
 
         activities.push({
           id: `act-${i}-end`,

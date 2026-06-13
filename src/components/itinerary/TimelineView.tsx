@@ -346,6 +346,107 @@ interface TimelineViewProps {
   onToggleRainFallback?: (dayNumber: number) => void;
 }
 
+const TRANSIT_LABELS: Record<string, {
+  prefix: string;
+  estLabel: string;
+  minLabel: string;
+  distLabel: string;
+  walkRec: string;
+  publicRec: string;
+  taxiRec: string;
+}> = {
+  'zh-TW': {
+    prefix: '交通指引：',
+    estLabel: '預估時間',
+    minLabel: '分鐘',
+    distLabel: '距離約',
+    walkRec: '前往下一站距離較近，建議步行前往',
+    publicRec: '前往下一站大眾運輸便利，建議搭乘地鐵、公車或輕軌前往',
+    taxiRec: '前往下一站大眾運輸不便，建議搭乘包車、計程車或使用 %{platforms} 叫車'
+  },
+  'zh-CN': {
+    prefix: '交通指引：',
+    estLabel: '预估时间',
+    minLabel: '分钟',
+    distLabel: '距离约',
+    walkRec: '前往下一站距离较近，建议步行前往',
+    publicRec: '前往下一站大众运输便利，建议搭乘地铁、公交或轻轨前往',
+    taxiRec: '前往下一站大众运输不便，建议搭乘包车、出租车或使用 %{platforms} 叫车'
+  },
+  'ja': {
+    prefix: '交通案内：',
+    estLabel: '所要時間約',
+    minLabel: '分',
+    distLabel: '距離約',
+    walkRec: '次の目的地まで近いため、徒歩での移動をお勧めします',
+    publicRec: '次の目的地まで公共交通機関が便利です。地下鉄やバス、ライトレールの利用をお勧めします',
+    taxiRec: '次の目的地まで公共交通機関が不便なため、チャーター車、タクシー、または %{platforms} での配車をお勧めします'
+  },
+  'ko': {
+    prefix: '교통 안내: ',
+    estLabel: '예상 시간',
+    minLabel: '분',
+    distLabel: '거리 약',
+    walkRec: '다음 목적지까지 거리가 가까우므로 도보 이동을 권장합니다',
+    publicRec: '다음 목적지까지 대중교통이 편리하므로 지하철, 버스 또는 경전철 이용을 권장합니다',
+    taxiRec: '다음 목적지까지 대중교통이 불편하므로 전세차, 택시 또는 %{platforms} 호출을 권장합니다'
+  },
+  'es': {
+    prefix: 'Guía de transporte: ',
+    estLabel: 'tiempo estimado',
+    minLabel: 'min',
+    distLabel: 'distancia aprox.',
+    walkRec: 'Se recomienda caminar hasta la siguiente parada',
+    publicRec: 'El transporte público es conveniente, se recomienda metro/autobús',
+    taxiRec: 'El transporte público es limitado, se recomienda alquiler/taxi/%{platforms}'
+  },
+  'ms': {
+    prefix: 'Panduan Pengangkutan: ',
+    estLabel: 'anggaran masa',
+    minLabel: 'min',
+    distLabel: 'jarak anggaran',
+    walkRec: 'Berjalan kaki disyorkan ke perhentian seterusnya',
+    publicRec: 'Pengangkutan awam adalah mudah, disyorkan metro/bas',
+    taxiRec: 'Pengangkutan awam adalah terhad, disyorkan sewa/teksi/%{platforms}'
+  },
+  'pt': {
+    prefix: 'Guia de transporte: ',
+    estLabel: 'tempo estimado',
+    minLabel: 'minutos',
+    distLabel: 'distância aprox.',
+    walkRec: 'Recomenda-se caminhar até a próxima paragem',
+    publicRec: 'O transporte público é conveniente, recomenda-se metro/autocarro',
+    taxiRec: 'O transporte público é limitado, recomenda-se aluguer/táxi/%{platforms}'
+  },
+  'th': {
+    prefix: 'คำแนะนำการเดินทาง: ',
+    estLabel: 'เวลาโดยประมาณ',
+    minLabel: 'นาที',
+    distLabel: 'ระยะทางประมาณ',
+    walkRec: 'แนะนำให้เดินไปยังจุดหมายถัดไป',
+    publicRec: 'การเดินทางด้วยขนส่งสาธารณะสะดวก แนะนำให้ขึ้นรถไฟใต้ดิน/รถประจำทาง',
+    taxiRec: 'การเดินทางด้วยขนส่งสาธารณะไม่สะดวก แนะนำให้เช่ารถ, แท็กซี่ หรือเรียก %{platforms}'
+  },
+  'vi': {
+    prefix: 'Hướng dẫn di chuyển: ',
+    estLabel: 'thời gian ước tính',
+    minLabel: 'phút',
+    distLabel: 'khoảng cách khoảng',
+    walkRec: 'Khuyến khích đi bộ đến điểm dừng tiếp theo',
+    publicRec: 'Giao thông công cộng thuận tiện, khuyến nghị đi tàu điện ngầm/xe buýt',
+    taxiRec: 'Giao thông công cộng hạn chế, khuyến nghị thuê xe/taxi/gọi %{platforms}'
+  },
+  'en': {
+    prefix: 'Transport Guide: ',
+    estLabel: 'estimated',
+    minLabel: 'mins',
+    distLabel: 'distance approx.',
+    walkRec: 'Walk recommended to the next stop',
+    publicRec: 'Public transit is convenient, metro/bus recommended',
+    taxiRec: 'Public transit is limited, charter/taxi/%{platforms} recommended'
+  }
+};
+
 export function TimelineView({
   day,
   onMoveActivity,
@@ -445,15 +546,10 @@ export function TimelineView({
       uiName = uiName.split('[')[0].trim();
     }
 
-    // If UI language is Chinese and the UI name doesn't contain Chinese, resolve via findLocalizedName
-    if (!isEn) {
-      const hasChinese = /[\u4e00-\u9fa5]/.test(uiName);
-      if (!hasChinese) {
-        const localized = findLocalizedName(uiName, act.location?.latitude || 0, act.location?.longitude || 0, locale);
-        if (localized.title && localized.title !== uiName) {
-          uiName = localized.title;
-        }
-      }
+    // Resolve via findLocalizedName to get the localized blogger-style title for the active UI locale
+    const localized = findLocalizedName(uiName, act.location?.latitude || 0, act.location?.longitude || 0, locale);
+    if (localized.title && localized.title !== uiName) {
+      uiName = localized.title;
     }
 
     if (localName === uiName) {
@@ -841,15 +937,16 @@ export function TimelineView({
                       let transitIconName: any = 'car';
                       let transitIconColor = '#DC2626';
 
-                      const prefix = isEn ? 'Transport Guide: ' : '交通指引：';
-                      const estLabel = isEn ? 'estimated' : '預估時間';
-                      const minLabel = isEn ? 'mins' : '分鐘';
-                      const distLabel = isEn ? 'distance approx.' : '距離約';
+                      const targetL = TRANSIT_LABELS[locale] || TRANSIT_LABELS['en'];
+                      const prefix = targetL.prefix;
+                      const estLabel = targetL.estLabel;
+                      const minLabel = targetL.minLabel;
+                      const distLabel = targetL.distLabel;
 
                       if (nextTransport && nextTransport.description) {
-                        transitText = isEn 
-                          ? `${prefix}${nextTransport.description}, ${estLabel} ${transitDuration} ${minLabel}.`
-                          : `${prefix}${nextTransport.description}，${estLabel} ${transitDuration} ${minLabel}。`;
+                        const separator = (locale.startsWith('zh') || locale === 'ja') ? '，' : ', ';
+                        const endChar = (locale.startsWith('zh') || locale === 'ja') ? '。' : '.';
+                        transitText = `${prefix}${nextTransport.description}${separator}${estLabel} ${transitDuration} ${minLabel}${endChar}`;
                         
                         if (transitMode === 'walk') {
                           transitIconName = 'walk';
@@ -859,30 +956,28 @@ export function TimelineView({
                           transitIconColor = '#3B82F6';
                         }
                       } else {
+                        const distSeparator = (locale.startsWith('zh') || locale === 'ja') ? '，' : ', ';
                         const distPart = transitDistStr 
-                          ? (isEn ? `, ${distLabel} ${transitDistStr}` : `，${distLabel} ${transitDistStr}`) 
+                          ? `${distSeparator}${distLabel} ${transitDistStr}` 
                           : '';
 
                         const hailingInfo = getRideHailingInfo(day.region, isEn);
+                        const endChar = (locale.startsWith('zh') || locale === 'ja') ? '。' : '.';
+                        const separator = (locale.startsWith('zh') || locale === 'ja') ? '，' : ', ';
 
                         if (transitMode === 'walk') {
                           transitIconName = 'walk';
                           transitIconColor = '#10B981';
-                          transitText = isEn
-                            ? `${prefix}Walk recommended to the next stop${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
-                            : `${prefix}前往下一站距離較近，建議步行前往${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
+                          transitText = `${prefix}${targetL.walkRec}${distPart}${separator}${estLabel} ${transitDuration} ${minLabel}${endChar}`;
                         } else if (transitMode === 'public') {
                           transitIconName = 'bus';
                           transitIconColor = '#3B82F6';
-                          transitText = isEn
-                            ? `${prefix}Public transit is convenient, metro/bus recommended${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
-                            : `${prefix}前往下一站大眾運輸便利，建議搭乘地鐵、公車或輕軌前往${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
+                          transitText = `${prefix}${targetL.publicRec}${distPart}${separator}${estLabel} ${transitDuration} ${minLabel}${endChar}`;
                         } else {
                           transitIconName = 'car';
                           transitIconColor = '#DC2626';
-                          transitText = isEn
-                            ? `${prefix}Public transit is limited, charter/taxi/${hailingInfo.transitLabel} recommended${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
-                            : `${prefix}前往下一站大眾運輸不便，建議搭乘包車、計程車或使用 ${hailingInfo.transitLabel} 叫車${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
+                          const taxiRecFilled = targetL.taxiRec.replace('%{platforms}', hailingInfo.transitLabel);
+                          transitText = `${prefix}${taxiRecFilled}${distPart}${separator}${estLabel} ${transitDuration} ${minLabel}${endChar}`;
                         }
                       }
 
