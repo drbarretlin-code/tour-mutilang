@@ -159,34 +159,90 @@ export function Itinerary3DMap({ itinerary, activeDay, height = 300 }: Itinerary
     });
 
     if (latlngs.length > 0) {
-      // Connect points with neon green dashed lines
-      L.polyline(latlngs, {
-        color: '#00D8A1',
-        weight: 3.5,
-        dashArray: '6, 6',
-        opacity: 0.85
-      }).addTo(map);
-
-      // Render distance labels at path midpoints
-      for (var i = 0; i < latlngs.length - 1; i++) {
-        var pt = points[i];
-        if (pt.distToNext && pt.lat !== 0 && points[i+1].lat !== 0) {
-          var midLat = (latlngs[i][0] + latlngs[i+1][0]) / 2;
-          var midLng = (latlngs[i][1] + latlngs[i+1][1]) / 2;
-          
-          L.marker([midLat, midLng], {
-            icon: L.divIcon({
-              className: 'distance-label-container',
-              html: '<div class="distance-label">' + pt.distToNext + '</div>',
-              iconSize: [0, 0]
-            })
-          }).addTo(map);
-        }
-      }
-
       // Automatically adjust camera zoom boundary to cover all points
       var group = new L.featureGroup(markers);
       map.fitBounds(group.getBounds().pad(0.15));
+
+      var distanceLabelLayer = L.layerGroup().addTo(map);
+
+      // 在指定線段中點放置一個距離標籤（沿線顯示真實道路里程，無資料時退回直線估算值）。
+      function addDistanceLabel(fromLL, toLL, text) {
+        if (!text) return;
+        var midLat = (fromLL[0] + toLL[0]) / 2;
+        var midLng = (fromLL[1] + toLL[1]) / 2;
+        L.marker([midLat, midLng], {
+          icon: L.divIcon({
+            className: 'distance-label-container',
+            html: '<div class="distance-label">' + text + '</div>',
+            iconSize: [0, 0]
+          })
+        }).addTo(distanceLabelLayer);
+      }
+
+      // 退回方案：直線連接 + 直線距離標籤（OSRM 取得失敗時使用）。
+      function drawStraightFallback() {
+        L.polyline(latlngs, {
+          color: '#00D8A1',
+          weight: 3.5,
+          dashArray: '6, 6',
+          opacity: 0.85
+        }).addTo(map);
+        for (var i = 0; i < latlngs.length - 1; i++) {
+          var pt = points[i];
+          if (pt.distToNext && pt.lat !== 0 && points[i+1].lat !== 0) {
+            addDistanceLabel(latlngs[i], latlngs[i+1], pt.distToNext);
+          }
+        }
+      }
+
+      // 優先：用免費的 OSRM 計算沿真實道路的路線幾何與各段里程（貼著馬路顯示，
+      // 視覺與資訊接近 Google Maps），無金鑰、無配額；失敗時退回直線連接。
+      if (latlngs.length >= 2) {
+        var coordStr = latlngs.map(function(ll) { return ll[1] + ',' + ll[0]; }).join(';');
+        var osrmUrl = 'https://router.project-osrm.org/route/v1/driving/' + coordStr +
+          '?overview=full&geometries=geojson&steps=false';
+
+        var controller = new AbortController();
+        var timer = setTimeout(function() { controller.abort(); }, 7000);
+
+        fetch(osrmUrl, { signal: controller.signal })
+          .then(function(res) { return res.ok ? res.json() : null; })
+          .then(function(data) {
+            clearTimeout(timer);
+            var route = data && data.routes && data.routes[0];
+            if (!route || !route.geometry || !route.geometry.coordinates) {
+              drawStraightFallback();
+              return;
+            }
+            // GeoJSON 為 [lng, lat]，Leaflet 需要 [lat, lng]
+            var routeLatLngs = route.geometry.coordinates.map(function(c) { return [c[1], c[0]]; });
+            L.polyline(routeLatLngs, {
+              color: '#00D8A1',
+              weight: 4,
+              opacity: 0.9
+            }).addTo(map);
+
+            // 各段（leg）真實道路里程標於兩節點中點
+            var legs = route.legs || [];
+            for (var i = 0; i < latlngs.length - 1; i++) {
+              var text = '';
+              if (legs[i] && typeof legs[i].distance === 'number') {
+                text = (legs[i].distance / 1000).toFixed(1) + ' km';
+              } else {
+                text = points[i].distToNext;
+              }
+              if (latlngs[i][0] !== 0 && latlngs[i+1][0] !== 0) {
+                addDistanceLabel(latlngs[i], latlngs[i+1], text);
+              }
+            }
+          })
+          .catch(function() {
+            clearTimeout(timer);
+            drawStraightFallback();
+          });
+      } else {
+        drawStraightFallback();
+      }
     } else {
       // Fallback center if no valid points
       map.setView([13.7563, 100.5018], 10);
