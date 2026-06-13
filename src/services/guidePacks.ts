@@ -4,12 +4,25 @@
  * - COVERED_GUIDE_COUNTRIES：已內建於 App 的離線指南範本（getFallbackGuideInfo）。
  * - DOWNLOADABLE_GUIDE_COUNTRIES：可由使用者於目的地指南頁主動下載的額外國家範本，
  *   下載後會快取於本機（AsyncStorage/localStorage），離線狀態下可直接使用。
+ *
+ * 下載機制採用超時與快取策略：
+ * - 超時：5 秒（防止網路無限等待）
+ * - 快取：7 天 TTL（AsyncStorage/@guide_pack_cache_{key}）
+ * - 重試：由呼叫端使用 PAC 的 executeWithHealing 提供指數退避重試
  */
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createLogger } from './logger';
+
+const logger = createLogger('guidePack');
 
 export interface GuideCountryOption {
   key: string;
   label: string;
 }
+
+const GUIDE_PACK_CACHE_PREFIX = '@guide_pack_cache_';
+const GUIDE_PACK_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 7; // 7 天
 
 export const COVERED_GUIDE_COUNTRIES: GuideCountryOption[] = [
   { key: 'japan', label: '日本' },
@@ -76,9 +89,46 @@ export function getDownloadableGuideCountry(key: string | null): GuideCountryOpt
 export const GUIDE_PACK_BASE_URL =
   process.env.EXPO_PUBLIC_GUIDE_PACK_BASE_URL || 'https://raw.githubusercontent.com/tour-mutilang/guide-packs/main';
 
-/** 下載指定國家的離線指南範本（呼叫端負責快取與錯誤提示） */
-export async function fetchGuidePack(key: string): Promise<any> {
-  const res = await fetch(`${GUIDE_PACK_BASE_URL}/${key}.json`);
+/**
+ * 超時機制：5 秒
+ * 快取：AsyncStorage，7 天 TTL
+ * 重試：由呼叫端使用 PAC 的 executeWithHealing 提供
+ */
+async function fetchWithTimeout(url: string, ms: number): Promise<Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  try {
+    return await fetch(url, { signal: controller.signal });
+  } finally {
+    clearTimeout(id);
+  }
+}
+
+interface FetchGuidePackOptions {
+  timeoutMs?: number;
+  useCache?: boolean;
+}
+
+/** 下載指定國家的離線指南範本（支援超時與快取）。重試由呼叫端透過 PAC 的 executeWithHealing 提供 */
+export async function fetchGuidePack(key: string, options: FetchGuidePackOptions = {}): Promise<any> {
+  const { timeoutMs = 5000, useCache = true } = options;
+  const cacheKey = `${GUIDE_PACK_CACHE_PREFIX}${key}`;
+
+  // 嘗試讀取快取
+  if (useCache) {
+    try {
+      const cached = await AsyncStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed?.ts && Date.now() - parsed.ts < GUIDE_PACK_CACHE_TTL_MS) {
+          return parsed.data;
+        }
+      }
+    } catch { /* 忽略快取讀取錯誤 */ }
+  }
+
+  // 從線上資源下載
+  const res = await fetchWithTimeout(`${GUIDE_PACK_BASE_URL}/${key}.json`, timeoutMs);
   if (!res.ok) {
     throw new Error('GUIDE_PACK_NOT_FOUND');
   }
@@ -86,5 +136,13 @@ export async function fetchGuidePack(key: string): Promise<any> {
   if (!data || !data.currencyCode || !Array.isArray(data.emergencyContacts) || !Array.isArray(data.usefulPhrases)) {
     throw new Error('GUIDE_PACK_INVALID');
   }
+
+  // 寫入快取
+  if (useCache) {
+    try {
+      await AsyncStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data }));
+    } catch { /* 忽略快取寫入錯誤 */ }
+  }
+
   return data;
 }

@@ -6,6 +6,7 @@ import { fetchDestinationPOIs, POI, PoiCategory } from './poi';
 import { fetchWikipediaSummaries } from './enrich';
 import { getBuiltInTemplate, getBuiltInRestaurants, findLocalizedName, findLocalizedDescription } from '../data/destinations';
 import { detectGuideCountryKey, isCoveredGuideCountry, getDownloadableGuideCountry } from './guidePacks';
+import { PACEngine } from './pac';
 
 // ─── POI → 行程範本 轉換（規則式引擎使用） ───
 
@@ -370,7 +371,7 @@ function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
   });
 }
 
-function getFallbackGuideInfo(country: string): any {
+export function getFallbackGuideInfo(country: string): any {
   const safeCountry = country || '泰國';
   const locale = i18n.locale || 'zh-TW';
   const isEn = !locale.startsWith('zh');
@@ -545,13 +546,19 @@ export const aiService = {
     await Promise.all(dests.map(async (d) => {
       if (!d?.name || poiByDest[d.name]) return;
       try {
-        const pois = await fetchDestinationPOIs({
-          destName: d.name,
-          lat: d.latitude,
-          lon: d.longitude,
-          interests: alignedSurvey.interests || [],
-          limit: limitPerDest,
-        });
+        const pois = await PACEngine.executeWithHealing(
+          () => fetchDestinationPOIs({
+            destName: d.name,
+            lat: d.latitude,
+            lon: d.longitude,
+            interests: alignedSurvey.interests || [],
+            limit: limitPerDest,
+          }),
+          () => getBuiltInTemplate(d.name)?.pois || [],
+          `fetchDestinationPOIs_${d.name}`,
+          2,
+          []
+        );
         if (pois.length > 0) {
           poiByDest[d.name] = buildDestTemplateFromPOIs(pois, d.name, appLocale);
         }
@@ -566,13 +573,19 @@ export const aiService = {
     await Promise.all(dests.map(async (d) => {
       if (!d?.name || restByDest[d.name]) return;
       try {
-        const foodPois = await fetchDestinationPOIs({
-          destName: d.name,
-          lat: d.latitude,
-          lon: d.longitude,
-          interests: ['food'],
-          limit: Math.max(12, dayCount * 2),
-        });
+        const foodPois = await PACEngine.executeWithHealing(
+          () => fetchDestinationPOIs({
+            destName: d.name,
+            lat: d.latitude,
+            lon: d.longitude,
+            interests: ['food'],
+            limit: Math.max(12, dayCount * 2),
+          }),
+          () => getBuiltInRestaurants(d.name, appLocale),
+          `fetchDestinationPOIs_food_${d.name}`,
+          2,
+          []
+        );
         const seeds = foodPois
           .filter(p => p.name && p.lat && p.lon)
           .map((p): RestaurantSeed => {
@@ -598,7 +611,13 @@ export const aiService = {
       await Promise.all(Object.values(poiByDest).map(async (tpl) => {
         if (!tpl?.titles?.length) return;
         const queryTitles = tpl.titles.map((t, idx) => (tpl.localTitles?.[idx] || t));
-        const summaries = await fetchWikipediaSummaries(queryTitles, appLocale);
+        const summaries = await PACEngine.executeWithHealing(
+          () => fetchWikipediaSummaries(queryTitles, appLocale),
+          () => ({}),
+          'fetchWikipediaSummaries',
+          2,
+          []
+        );
         // 僅當維基摘要「不短於」既有的約300字引言時才覆寫，避免以較短的摘要取代而導致介紹變短；
         // 否則沿用 buildPoiDescription 產生的完整長介紹，確保長度達標。
         tpl.descs = tpl.descs.map((d, idx) => {
@@ -1672,13 +1691,19 @@ export async function regenerateActivityAlternatives(
 
   let pois: POI[] = [];
   try {
-    pois = await fetchDestinationPOIs({
-      destName: region,
-      lat: lat && lat !== 0 ? lat : undefined,
-      lon: lon && lon !== 0 ? lon : undefined,
-      interests: survey?.interests || [],
-      limit: 40,
-    });
+    pois = await PACEngine.executeWithHealing(
+      () => fetchDestinationPOIs({
+        destName: region,
+        lat: lat && lat !== 0 ? lat : undefined,
+        lon: lon && lon !== 0 ? lon : undefined,
+        interests: survey?.interests || [],
+        limit: 40,
+      }),
+      () => [],
+      `fetchDestinationPOIs_alternatives_${region}`,
+      2,
+      []
+    );
   } catch (e) {
     console.warn('[regenerateActivityAlternatives] POI 取得失敗', e);
   }

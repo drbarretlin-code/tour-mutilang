@@ -198,8 +198,9 @@ class ProjectAutonomicCore {
 
         attempt++;
         const delay = Math.pow(2, attempt) * 500; // Exponential Backoff: 1s, 2s, 4s...
-        console.warn(`[PAC Self-Healing] ${actionName} failed (attempt ${attempt}/${maxRetries}). Retrying in ${delay}ms...`, error);
-        
+        const errorMsg = error?.message || error?.toString?.() || 'Unknown error';
+        console.warn(`[PAC Self-Healing] ${actionName} failed (attempt ${attempt}/${maxRetries}). Retrying in ${delay}ms... Error: ${errorMsg}`);
+
         if (attempt < maxRetries) {
           await new Promise((res) => setTimeout(res, delay));
         }
@@ -207,7 +208,7 @@ class ProjectAutonomicCore {
     }
 
     // Degrade and use fallback
-    console.warn(`[PAC Self-Healing] All ${maxRetries} retries failed for ${actionName}. Entering degraded mode.`);
+    console.warn(`[PAC Self-Healing] ${actionName} failed after ${maxRetries} attempts. Using fallback...`);
     this.errorCounts[actionName] = (this.errorCounts[actionName] || 0) + 1;
     this.state.healing = 'degraded';
     this.state.lastError = `Action ${actionName} failed after ${maxRetries} attempts. Falling back to local offline processor.`;

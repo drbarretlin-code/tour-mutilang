@@ -9,6 +9,8 @@ import { t } from '../../i18n';
 import { usePAC } from '../../context/PACContext';
 import { COVERED_GUIDE_COUNTRIES, fetchGuidePack } from '../../services/guidePacks';
 import { useResponsive } from '../../hooks/useResponsive';
+import { PACEngine } from '../../services/pac';
+import { getFallbackGuideInfo } from '../../services/ai';
 
 // Web-safe cache helpers: bypass AsyncStorage on Web (unreliable) and use localStorage directly
 const cacheGet = async (key: string): Promise<string | null> => {
@@ -208,7 +210,14 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
 
     setDownloading(true);
     try {
-      const pack = await fetchGuidePack(downloadable.key);
+      // 使用 PAC 的 executeWithHealing 實現指數退避重試
+      const pack = await PACEngine.executeWithHealing(
+        () => fetchGuidePack(downloadable.key),
+        () => getFallbackGuideInfo(downloadable.key),
+        `fetchGuidePack_${downloadable.key}`,
+        3,
+        ['GUIDE_PACK_NOT_FOUND', 'GUIDE_PACK_INVALID']
+      );
       await cacheSet(`@guide_pack_${downloadable.key}`, JSON.stringify(pack));
       await cacheSet(`@guide_data_${getCountryName()}`, '');
       await loadGuideData();

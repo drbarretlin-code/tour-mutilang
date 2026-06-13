@@ -1,5 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { InterestTag } from '../types/survey';
+import { createLogger } from './logger';
+import { recordAPIMetric } from './metrics';
+
+const logger = createLogger('poi');
 
 /**
  * POI（景點）資料服務 — 使用免費的 OpenTripMap API。
@@ -126,7 +130,7 @@ export async function verifyOpenTripMapKey(): Promise<OtmKeyDiagnostic> {
 
   try {
     const url = `${OTM_BASE}/geoname?name=Bangkok&apikey=${encodeURIComponent(key)}`;
-    const res = await fetchWithTimeout(url, 6000);
+    const res = await fetchWithTimeout(url, 4000);
     if (res.status === 401 || res.status === 403) {
       return {
         status: 'invalid',
@@ -159,6 +163,10 @@ export async function verifyOpenTripMapKey(): Promise<OtmKeyDiagnostic> {
   }
 }
 
+/**
+ * 超時機制：激進策略，4 秒。
+ * 原因：配合 PAC 的指數退避重試（1s → 2s → 4s），快速失敗更有效率。
+ */
 async function fetchWithTimeout(url: string, ms: number): Promise<Response> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), ms);
@@ -181,7 +189,7 @@ async function resolveCenter(
   }
   try {
     const url = `${OTM_BASE}/geoname?name=${encodeURIComponent(destName)}&apikey=${apiKey}`;
-    const res = await fetchWithTimeout(url, 6000);
+    const res = await fetchWithTimeout(url, 4000);
     if (!res.ok) return null;
     const data = await res.json();
     if (typeof data?.lat === 'number' && typeof data?.lon === 'number') {
@@ -232,22 +240,22 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
 
   const apiKey = await resolveApiKey();
   if (!apiKey) {
-    console.warn('[poi] 找不到 OpenTripMap API 金鑰（EXPO_PUBLIC_OPENTRIPMAP_KEY 或本機設定），改用內建範本。');
+    logger.warn('找不到 OpenTripMap API 金鑰（EXPO_PUBLIC_OPENTRIPMAP_KEY 或本機設定），改用內建範本。');
     return [];
   }
 
   const center = await resolveCenter(destName, lat, lon, apiKey);
   if (!center) {
-    console.warn(`[poi] 無法解析「${destName}」的中心座標，改用內建範本。`);
+    logger.warn(`無法解析「${destName}」的中心座標，改用內建範本。`);
     return [];
   }
 
   try {
     const url = `${OTM_BASE}/radius?radius=${radiusMeters}&lon=${center.lon}&lat=${center.lat}`
       + `&kinds=${encodeURIComponent(kindsParam)}&rate=2&format=json&limit=${limit}&apikey=${apiKey}`;
-    const res = await fetchWithTimeout(url, 8000);
+    const res = await fetchWithTimeout(url, 4000);
     if (!res.ok) {
-      console.warn(`[poi] OpenTripMap radius 回傳 ${res.status}，改用內建範本。`);
+      logger.warn(`OpenTripMap radius 回傳 ${res.status}，改用內建範本。`);
       return [];
     }
     const raw = await res.json();
@@ -280,7 +288,7 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
 
     return pois;
   } catch (e) {
-    console.warn('[poi] OpenTripMap 查詢失敗，改用內建範本。', e);
+    logger.warn('OpenTripMap 查詢失敗，改用內建範本。', e);
     return [];
   }
 }

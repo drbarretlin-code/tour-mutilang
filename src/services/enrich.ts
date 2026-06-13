@@ -1,4 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createLogger } from './logger';
+
+const logger = createLogger('wiki');
 
 /**
  * 景點介紹動態補強服務 —— 使用維基百科免費的 REST Summary API（無金鑰、無配額限制）。
@@ -29,6 +32,10 @@ function zhVariant(locale: string): string | null {
   return null;
 }
 
+/**
+ * 超時機制：激進策略，4 秒。
+ * 原因：配合 PAC 的指數退避重試（1s → 2s → 4s），快速失敗更有效率。
+ */
 async function fetchWithTimeout(url: string, ms: number, headers?: Record<string, string>): Promise<Response> {
   const controller = new AbortController();
   const id = setTimeout(() => controller.abort(), ms);
@@ -70,7 +77,7 @@ export async function fetchWikipediaSummary(
 
   try {
     const url = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.trim())}`;
-    const res = await fetchWithTimeout(url, 6000, headers);
+    const res = await fetchWithTimeout(url, 4000, headers);
     if (!res.ok) {
       // 找不到條目時亦寫入空快取，避免重複查詢
       try { await AsyncStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), text: null })); } catch { /* ignore */ }
