@@ -486,32 +486,8 @@ export default function ItineraryScreen() {
       setLoading(true);
       const html = generateItineraryHtml(itinerary, contextSurvey);
 
-      if (Platform.OS === 'web') {
-        const iframe = document.createElement('iframe');
-        iframe.style.position = 'absolute';
-        iframe.style.width = '0px';
-        iframe.style.height = '0px';
-        iframe.style.border = 'none';
-        document.body.appendChild(iframe);
-        
-        const doc = iframe.contentWindow?.document;
-        if (doc) {
-          doc.open();
-          doc.write(html);
-          doc.close();
-          
-          iframe.contentWindow?.focus();
-          setTimeout(() => {
-            iframe.contentWindow?.print();
-            setTimeout(() => {
-              if (document.body.contains(iframe)) {
-                document.body.removeChild(iframe);
-              }
-            }, 1000);
-          }, 500);
-        } else {
-          await Print.printAsync({ html });
-        }
+      if (Platform.OS === 'web' || Platform.OS === 'macos' || Platform.OS === 'windows') {
+        await Print.printAsync({ html });
       } else {
         const { uri } = await Print.printToFileAsync({ html, base64: false });
         
@@ -740,23 +716,71 @@ export default function ItineraryScreen() {
             </View>
             
             {/* Action Buttons (Always visible in Header) */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.full, padding: 4 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
               {!isOffline && (
-                <TouchableOpacity onPress={handleRefreshItinerary} style={{ padding: 8, marginHorizontal: 4 }}>
+                <TouchableOpacity
+                  onPress={handleRefreshItinerary}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    backgroundColor: colors.backgroundSecondary,
+                    borderRadius: borderRadius.full,
+                    paddingHorizontal: isLargeScreen ? spacing.md : 10,
+                    paddingVertical: 8,
+                    marginHorizontal: 2
+                  }}
+                >
                   <Ionicons name="sync" size={18} color={colors.textSecondary} />
+                  {isLargeScreen && (
+                    <Text style={[typography.labelMedium, { color: colors.textSecondary, marginLeft: 6, fontWeight: '700' }]}>
+                      {t('common.refresh')}
+                    </Text>
+                  )}
                 </TouchableOpacity>
               )}
-              <TouchableOpacity onPress={handleExportPDF} style={{ padding: 8, marginHorizontal: 4 }}>
+              <TouchableOpacity
+                onPress={handleExportPDF}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: colors.backgroundSecondary,
+                  borderRadius: borderRadius.full,
+                  paddingHorizontal: isLargeScreen ? spacing.md : 10,
+                  paddingVertical: 8,
+                  marginHorizontal: 2
+                }}
+              >
                 <Ionicons name="document-text" size={18} color={colors.textSecondary} />
+                {isLargeScreen && (
+                  <Text style={[typography.labelMedium, { color: colors.textSecondary, marginLeft: 6, fontWeight: '700' }]}>
+                    {t('itinerary.export.pdf')}
+                  </Text>
+                )}
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => {
-                if (Platform.OS === 'web') {
-                  window.alert(`${t('itinerary.shareTitle')}\n${t('itinerary.shareMsg')}`);
-                } else {
-                  showAlert(t('itinerary.shareTitle'), t('itinerary.shareMsg'));
-                }
-              }} style={{ padding: 8, marginHorizontal: 4 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  if (Platform.OS === 'web') {
+                    window.alert(`${t('itinerary.shareTitle')}\n${t('itinerary.shareMsg')}`);
+                  } else {
+                    showAlert(t('itinerary.shareTitle'), t('itinerary.shareMsg'));
+                  }
+                }}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  backgroundColor: colors.backgroundSecondary,
+                  borderRadius: borderRadius.full,
+                  paddingHorizontal: isLargeScreen ? spacing.md : 10,
+                  paddingVertical: 8,
+                  marginHorizontal: 2
+                }}
+              >
                 <Ionicons name="share-social" size={18} color={colors.textSecondary} />
+                {isLargeScreen && (
+                  <Text style={[typography.labelMedium, { color: colors.textSecondary, marginLeft: 6, fontWeight: '700' }]}>
+                    {t('common.share')}
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>
@@ -808,6 +832,8 @@ export default function ItineraryScreen() {
                   { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
                   { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
                   { code: 'checklist', label: t('itinerary.tabs.checklist'), icon: 'checkbox-outline' },
+                  { code: 'expenses', label: t('itinerary.tabs.expenses'), icon: 'card-outline' },
+                  { code: 'translator', label: t('itinerary.tabs.translator'), icon: 'language-outline' },
                 ].map((mode) => {
                   const isSelected = viewMode === mode.code;
                   return (

@@ -48,7 +48,9 @@
     "other": "其他",
     "done": "完成",
     "skip": "跳过",
-    "days": "%{count} 天"
+    "days": "%{count} 天",
+    "refresh": "重新整理",
+    "share": "分享"
   },
   "auth": {
     "login": "登录",

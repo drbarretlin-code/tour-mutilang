@@ -48,7 +48,9 @@
     "other": "Other",
     "done": "Done",
     "skip": "Skip",
-    "days": "%{count} Days"
+    "days": "%{count} Days",
+    "refresh": "Refresh",
+    "share": "Share"
   },
   "auth": {
     "login": "Log In",

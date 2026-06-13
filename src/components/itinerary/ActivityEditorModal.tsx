@@ -195,7 +195,7 @@ export function ActivityEditorModal({
 
   const modalContent = hasData ? (
     <KeyboardAvoidingView 
-      style={styles.overlay} 
+      style={[styles.overlay, Platform.OS === 'web' ? { backgroundColor: 'transparent', flex: undefined, width: '100%', maxWidth: 600 } : null]} 
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={[styles.modalContainer, { backgroundColor: colors.background, borderRadius: borderRadius.lg }]}>
@@ -474,7 +474,17 @@ export function ActivityEditorModal({
 
   if (Platform.OS === 'web') {
     return (
-      <View style={[StyleSheet.absoluteFill, { zIndex: 9999, display: isVisible ? 'flex' : 'none' }]}>
+      <View style={[
+        StyleSheet.absoluteFill, 
+        { 
+          zIndex: 9999, 
+          display: isVisible ? 'flex' : 'none', 
+          backgroundColor: 'rgba(0, 0, 0, 0.4)', 
+          justifyContent: 'center', 
+          alignItems: 'center',
+          padding: 16
+        }
+      ]}>
         {modalContent}
       </View>
     );

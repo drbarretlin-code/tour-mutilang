@@ -6,6 +6,7 @@ import { ItineraryDay, Activity } from '../../types/itinerary';
 import i18n, { t } from '../../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import { getRouteDistanceKm } from '../../utils/distance';
+import { useResponsive } from '../../hooks/useResponsive';
 
 interface TimelineViewProps {
   day: ItineraryDay;
@@ -27,6 +28,7 @@ export function TimelineView({
   onReRollActivity,
 }: TimelineViewProps) {
   const { colors, spacing, borderRadius, typography, shadows } = useTheme();
+  const { isLargeScreen } = useResponsive();
 
   const renderVerticalTransitBadge = (transport: any, from?: any, to?: any) => {
     const tData = transport || { mode: 'drive', duration: 10 };
@@ -288,246 +290,257 @@ export function TimelineView({
             {/* Right Activity Card */}
             <View style={[styles.rightColumn, { paddingBottom: spacing.lg }]}>
               <View style={[styles.card, { borderColor: '#E2E8F0', backgroundColor: '#FFFFFF', borderRadius: borderRadius.md }]}>
-                
-                {/* 1. Header (Time & Region) */}
-                <View style={styles.flatHeader}>
-                  <Text style={[typography.labelMedium, { color: '#334155', fontWeight: '700' }]}>
-                    {act.startTime}
-                  </Text>
-                  <Text style={[typography.caption, { color: '#64748B', marginLeft: 8 }]}>
-                    {t('itinerary.timelineView.activity.region', { region: day.region || t('itinerary.timelineView.activity.thisRegion') })}
-                  </Text>
-                  <View style={{ flex: 1 }} />
-                  {!!act.location && (
-                    <TouchableOpacity onPress={() => onNavigate(act.location!, isFirst ? undefined : activities[index - 1]?.location)} style={{ padding: 4 }}>
-                      <Ionicons name="open-outline" size={18} color="#94A3B8" />
-                    </TouchableOpacity>
-                  )}
-                </View>
-
-                <Text style={[typography.titleMedium, { color: '#0F172A', fontWeight: '800', marginTop: 8 }]}>
-                  {getActivityTypeLabel(act.type)}：{act.title} {act.localTitle ? `[${act.localTitle}]` : ''}
-                </Text>
-
-                {/* 景點長介紹（約300字）：可展開／收合，預設顯示前幾行 */}
-                {!!act.description && (
-                  <View style={{ marginTop: 6 }}>
-                    <Text
-                      style={[typography.bodySmall, { color: '#475569', lineHeight: 20 }]}
-                      numberOfLines={expandedDesc[act.id] ? undefined : 4}
-                    >
-                      {act.description}
-                    </Text>
-                    {act.description.length > 80 && (
-                      <TouchableOpacity onPress={() => setExpandedDesc(prev => ({ ...prev, [act.id]: !prev[act.id] }))} style={{ marginTop: 4 }}>
-                        <Text style={[typography.caption, { color: colors.primary500, fontWeight: '700' }]}>
-                          {expandedDesc[act.id] ? '收起 ▴' : '展開更多 ▾'}
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                )}
-
-                {(act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport')) && (
-                  <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: 12 }}>
-                    <TouchableOpacity
-                      onPress={() => setExpandedTerminalMap(prev => ({ ...prev, [act.id]: !prev[act.id] }))}
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 8,
-                        paddingVertical: 10,
-                        paddingHorizontal: 16,
-                        backgroundColor: colors.backgroundSecondary,
-                        borderColor: colors.border,
-                        borderWidth: 1,
-                        borderRadius: borderRadius.md,
-                      }}
-                    >
-                      <Ionicons name="airplane-outline" size={16} color={colors.primary500} />
-                      <Text style={[typography.labelMedium, { color: colors.primary500, fontWeight: '700' }]}>
-                        {expandedTerminalMap[act.id] ? '收起航站大廳導覽圖 ▴' : '🗺️ 展開航站大廳導覽圖 (BKK Airport) ▾'}
+                <View style={isLargeScreen ? { flexDirection: 'row', gap: 16 } : null}>
+                  
+                  {/* Left Column: Info & Action Buttons */}
+                  <View style={isLargeScreen ? { flex: 2 } : { width: '100%' }}>
+                    {/* 1. Header (Time & Region) */}
+                    <View style={styles.flatHeader}>
+                      <Text style={[typography.labelMedium, { color: '#334155', fontWeight: '700' }]}>
+                        {act.startTime}
                       </Text>
-                    </TouchableOpacity>
+                      <Text style={[typography.caption, { color: '#64748B', marginLeft: 8 }]}>
+                        {t('itinerary.timelineView.activity.region', { region: day.region || t('itinerary.timelineView.activity.thisRegion') })}
+                      </Text>
+                      <View style={{ flex: 1 }} />
+                      {!!act.location && (
+                        <TouchableOpacity onPress={() => onNavigate(act.location!, isFirst ? undefined : activities[index - 1]?.location)} style={{ padding: 4 }}>
+                          <Ionicons name="open-outline" size={18} color="#94A3B8" />
+                        </TouchableOpacity>
+                      )}
+                    </View>
 
-                    {expandedTerminalMap[act.id] && (
-                      <View style={{ marginTop: 10, backgroundColor: colors.backgroundSecondary, borderColor: colors.border, borderWidth: 1, borderRadius: borderRadius.md, padding: 12 }}>
-                        <Text style={[typography.labelSmall, { color: colors.text, fontWeight: '700', marginBottom: 8 }]}>
-                          {day.dayNumber === 1 ? '🇹🇭 曼谷蘇凡納布機場 (BKK) 入境大廳指引 (Level 2)' : '🇹🇭 曼谷蘇凡納布機場 (BKK) 出境大廳指引 (Level 4)'}
+                    <Text style={[typography.titleMedium, { color: '#0F172A', fontWeight: '800', marginTop: 8 }]}>
+                      {getActivityTypeLabel(act.type)}：{act.title} {act.localTitle ? `[${act.localTitle}]` : ''}
+                    </Text>
+
+                    {/* 景點長介紹（約300字）：可展開／收合，預設顯示前幾行 */}
+                    {!!act.description && (
+                      <View style={{ marginTop: 6 }}>
+                        <Text
+                          style={[typography.bodySmall, { color: '#475569', lineHeight: 20 }]}
+                          numberOfLines={expandedDesc[act.id] ? undefined : 4}
+                        >
+                          {act.description}
                         </Text>
-                        <View style={{ borderRadius: borderRadius.sm, overflow: 'hidden', borderWidth: 1, borderColor: colors.border, backgroundColor: '#FFFFFF' }}>
-                          <Image 
-                            source={require('../../../assets/images/airport_terminal_map.png')} 
-                            style={{ width: '100%', height: 350, resizeMode: 'contain' }} 
-                          />
-                        </View>
-                        <Text style={[typography.caption, { color: colors.textSecondary, marginTop: 8, lineHeight: 18 }]}>
-                          {day.dayNumber === 1 
-                            ? '💡 抵達指引：下飛機後順著「Immigration (入境)」指標前進，至 Level 2 辦理入境與行李提取。提取行李後，出口位於 Level 2 大廳。若欲搭乘機場快線 (ARL)，請搭手扶梯下至 B1 層。'
-                            : '💡 離境指引：專車或 Grab 將在 Level 4 離境大廳入口停靠。進入航廈後請尋找對應航空公司的 Check-in 櫃檯辦理登機。安檢與證照查驗位於 Level 4 後方中央。'
-                          }
-                        </Text>
+                        {act.description.length > 80 && (
+                          <TouchableOpacity onPress={() => setExpandedDesc(prev => ({ ...prev, [act.id]: !prev[act.id] }))} style={{ marginTop: 4 }}>
+                            <Text style={[typography.caption, { color: colors.primary500, fontWeight: '700' }]}>
+                              {expandedDesc[act.id] ? '收起 ▴' : '展開更多 ▾'}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
                       </View>
                     )}
-                  </View>
-                )}
 
-                {/* 3. Transport Guideline */}
-                {!isLast && (() => {
-                  const transitDuration = nextTransport && nextTransport.duration 
-                    ? nextTransport.duration 
-                    : Math.max(10, gapMinutes);
-                  const transitDistance = nextTransport ? getRouteDistanceKm(nextTransport, act.location, nextAct?.location) : 0;
-                  const transitDistStr = transitDistance > 0 ? `${transitDistance.toFixed(1)} km` : '';
-                  const transitMode = nextTransport ? nextTransport.mode : 'drive';
+                    {(act.photoUrl === 'local-asset://airport_map' || act.title.includes('機場') || act.title.toLowerCase().includes('airport')) && (
+                      <View style={{ marginTop: 12, borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: 12 }}>
+                        <TouchableOpacity
+                          onPress={() => setExpandedTerminalMap(prev => ({ ...prev, [act.id]: !prev[act.id] }))}
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 8,
+                            paddingVertical: 10,
+                            paddingHorizontal: 16,
+                            backgroundColor: colors.backgroundSecondary,
+                            borderColor: colors.border,
+                            borderWidth: 1,
+                            borderRadius: borderRadius.md,
+                          }}
+                        >
+                          <Ionicons name="airplane-outline" size={16} color={colors.primary500} />
+                          <Text style={[typography.labelMedium, { color: colors.primary500, fontWeight: '700' }]}>
+                            {expandedTerminalMap[act.id] ? '收起航站大廳導覽圖 ▴' : '🗺️ 展開航站大廳導覽圖 (BKK Airport) ▾'}
+                          </Text>
+                        </TouchableOpacity>
 
-                  const locale = i18n.locale || 'zh-TW';
-                  const isEn = !locale.startsWith('zh');
+                        {expandedTerminalMap[act.id] && (
+                          <View style={{ marginTop: 10, backgroundColor: colors.backgroundSecondary, borderColor: colors.border, borderWidth: 1, borderRadius: borderRadius.md, padding: 12 }}>
+                            <Text style={[typography.labelSmall, { color: colors.text, fontWeight: '700', marginBottom: 8 }]}>
+                              {day.dayNumber === 1 ? '🇹🇭 曼谷蘇凡納布機場 (BKK) 入境大廳指引 (Level 2)' : '🇹🇭 曼谷蘇凡納布機場 (BKK) 出境大廳指引 (Level 4)'}
+                            </Text>
+                            <View style={{ borderRadius: borderRadius.sm, overflow: 'hidden', borderWidth: 1, borderColor: colors.border, backgroundColor: '#FFFFFF' }}>
+                              <Image 
+                                source={require('../../../assets/images/airport_terminal_map.png')} 
+                                style={{ width: '100%', height: 350, resizeMode: 'contain' }} 
+                              />
+                            </View>
+                            <Text style={[typography.caption, { color: colors.textSecondary, marginTop: 8, lineHeight: 18 }]}>
+                              {day.dayNumber === 1 
+                                ? '💡 抵達指引：下飛機後順著「Immigration (入境)」指標前進，至 Level 2 辦理入境與行李提取。提取行李後，出口位於 Level 2 大廳。若欲搭乘機場快線 (ARL)，請搭手扶梯下至 B1 層。'
+                                : '💡 離境指引：專車或 Grab 將在 Level 4 離境大廳入口停靠。進入航廈後請尋找對應航空公司的 Check-in 櫃檯辦理登機。安檢與證照查驗位於 Level 4 後方中央。'
+                              }
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                    )}
 
-                  let transitText = '';
-                  let transitIconName: any = 'car';
-                  let transitIconColor = '#DC2626';
+                    {/* 3. Transport Guideline */}
+                    {!isLast && (() => {
+                      const transitDuration = nextTransport && nextTransport.duration 
+                        ? nextTransport.duration 
+                        : Math.max(10, gapMinutes);
+                      const transitDistance = nextTransport ? getRouteDistanceKm(nextTransport, act.location, nextAct?.location) : 0;
+                      const transitDistStr = transitDistance > 0 ? `${transitDistance.toFixed(1)} km` : '';
+                      const transitMode = nextTransport ? nextTransport.mode : 'drive';
 
-                  const prefix = isEn ? 'Transport Guide: ' : '交通指引：';
-                  const estLabel = isEn ? 'estimated' : '預估時間';
-                  const minLabel = isEn ? 'mins' : '分鐘';
-                  const distLabel = isEn ? 'distance approx.' : '距離約';
+                      const locale = i18n.locale || 'zh-TW';
+                      const isEn = !locale.startsWith('zh');
 
-                  if (nextTransport && nextTransport.description) {
-                    transitText = isEn 
-                      ? `${prefix}${nextTransport.description}, ${estLabel} ${transitDuration} ${minLabel}.`
-                      : `${prefix}${nextTransport.description}，${estLabel} ${transitDuration} ${minLabel}。`;
-                    
-                    if (transitMode === 'walk') {
-                      transitIconName = 'walk';
-                      transitIconColor = '#10B981';
-                    } else if (transitMode === 'public') {
-                      transitIconName = 'bus';
-                      transitIconColor = '#3B82F6';
-                    }
-                  } else {
-                    const distPart = transitDistStr 
-                      ? (isEn ? `, ${distLabel} ${transitDistStr}` : `，${distLabel} ${transitDistStr}`) 
-                      : '';
+                      let transitText = '';
+                      let transitIconName: any = 'car';
+                      let transitIconColor = '#DC2626';
 
-                    if (transitMode === 'walk') {
-                      transitIconName = 'walk';
-                      transitIconColor = '#10B981';
-                      transitText = isEn
-                        ? `${prefix}Walk recommended to the next stop${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
-                        : `${prefix}前往下一站距離較近，建議步行前往${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
-                    } else if (transitMode === 'public') {
-                      transitIconName = 'bus';
-                      transitIconColor = '#3B82F6';
-                      transitText = isEn
-                        ? `${prefix}Public transit is convenient, metro/bus recommended${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
-                        : `${prefix}前往下一站大眾運輸便利，建議搭乘地鐵、公車或輕軌前往${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
-                    } else {
-                      transitIconName = 'car';
-                      transitIconColor = '#DC2626';
-                      transitText = isEn
-                        ? `${prefix}Public transit is limited, charter/taxi/Grab recommended${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
-                        : `${prefix}前往下一站大眾運輸不便，建議搭乘包車、計程車或使用 Bolt/Grab 叫車${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
-                    }
-                  }
+                      const prefix = isEn ? 'Transport Guide: ' : '交通指引：';
+                      const estLabel = isEn ? 'estimated' : '預估時間';
+                      const minLabel = isEn ? 'mins' : '分鐘';
+                      const distLabel = isEn ? 'distance approx.' : '距離約';
 
-                  if (!transitText) return null;
+                      if (nextTransport && nextTransport.description) {
+                        transitText = isEn 
+                          ? `${prefix}${nextTransport.description}, ${estLabel} ${transitDuration} ${minLabel}.`
+                          : `${prefix}${nextTransport.description}，${estLabel} ${transitDuration} ${minLabel}。`;
+                        
+                        if (transitMode === 'walk') {
+                          transitIconName = 'walk';
+                          transitIconColor = '#10B981';
+                        } else if (transitMode === 'public') {
+                          transitIconName = 'bus';
+                          transitIconColor = '#3B82F6';
+                        }
+                      } else {
+                        const distPart = transitDistStr 
+                          ? (isEn ? `, ${distLabel} ${transitDistStr}` : `，${distLabel} ${transitDistStr}`) 
+                          : '';
 
-                  return (
-                    <View style={[styles.transitGuideRow, { marginTop: 12 }]}>
-                      <Ionicons name={transitIconName} size={16} color={transitIconColor} />
-                      <Text style={[typography.caption, { color: '#475569', marginLeft: 6, flex: 1 }]}>
-                        {transitText}
-                      </Text>
+                        if (transitMode === 'walk') {
+                          transitIconName = 'walk';
+                          transitIconColor = '#10B981';
+                          transitText = isEn
+                            ? `${prefix}Walk recommended to the next stop${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
+                            : `${prefix}前往下一站距離較近，建議步行前往${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
+                        } else if (transitMode === 'public') {
+                          transitIconName = 'bus';
+                          transitIconColor = '#3B82F6';
+                          transitText = isEn
+                            ? `${prefix}Public transit is convenient, metro/bus recommended${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
+                            : `${prefix}前往下一站大眾運輸便利，建議搭乘地鐵、公車或輕軌前往${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
+                        } else {
+                          transitIconName = 'car';
+                          transitIconColor = '#DC2626';
+                          transitText = isEn
+                            ? `${prefix}Public transit is limited, charter/taxi/Grab recommended${distPart}, ${estLabel} ${transitDuration} ${minLabel}.`
+                            : `${prefix}前往下一站大眾運輸不便，建議搭乘包車、計程車或使用 Bolt/Grab 叫車${distPart}，${estLabel} ${transitDuration} ${minLabel}。`;
+                        }
+                      }
+
+                      if (!transitText) return null;
+
+                      return (
+                        <View style={[styles.transitGuideRow, { marginTop: 12 }]}>
+                          <Ionicons name={transitIconName} size={16} color={transitIconColor} />
+                          <Text style={[typography.caption, { color: '#475569', marginLeft: 6, flex: 1 }]}>
+                            {transitText}
+                          </Text>
+                        </View>
+                      );
+                    })()}
+
+                    {/* 4. Action Buttons (Nav & Booking) */}
+                    <View style={[styles.actionBtnRow, { marginTop: 16 }]}>
+                      <TouchableOpacity 
+                        style={[styles.actionBtn, { borderColor: '#10B981', backgroundColor: '#ECFDF5' }]}
+                        onPress={() => onNavigate(act.location || { latitude: 0, longitude: 0, address: '', name: act.title }, isFirst ? undefined : activities[index - 1]?.location)}
+                      >
+                        <Ionicons name="navigate-circle-outline" size={16} color="#059669" style={{ marginRight: 4 }} />
+                        <Text style={[typography.caption, { color: '#059669', fontWeight: '700' }]}>{t('itinerary.timelineView.activity.navigate')}</Text>
+                      </TouchableOpacity>
+
+                      {(act.bookingRecommended || ['attraction', 'activity'].includes(act.type)) && (
+                        <>
+                          <TouchableOpacity 
+                            style={[styles.actionBtn, { borderColor: '#FF5B00', backgroundColor: '#FFF0E5' }]}
+                            onPress={() => handleOpenUrl(`https://www.klook.com/zh-TW/search/result/?query=${encodeURIComponent(act.localTitle || act.title)}`)}
+                          >
+                            <Ionicons name="ticket" size={14} color="#FF5B00" style={{ marginRight: 4 }} />
+                            <Text style={[typography.caption, { color: '#FF5B00', fontWeight: '700' }]}>Klook 找票券</Text>
+                          </TouchableOpacity>
+
+                          <TouchableOpacity 
+                            style={[styles.actionBtn, { borderColor: '#26C2D6', backgroundColor: '#E0FAFD' }]}
+                            onPress={() => handleOpenUrl(`https://www.kkday.com/zh-tw/product/productlist?word=${encodeURIComponent(act.localTitle || act.title)}`)}
+                          >
+                            <Ionicons name="ticket" size={14} color="#26C2D6" style={{ marginRight: 4 }} />
+                            <Text style={[typography.caption, { color: '#26C2D6', fontWeight: '700' }]}>KKday 找體驗</Text>
+                          </TouchableOpacity>
+                        </>
+                      )}
+
+                      <TouchableOpacity 
+                        style={[styles.actionBtn, { borderColor: '#DBEAFE', backgroundColor: '#EFF6FF' }]}
+                        onPress={() => handleOpenUrl(`https://www.google.com/search?q=${encodeURIComponent((act.localTitle || act.title) + ' ' + (day.region || ''))}`)}
+                      >
+                        <Ionicons name="search-outline" size={14} color="#2563EB" style={{ marginRight: 4 }} />
+                        <Text style={[typography.caption, { color: '#2563EB', fontWeight: '600' }]}>{t('itinerary.timelineView.activity.googleSearch', { defaultValue: 'Google 搜尋' })}</Text>
+                      </TouchableOpacity>
+                      
+                      {act.links && act.links.map((link, idx) => (
+                        <TouchableOpacity 
+                          key={idx}
+                          style={[styles.actionBtn, { borderColor: '#CBD5E1', backgroundColor: '#F8FAFC' }]}
+                          onPress={() => handleOpenUrl(link.url)}
+                        >
+                          <Ionicons name="link-outline" size={14} color="#3B82F6" style={{ marginRight: 4 }} />
+                          <Text style={[typography.caption, { color: '#3B82F6', fontWeight: '600' }]} numberOfLines={1}>{link.label}</Text>
+                        </TouchableOpacity>
+                      ))}
+
+                      {onEditActivity && (
+                        <TouchableOpacity 
+                          style={[styles.actionBtn, { borderColor: '#E2E8F0', backgroundColor: '#F8FAFC' }]}
+                          onPress={() => onEditActivity(act.id)}
+                        >
+                          <Ionicons name="pencil-outline" size={14} color="#64748B" style={{ marginRight: 4 }} />
+                          <Text style={[typography.caption, { color: '#475569', fontWeight: '600' }]}>{t('common.edit')}</Text>
+                        </TouchableOpacity>
+                      )}
+
+                      {onReRollActivity && !['hotel', 'transport'].includes(act.type) && (
+                        <TouchableOpacity
+                          style={[styles.actionBtn, { borderColor: '#FDE047', backgroundColor: '#FEF9C3' }]}
+                          onPress={() => onReRollActivity(act.id)}
+                        >
+                          <Ionicons name="dice-outline" size={14} color="#A16207" style={{ marginRight: 4 }} />
+                          <Text style={[typography.caption, { color: '#A16207', fontWeight: '600' }]}>{t('itinerary.timelineView.activity.reroll', { defaultValue: '換一個' })}</Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
-                  );
-                })()}
+                  </View>
 
-                {/* 4. Action Buttons (Nav & Booking) */}
-                <View style={[styles.actionBtnRow, { marginTop: 16 }]}>
-                  <TouchableOpacity 
-                    style={[styles.actionBtn, { borderColor: '#10B981', backgroundColor: '#ECFDF5' }]}
-                    onPress={() => onNavigate(act.location || { latitude: 0, longitude: 0, address: '', name: act.title }, isFirst ? undefined : activities[index - 1]?.location)}
-                  >
-                    <Ionicons name="navigate-circle-outline" size={16} color="#059669" style={{ marginRight: 4 }} />
-                    <Text style={[typography.caption, { color: '#059669', fontWeight: '700' }]}>{t('itinerary.timelineView.activity.navigate')}</Text>
-                  </TouchableOpacity>
+                  {/* Right Column: Notes block */}
+                  <View style={isLargeScreen ? { flex: 1, borderLeftWidth: 1, borderLeftColor: colors.divider, paddingLeft: 16, justifyContent: 'center' } : null}>
+                    {/* 5. Notes Input */}
+                    <View style={[styles.notesContainer, isLargeScreen ? { borderTopWidth: 0, marginTop: 0, paddingTop: 0 } : { borderTopColor: '#F1F5F9' }]}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: isLargeScreen ? 6 : 0 }}>
+                        <Ionicons name="create-outline" size={16} color="#94A3B8" />
+                        <Text style={[typography.caption, { color: '#64748B', marginLeft: 4 }]}>{t('itinerary.timelineView.activity.notesLabel')}</Text>
+                      </View>
+                      <TextInput
+                        style={[styles.noteInput, { borderColor: colors.border, color: colors.text, backgroundColor: colors.backgroundSecondary, marginLeft: isLargeScreen ? 0 : 8, width: '100%' }]}
+                        placeholder={t('itinerary.timelineView.activity.notesPlaceholder')}
+                        placeholderTextColor={colors.textTertiary}
+                        value={noteValue}
+                        onChangeText={(text) => handleNoteChange(act.id, text)}
+                        onBlur={() => handleNoteBlur(act.id)}
+                        multiline={isLargeScreen}
+                        numberOfLines={isLargeScreen ? 3 : 1}
+                      />
+                    </View>
+                  </View>
 
-                  {/* dynamic booking recommendation */}
-                  {(act.bookingRecommended || ['attraction', 'activity'].includes(act.type)) && (
-                    <>
-                      <TouchableOpacity 
-                        style={[styles.actionBtn, { borderColor: '#FF5B00', backgroundColor: '#FFF0E5' }]}
-                        onPress={() => handleOpenUrl(`https://www.klook.com/zh-TW/search/result/?query=${encodeURIComponent(act.localTitle || act.title)}`)}
-                      >
-                        <Ionicons name="ticket" size={14} color="#FF5B00" style={{ marginRight: 4 }} />
-                        <Text style={[typography.caption, { color: '#FF5B00', fontWeight: '700' }]}>Klook 找票券</Text>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity 
-                        style={[styles.actionBtn, { borderColor: '#26C2D6', backgroundColor: '#E0FAFD' }]}
-                        onPress={() => handleOpenUrl(`https://www.kkday.com/zh-tw/product/productlist?word=${encodeURIComponent(act.localTitle || act.title)}`)}
-                      >
-                        <Ionicons name="ticket" size={14} color="#26C2D6" style={{ marginRight: 4 }} />
-                        <Text style={[typography.caption, { color: '#26C2D6', fontWeight: '700' }]}>KKday 找體驗</Text>
-                      </TouchableOpacity>
-                    </>
-                  )}
-
-                  <TouchableOpacity 
-                    style={[styles.actionBtn, { borderColor: '#DBEAFE', backgroundColor: '#EFF6FF' }]}
-                    onPress={() => handleOpenUrl(`https://www.google.com/search?q=${encodeURIComponent((act.localTitle || act.title) + ' ' + (day.region || ''))}`)}
-                  >
-                    <Ionicons name="search-outline" size={14} color="#2563EB" style={{ marginRight: 4 }} />
-                    <Text style={[typography.caption, { color: '#2563EB', fontWeight: '600' }]}>{t('itinerary.timelineView.activity.googleSearch', { defaultValue: 'Google 搜尋' })}</Text>
-                  </TouchableOpacity>
-                  
-                  {act.links && act.links.map((link, idx) => (
-                    <TouchableOpacity 
-                      key={idx}
-                      style={[styles.actionBtn, { borderColor: '#CBD5E1', backgroundColor: '#F8FAFC' }]}
-                      onPress={() => handleOpenUrl(link.url)}
-                    >
-                      <Ionicons name="link-outline" size={14} color="#3B82F6" style={{ marginRight: 4 }} />
-                      <Text style={[typography.caption, { color: '#3B82F6', fontWeight: '600' }]} numberOfLines={1}>{link.label}</Text>
-                    </TouchableOpacity>
-                  ))}
-
-                  {onEditActivity && (
-                    <TouchableOpacity 
-                      style={[styles.actionBtn, { borderColor: '#E2E8F0', backgroundColor: '#F8FAFC' }]}
-                      onPress={() => onEditActivity(act.id)}
-                    >
-                      <Ionicons name="pencil-outline" size={14} color="#64748B" style={{ marginRight: 4 }} />
-                      <Text style={[typography.caption, { color: '#475569', fontWeight: '600' }]}>{t('common.edit')}</Text>
-                    </TouchableOpacity>
-                  )}
-
-                  {/* 「換一個」僅適用於可替換的景點/餐飲/活動；住宿起訖點與機場接送不提供替換 */}
-                  {onReRollActivity && !['hotel', 'transport'].includes(act.type) && (
-                    <TouchableOpacity
-                      style={[styles.actionBtn, { borderColor: '#FDE047', backgroundColor: '#FEF9C3' }]}
-                      onPress={() => onReRollActivity(act.id)}
-                    >
-                      <Ionicons name="dice-outline" size={14} color="#A16207" style={{ marginRight: 4 }} />
-                      <Text style={[typography.caption, { color: '#A16207', fontWeight: '600' }]}>{t('itinerary.timelineView.activity.reroll', { defaultValue: '換一個' })}</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-
-                {/* 5. Notes Input */}
-                <View style={[styles.notesContainer, { borderTopColor: '#F1F5F9' }]}>
-                  <Ionicons name="create-outline" size={16} color="#94A3B8" />
-                  <Text style={[typography.caption, { color: '#64748B', marginLeft: 4 }]}>{t('itinerary.timelineView.activity.notesLabel')}</Text>
-                  <TextInput
-                    style={[styles.noteInput, { borderColor: colors.border, color: colors.text, backgroundColor: colors.backgroundSecondary }]}
-                    placeholder={t('itinerary.timelineView.activity.notesPlaceholder')}
-                    placeholderTextColor={colors.textTertiary}
-                    value={noteValue}
-                    onChangeText={(text) => handleNoteChange(act.id, text)}
-                    onBlur={() => handleNoteBlur(act.id)}
-                  />
                 </View>
               </View>
 

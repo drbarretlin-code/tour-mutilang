@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { t } from '../../i18n';
 import { usePAC } from '../../context/PACContext';
 import { COVERED_GUIDE_COUNTRIES, fetchGuidePack } from '../../services/guidePacks';
+import { useResponsive } from '../../hooks/useResponsive';
 
 // Web-safe cache helpers: bypass AsyncStorage on Web (unreliable) and use localStorage directly
 const cacheGet = async (key: string): Promise<string | null> => {
@@ -33,6 +34,7 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
   const { colors, typography, spacing, borderRadius, shadows } = useTheme();
   const { survey } = useSurvey();
   const { pacState } = usePAC();
+  const { isLargeScreen } = useResponsive();
   
   const [loading, setLoading] = useState(true);
   const [guideData, setGuideData] = useState<any>(null);
@@ -312,7 +314,7 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
           </TouchableOpacity>
         </View>
 
-        <View style={styles.exchangeContentRow}>
+        <View style={[styles.exchangeContentRow, { flexDirection: isLargeScreen ? 'row' : 'column' }]}>
           {/* Left: Input & Output */}
           <View style={styles.exchangeInputSection}>
             <Text style={[typography.labelSmall, { color: colors.textTertiary, marginBottom: 8 }]}>
@@ -385,7 +387,7 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
       </View>
 
       {/* 2. Bottom Two Columns */}
-      <View style={styles.bottomColumns}>
+      <View style={[styles.bottomColumns, { flexDirection: isLargeScreen ? 'row' : 'column' }]}>
         
         {/* Left: Emergency Contacts */}
         <View style={[styles.card, styles.columnCard, shadows.sm, { backgroundColor: colors.surface, borderRadius: borderRadius.lg }]}>
@@ -484,7 +486,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   exchangeContentRow: {
-    flexDirection: Platform.OS === 'web' ? 'row' : 'column',
     gap: 24,
   },
   exchangeInputSection: {
@@ -544,7 +545,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   bottomColumns: {
-    flexDirection: Platform.OS === 'web' ? 'row' : 'column',
     gap: 16,
   },
   columnCard: {

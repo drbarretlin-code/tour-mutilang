@@ -667,7 +667,14 @@ export const aiService = {
         attractionNotes: '建議穿著舒適好走的鞋子，並攜帶水壺。',
         activityNotes: '適合拍照留念與挑選伴手禮，可使用行動支付。',
         classicAttraction: '經典名勝',
-        commercialDistrict: '商圈地標'
+        commercialDistrict: '商圈地標',
+        hotelEconomy: '舒適經濟型旅宿',
+        hotelModerate: '精選中階飯店',
+        hotelLuxury: '奢華高級飯店',
+        hotelUnlimited: '尊榮頂級奢華渡假村',
+        dietaryWarn: '【飲食警語】此餐點已為您避開：%{pref}，請於現場點餐時與店家再次確認。',
+        eveningActivityTitle: '夜間活動：',
+        eveningActivityDesc: '體驗當地獨特的夜生活，感受越夜越美麗 of 的城市風情。'
       },
       'zh-CN': {
         arriveAirport: '抵达当地机场',
@@ -713,7 +720,14 @@ export const aiService = {
         attractionNotes: '建议穿着舒适好走的鞋子，并携带水壶。',
         activityNotes: '适合拍照留念与挑选伴手礼，可使用移动支付。',
         classicAttraction: '经典名胜',
-        commercialDistrict: '商圈地标'
+        commercialDistrict: '商圈地标',
+        hotelEconomy: '舒适经济型旅宿',
+        hotelModerate: '精选中档酒店',
+        hotelLuxury: '奢华高级酒店',
+        hotelUnlimited: '尊荣顶级奢华度假村',
+        dietaryWarn: '【饮食警语】此餐点已为您避开：%{pref}，请于现场点餐时与店家再次确认。',
+        eveningActivityTitle: '夜间活动：',
+        eveningActivityDesc: '体验当地独特的夜生活，感受越夜越美丽的城市风情。'
       },
       'en': {
         arriveAirport: 'Arrive at Airport',
@@ -759,7 +773,14 @@ export const aiService = {
         attractionNotes: 'Comfortable walking shoes and a water bottle are highly recommended.',
         activityNotes: 'Great for photography and souvenir shopping. Mobile payments are accepted.',
         classicAttraction: 'Classic Landmark',
-        commercialDistrict: 'Shopping District'
+        commercialDistrict: 'Shopping District',
+        hotelEconomy: 'Comfort Budget Lodging',
+        hotelModerate: 'Selected Mid-range Hotel',
+        hotelLuxury: 'Luxury Premium Hotel',
+        hotelUnlimited: 'Exclusive Luxury Resort',
+        dietaryWarn: '[Dietary Alert] This meal excludes: %{pref}. Please re-confirm with the restaurant staff when ordering.',
+        eveningActivityTitle: 'Evening Activity: ',
+        eveningActivityDesc: 'Experience the unique local nightlife and vibrant evening atmosphere.'
       }
     };
 
@@ -810,6 +831,128 @@ export const aiService = {
       return null;
     };
 
+        // 交通工具偏好解析
+    const modes = survey?.transportModes || [];
+    let primaryMode: 'walk' | 'public' | 'drive' | 'taxi' | 'charter' = 'charter';
+    if (modes.includes('charter')) primaryMode = 'charter';
+    else if (modes.includes('rental')) primaryMode = 'drive';
+    else if (modes.includes('taxi')) primaryMode = 'taxi';
+    else if (modes.includes('public')) primaryMode = 'public';
+    else if (modes.includes('walking')) primaryMode = 'walk';
+
+    // 取得交通細節輔助函式
+    const getTransitInfo = (mode: 'walk' | 'public' | 'drive' | 'taxi' | 'charter', stdDuration: number, stdDistance: number) => {
+      let actualDuration = stdDuration;
+      let actualDistance = stdDistance;
+      let cost = 0;
+      let desc = '';
+      
+      switch (mode) {
+        case 'walk':
+          actualDuration = Math.round(stdDuration * 3.0);
+          actualDistance = stdDistance;
+          cost = 0;
+          desc = locale.startsWith('zh') ? '徒步前行，沿途欣賞街景，環保又健康。' : 'Walk to the next spot, enjoying the street views along the way.';
+          break;
+        case 'public':
+          actualDuration = Math.round(stdDuration * 1.5);
+          actualDistance = stdDistance;
+          cost = currency === 'USD' ? 2 : 45;
+          desc = locale.startsWith('zh') ? '搭乘當地便捷的大眾運輸系統（公車/地鐵）。' : 'Take the local public transit system (bus/subway).';
+          break;
+        case 'taxi':
+          actualDuration = stdDuration;
+          actualDistance = stdDistance;
+          cost = currency === 'USD' ? 12 : 300;
+          desc = locale.startsWith('zh') ? '使用叫車 App 或於路邊攔截計程車，方便快捷。' : 'Call a taxi or use a ride-hailing app for a quick and direct transfer.';
+          break;
+        case 'drive':
+          actualDuration = stdDuration;
+          actualDistance = stdDistance;
+          cost = 0;
+          desc = locale.startsWith('zh') ? '駕駛自租車輛前往，路況良好。' : 'Drive your rental car to the destination, road conditions are good.';
+          break;
+        case 'charter':
+        default:
+          actualDuration = stdDuration;
+          actualDistance = stdDistance;
+          cost = 0;
+          desc = locale.startsWith('zh') ? '搭乘包車前往，司機皆具備良好服務評價。' : 'Ride in a private charter car, driven by a professional driver.';
+          break;
+      }
+      return { mode, duration: actualDuration, distance: actualDistance, cost, description: desc };
+    };
+
+    // 預算等級的飯店及餐費估算
+    const getHotelNameByBudget = (budget?: string) => {
+      if (budget === 'economy') return strings.hotelEconomy;
+      if (budget === 'luxury') return strings.hotelLuxury;
+      if (budget === 'unlimited') return strings.hotelUnlimited;
+      return strings.hotelModerate;
+    };
+    const customHotelName = getHotelNameByBudget(survey?.budgetLevel);
+
+    const getMealCost = (budget?: string) => {
+      if (budget === 'economy') return 150;
+      if (budget === 'luxury') return 1200;
+      if (budget === 'unlimited') return 3000;
+      return 400; // moderate
+    };
+    const mealAmount = getMealCost(survey?.budgetLevel);
+
+    // 飲食限制警語
+    const getDietaryNotes = (dietary?: string[]) => {
+      if (!dietary || dietary.length === 0 || dietary.includes('none')) return '';
+      const mapped = dietary.map(d => {
+        if (d === 'vegetarian') return locale.startsWith('zh') ? '素食' : 'Vegetarian';
+        if (d === 'vegan') return locale.startsWith('zh') ? '純素' : 'Vegan';
+        if (d === 'halal') return locale.startsWith('zh') ? '清真' : 'Halal';
+        if (d === 'peanut_allergy') return locale.startsWith('zh') ? '花生過敏' : 'Peanut Allergy';
+        if (d === 'seafood_allergy') return locale.startsWith('zh') ? '海鮮過敏' : 'Seafood Allergy';
+        return d;
+      });
+      const listStr = mapped.join(', ');
+      return strings.dietaryWarn.replace('%{pref}', listStr);
+    };
+    const dietaryNote = getDietaryNotes(survey?.dietaryRestrictions);
+
+    // 每天排程的動態起始點與步調
+    const getStartTimes = (pref?: string, paceVal?: string) => {
+      let departTime = '08:30';
+      let morningTime = '09:00';
+      
+      if (pref === 'early_bird') {
+        departTime = paceVal === 'packed' ? '07:30' : '08:00';
+        morningTime = paceVal === 'packed' ? '08:00' : '08:30';
+      } else if (pref === 'late_riser') {
+        departTime = paceVal === 'relaxed' ? '10:00' : '09:30';
+        morningTime = paceVal === 'relaxed' ? '10:30' : '10:00';
+      } else { // normal
+        if (paceVal === 'packed') {
+          departTime = '08:00';
+          morningTime = '08:30';
+        } else if (paceVal === 'relaxed') {
+          departTime = '09:00';
+          morningTime = '09:30';
+        } else {
+          departTime = '08:30';
+          morningTime = '09:00';
+        }
+      }
+      return { departTime, morningTime };
+    };
+    const { departTime, morningTime } = getStartTimes(survey?.morningPreference, survey?.pace);
+
+    let morningDuration = 150;
+    let afternoonDuration = 180;
+    if (survey?.pace === 'relaxed') {
+      morningDuration = 180;
+      afternoonDuration = 210;
+    } else if (survey?.pace === 'packed') {
+      morningDuration = 100;
+      afternoonDuration = 120;
+    }
+
     for (let i = 0; i < dayCount; i++) {
       const currentDayDate = new Date(start.getTime() + i * 86400000);
       const dateStr = `${currentDayDate.getFullYear()}-${String(currentDayDate.getMonth() + 1).padStart(2, '0')}-${String(currentDayDate.getDate()).padStart(2, '0')}`;
@@ -822,17 +965,18 @@ export const aiService = {
       const cursor = destCursor[currentDest.name] || 0;
       const morningIdx2 = templates.titles.length ? cursor % templates.titles.length : 0;
       const afternoonIdx2 = templates.titles.length ? (cursor + 1) % templates.titles.length : 0;
-      destCursor[currentDest.name] = cursor + 2;
+      const eveningIdx2 = templates.titles.length ? (cursor + 2) % templates.titles.length : 0;
+      destCursor[currentDest.name] = cursor + (survey?.pace === 'packed' ? 3 : 2);
 
       // 當日起點住宿（昨晚入住、今早從此處出發；依日期區間解析），找不到則退回通用名稱。
-      const dayHotelName = resolveHotelForDate(dateStr) || strings.hotelName;
+      const dayHotelName = resolveHotelForDate(dateStr) || customHotelName;
 
       // 當晚住宿（今晚實際入住、回程終點；退房當日不續住，改查次日所屬住宿）。
-      let nightHotelName = strings.hotelName;
+      let nightHotelName = customHotelName;
       if (i < dayCount - 1) {
         const nextDayDate = new Date(start.getTime() + (i + 1) * 86400000);
         const nextDateStr = `${nextDayDate.getFullYear()}-${String(nextDayDate.getMonth() + 1).padStart(2, '0')}-${String(nextDayDate.getDate()).padStart(2, '0')}`;
-        nightHotelName = resolveHotelForDate(nextDateStr) || resolveHotelForDate(dateStr, true) || strings.hotelName;
+        nightHotelName = resolveHotelForDate(nextDateStr) || resolveHotelForDate(dateStr, true) || customHotelName;
       }
 
       // Activities building
@@ -842,7 +986,7 @@ export const aiService = {
       const matchedSpecific = userSpecificLocations.find(item => !isHotelItem(item.value) && item.preferredDate === dateStr)
         || userSpecificLocations.find(item => !isHotelItem(item.value) && (() => { const r = parseRange(item.preferredDate); return !!r && dateStr >= r.startStr && dateStr <= r.endStr; })());
       const matchedMust = matchedSpecific ? null : (userMustVisits.find(item => item.preferredDate === dateStr) || userMustVisits[i]);
-      
+
       // 1. Depart Hotel or Arrive at Airport
       if (i === 0) {
         const titleText = (outgoingFlight && outgoingFlight.flightNumber) ? `${strings.arriveAirport} (${outgoingFlight.flightNumber})` : strings.arriveAirport;
@@ -862,7 +1006,7 @@ export const aiService = {
             longitude: currentDest.longitude || 0
           },
           duration: 90,
-          transport: { mode: 'charter', duration: 45, distance: 30000, description: strings.airportTransportDesc },
+          transport: getTransitInfo(primaryMode, 45, 30000),
           links: [{ label: strings.airportLink, url: 'https://www.klook.com/', type: 'booking' }],
           notes: strings.airportNotes,
           isMustVisit: false,
@@ -888,7 +1032,7 @@ export const aiService = {
             longitude: currentDest.longitude || 0
           },
           duration: 30,
-          transport: { mode: 'charter', duration: 30, distance: 15000, description: strings.hotelTransportDesc },
+          transport: getTransitInfo(primaryMode, 30, 15000),
           links: [{ label: strings.hotelLink, url: 'https://www.klook.com/', type: 'booking' }],
           notes: '',
           isMustVisit: false,
@@ -899,8 +1043,8 @@ export const aiService = {
         activities.push({
           id: `act-${i}-start`,
           order: 0,
-          startTime: '08:30',
-          endTime: '09:00',
+          startTime: departTime,
+          endTime: morningTime,
           title: `${strings.departHotel}（${dayHotelName}）`,
           localTitle: dayHotelName,
           type: 'hotel',
@@ -912,7 +1056,7 @@ export const aiService = {
             longitude: currentDest.longitude || 0
           },
           duration: 30,
-          transport: { mode: 'charter', duration: 30, distance: 15000, description: strings.hotelTransportDesc },
+          transport: getTransitInfo(primaryMode, 30, 15000),
           links: [{ label: strings.hotelLink, url: 'https://www.klook.com/', type: 'booking' }],
           notes: '',
           isMustVisit: false,
@@ -929,15 +1073,15 @@ export const aiService = {
       let morningPhoto = templates.images[morningIdx]!;
       let morningCoord = templates.coords?.[morningIdx];
       let morningLinks = [];
-      let morningStartTime = '09:00';
-      let morningDuration = 150;
+      let morningStartTime = morningTime;
+      let currentMorningDuration = morningDuration;
 
       if (matchedSpecific) {
         morningTitle = matchedSpecific.value;
         morningLocalTitle = matchedSpecific.value;
         morningDesc = matchedSpecific.notes ? `${matchedSpecific.value} (${matchedSpecific.notes})` : matchedSpecific.value;
-        morningStartTime = matchedSpecific.preferredTime || '09:00';
-        morningDuration = matchedSpecific.duration || 120;
+        morningStartTime = matchedSpecific.preferredTime || morningTime;
+        currentMorningDuration = matchedSpecific.duration || 120;
         if (matchedSpecific.type === 'url' && matchedSpecific.value.startsWith('http')) {
           morningLinks.push({
             label: strings.refUrlLabel,
@@ -949,7 +1093,7 @@ export const aiService = {
         morningTitle = strings.mustVisitTitle.replace('{value}', matchedMust.value);
         morningLocalTitle = matchedMust.value;
         morningDesc = strings.mustVisitDesc.replace('{value}', matchedMust.value);
-        morningStartTime = matchedMust.preferredTime || '09:00';
+        morningStartTime = matchedMust.preferredTime || morningTime;
         if (matchedMust.type === 'url' && matchedMust.value.startsWith('http')) {
           morningLinks.push({
             label: strings.refUrlLabel,
@@ -975,8 +1119,8 @@ export const aiService = {
         const NOON_MIN = 12 * 60;
         const [msH, msM] = morningStartTime.split(':').map(Number);
         const morningStartMin = (msH || 0) * 60 + (msM || 0);
-        if (morningStartMin < NOON_MIN && morningStartMin + morningDuration > NOON_MIN) {
-          morningDuration = Math.max(60, NOON_MIN - morningStartMin);
+        if (morningStartMin < NOON_MIN && morningStartMin + currentMorningDuration > NOON_MIN) {
+          currentMorningDuration = Math.max(60, NOON_MIN - morningStartMin);
         }
       }
 
@@ -984,7 +1128,7 @@ export const aiService = {
         id: `act-${i}-1`,
         order: 1,
         startTime: morningStartTime,
-        endTime: addMinutesToTime(morningStartTime, morningDuration),
+        endTime: addMinutesToTime(morningStartTime, currentMorningDuration),
         title: morningTitle,
         localTitle: morningLocalTitle,
         type: 'attraction',
@@ -995,7 +1139,8 @@ export const aiService = {
           latitude: (!matchedSpecific && !matchedMust && morningCoord) ? morningCoord.lat : (currentDest.latitude || 0),
           longitude: (!matchedSpecific && !matchedMust && morningCoord) ? morningCoord.lon : (currentDest.longitude || 0)
         },
-        duration: morningDuration,
+        duration: currentMorningDuration,
+        transport: getTransitInfo(primaryMode, 15, 5000),
         links: morningLinks,
         notes: matchedSpecific?.notes || strings.attractionNotes,
         isMustVisit: !!matchedSpecific || !!matchedMust,
@@ -1005,7 +1150,7 @@ export const aiService = {
         openingHours: '09:00 - 17:30'
       });
 
-      // 3. Afternoon Activity (Restaurant)
+      // 3. Lunch Activity (Restaurant)
       const lunchTitles: Record<string, string[]> = {
         'zh-TW': ['在地推薦人氣私房菜', '文青風特色咖啡廳輕食', '老字號經典道地小吃', '米其林必比登推薦餐廳'],
         'zh-CN': ['在地推荐人气私房菜', '文青风特色咖啡厅轻食', '老字号经典道地小吃', '米其林必比登推荐餐厅'],
@@ -1022,29 +1167,36 @@ export const aiService = {
         : getDestRestaurants(currentDest.name, locale);
       const lunchPick = destRestaurants.length ? destRestaurants[i % destRestaurants.length] : null;
 
+      // 依 morning 結束時間與交通時間動態推算午餐開始時間
+      const morningEnd = activities[activities.length - 1].endTime;
+      const lunchTransit = getTransitInfo(primaryMode, 15, 5000);
+      const earliestLunchStart = addMinutesToTime(morningEnd, lunchTransit.duration);
+      const lunchStartTime = earliestLunchStart < '12:00' ? '12:00' : earliestLunchStart;
+      const lunchDuration = survey?.pace === 'packed' ? 60 : 90;
+
       activities.push({
         id: `act-${i}-2`,
         order: 2,
-        startTime: '12:00',
-        endTime: '13:30',
+        startTime: lunchStartTime,
+        endTime: addMinutesToTime(lunchStartTime, lunchDuration),
         title: lunchPick ? `${strings.lunchTitle}${lunchPick.title}` : `${strings.lunchTitle}${currentLunchTitle}`,
         localTitle: lunchPick ? lunchPick.localTitle : 'Local Restaurant',
         type: 'restaurant',
-        description: lunchPick ? lunchPick.desc : strings.lunchDesc,
+        description: (lunchPick ? lunchPick.desc : strings.lunchDesc) + (dietaryNote ? `\n\n${dietaryNote}` : ''),
         location: {
           name: lunchPick ? lunchPick.title : strings.lunchLocName,
           address: `${currentDest.name}${strings.lunchLocAddress}`,
           latitude: lunchPick ? lunchPick.lat : (currentDest.latitude || 0),
           longitude: lunchPick ? lunchPick.lon : (currentDest.longitude || 0)
         },
-        duration: 90,
-        transport: { mode: 'public', duration: 15, distance: 0, description: strings.lunchTransportDesc },
+        duration: lunchDuration,
+        transport: getTransitInfo(primaryMode, 15, 5000),
         links: lunchPick ? [{ label: strings.grabLink, url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lunchPick.localTitle)}`, type: 'info' as const }] : [],
-        notes: strings.lunchNotes,
+        notes: strings.lunchNotes + (dietaryNote ? `\n${dietaryNote}` : ''),
         isMustVisit: false,
         photoUrl: templates.images[2],
         rating: 4.7,
-        cost: { amount: lunchPick ? lunchPick.cost : 350, currency },
+        cost: { amount: lunchPick ? (lunchPick.cost || mealAmount) : mealAmount, currency },
         openingHours: '11:00 - 21:00'
       });
 
@@ -1055,11 +1207,15 @@ export const aiService = {
       const afternoonDesc = templates.descs[afternoonIdx]!;
       const afternoonCoord = templates.coords?.[afternoonIdx];
 
+      const lunchEnd = activities[activities.length - 1].endTime;
+      const afternoonTransit = getTransitInfo(primaryMode, 15, 5000);
+      const afternoonStartTime = addMinutesToTime(lunchEnd, afternoonTransit.duration);
+
       activities.push({
         id: `act-${i}-3`,
         order: 3,
-        startTime: '14:30',
-        endTime: '17:30',
+        startTime: afternoonStartTime,
+        endTime: addMinutesToTime(afternoonStartTime, afternoonDuration),
         title: afternoonTitle,
         localTitle: afternoonLocalTitle,
         type: 'activity',
@@ -1070,7 +1226,8 @@ export const aiService = {
           latitude: afternoonCoord ? afternoonCoord.lat : (currentDest.latitude || 0),
           longitude: afternoonCoord ? afternoonCoord.lon : (currentDest.longitude || 0)
         },
-        duration: 180,
+        duration: afternoonDuration,
+        transport: getTransitInfo(primaryMode, 15, 5000),
         links: [],
         notes: strings.activityNotes,
         isMustVisit: false,
@@ -1080,12 +1237,52 @@ export const aiService = {
         openingHours: '24小時開放'
       });
 
+      // 4b. Evening Activity (for packed pace, non-last-day)
+      if (survey?.pace === 'packed' && i !== dayCount - 1) {
+        const eveningIdx = eveningIdx2;
+        const eveningTitle = templates.titles[eveningIdx] || `${currentDest.name}${strings.commercialDistrict}`;
+        const eveningLocalTitle = templates.localTitles[eveningIdx] || eveningTitle;
+        const eveningDesc = templates.descs[eveningIdx] || strings.eveningActivityDesc;
+        const eveningCoord = templates.coords?.[eveningIdx];
+        const eveningPhoto = templates.images[eveningIdx] || templates.images[1];
+        
+        const afternoonEnd = activities[activities.length - 1].endTime;
+        const eveningTransit = getTransitInfo(primaryMode, 15, 5000);
+        const eveningStartTime = addMinutesToTime(afternoonEnd, eveningTransit.duration);
+
+        activities.push({
+          id: `act-${i}-evening`,
+          order: 4,
+          startTime: eveningStartTime,
+          endTime: addMinutesToTime(eveningStartTime, 60),
+          title: `${strings.eveningActivityTitle}${eveningTitle}`,
+          localTitle: eveningLocalTitle,
+          type: 'activity',
+          description: eveningDesc,
+          location: {
+            name: eveningTitle,
+            address: `${currentDest.name}`,
+            latitude: eveningCoord ? eveningCoord.lat : (currentDest.latitude || 0),
+            longitude: eveningCoord ? eveningCoord.lon : (currentDest.longitude || 0)
+          },
+          duration: 60,
+          transport: getTransitInfo(primaryMode, 15, 5000),
+          links: [],
+          notes: strings.activityNotes,
+          isMustVisit: false,
+          photoUrl: eveningPhoto,
+          rating: 4.6,
+          cost: { amount: 0, currency },
+          openingHours: '18:00 - 23:00'
+        });
+      }
+
       // 5. Return to Hotel or Depart to Airport
       if (i === dayCount - 1) {
         const titleText = (returnFlight && returnFlight.flightNumber) ? `${strings.arriveAirport} (${returnFlight.flightNumber})` : strings.arriveAirport;
         activities.push({
           id: `act-${i}-end`,
-          order: 4,
+          order: activities.length,
           startTime: '18:00',
           endTime: '20:00',
           title: titleText,
@@ -1099,7 +1296,7 @@ export const aiService = {
             longitude: currentDest.longitude || 0
           },
           duration: 120,
-          transport: { mode: 'charter', duration: 45, distance: 30000, description: strings.returnHotelTransportDesc },
+          transport: getTransitInfo(primaryMode, 45, 30000),
           links: [{ label: strings.grabLink, url: 'https://www.grab.com/', type: 'info' }],
           notes: returnFlight ? `航班時間：${returnFlight.departureTime}。請務必再三確認護照與隨身行李是否帶齊。` : strings.airportNotes,
           isMustVisit: false,
@@ -1108,11 +1305,9 @@ export const aiService = {
           openingHours: strings.airportHours
         });
       } else {
-        // 回到飯店的時間依當日最後一項活動的結束時間順延，避免與 CLAUDE.md 之每日 08:00-21:00
-        // 時間限制及「合理間隔」規範脫鉤；超出範圍將由 clampFallbackItineraryTimes 統一校正。
         const lastAct = activities[activities.length - 1];
-        const returnTransportDuration = lastAct?.transport?.duration || 15;
-        const returnStartTime = lastAct ? addMinutesToTime(lastAct.endTime, returnTransportDuration) : '18:00';
+        const returnTransport = getTransitInfo(primaryMode, 15, 5000);
+        const returnStartTime = lastAct ? addMinutesToTime(lastAct.endTime, returnTransport.duration) : '18:00';
         const returnEndTime = addMinutesToTime(returnStartTime, 30);
 
         activities.push({
@@ -1131,7 +1326,7 @@ export const aiService = {
             longitude: currentDest.longitude || 0
           },
           duration: 30,
-          transport: { mode: 'charter', duration: 30, distance: 15000, description: strings.returnHotelTransportDesc },
+          transport: getTransitInfo(primaryMode, 30, 15000),
           links: [{ label: strings.grabLink, url: 'https://www.grab.com/', type: 'info' }],
           notes: '',
           isMustVisit: false,
