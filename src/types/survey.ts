@@ -155,6 +155,11 @@ export interface MultiModalInput {
   preferredTime?: string;
   duration?: number; // 建議停留時間 (分鐘)
   notes?: string;    // 距離或備註
+  // 經緯度與精確地點資訊 (由 Autocomplete 或 AI Parser 提供)
+  lat?: number;
+  lng?: number;
+  placeId?: string;
+  address?: string;
 }
 
 // ─── Composite Survey Data ───

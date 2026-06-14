@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { useSurvey } from '../../context/SurveyContext';
 import { useTheme } from '../../context/ThemeContext';
 import { Card } from '../common/Card';
@@ -7,6 +7,12 @@ import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { t } from '../../i18n';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Linking from 'expo-linking';
+import { AttractionAutocomplete } from './AttractionAutocomplete';
+import { parseAttractionsWithAI } from '../../services/aiPreprocessor';
+import { parseGoogleMapsUrl } from '../../utils/urlParser';
+import { ActivityIndicator } from 'react-native';
 
 
 export function StepAttractions() {
@@ -22,6 +28,49 @@ export function StepAttractions() {
   const { colors, spacing, borderRadius, typography } = useTheme();
 
   // Local inputs
+  
+  const [geminiKey, setGeminiKey] = useState('');
+  const [isAiParsing, setIsAiParsing] = useState(false);
+  const [magicInput, setMagicInput] = useState('');
+
+  const [specLat, setSpecLat] = useState<number>();
+  const [specLng, setSpecLng] = useState<number>();
+  const [specPlaceId, setSpecPlaceId] = useState<string>();
+  const [specAddress, setSpecAddress] = useState<string>();
+
+  const [mustLat, setMustLat] = useState<number>();
+  const [mustLng, setMustLng] = useState<number>();
+  const [mustPlaceId, setMustPlaceId] = useState<string>();
+  const [mustAddress, setMustAddress] = useState<string>();
+
+  React.useEffect(() => {
+    AsyncStorage.getItem('gemini_api_key').then(val => {
+      if (val) setGeminiKey(val);
+    });
+  }, []);
+
+  const handleSaveGeminiKey = (val: string) => {
+    setGeminiKey(val);
+    AsyncStorage.setItem('gemini_api_key', val);
+  };
+
+  const handleMagicParse = async () => {
+    if (!magicInput.trim() || !geminiKey) return;
+    setIsAiParsing(true);
+    try {
+      const parsed = await parseAttractionsWithAI(geminiKey, magicInput);
+      parsed.forEach(p => {
+        addMustVisitAttraction('text', p.value, undefined, undefined, undefined, undefined, p.lat, p.lng, p.placeId, p.notes);
+      });
+      setMagicInput('');
+      alert('AI 預處理成功！已為您自動解碼並加入清單。');
+    } catch(e: any) {
+      alert('解析失敗: ' + (e.message || '請檢查您的 API Key'));
+    } finally {
+      setIsAiParsing(false);
+    }
+  };
+
   const [refUrl, setRefUrl] = useState('');
   const [mustUrl, setMustUrl] = useState('');
   const [mustDate, setMustDate] = useState('');
@@ -43,8 +92,19 @@ export function StepAttractions() {
   // Add Must Visit
   const handleAddMustVisit = () => {
     if (!mustUrl) return;
-    addMustVisitAttraction('url', mustUrl, mustDate || undefined, mustTime || undefined);
+    
+    const mapMatch = parseGoogleMapsUrl(mustUrl);
+    if (mapMatch) {
+      addMustVisitAttraction('url', mapMatch.name || mustUrl, mustDate || undefined, mustTime || undefined, undefined, undefined, mapMatch.lat, mapMatch.lng, undefined, undefined);
+    } else {
+      addMustVisitAttraction('url', mustUrl, mustDate || undefined, mustTime || undefined, undefined, undefined, mustLat, mustLng, mustPlaceId, mustAddress);
+    }
     setMustUrl('');
+    setMustLat(undefined);
+    setMustLng(undefined);
+    setMustPlaceId(undefined);
+    setMustAddress(undefined);
+
     setMustDate('');
     setMustTime('');
   };
@@ -58,9 +118,19 @@ export function StepAttractions() {
       specDate || undefined,
       specTime || undefined,
       specDuration ? parseInt(specDuration, 10) : undefined,
-      specNotes || undefined
+      specNotes || undefined,
+      undefined,
+      undefined,
+      specLat,
+      specLng,
+      specPlaceId,
+      specAddress
     );
     setSpecName('');
+    setSpecLat(undefined);
+    setSpecLng(undefined);
+    setSpecPlaceId(undefined);
+    setSpecAddress(undefined);
     setSpecDate('');
     setSpecTime('');
     setSpecDuration('');
@@ -71,6 +141,48 @@ export function StepAttractions() {
 
   return (
     <ScrollView contentContainerStyle={{ padding: spacing.lg }} style={styles.container}>
+      {/* SECTION 0: BYOK Gemini AI Preprocessor */}
+      <Card variant="elevated" style={{ marginBottom: spacing.lg, backgroundColor: colors.primary100 }}>
+        <View style={styles.flexRowBetween}>
+          <View style={styles.flexRow}>
+            <Ionicons name="sparkles" size={20} color={colors.primary500} style={{ marginRight: 8 }} />
+            <Text style={[typography.titleMedium, { color: colors.primary900, fontWeight: '700' }]}>AI 神奇魔法棒</Text>
+          </View>
+          <TouchableOpacity onPress={() => Linking.openURL('https://aistudio.google.com/app/apikey')}>
+            <Ionicons name="help-circle-outline" size={24} color={colors.primary500} />
+          </TouchableOpacity>
+        </View>
+        <Text style={[typography.bodySmall, { color: colors.textSecondary, marginTop: 4, marginBottom: 12 }]}>
+          貼上任何雜亂的地點描述或多段網址，讓 AI 一鍵幫您轉化成精準座標並加入清單。(金鑰僅存本地)
+        </Text>
+        
+        <Input
+          placeholder="請輸入您的 Gemini Free Tier API Key"
+          value={geminiKey}
+          onChangeText={handleSaveGeminiKey}
+          containerStyle={{ marginBottom: 12 }}
+          secureTextEntry
+        />
+
+        {geminiKey ? (
+          <View>
+            <TextInput
+              style={[{ height: 80, backgroundColor: colors.surface, borderRadius: borderRadius.md, padding: 12, borderWidth: 1, borderColor: colors.border }]}
+              multiline
+              placeholder="例如：下午想吃六千牛肉湯，然後去 https://maps.app.goo.gl/..."
+              value={magicInput}
+              onChangeText={setMagicInput}
+            />
+            <Button
+              title={isAiParsing ? "解析中..." : "一鍵 AI 解析"}
+              onPress={handleMagicParse}
+              disabled={isAiParsing || !magicInput}
+              style={{ marginTop: 12 }}
+            />
+          </View>
+        ) : null}
+      </Card>
+
       
       {/* SECTION 2: SPECIFIC LOCATION REQUIREMENTS (PRIORITY) */}
       <Text style={[typography.titleMedium, { color: colors.text, marginBottom: spacing.xs, fontWeight: '600' }]}>
@@ -83,10 +195,17 @@ export function StepAttractions() {
       <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
         {/* Specific Location Inputs */}
         <View style={styles.flexRowBetween}>
-          <Input
+          <AttractionAutocomplete
             placeholder={t('survey.attractions.specificLocation.placeholder')}
             value={specName}
             onChangeText={setSpecName}
+            onSelect={(loc) => {
+              setSpecName(loc.name);
+              setSpecLat(loc.lat);
+              setSpecLng(loc.lng);
+              setSpecPlaceId(loc.placeId);
+              setSpecAddress(loc.address);
+            }}
             containerStyle={{ flex: 1 }}
           />
         </View>
@@ -168,11 +287,18 @@ export function StepAttractions() {
       <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
         {/* Must Visit Inputs */}
         <View style={styles.flexRowBetween}>
-          <Input
-            placeholder="e.g. Grand Palace, Tokyo Tower"
+          <AttractionAutocomplete
+            placeholder="貼上網址或搜尋景點 e.g. Grand Palace, Tokyo Tower"
             value={mustUrl}
             onChangeText={setMustUrl}
-            containerStyle={{ flex: 1, marginRight: spacing.sm }}
+            onSelect={(loc) => {
+              setMustUrl(loc.name);
+              setMustLat(loc.lat);
+              setMustLng(loc.lng);
+              setMustPlaceId(loc.placeId);
+              setMustAddress(loc.address);
+            }}
+            containerStyle={{ flex: 1 }}
           />
 
         </View>

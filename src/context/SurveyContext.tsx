@@ -22,9 +22,9 @@ interface SurveyContextType {
   removeFlight: (id: string) => void;
   addReferenceAttraction: (type: 'url' | 'image' | 'file' | 'text', value: string, fileName?: string, mimeType?: string) => void;
   removeReferenceAttraction: (id: string) => void;
-  addMustVisitAttraction: (type: 'url' | 'image' | 'file' | 'text', value: string, preferredDate?: string, preferredTime?: string, fileName?: string, mimeType?: string) => void;
+  addMustVisitAttraction: (type: 'url' | 'image' | 'file' | 'text', value: string, preferredDate?: string, preferredTime?: string, fileName?: string, mimeType?: string, lat?: number, lng?: number, placeId?: string, address?: string) => void;
   removeMustVisitAttraction: (id: string) => void;
-  addSpecificLocation: (type: 'url' | 'image' | 'file' | 'text', value: string, preferredDate?: string, preferredTime?: string, duration?: number, notes?: string, fileName?: string, mimeType?: string) => void;
+  addSpecificLocation: (type: 'url' | 'image' | 'file' | 'text', value: string, preferredDate?: string, preferredTime?: string, duration?: number, notes?: string, fileName?: string, mimeType?: string, lat?: number, lng?: number, placeId?: string, address?: string) => void;
   removeSpecificLocation: (id: string) => void;
   saveDraft: () => Promise<void>;
   submitSurvey: () => Promise<void>;
@@ -205,10 +205,14 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     preferredDate?: string,
     preferredTime?: string,
     fileName?: string,
-    mimeType?: string
+    mimeType?: string,
+    lat?: number,
+    lng?: number,
+    placeId?: string,
+    address?: string
   ) => {
     const id = Math.random().toString(36).substring(2, 9);
-    const newItem = { id, type, value, preferredDate, preferredTime, fileName, mimeType };
+    const newItem = { id, type, value, preferredDate, preferredTime, fileName, mimeType, lat, lng, placeId, address };
     updateSurvey({
       mustVisitAttractions: [...survey.mustVisitAttractions, newItem]
     });
@@ -228,10 +232,14 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     duration?: number,
     notes?: string,
     fileName?: string,
-    mimeType?: string
+    mimeType?: string,
+    lat?: number,
+    lng?: number,
+    placeId?: string,
+    address?: string
   ) => {
     const id = Math.random().toString(36).substring(2, 9);
-    const newItem = { id, type, value, preferredDate, preferredTime, duration, notes, fileName, mimeType };
+    const newItem = { id, type, value, preferredDate, preferredTime, duration, notes, fileName, mimeType, lat, lng, placeId, address };
     updateSurvey({
       specificLocations: [...(survey.specificLocations || []), newItem]
     });
