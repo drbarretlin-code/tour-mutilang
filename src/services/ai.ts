@@ -5,7 +5,7 @@ import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
 import { fetchDestinationPOIs, verifyOpenTripMapKey, POI, PoiCategory } from './poi';
 import { fetchWikipediaSummaries } from './enrich';
 import { getBuiltInTemplate, getBuiltInRestaurants, findLocalizedName, findLocalizedDescription } from '../data/destinations';
-import { detectGuideCountryKey, isCoveredGuideCountry, getDownloadableGuideCountry } from './guidePacks';
+import { detectGuideCountryKey, isCoveredGuideCountry, getDownloadableGuideCountry, normalizeCountryKey } from './guidePacks';
 import { PACEngine } from './pac';
 import { createLogger } from './logger';
 
@@ -1625,6 +1625,15 @@ export const aiService = {
     fallback.isCovered = isCoveredGuideCountry(key);
     fallback.countryKey = key || undefined;
     fallback.downloadableCountry = !fallback.isCovered ? getDownloadableGuideCountry(key) : undefined;
+
+    // 若目的地不在已知清單中，嘗試推導候選 key 供 UI 嘗試下載
+    if (!fallback.isCovered && !fallback.downloadableCountry) {
+      const candidate = normalizeCountryKey(country);
+      if (candidate) {
+        fallback.candidateKey = candidate;
+      }
+    }
+
     return fallback;
   }
 };

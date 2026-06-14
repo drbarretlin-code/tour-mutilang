@@ -463,7 +463,16 @@
         "translator": "雙向語音翻譯網頁",
         "openTool": "開啟工具",
         "applyApiKey": "申請 API KEY"
-      }
+      },
+      "tryDownload": "嘗試下載指南",
+      "downloading": "下載中...",
+      "downloadNotAvailable": "此目的地目前尚無線上指南範本，建議確認目的地名稱後再試一次，以避免計劃錯誤。",
+      "coveredCountries": "此頁為內建離線指南範本，目前精選涵蓋：{{countries}}。",
+      "coveredInfo": "本頁為精選離線指南，內容已為此目的地最佳化，離線亦可使用。",
+      "notCoveredWithDownload": "目的地「{{label}}」尚未涵蓋，目前顯示通用國際範本。",
+      "noGuideTemplate": "此目的地尚無對應的離線指南範本，目前顯示通用國際範本。",
+      "downloadLabel": "下載「{{label}}」專屬指南",
+      "tryDownloadLabel": "嘗試下載此目的地指南"
     },
     "expenseSplitter": {
       "me": "我",
@@ -705,7 +714,22 @@
     "about": "關於",
     "privacy": "隱私權政策",
     "terms": "服務條款",
-    "version": "版本"
+    "version": "版本",
+    "apiKeySettings": {
+      "title": "API 金鑰設定",
+      "geoapifyLabel": "Geoapify 地理編碼金鑰",
+      "geoapifyHint": "上架後若遇到流量暴增或免費額度超限，可輸入您的個人金鑰以繼續使用地理編碼服務。",
+      "applyLink": "前往申請免費金鑰",
+      "inputPlaceholder": "貼上您的 Geoapify API Key",
+      "save": "儲存",
+      "clear": "清除",
+      "statusBuiltIn": "目前使用：內建金鑰",
+      "statusCustom": "目前使用：自訂金鑰",
+      "statusNone": "未設定金鑰（使用備援）",
+      "quotaExceeded": "地理編碼服務額度已超限，請設定您自己的金鑰以繼續使用。",
+      "saved": "金鑰已儲存",
+      "cleared": "已清除自訂金鑰"
+    }
   },
   "errors": {
     "required": "此欄位為必填",

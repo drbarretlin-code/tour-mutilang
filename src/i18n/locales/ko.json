@@ -447,8 +447,18 @@
       "phrases": {
         "title": "🔥 실용어학 가이드",
         "translator": "1. 양방향 음성번역 웹페이지",
-        "openTool": "도구 열기"
-      }
+        "openTool": "도구 열기",
+        "applyApiKey": "API 키 신청"
+      },
+      "tryDownload": "가이드 다운로드 시도",
+      "downloading": "다운로드 중...",
+      "downloadNotAvailable": "이 여행지에 대한 온라인 가이드 템플릿이 아직 없습니다. 여행지 이름을 확인하고 다시 시도해 주세요.",
+      "coveredCountries": "이 페이지는 내장 오프라인 가이드 템플릿입니다. 현재 지원 지역: {{countries}}.",
+      "coveredInfo": "이 페이지는 이 여행지에 최적화된 엄선 오프라인 가이드입니다. 오프라인에서도 사용 가능합니다.",
+      "notCoveredWithDownload": "여행지 \"{{label}}\"은(는) 아직 지원되지 않습니다. 일반 국제 템플릿을 표시합니다.",
+      "noGuideTemplate": "이 여행지에 대한 오프라인 가이드 템플릿이 없습니다. 일반 국제 템플릿을 표시합니다.",
+      "downloadLabel": "\"[{{label}}]\" 가이드 다운로드",
+      "tryDownloadLabel": "이 여행지 가이드 다운로드 시도"
     },
     "expenseSplitter": {
       "me": "나",
@@ -678,7 +688,22 @@
     "about": "~에 대한",
     "privacy": "개인 정보 보호 정책",
     "terms": "서비스 약관",
-    "version": "버전"
+    "version": "버전",
+    "apiKeySettings": {
+      "title": "API 키 설정",
+      "geoapifyLabel": "Geoapify 지오코딩 키",
+      "geoapifyHint": "출시 후 트래픽 급증이나 무료 할당량 초과 시 자체 키를 입력하여 지오코딩 서비스를 계속 이용할 수 있습니다.",
+      "applyLink": "무료 키 신청하기",
+      "inputPlaceholder": "Geoapify API 키를 붙여넣기",
+      "save": "저장",
+      "clear": "지우기",
+      "statusBuiltIn": "현재 사용 중: 내장 키",
+      "statusCustom": "현재 사용 중: 사용자 키",
+      "statusNone": "키 미설정 (대체 수단 사용 중)",
+      "quotaExceeded": "지오코딩 서비스 할당량이 초과되었습니다. 자체 API 키를 설정해 주세요.",
+      "saved": "키가 저장되었습니다",
+      "cleared": "사용자 키가 삭제되었습니다"
+    }
   },
   "errors": {
     "required": "이 필드는 필수입니다",

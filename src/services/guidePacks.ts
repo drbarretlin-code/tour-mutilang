@@ -146,3 +146,83 @@ export async function fetchGuidePack(key: string, options: FetchGuidePackOptions
 
   return data;
 }
+
+const COUNTRY_NAME_TO_KEY: Record<string, string> = {
+  '印度': 'india', 'india': 'india', 'インド': 'india', '인도': 'india',
+  '印尼': 'indonesia', '印度尼西亞': 'indonesia', 'indonesia': 'indonesia',
+  '土耳其': 'turkey', 'turkey': 'turkey', 'türkiye': 'turkey',
+  '埃及': 'egypt', 'egypt': 'egypt',
+  '希臘': 'greece', '希腊': 'greece', 'greece': 'greece',
+  '西班牙': 'spain', 'spain': 'spain', 'españa': 'spain',
+  '葡萄牙': 'portugal', 'portugal': 'portugal',
+  '德國': 'germany', '德国': 'germany', 'germany': 'germany',
+  '荷蘭': 'netherlands', '荷兰': 'netherlands', 'netherlands': 'netherlands',
+  '瑞士': 'switzerland', 'switzerland': 'switzerland',
+  '奧地利': 'austria', '奥地利': 'austria', 'austria': 'austria',
+  '加拿大': 'canada', 'canada': 'canada',
+  '墨西哥': 'mexico', 'mexico': 'mexico', 'méxico': 'mexico',
+  '巴西': 'brazil', 'brazil': 'brazil', 'brasil': 'brazil',
+  '紐西蘭': 'newzealand', '新西蘭': 'newzealand', 'new zealand': 'newzealand',
+  '菲律賓': 'philippines', '菲律宾': 'philippines', 'philippines': 'philippines',
+  '柬埔寨': 'cambodia', 'cambodia': 'cambodia',
+  '緬甸': 'myanmar', 'myanmar': 'myanmar',
+  '寮國': 'laos', '老挝': 'laos', 'laos': 'laos',
+  '斯里蘭卡': 'srilanka', 'sri lanka': 'srilanka',
+  '尼泊爾': 'nepal', 'nepal': 'nepal',
+  '摩洛哥': 'morocco', 'morocco': 'morocco',
+  '南非': 'southafrica', 'south africa': 'southafrica',
+  '俄羅斯': 'russia', 'rossiya': 'russia', 'russia': 'russia', '俄罗斯': 'russia',
+  '克羅埃西亞': 'croatia', 'croatia': 'croatia',
+  '捷克': 'czechia', 'czech': 'czechia', 'czechia': 'czechia',
+  '匈牙利': 'hungary', 'hungary': 'hungary',
+  '波蘭': 'poland', '波兰': 'poland', 'poland': 'poland',
+  '瑞典': 'sweden', 'sweden': 'sweden',
+  '挪威': 'norway', 'norway': 'norway',
+  '芬蘭': 'finland', '芬兰': 'finland', 'finland': 'finland',
+  '丹麥': 'denmark', '丹麦': 'denmark', 'denmark': 'denmark',
+  '冰島': 'iceland', 'iceland': 'iceland',
+  '阿聯酋': 'uae', '阿联酋': 'uae', 'uae': 'uae', 'united arab emirates': 'uae',
+  '杜拜': 'uae', 'dubai': 'uae',
+  '以色列': 'israel', 'israel': 'israel',
+  '約旦': 'jordan', 'jordan': 'jordan',
+  '秘魯': 'peru', 'peru': 'peru', 'perú': 'peru',
+  '阿根廷': 'argentina', 'argentina': 'argentina',
+  '智利': 'chile', 'chile': 'chile',
+  '哥倫比亞': 'colombia', 'colombia': 'colombia',
+  '古巴': 'cuba', 'cuba': 'cuba',
+};
+
+/** Converts arbitrary country names to lowercase key suitable for guide packs. */
+export function normalizeCountryKey(country: string): string | null {
+  if (!country) return null;
+  
+  // 1) Try existing detectGuideCountryKey
+  const detected = detectGuideCountryKey(country);
+  if (detected) return detected;
+
+  const normalized = country.toLowerCase().trim();
+
+  // 2) Try direct mapping lookup
+  if (COUNTRY_NAME_TO_KEY[normalized]) {
+    return COUNTRY_NAME_TO_KEY[normalized];
+  }
+
+  // 3) Try extracting words (for multi-word inputs like "Republic of India")
+  const words = normalized.replace(/[^a-z\s]/g, '').split(/\s+/);
+  for (const w of words) {
+    if (w && COUNTRY_NAME_TO_KEY[w]) {
+      return COUNTRY_NAME_TO_KEY[w];
+    }
+    if (w && Object.values(COUNTRY_NAME_TO_KEY).includes(w)) {
+      return w;
+    }
+  }
+
+  return null;
+}
+
+/** Try to download unlisted guide pack directly from base URL */
+export async function tryFetchUnlistedGuidePack(key: string, options: FetchGuidePackOptions = {}): Promise<any> {
+  return fetchGuidePack(key, options);
+}
+

@@ -13,6 +13,7 @@ import { ItineraryCard } from '../src/components/dashboard/ItineraryCard';
 import { t } from '../src/i18n';
 import { LanguagePicker } from '../src/components/common/LanguagePicker';
 import { useLanguage } from '../src/context/LanguageContext';
+import { ApiKeySettings } from '../src/components/common/ApiKeySettings';
 
 const OFFLINE_ITINERARIES_LIST_KEY = '@trip_cached_itineraries_list';
 
@@ -23,6 +24,7 @@ export default function HomeDashboard() {
   const { locale } = useLanguage();
   const router = useRouter();
 
+  const [showApiSettings, setShowApiSettings] = useState(false);
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
   const [loadingList, setLoadingList] = useState(true);
 
@@ -209,6 +211,9 @@ export default function HomeDashboard() {
             </View>
           </View>
           <View style={styles.headerRight}>
+            <TouchableOpacity onPress={() => setShowApiSettings(prev => !prev)} style={styles.iconBtn}>
+              <Ionicons name="settings-outline" size={24} color={colors.textSecondary} />
+            </TouchableOpacity>
             <LanguagePicker />
             <TouchableOpacity onPress={handleLogout} style={styles.iconBtn}>
               <Ionicons name="log-out-outline" size={24} color={colors.textSecondary} />
@@ -255,6 +260,8 @@ export default function HomeDashboard() {
                 </Text>
                 <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
               </TouchableOpacity>
+
+              <ApiKeySettings visible={showApiSettings} />
             </View>
 
             {/* Empty State / Loading State */}

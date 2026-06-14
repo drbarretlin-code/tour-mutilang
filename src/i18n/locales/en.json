@@ -463,7 +463,16 @@
         "translator": "Two-way Voice Translator",
         "openTool": "Open Tool",
         "applyApiKey": "Get API KEY"
-      }
+      },
+      "tryDownload": "Try Download Guide",
+      "downloading": "Downloading...",
+      "downloadNotAvailable": "No online guide template is available for this destination. Please verify the destination name and try again to avoid planning errors.",
+      "coveredCountries": "This is a built-in offline guide template, currently covering: {{countries}}.",
+      "coveredInfo": "This is a curated offline guide optimized for this destination, available offline.",
+      "notCoveredWithDownload": "Destination \"{{label}}\" is not yet covered. Showing generic international template.",
+      "noGuideTemplate": "No matching offline guide template for this destination. Showing generic international template.",
+      "downloadLabel": "Download \"{{label}}\" Guide",
+      "tryDownloadLabel": "Try downloading guide for this destination"
     },
     "expenseSplitter": {
       "me": "Me",
@@ -705,7 +714,22 @@
     "about": "About",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
-    "version": "Version"
+    "version": "Version",
+    "apiKeySettings": {
+      "title": "API Key Settings",
+      "geoapifyLabel": "Geoapify Geocoding Key",
+      "geoapifyHint": "If you encounter traffic spikes or quota limits after launch, enter your own key to continue using the geocoding service.",
+      "applyLink": "Apply for a Free Key",
+      "inputPlaceholder": "Paste your Geoapify API Key",
+      "save": "Save",
+      "clear": "Clear",
+      "statusBuiltIn": "Currently using: Built-in key",
+      "statusCustom": "Currently using: Custom key",
+      "statusNone": "No key set (using fallback)",
+      "quotaExceeded": "Geocoding service quota exceeded. Please set your own API key to continue.",
+      "saved": "Key saved",
+      "cleared": "Custom key cleared"
+    }
   },
   "errors": {
     "required": "This field is required",

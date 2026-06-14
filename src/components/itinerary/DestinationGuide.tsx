@@ -7,7 +7,7 @@ import { aiService } from '../../services/ai';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { t } from '../../i18n';
 import { usePAC } from '../../context/PACContext';
-import { COVERED_GUIDE_COUNTRIES, fetchGuidePack } from '../../services/guidePacks';
+import { COVERED_GUIDE_COUNTRIES, fetchGuidePack, tryFetchUnlistedGuidePack } from '../../services/guidePacks';
 import { useResponsive } from '../../hooks/useResponsive';
 import { PACEngine } from '../../services/pac';
 import { getFallbackGuideInfo } from '../../services/ai';
@@ -231,6 +231,32 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
     }
   };
 
+  const handleTryDownloadUnlisted = async () => {
+    const candidateKey = guideData?.candidateKey;
+    if (!candidateKey || downloading) return;
+
+    setDownloading(true);
+    try {
+      const pack = await PACEngine.executeWithHealing(
+        () => tryFetchUnlistedGuidePack(candidateKey),
+        () => getFallbackGuideInfo(candidateKey),
+        `tryFetchGuidePack_${candidateKey}`,
+        2, // fewer retries for unlisted
+        ['GUIDE_PACK_NOT_FOUND', 'GUIDE_PACK_INVALID']
+      );
+      await cacheSet(`@guide_pack_${candidateKey}`, JSON.stringify(pack));
+      await cacheSet(`@guide_data_${getCountryName()}`, '');
+      await loadGuideData();
+    } catch (e) {
+      console.warn('[DestinationGuide] Unlisted guide pack download failed:', e);
+      const message = t('itinerary.destinationGuide.downloadNotAvailable');
+      if (Platform.OS === 'web') window.alert(message);
+      else Alert.alert(t('itinerary.destinationGuide.tryDownload'), message);
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
       
@@ -276,17 +302,17 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
             />
             <Text style={[typography.bodySmall, { color: colors.primary700, flex: 1 }]}>
               {guideData.isCovered
-                ? '本頁為精選離線指南，內容已為此目的地最佳化，離線亦可使用。'
-                : `此頁為內建離線指南範本，目前精選涵蓋：${COVERED_GUIDE_COUNTRIES.map(c => c.label).join('／')}。`}
+                ? t('itinerary.destinationGuide.coveredInfo')
+                : t('itinerary.destinationGuide.coveredCountries', { countries: COVERED_GUIDE_COUNTRIES.map(c => c.label).join('／') })}
             </Text>
           </View>
 
           {!guideData.isCovered && (
             <View style={{ marginTop: 8 }}>
-              <Text style={[typography.bodySmall, { color: colors.primary700, marginBottom: guideData.downloadableCountry ? 8 : 0 }]}>
+              <Text style={[typography.bodySmall, { color: colors.primary700, marginBottom: (guideData.downloadableCountry || guideData.candidateKey) ? 8 : 0 }]}>
                 {guideData.downloadableCountry
-                  ? `目的地「${guideData.downloadableCountry.label}」尚未涵蓋，目前顯示通用國際範本。`
-                  : '此目的地尚無對應的離線指南範本，目前顯示通用國際範本。'}
+                  ? t('itinerary.destinationGuide.notCoveredWithDownload', { label: guideData.downloadableCountry.label })
+                  : t('itinerary.destinationGuide.noGuideTemplate')}
               </Text>
               {guideData.downloadableCountry && (
                 <TouchableOpacity
@@ -299,7 +325,22 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
                     : <Ionicons name="cloud-download-outline" size={16} color="#fff" style={{ marginRight: 6 }} />
                   }
                   <Text style={[typography.labelMedium, { color: '#fff', fontWeight: '700' }]}>
-                    {downloading ? '下載中...' : `下載「${guideData.downloadableCountry.label}」專屬指南`}
+                    {downloading ? t('itinerary.destinationGuide.downloading') : t('itinerary.destinationGuide.downloadLabel', { label: guideData.downloadableCountry.label })}
+                  </Text>
+                </TouchableOpacity>
+              )}
+              {!guideData.downloadableCountry && guideData.candidateKey && (
+                <TouchableOpacity
+                  style={[styles.downloadBtn, { backgroundColor: colors.primary500, borderRadius: borderRadius.md, opacity: downloading ? 0.6 : 1 }]}
+                  onPress={handleTryDownloadUnlisted}
+                  disabled={downloading}
+                >
+                  {downloading
+                    ? <ActivityIndicator size="small" color="#fff" />
+                    : <Ionicons name="cloud-download-outline" size={16} color="#fff" style={{ marginRight: 6 }} />
+                  }
+                  <Text style={[typography.labelMedium, { color: '#fff', fontWeight: '700' }]}>
+                    {downloading ? t('itinerary.destinationGuide.downloading') : t('itinerary.destinationGuide.tryDownloadLabel')}
                   </Text>
                 </TouchableOpacity>
               )}

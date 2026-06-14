@@ -447,8 +447,18 @@
       "phrases": {
         "title": "☕ Hướng dẫn ngôn ngữ thực tế",
         "translator": "1. Trang web dịch giọng nói hai chiều",
-        "openTool": "Mở công cụ"
-      }
+        "openTool": "Mở công cụ",
+        "applyApiKey": "Đăng ký API KEY"
+      },
+      "tryDownload": "Thử tải hướng dẫn",
+      "downloading": "Đang tải...",
+      "downloadNotAvailable": "Hiện chưa có mẫu hướng dẫn trực tuyến cho điểm đến này. Vui lòng xác nhận tên điểm đến và thử lại.",
+      "coveredCountries": "Đây là mẫu hướng dẫn ngoại tuyến tích hợp, hiện bao gồm: {{countries}}.",
+      "coveredInfo": "Đây là hướng dẫn ngoại tuyến được chọn lọc cho điểm đến này, có thể dùng khi ngoại tuyến.",
+      "notCoveredWithDownload": "Điểm đến \"{{label}}\" chưa được bao gồm. Đang hiển thị mẫu quốc tế chung.",
+      "noGuideTemplate": "Không có mẫu hướng dẫn ngoại tuyến cho điểm đến này. Đang hiển thị mẫu quốc tế chung.",
+      "downloadLabel": "Tải hướng dẫn \"{{label}}\"",
+      "tryDownloadLabel": "Thử tải hướng dẫn cho điểm đến này"
     },
     "expenseSplitter": {
       "me": "TÔI",
@@ -678,7 +688,22 @@
     "about": "Về",
     "privacy": "chính sách bảo mật",
     "terms": "Điều khoản dịch vụ",
-    "version": "Phiên bản"
+    "version": "Phiên bản",
+    "apiKeySettings": {
+      "title": "Cài đặt API Key",
+      "geoapifyLabel": "Khóa Geoapify Geocoding",
+      "geoapifyHint": "Nếu gặp tình trạng tăng đột biến lưu lượng hoặc vượt quá hạn mức miễn phí sau khi ra mắt, bạn có thể nhập khóa cá nhân để tiếp tục sử dụng dịch vụ geocoding.",
+      "applyLink": "Đăng ký khóa miễn phí",
+      "inputPlaceholder": "Dán API Key Geoapify của bạn",
+      "save": "Lưu",
+      "clear": "Xóa",
+      "statusBuiltIn": "Đang dùng: Khóa tích hợp",
+      "statusCustom": "Đang dùng: Khóa tùy chỉnh",
+      "statusNone": "Chưa đặt khóa (dùng dự phòng)",
+      "quotaExceeded": "Hạn mức dịch vụ geocoding đã vượt quá. Vui lòng đặt API key của bạn để tiếp tục.",
+      "saved": "Đã lưu khóa",
+      "cleared": "Đã xóa khóa tùy chỉnh"
+    }
   },
   "errors": {
     "required": "Trường này là bắt buộc",

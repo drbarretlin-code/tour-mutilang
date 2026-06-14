@@ -447,8 +447,18 @@
       "phrases": {
         "title": "☕ Guía práctica de idiomas",
         "translator": "1. Página web de traducción de voz bidireccional",
-        "openTool": "Abrir herramienta"
-      }
+        "openTool": "Abrir herramienta",
+        "applyApiKey": "Solicitar clave API"
+      },
+      "tryDownload": "Intentar descargar guía",
+      "downloading": "Descargando...",
+      "downloadNotAvailable": "Actualmente no hay una plantilla de guía en línea para este destino. Verifique el nombre del destino e intente de nuevo.",
+      "coveredCountries": "Esta es una plantilla de guía sin conexión integrada, que cubre: {{countries}}.",
+      "coveredInfo": "Esta es una guía sin conexión seleccionada optimizada para este destino, disponible sin conexión.",
+      "notCoveredWithDownload": "El destino \"{{label}}\" aún no está cubierto. Mostrando plantilla internacional genérica.",
+      "noGuideTemplate": "No hay plantilla de guía sin conexión para este destino. Mostrando plantilla internacional genérica.",
+      "downloadLabel": "Descargar guía \"{{label}}\"",
+      "tryDownloadLabel": "Intentar descargar guía para este destino"
     },
     "expenseSplitter": {
       "me": "I",
@@ -678,7 +688,22 @@
     "about": "acerca de",
     "privacy": "política de privacidad",
     "terms": "Términos de servicio",
-    "version": "Versión"
+    "version": "Versión",
+    "apiKeySettings": {
+      "title": "Configuración de clave API",
+      "geoapifyLabel": "Clave de Geoapify Geocoding",
+      "geoapifyHint": "Si experimenta picos de tráfico o se excede la cuota gratuita tras el lanzamiento, puede ingresar su propia clave para seguir utilizando el servicio de geocodificación.",
+      "applyLink": "Solicitar clave gratuita",
+      "inputPlaceholder": "Pegue su clave API de Geoapify",
+      "save": "Guardar",
+      "clear": "Borrar",
+      "statusBuiltIn": "En uso: Clave integrada",
+      "statusCustom": "En uso: Clave personalizada",
+      "statusNone": "Sin clave configurada (usando respaldo)",
+      "quotaExceeded": "Se ha excedido la cuota del servicio de geocodificación. Configure su propia clave API para continuar.",
+      "saved": "Clave guardada",
+      "cleared": "Clave personalizada eliminada"
+    }
   },
   "errors": {
     "required": "Este campo es obligatorio",

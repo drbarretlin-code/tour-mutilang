@@ -447,8 +447,18 @@
       "phrases": {
         "title": "☕ Panduan bahasa praktikal",
         "translator": "1. Halaman web terjemahan suara dua hala",
-        "openTool": "Buka alat"
-      }
+        "openTool": "Buka alat",
+        "applyApiKey": "Mohon KUNCI API"
+      },
+      "tryDownload": "Cuba Muat Turun Panduan",
+      "downloading": "Memuat turun...",
+      "downloadNotAvailable": "Templat panduan dalam talian belum tersedia untuk destinasi ini. Sila sahkan nama destinasi dan cuba lagi.",
+      "coveredCountries": "Halaman ini ialah templat panduan luar talian terbina dalam, meliputi: {{countries}}.",
+      "coveredInfo": "Halaman ini ialah panduan luar talian terpilih untuk destinasi ini, boleh digunakan tanpa talian.",
+      "notCoveredWithDownload": "Destinasi \"{{label}}\" belum diliputi. Menunjukkan templat antarabangsa umum.",
+      "noGuideTemplate": "Tiada templat panduan luar talian untuk destinasi ini. Menunjukkan templat antarabangsa umum.",
+      "downloadLabel": "Muat Turun Panduan \"{{label}}\"",
+      "tryDownloadLabel": "Cuba muat turun panduan untuk destinasi ini"
     },
     "expenseSplitter": {
       "me": "saya",
@@ -678,7 +688,22 @@
     "about": "kira-kira",
     "privacy": "dasar privasi",
     "terms": "Syarat Perkhidmatan",
-    "version": "Versi"
+    "version": "Versi",
+    "apiKeySettings": {
+      "title": "Tetapan Kunci API",
+      "geoapifyLabel": "Kunci Geoapify Geocoding",
+      "geoapifyHint": "Jika mengalami lonjakan trafik atau kuota percuma melebihi had selepas pelancaran, anda boleh memasukkan kunci peribadi untuk terus menggunakan perkhidmatan geocoding.",
+      "applyLink": "Mohon Kunci Percuma",
+      "inputPlaceholder": "Tampal Kunci API Geoapify anda",
+      "save": "Simpan",
+      "clear": "Padam",
+      "statusBuiltIn": "Sedang digunakan: Kunci terbina dalam",
+      "statusCustom": "Sedang digunakan: Kunci tersuai",
+      "statusNone": "Tiada kunci ditetapkan (guna sandaran)",
+      "quotaExceeded": "Kuota perkhidmatan geocoding telah melebihi had. Sila tetapkan kunci API anda sendiri.",
+      "saved": "Kunci disimpan",
+      "cleared": "Kunci tersuai dipadamkan"
+    }
   },
   "errors": {
     "required": "Medan ini diperlukan",

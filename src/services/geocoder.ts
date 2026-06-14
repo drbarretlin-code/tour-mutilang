@@ -38,7 +38,45 @@ function localeToGeoLang(locale: string): string {
   return 'en';
 }
 
+const USER_GEOAPIFY_KEY = '@user_geoapify_key';
+let _userKeyCache: string | null | undefined = undefined; // undefined = not loaded yet
+
+/** Load user's custom Geoapify key from AsyncStorage into memory cache. Call once at app startup. */
+export async function loadUserGeoapifyKey(): Promise<void> {
+  try {
+    _userKeyCache = await AsyncStorage.getItem(USER_GEOAPIFY_KEY);
+  } catch {
+    _userKeyCache = null;
+  }
+}
+
+/** Save a user-provided Geoapify key (persists to AsyncStorage + updates in-memory cache). */
+export async function setUserGeoapifyKey(key: string): Promise<void> {
+  const trimmed = (key || '').trim();
+  if (!trimmed) return clearUserGeoapifyKey();
+  _userKeyCache = trimmed;
+  try {
+    await AsyncStorage.setItem(USER_GEOAPIFY_KEY, trimmed);
+  } catch { /* ignore */ }
+}
+
+/** Clear user-provided Geoapify key. */
+export async function clearUserGeoapifyKey(): Promise<void> {
+  _userKeyCache = null;
+  try {
+    await AsyncStorage.removeItem(USER_GEOAPIFY_KEY);
+  } catch { /* ignore */ }
+}
+
+/** Get the currently active user key (from cache, synchronous). Returns null if none set. */
+export function getUserGeoapifyKey(): string | null {
+  return _userKeyCache || null;
+}
+
 function geoapifyKey(): string | null {
+  // 1) 使用者自訂金鑰（運行時覆寫）優先
+  if (_userKeyCache) return _userKeyCache;
+  // 2) 環境變數內建金鑰
   return (typeof process !== 'undefined' && process.env.EXPO_PUBLIC_GEOAPIFY_KEY) || null;
 }
 
@@ -52,6 +90,16 @@ async function fetchWithTimeout(url: string, ms: number, headers?: Record<string
   }
 }
 
+let _quotaExceeded = false;
+
+export function isGeoapifyQuotaExceeded(): boolean {
+  return _quotaExceeded;
+}
+
+export function resetQuotaExceededFlag(): void {
+  _quotaExceeded = false;
+}
+
 /** 以 Geoapify 進行地理編碼（需金鑰）。失敗回 null。 */
 async function geocodeViaGeoapify(query: string, lang: string): Promise<GeoCoords | null> {
   const key = geoapifyKey();
@@ -61,6 +109,9 @@ async function geocodeViaGeoapify(query: string, lang: string): Promise<GeoCoord
       + `?text=${encodeURIComponent(query)}&type=city&format=json&limit=1&lang=${lang}&apiKey=${encodeURIComponent(key)}`;
     const res = await fetchWithTimeout(url, 6000);
     if (!res.ok) {
+      if (res.status === 402 || res.status === 429) {
+        _quotaExceeded = true;
+      }
       logger.warn(`Geoapify 回傳 ${res.status}。`);
       return null;
     }
@@ -148,7 +199,8 @@ export async function geocodeDestination(
 }
 
 /** 診斷目前地理編碼器設定（供啟動自檢顯示）。 */
-export function getGeocoderStatus(): { provider: 'geoapify' | 'nominatim'; hasKey: boolean } {
-  const hasKey = !!geoapifyKey();
-  return { provider: hasKey ? 'geoapify' : 'nominatim', hasKey };
+export function getGeocoderStatus(): { provider: 'geoapify' | 'nominatim'; hasKey: boolean; isUserKey: boolean } {
+  const userKey = getUserGeoapifyKey();
+  const hasKey = !!userKey || !!((typeof process !== 'undefined' && process.env.EXPO_PUBLIC_GEOAPIFY_KEY));
+  return { provider: hasKey ? 'geoapify' : 'nominatim', hasKey, isUserKey: !!userKey };
 }

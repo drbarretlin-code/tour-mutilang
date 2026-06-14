@@ -447,8 +447,18 @@
       "phrases": {
         "title": "☕ 実践的な言語ガイド",
         "translator": "1.双方向音声翻訳Webページ",
-        "openTool": "ツールを開く"
-      }
+        "openTool": "ツールを開く",
+        "applyApiKey": "APIキーを取得"
+      },
+      "tryDownload": "ガイドのダウンロードを試す",
+      "downloading": "ダウンロード中...",
+      "downloadNotAvailable": "この目的地のオンラインガイドテンプレートは現在利用できません。目的地名を確認して再度お試しください。",
+      "coveredCountries": "このページは内蔵オフラインガイドテンプレートです。現在の対象地域：{{countries}}。",
+      "coveredInfo": "このページはこの目的地に最適化された厳選オフラインガイドです。オフラインでもご利用いただけます。",
+      "notCoveredWithDownload": "目的地「{{label}}」はまだ対象外です。汎用国際テンプレートを表示しています。",
+      "noGuideTemplate": "この目的地に対応するオフラインガイドテンプレートはありません。汎用国際テンプレートを表示しています。",
+      "downloadLabel": "「{{label}}」ガイドをダウンロード",
+      "tryDownloadLabel": "この目的地のガイドのダウンロードを試す"
     },
     "expenseSplitter": {
       "me": "私",
@@ -678,7 +688,22 @@
     "about": "アプリについて",
     "privacy": "プライバシーポリシー",
     "terms": "利用規約",
-    "version": "バージョン"
+    "version": "バージョン",
+    "apiKeySettings": {
+      "title": "APIキー設定",
+      "geoapifyLabel": "Geoapify ジオコーディングキー",
+      "geoapifyHint": "リリース後にトラフィックの急増や無料枠の超過が発生した場合、ご自身のキーを入力してジオコーディングサービスを引き続きご利用いただけます。",
+      "applyLink": "無料キーを申請する",
+      "inputPlaceholder": "Geoapify APIキーを貼り付け",
+      "save": "保存",
+      "clear": "クリア",
+      "statusBuiltIn": "現在使用中：内蔵キー",
+      "statusCustom": "現在使用中：カスタムキー",
+      "statusNone": "キー未設定（フォールバック使用中）",
+      "quotaExceeded": "ジオコーディングサービスの利用枠を超過しました。ご自身のAPIキーを設定してください。",
+      "saved": "キーを保存しました",
+      "cleared": "カスタムキーをクリアしました"
+    }
   },
   "errors": {
     "required": "この項目は必須です",

@@ -447,8 +447,18 @@
       "phrases": {
         "title": "☕ Guia prático de idiomas",
         "translator": "1. Página da web de tradução de voz bidirecional",
-        "openTool": "Ferramenta aberta"
-      }
+        "openTool": "Ferramenta aberta",
+        "applyApiKey": "Solicitar chave API"
+      },
+      "tryDownload": "Tentar transferir guia",
+      "downloading": "A transferir...",
+      "downloadNotAvailable": "Atualmente não há modelo de guia online para este destino. Verifique o nome do destino e tente novamente.",
+      "coveredCountries": "Esta é uma modelo de guia offline integrado, cobrindo: {{countries}}.",
+      "coveredInfo": "Este é um guia offline selecionado otimizado para este destino, disponível offline.",
+      "notCoveredWithDownload": "O destino \"{{label}}\" ainda não está coberto. A mostrar modelo internacional genérico.",
+      "noGuideTemplate": "Não há modelo de guia offline para este destino. A mostrar modelo internacional genérico.",
+      "downloadLabel": "Transferir guia \"{{label}}\"",
+      "tryDownloadLabel": "Tentar transferir guia para este destino"
     },
     "expenseSplitter": {
       "me": "EU",
@@ -678,7 +688,22 @@
     "about": "sobre",
     "privacy": "política de Privacidade",
     "terms": "Termos de Serviço",
-    "version": "Versão"
+    "version": "Versão",
+    "apiKeySettings": {
+      "title": "Configuração de Chave API",
+      "geoapifyLabel": "Chave Geoapify Geocoding",
+      "geoapifyHint": "Se enfrentar picos de tráfego ou exceder a cota gratuita após o lançamento, insira a sua chave pessoal para continuar a utilizar o serviço de geocodificação.",
+      "applyLink": "Solicitar Chave Gratuita",
+      "inputPlaceholder": "Cole a sua chave API Geoapify",
+      "save": "Guardar",
+      "clear": "Limpar",
+      "statusBuiltIn": "Em uso: Chave integrada",
+      "statusCustom": "Em uso: Chave personalizada",
+      "statusNone": "Sem chave configurada (a usar alternativa)",
+      "quotaExceeded": "A cota do serviço de geocodificação foi excedida. Configure a sua própria chave API para continuar.",
+      "saved": "Chave guardada",
+      "cleared": "Chave personalizada removida"
+    }
   },
   "errors": {
     "required": "Este campo é obrigatório",
