@@ -447,6 +447,56 @@ const TRANSIT_LABELS: Record<string, {
   }
 };
 
+const getDayOfWeek = (dateStr: string): number => {
+  const d = new Date(dateStr);
+  return d.getDay();
+};
+
+const isTimeConflict = (startTime: string, endTime: string, openingHours?: string): boolean => {
+  if (!openingHours || openingHours === '24小時開放' || openingHours.includes('24小時') || openingHours.toLowerCase().includes('24 hours')) {
+    return false;
+  }
+  const parseTime = (timeStr: string): number => {
+    if (!timeStr) return 0;
+    const parts = timeStr.split(':');
+    return (parseInt(parts[0]) || 0) * 60 + (parseInt(parts[1]) || 0);
+  };
+  const parts = openingHours.split('-');
+  if (parts.length !== 2) return false;
+  const openMin = parseTime(parts[0].trim());
+  const closeMin = parseTime(parts[1].trim());
+  const startMin = parseTime(startTime);
+  const endMin = parseTime(endTime);
+  if (closeMin < openMin) {
+    return !(startMin >= openMin || startMin <= closeMin) || !(endMin >= openMin || endMin <= closeMin);
+  }
+  return startMin < openMin || endMin > closeMin;
+};
+
+const checkAttractionWarning = (act: any, dateStr: string, isEn: boolean): string[] => {
+  const warnings: string[] = [];
+  if (!act || (act.type !== 'activity' && act.type !== 'attraction')) return warnings;
+  if (act.openingHours) {
+    if (isTimeConflict(act.startTime, act.endTime, act.openingHours)) {
+      warnings.push(isEn 
+        ? `⚠️ Warning: Scheduled outside opening hours (${act.openingHours}).` 
+        : `⚠️ 警示：此時間段景點已關閉（營業時間：${act.openingHours}）。`
+      );
+    }
+    const dayOfWeek = getDayOfWeek(dateStr);
+    const titleLower = (act.title || '').toLowerCase();
+    const typeLower = (act.type || '').toLowerCase();
+    const isMuseum = titleLower.includes('博物館') || titleLower.includes('museum') || typeLower.includes('museum');
+    if (dayOfWeek === 1 && isMuseum) {
+      warnings.push(isEn 
+        ? `⚠️ Attention: Museums are often closed on Mondays.` 
+        : `⚠️ 注意：此時間段景點可能公休（部分博物館週一公休）。`
+      );
+    }
+  }
+  return warnings;
+};
+
 export function TimelineView({
   day,
   onMoveActivity,
@@ -848,6 +898,31 @@ export function TimelineView({
                         </TouchableOpacity>
                       )}
                     </View>
+
+                    {/* Schedule Conflicts & Day-off Warning Banner */}
+                    {(() => {
+                      const warnings = checkAttractionWarning(act, day.date, isEn);
+                      if (!warnings.length) return null;
+                      return (
+                        <View style={{
+                          backgroundColor: colors.warning50,
+                          borderColor: colors.warning200,
+                          borderWidth: 1,
+                          borderRadius: borderRadius.sm,
+                          padding: 8,
+                          marginTop: 8,
+                          gap: 4
+                        }}>
+                          {warnings.map((w, idx) => (
+                            <View key={idx} style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                              <Text style={[typography.bodySmall, { color: colors.warning800, flex: 1, lineHeight: 16 }]}>
+                                {w}
+                              </Text>
+                            </View>
+                          ))}
+                        </View>
+                      );
+                    })()}
 
                     <Text style={[typography.titleMedium, { color: '#0F172A', fontWeight: '800', marginTop: 8 }]}>
                       {renderActivityTitle(act)}

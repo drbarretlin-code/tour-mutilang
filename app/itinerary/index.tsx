@@ -7,7 +7,8 @@ import { useTheme } from '../../src/context/ThemeContext';
 import { DailySummaryCard } from '../../src/components/itinerary/DailySummaryCard';
 import { TimelineView } from '../../src/components/itinerary/TimelineView';
 import { MapFallbackView, getDayRouteNavigationUrl } from '../../src/components/itinerary/MapFallbackView';
-import { PackingChecklist } from '../../src/components/itinerary/PackingChecklist';
+import { PackingList } from '../../src/components/itinerary/PackingList';
+import { ItineraryCollaborator } from '../../src/components/itinerary/ItineraryCollaborator';
 import { DestinationGuide } from '../../src/components/itinerary/DestinationGuide';
 import { Itinerary3DMap } from '../../src/components/itinerary/Itinerary3DMap';
 import { CombinedItineraryView } from '../../src/components/itinerary/CombinedItineraryView';
@@ -62,7 +63,7 @@ const OFFLINE_ITINERARY_KEY = '@trip_active_itinerary';
 const OFFLINE_SURVEY_KEY = '@trip_active_survey';
 
 
-type ViewMode = 'timeline' | 'map' | 'checklist' | 'guide';
+type ViewMode = 'timeline' | 'map' | 'checklist' | 'guide' | 'collaborator';
 
 export default function ItineraryScreen() {
   const { survey: contextSurvey, activeItinerary: contextItinerary, updateSurvey } = useSurvey();
@@ -74,7 +75,7 @@ export default function ItineraryScreen() {
   const [loading, setLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(false);
   const [regenerating, setRegenerating] = useState(false);
-  const [viewMode, setViewMode] = useState<'timeline' | 'map' | 'checklist' | 'guide'>('timeline');
+  const [viewMode, setViewMode] = useState<ViewMode>('timeline');
   const [activeDay, setActiveDay] = useState<number>(1);
   const [isNavExpanded, setIsNavExpanded] = useState<boolean>(true);
   const [editingActivityId, setEditingActivityId] = useState<string | null>(null);
@@ -575,9 +576,16 @@ export default function ItineraryScreen() {
       {/* timeline and map modes are now handled by CombinedItineraryView directly in the main layout */}
 
       {viewMode === 'checklist' && (
-        <PackingChecklist
+        <PackingList
           itinerary={activeItinerary}
-          survey={contextSurvey}
+          survey={contextSurvey!}
+        />
+      )}
+
+      {viewMode === 'collaborator' && (
+        <ItineraryCollaborator
+          itinerary={activeItinerary}
+          survey={contextSurvey!}
         />
       )}
 
@@ -899,6 +907,7 @@ export default function ItineraryScreen() {
                   { code: 'timeline', label: t('itinerary.tabs.timeline'), icon: 'map' },
                   { code: 'guide', label: t('itinerary.tabs.guide'), icon: 'compass-outline' },
                   { code: 'checklist', label: t('itinerary.tabs.checklist'), icon: 'checkbox-outline' },
+                  { code: 'collaborator', label: !locale.startsWith('zh') ? 'Collaboration' : '協同投票', icon: 'people-outline' },
                 ].map((mode) => {
                   const isSelected = viewMode === mode.code;
                   return (

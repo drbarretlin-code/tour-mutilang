@@ -32,6 +32,123 @@ interface Props {
   countryName?: string;
 }
 
+interface WeatherAdvice {
+  season: string;
+  tempRange: string;
+  description: string;
+  clothing: string;
+  tips: string[];
+}
+
+const getWeatherAdvice = (country: string, month: number, isEn: boolean): WeatherAdvice => {
+  const cLower = country.toLowerCase();
+  const isTropical = cLower.includes('泰國') || cLower.includes('thailand') ||
+                     cLower.includes('新加坡') || cLower.includes('singapore') ||
+                     cLower.includes('馬來西亞') || cLower.includes('malaysia') ||
+                     cLower.includes('菲律賓') || cLower.includes('philippines') ||
+                     cLower.includes('越南') || cLower.includes('vietnam') ||
+                     cLower.includes('印尼') || cLower.includes('indonesia') ||
+                     cLower.includes('曼谷') || cLower.includes('bangkok') ||
+                     cLower.includes('普吉') || cLower.includes('phuket') ||
+                     cLower.includes('峇里') || cLower.includes('bali');
+
+  if (isTropical) {
+    const isRainy = month >= 5 && month <= 10;
+    if (isRainy) {
+      return {
+        season: isEn ? 'Rainy Season (Monsoon)' : '雨季 (季風氣候)',
+        tempRange: '26°C - 33°C',
+        description: isEn 
+          ? 'Hot and humid with frequent rainstorms or afternoon showers.' 
+          : '高溫潮濕，常有午後雷陣雨或持續性降雨。',
+        clothing: isEn 
+          ? 'Light, breathable cotton clothing. Short sleeves and shorts. Wear waterproof sandals.' 
+          : '輕便、透氣防汗的棉質衣物。短袖短褲為佳，建議穿防滑且防水的涼鞋或拖鞋。',
+        tips: isEn 
+          ? ['Always carry an umbrella or light raincoat.', 'Be prepared for sudden heavy downpours.', 'Stay hydrated and use sun protection.'] 
+          : ['隨身攜帶雨具（摺疊傘或輕便雨衣）。', '注意午後強降雨，避免積水路段。', '多喝水防中暑，即使陰天也要注意防曬。']
+      };
+    } else {
+      return {
+        season: isEn ? 'Dry Season (Cooler)' : '乾季 (涼季)',
+        tempRange: '24°C - 32°C',
+        description: isEn 
+          ? 'Sunny and warm, the most comfortable time to visit.' 
+          : '晴朗溫暖，降雨極少，是最適宜旅遊的季節。',
+        clothing: isEn 
+          ? 'Summer clothing, sunglasses, and a sunhat. A light jacket might be useful for strong air conditioning indoors.' 
+          : '夏季清涼衣物，墨鏡及防曬帽。室內冷氣通常較強，建議隨身攜帶薄外套。',
+        tips: isEn 
+          ? ['UV index is very high; apply sunscreen regularly.', 'Great time for outdoor and beach activities.', 'Drink plenty of fluids.'] 
+          : ['紫外線指數高，請定時塗抹防曬乳。', '極適合進行戶外與沙灘活動。', '注意水分補充。']
+      };
+    }
+  }
+  
+  const isWinter = month === 12 || month === 1 || month === 2;
+  const isSpring = month === 3 || month === 4 || month === 5;
+  const isSummer = month === 6 || month === 7 || month === 8;
+  
+  if (isWinter) {
+    const needsHeavyCoat = !cLower.includes('台灣') && !cLower.includes('taiwan');
+    return {
+      season: isEn ? 'Winter' : '冬季',
+      tempRange: needsHeavyCoat ? '-5°C - 8°C' : '12°C - 19°C',
+      description: isEn 
+        ? 'Cold and dry, snow is common in northern areas. Short daylight hours.' 
+        : '寒冷乾燥，北部地區易有降雪或強風，日照時間較短。',
+      clothing: isEn 
+        ? 'Layered clothing: thermal underwear, sweater, heavy coat or down jacket, gloves, and scarf.' 
+        : '洋蔥式穿法：發熱衣、毛衣、防風保暖外套或羽絨衣，並配戴圍巾與防寒手套。',
+      tips: isEn 
+        ? ['Watch out for icy, slippery roads.', 'Moisturize skin to prevent dryness.', 'Double check sunset times before outdoor trips.'] 
+        : ['部分路面可能結冰濕滑，行走請注意防滑。', '天氣乾燥，注意皮膚保濕。', '日落時間較早，室外行程建議提早出發。']
+    };
+  } else if (isSpring) {
+    return {
+      season: isEn ? 'Spring' : '春季',
+      tempRange: '12°C - 22°C',
+      description: isEn 
+        ? 'Pleasant and mild weather. Beautiful cherry blossom and flower seasons.' 
+        : '氣候宜人，冷暖適中。正值櫻花或春季花卉盛開的季節。',
+      clothing: isEn 
+        ? 'Long sleeves, light sweaters, with a windbreaker or denim jacket for chilly mornings and nights.' 
+        : '長袖襯衫、針織衫，早晚溫差大，隨身攜帶防風外套或牛仔外套。',
+      tips: isEn 
+        ? ['Weather can be unpredictable; carry a light jacket.', 'Popular spots can be crowded due to blossom festivals.', 'Allergy season; carry antihistamines if needed.'] 
+        : ['春季天氣多變，建議隨身準備外套。', '花季景點人潮眾多，建議提早規劃交通。', '花粉過敏者請備妥口罩或藥品。']
+    };
+  } else if (isSummer) {
+    return {
+      season: isEn ? 'Summer' : '夏季',
+      tempRange: '25°C - 35°C',
+      description: isEn 
+        ? 'Hot and humid with occasional typhoons or rainy periods.' 
+        : '炎熱潮濕，紫外線強烈，偶有颱風或梅雨鋒面帶來的降雨。',
+      clothing: isEn 
+        ? 'Light t-shirts, shorts, breathable fabrics, and comfortable walking shoes.' 
+        : '短袖 T 恤、短褲、防曬衣物，選擇透氣舒適的鞋子。',
+      tips: isEn 
+        ? ['High risk of heatstroke; stay hydrated.', 'Check weather alerts for typhoons or heavy rain.', 'Sunscreen and insect repellent are essential.'] 
+        : ['高溫炎熱注意防暑，適時補充水分。', '隨時關注颱風或大雨特報。', '防曬乳與防蚊液為必備品。']
+    };
+  } else {
+    return {
+      season: isEn ? 'Autumn' : '秋季',
+      tempRange: '15°C - 24°C',
+      description: isEn 
+        ? 'Cool, dry, and comfortable with autumn leaves. Excellent travel weather.' 
+        : '涼爽乾燥，氣候舒適，楓葉轉紅，是極佳的旅遊季節。',
+      clothing: isEn 
+        ? 'T-shirts with a light cardigan, sweater, or casual jacket. Long pants.' 
+        : '短袖搭配薄針織衫、針織外套，或休閒長袖、薄夾克，下身穿長褲。',
+      tips: isEn 
+        ? ['Excellent time for photography.', 'Warm during the day but cold at night; dress in layers.', 'Pre-book popular foliage viewing locations.'] 
+        : ['天氣晴朗極適合拍照。', '晝夜溫差大，注意保暖防寒。', '賞楓熱門景點建議提前預訂門票或交通。']
+    };
+  }
+};
+
 export function DestinationGuide({ onNavigateToTranslator, countryName }: Props) {
   const { colors, typography, spacing, borderRadius, shadows } = useTheme();
   const { survey } = useSurvey();
@@ -348,6 +465,72 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
           )}
         </View>
       )}
+
+      {/* Weather & Attire Suggestions Card */}
+      {(() => {
+        const start = new Date(survey?.dates?.startDate || Date.now());
+        const month = start.getMonth() + 1;
+        const locale = survey?.locale || 'zh-TW';
+        const isEn = !locale.startsWith('zh');
+        const country = getCountryName();
+        const advice = getWeatherAdvice(country, month, isEn);
+        
+        return (
+          <View style={[styles.card, shadows.sm, { backgroundColor: colors.surface, borderRadius: borderRadius.lg, padding: spacing.lg, marginBottom: spacing.md }]}>
+            <View style={styles.cardHeader}>
+              <View style={styles.headerTitleRow}>
+                <View style={[styles.iconBox, { backgroundColor: '#3B82F6' }]}>
+                  <Ionicons name="sunny-outline" size={18} color="#fff" />
+                </View>
+                <View>
+                  <Text style={[typography.titleLarge, { color: colors.text, fontWeight: '800' }]}>
+                    {isEn ? 'Seasonal Weather & Attire' : '季節氣候與穿著建議'}
+                  </Text>
+                  <Text style={[typography.bodySmall, { color: colors.textSecondary, marginTop: 2 }]}>
+                    {isEn ? `Travel Month: ${month} (Season: ${advice.season})` : `出發月份：${month} 月 (季節：${advice.season})`}
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={{ gap: 12 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <View style={{ backgroundColor: colors.primary50, paddingHorizontal: 10, paddingVertical: 4, borderRadius: borderRadius.sm }}>
+                  <Text style={[typography.labelMedium, { color: colors.primary700, fontWeight: '700' }]}>
+                    {advice.tempRange}
+                  </Text>
+                </View>
+                <Text style={[typography.bodyMedium, { color: colors.text, flex: 1, fontWeight: '600' }]}>
+                  {advice.description}
+                </Text>
+              </View>
+
+              <View style={{ borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 12 }}>
+                <Text style={[typography.labelSmall, { color: colors.textTertiary, marginBottom: 4 }]}>
+                  {isEn ? 'WHAT TO WEAR' : '建議穿著'}
+                </Text>
+                <Text style={[typography.bodyMedium, { color: colors.text, lineHeight: 20 }]}>
+                  {advice.clothing}
+                </Text>
+              </View>
+
+              <View style={{ backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.md, padding: 12, marginTop: 4 }}>
+                <Text style={[typography.labelSmall, { color: colors.textTertiary, marginBottom: 6 }]}>
+                  {isEn ? 'WEATHER TIPS' : '出行貼心提示'}
+                </Text>
+                {advice.tips.map((tip, index) => (
+                  <View key={index} style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: index === advice.tips.length - 1 ? 0 : 6 }}>
+                    <Text style={[typography.bodySmall, { color: colors.textSecondary, marginRight: 6 }]}>•</Text>
+                    <Text style={[typography.bodySmall, { color: colors.textSecondary, flex: 1, lineHeight: 18 }]}>
+                      {tip}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
+        );
+      })()}
 
       {/* 1. Exchange Rate Calculator Card */}
       <View style={[styles.card, shadows.sm, { backgroundColor: colors.surface, borderRadius: borderRadius.lg, padding: spacing.lg }]}>
