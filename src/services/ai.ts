@@ -1028,7 +1028,11 @@ export const aiService = {
     const userSpecificLocations = survey?.specificLocations || [];
 
     // 判斷某筆特定地點是否為住宿（飯店/度假村/villa…），以及其涵蓋的日期範圍。
-    const isHotelItem = (v?: string) => !!v && /飯店|hotel|resort|villa|inn|住宿|旅館|ホテル/i.test(v);
+    const isHotelItem = (v?: string, notes?: string) => {
+      if (notes && /住宿飯店|hotel/i.test(notes)) return true;
+      if (v && /研討會|conference|seminar|展覽/i.test(v)) return false;
+      return !!v && /飯店|hotel|resort|villa|inn|住宿|旅館|ホテル/i.test(v);
+    };
     const parseRange = (raw?: string): { startStr: string; endStr: string } | null => {
       if (!raw) return null;
       const parts = raw.split(/\s*[~]\s*|\s+to\s+/i).map(s => s.trim()).filter(Boolean);
@@ -1045,7 +1049,7 @@ export const aiService = {
     // 因現實邏輯中退房當日不會續住，當晚應改採下一段住宿（由呼叫端再查詢次日日期取得）。
     const resolveHotelForDate = (dateStr: string, excludeCheckoutDay = false): string | null => {
       for (const loc of userSpecificLocations) {
-        if (!isHotelItem(loc.value)) continue;
+        if (!isHotelItem(loc.value, loc.notes)) continue;
         const r = parseRange(loc.preferredDate);
         if (!r) continue;
         if (excludeCheckoutDay && dateStr === r.endStr && r.endStr !== r.startStr) continue;
@@ -1205,8 +1209,8 @@ export const aiService = {
       const activities: Activity[] = [];
 
       // 非住宿的特定地點才當作當日景點插入；住宿改由 hotel loop 起訖點處理，不重複列為景點。
-      const matchedSpecific = userSpecificLocations.find(item => !isHotelItem(item.value) && item.preferredDate === dateStr)
-        || userSpecificLocations.find(item => !isHotelItem(item.value) && (() => { const r = parseRange(item.preferredDate); return !!r && dateStr >= r.startStr && dateStr <= r.endStr; })());
+      const matchedSpecific = userSpecificLocations.find(item => !isHotelItem(item.value, item.notes) && item.preferredDate === dateStr)
+        || userSpecificLocations.find(item => !isHotelItem(item.value, item.notes) && (() => { const r = parseRange(item.preferredDate); return !!r && dateStr >= r.startStr && dateStr <= r.endStr; })());
       const matchedMust = matchedSpecific ? null : (userMustVisits.find(item => item.preferredDate === dateStr) || userMustVisits[i]);
 
       // 1. Depart Hotel or Arrive at Airport

@@ -218,7 +218,7 @@ export function StepAttractions() {
             containerStyle={{ width: '48%' }}
           />
           <Input
-            placeholder={t('survey.attractions.specificLocation.specifyTime')}
+            placeholder="xx:xx"
             value={specTime}
             onChangeText={setSpecTime}
             containerStyle={{ width: '48%' }}
@@ -311,7 +311,7 @@ export function StepAttractions() {
             containerStyle={{ width: '48%' }}
           />
           <Input
-            placeholder={t('survey.attractions.mustVisit.specifyTime')}
+            placeholder="xx:xx"
             value={mustTime}
             onChangeText={setMustTime}
             containerStyle={{ width: '48%' }}
