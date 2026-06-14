@@ -331,7 +331,7 @@ function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
           description: '順利抵達當地機場，完成通關手續並領取行李。建議您先在機場購買當地的網卡或兌換部分當地貨幣，為接下來的旅程做好準備。',
           location: { name: `${destName}國際機場`, address: `${destName}機場航廈`, latitude: defaultDest.latitude || 0, longitude: defaultDest.longitude || 0 },
           duration: 90,
-          transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘機場接送專車直達市區。' },
+          transport: { mode: 'charter', duration: 45, description: '搭乘機場接送專車直達市區。' },
           links: [{ label: 'Klook 機場接送預訂', url: 'https://www.klook.com/', type: 'booking' }],
           notes: '請備妥入境文件與護照。',
           photoUrl: 'local-asset://airport_map',
@@ -380,7 +380,7 @@ function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
           description: '帶著滿滿的美好回憶，抵達機場準備搭機返國。建議您預留足夠的時間辦理退稅手續，並在免稅店做最後的採購。',
           location: { name: `${destName}國際機場`, address: `${destName}機場航廈`, latitude: defaultDest.latitude || 0, longitude: defaultDest.longitude || 0 },
           duration: 150,
-          transport: { mode: 'charter', duration: 45, distance: 30000, description: '搭乘包車前往機場。' },
+          transport: { mode: 'charter', duration: 45, description: '搭乘包車前往機場。' },
           links: [{ label: '當地推薦安全叫車 App', url: 'https://www.grab.com/', type: 'info' }],
           notes: returnFlight ? `航班時間：${depTime}。請務必再三確認護照與隨身行李是否帶齊。` : '請提早2-3小時抵達機場。',
           photoUrl: 'local-asset://airport_map',
@@ -1106,8 +1106,7 @@ export const aiService = {
           cost = 0;
           desc = locale.startsWith('zh') ? '搭乘包車前往，司機皆具備良好服務評價。' : 'Ride in a private charter car, driven by a professional driver.';
           break;
-      }
-      return { mode, duration: actualDuration, distance: actualDistance, cost, description: desc };
+      return { mode, duration: actualDuration, cost, description: desc };
     };
 
     // 預算等級的飯店及餐費估算
