@@ -1106,6 +1106,7 @@ export const aiService = {
           cost = 0;
           desc = locale.startsWith('zh') ? '搭乘包車前往，司機皆具備良好服務評價。' : 'Ride in a private charter car, driven by a professional driver.';
           break;
+      }
       return { mode, duration: actualDuration, cost, description: desc };
     };
 
