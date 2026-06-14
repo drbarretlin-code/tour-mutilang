@@ -72,56 +72,6 @@ export function StepAttractions() {
   return (
     <ScrollView contentContainerStyle={{ padding: spacing.lg }} style={styles.container}>
       
-      {/* SECTION 1: REFERENCE ATTRACTIONS (Tier 3) */}
-      <Text style={[typography.titleMedium, { color: colors.text, marginBottom: spacing.xs, fontWeight: '600' }]}>
-        {t('survey.attractions.reference.label')}
-      </Text>
-      <Text style={[typography.bodySmall, { color: colors.textTertiary, marginBottom: spacing.sm }]}>
-        {t('survey.attractions.reference.hint')}
-      </Text>
-
-      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
-        {/* URL Input */}
-        <View style={styles.flexRowBetween}>
-          <Input
-            placeholder={t('survey.attractions.reference.urlPlaceholder')}
-            value={refUrl}
-            onChangeText={setRefUrl}
-            containerStyle={{ flex: 1, marginRight: spacing.sm }}
-          />
-
-          <TouchableOpacity
-            onPress={handleAddRefUrl}
-            style={[styles.addBtn, { backgroundColor: colors.primary500, borderRadius: borderRadius.md }]}
-          >
-            <Ionicons name="add" size={24} color={colors.neutral0} />
-          </TouchableOpacity>
-        </View>
-
-
-        {/* Reference List */}
-        <View style={{ marginTop: spacing.md }}>
-          {(survey?.referenceAttractions || []).map((item) => (
-            <View key={item.id} style={[styles.attachmentBadge, { backgroundColor: colors.backgroundSecondary, borderColor: colors.border }]}>
-              <View style={styles.flexRow}>
-                <Ionicons
-                  name={item.type === 'file' ? 'document-text' : (item.type === 'url' ? 'link' : 'document')}
-                  size={18}
-                  color={colors.primary500}
-                  style={{ marginRight: spacing.xs }}
-                />
-                <Text numberOfLines={1} style={[typography.bodyMedium, { color: colors.text, flex: 1 }]}>
-                  {item.fileName || item.value}
-                </Text>
-              </View>
-              <TouchableOpacity onPress={() => removeReferenceAttraction(item.id)}>
-                <Ionicons name="trash" size={18} color={colors.error500} />
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
-      </Card>
-
       {/* SECTION 2: SPECIFIC LOCATION REQUIREMENTS (PRIORITY) */}
       <Text style={[typography.titleMedium, { color: colors.text, marginBottom: spacing.xs, fontWeight: '600' }]}>
         {t('survey.attractions.specificLocation.label')}
@@ -274,7 +224,57 @@ export function StepAttractions() {
         </View>
       </Card>
 
-    </ScrollView>
+    {/* SECTION 1: REFERENCE ATTRACTIONS (Tier 3) */}
+      <Text style={[typography.titleMedium, { color: colors.text, marginBottom: spacing.xs, fontWeight: '600' }]}>
+        {t('survey.attractions.reference.label')}
+      </Text>
+      <Text style={[typography.bodySmall, { color: colors.textTertiary, marginBottom: spacing.sm }]}>
+        {t('survey.attractions.reference.hint')}
+      </Text>
+
+      <Card variant="elevated" style={{ marginBottom: spacing.lg }}>
+        {/* URL Input */}
+        <View style={styles.flexRowBetween}>
+          <Input
+            placeholder={t('survey.attractions.reference.urlPlaceholder')}
+            value={refUrl}
+            onChangeText={setRefUrl}
+            containerStyle={{ flex: 1, marginRight: spacing.sm }}
+          />
+
+          <TouchableOpacity
+            onPress={handleAddRefUrl}
+            style={[styles.addBtn, { backgroundColor: colors.primary500, borderRadius: borderRadius.md }]}
+          >
+            <Ionicons name="add" size={24} color={colors.neutral0} />
+          </TouchableOpacity>
+        </View>
+
+
+        {/* Reference List */}
+        <View style={{ marginTop: spacing.md }}>
+          {(survey?.referenceAttractions || []).map((item) => (
+            <View key={item.id} style={[styles.attachmentBadge, { backgroundColor: colors.backgroundSecondary, borderColor: colors.border }]}>
+              <View style={styles.flexRow}>
+                <Ionicons
+                  name={item.type === 'file' ? 'document-text' : (item.type === 'url' ? 'link' : 'document')}
+                  size={18}
+                  color={colors.primary500}
+                  style={{ marginRight: spacing.xs }}
+                />
+                <Text numberOfLines={1} style={[typography.bodyMedium, { color: colors.text, flex: 1 }]}>
+                  {item.fileName || item.value}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => removeReferenceAttraction(item.id)}>
+                <Ionicons name="trash" size={18} color={colors.error500} />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      </Card>
+
+      </ScrollView>
   );
 }
 

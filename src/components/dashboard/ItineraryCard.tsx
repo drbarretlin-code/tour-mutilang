@@ -58,9 +58,17 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
               </Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Ionicons name="location-outline" size={14} color="rgba(255,255,255,0.8)" style={{ marginRight: 4 }} />
-                <Text style={[typography.labelMedium, { color: 'rgba(255,255,255,0.8)' }]}>
+                <Text style={[typography.labelMedium, { color: 'rgba(255,255,255,0.8)', marginRight: 12 }]}>
                   {startDate} {endDate && startDate !== endDate ? `~ ${endDate}` : ''}
                 </Text>
+                {itinerary.updatedAt && (
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Ionicons name="time-outline" size={14} color="rgba(255,255,255,0.8)" style={{ marginRight: 4 }} />
+                    <Text style={[typography.labelMedium, { color: 'rgba(255,255,255,0.8)' }]}>
+                      {new Date(itinerary.updatedAt).toLocaleDateString()}
+                    </Text>
+                  </View>
+                )}
               </View>
             </View>
           </View>
