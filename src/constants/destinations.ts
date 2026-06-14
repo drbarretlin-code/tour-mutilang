@@ -396,3 +396,43 @@ export const SUGGESTED_DESTINATIONS: SuggestedDestination[] = [
     longitude: -118.2437
   }
 ];
+
+/**
+ * 城市名稱正規化（P2）：去空白、轉小寫、去除常見行政後綴，
+ * 以利跨語系與「市/縣/都/府」等寫法的比對。
+ */
+function normalizeCityName(s: string): string {
+  return (s || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/(市|縣|县|区|區|都|府|県|省|州|city)$/u, '');
+}
+
+/**
+ * 由任意語系城市名查本地座標字典（P0/P2）。
+ * 命中回 { lat, lon }，否則回 null。供 resolveCenter 在呼叫 geoname 前優先使用，
+ * 讓常見目的地（含 geoname 解析不到的次級城市，如芭達雅/羅勇）免依賴線上地理編碼。
+ */
+export function resolveLocalCityCoords(name: string): { lat: number; lon: number } | null {
+  if (!name) return null;
+  const n = normalizeCityName(name);
+  if (!n) return null;
+  // 第一輪：正規化後完全相等
+  for (const d of SUGGESTED_DESTINATIONS) {
+    const variants = [d.name, d.name_en, d.name_zh_tw, d.name_zh_cn].map(normalizeCityName);
+    if (variants.some(v => v && v === n)) {
+      return { lat: d.latitude, lon: d.longitude };
+    }
+  }
+  // 第二輪：包含關係（如「東京都」⊇「東京」），限長度 ≥ 2 以避免短字誤判
+  if (n.length >= 2) {
+    for (const d of SUGGESTED_DESTINATIONS) {
+      const variants = [d.name, d.name_en, d.name_zh_tw, d.name_zh_cn].map(normalizeCityName);
+      if (variants.some(v => v && v.length >= 2 && (v.includes(n) || n.includes(v)))) {
+        return { lat: d.latitude, lon: d.longitude };
+      }
+    }
+  }
+  return null;
+}

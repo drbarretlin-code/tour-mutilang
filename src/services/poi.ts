@@ -3,6 +3,8 @@ import { InterestTag } from '../types/survey';
 import { createLogger } from './logger';
 import { recordAPIMetric } from './metrics';
 import { PACEngine } from './pac';
+import { resolveLocalCityCoords } from '../constants/destinations';
+import { fetchWikipediaGeoSearch } from './enrich';
 
 const logger = createLogger('poi');
 
@@ -188,7 +190,13 @@ async function fetchWithTimeout(url: string, ms: number): Promise<Response> {
   }
 }
 
-/** 解析城市中心座標：優先用 survey 已帶的座標，否則向 geoname 查詢 */
+/**
+ * 解析城市中心座標，優先序（P0/P2）：
+ *   1. survey 已帶的座標（最準）
+ *   2. 本地座標字典 resolveLocalCityCoords（免金鑰、涵蓋 geoname 解析不到的次級城市）
+ *   3. 線上 geoname（需金鑰）
+ * geoname 回 NOT_FOUND（HTTP 200 但無座標）視為確定性失敗，不應重試。
+ */
 async function resolveCenter(
   destName: string,
   lat: number | undefined,
@@ -198,6 +206,12 @@ async function resolveCenter(
   if (typeof lat === 'number' && typeof lon === 'number' && lat !== 0 && lon !== 0) {
     return { lat, lon };
   }
+  // 本地座標字典優先：常見目的地（含芭達雅/羅勇等 geoname 解析不到者）直接命中，免依賴線上地理編碼。
+  const local = resolveLocalCityCoords(destName);
+  if (local) {
+    logger.info(`「${destName}」中心座標命中本地字典，免用 geoname。`);
+    return local;
+  }
   try {
     const url = `${OTM_BASE}/geoname?name=${encodeURIComponent(destName)}&apikey=${apiKey}`;
     const res = await fetchWithTimeout(url, adaptiveTimeout(6000));
@@ -206,6 +220,8 @@ async function resolveCenter(
     if (typeof data?.lat === 'number' && typeof data?.lon === 'number') {
       return { lat: data.lat, lon: data.lon };
     }
+    // status:NOT_FOUND（HTTP 200 但無座標）—— 名稱無法解析，記錄供診斷。
+    logger.warn(`geoname 無法解析「${destName}」（${data?.status || 'NO_COORDS'}）。`);
   } catch {
     /* ignore */
   }
@@ -219,16 +235,54 @@ interface FetchPOIOptions {
   interests: InterestTag[];
   limit?: number;
   radiusMeters?: number;
+  /** App 語系，供 Wikipedia GeoSearch 後援來源選擇維基子網域（預設 en）。 */
+  locale?: string;
+}
+
+/**
+ * 將 Wikipedia GeoSearch 結果轉為 POI[]（P1 後援來源）。
+ * 當主來源 OpenTripMap 失敗或查無景點時呼叫，確保網路存在即有即時景點可用。
+ */
+async function fetchPOIsViaWikipedia(
+  center: { lat: number; lon: number },
+  locale: string,
+  radiusMeters: number,
+  limit: number
+): Promise<POI[]> {
+  const places = await fetchWikipediaGeoSearch(center.lat, center.lon, locale, radiusMeters, limit);
+  if (!places.length) return [];
+  logger.info(`改用 Wikipedia GeoSearch 後援取得 ${places.length} 個鄰近條目作為即時 POI。`);
+  return places
+    .sort((a, b) => a.dist - b.dist)
+    .map((p): POI => ({
+      xid: `wiki_${p.pageid}`,
+      name: p.title,
+      localName: p.title,
+      lat: p.lat,
+      lon: p.lon,
+      kinds: '',
+      rate: 1,
+      category: 'other',
+    }));
 }
 
 /**
  * 取得指定目的地的 POI 清單（依興趣過濾、依熱門度排序）。
  *
+ * 來源優先序（P0/P1）：
+ *   1. 14 天快取
+ *   2. OpenTripMap radius（需金鑰）
+ *   3. Wikipedia GeoSearch 後援（免金鑰）—— 當 OTM 硬失敗或查無景點時自動改用，
+ *      只要有中心座標（本地字典或 geoname）即可取得即時鄰近地標。
+ *   4. 皆無 → 由呼叫端退回內建靜態範本
+ *
  * 重要語意（供呼叫端區分「連線降級」與「該地真的沒景點」）：
- * - **硬失敗**（無金鑰 OTM_NO_KEY／座標解析失敗 OTM_GEONAME_FAILED／HTTP 錯誤
- *   OTM_HTTP_xxx／網路或逾時）一律 **throw**，讓 PAC 重試，並讓呼叫端得以標記降級。
- * - **API 成功但查無景點**（真實的空結果）才回傳空陣列 `[]`，此情況使用內建範本屬合理，
- *   不應視為降級。
+ * - **硬失敗**（無金鑰 OTM_NO_KEY／金鑰無效 OTM_INVALID_KEY／座標解析失敗
+ *   OTM_GEONAME_FAILED／HTTP OTM_HTTP_xxx／限流 OTM_RATE_LIMITED／網路逾時
+ *   OTM_NETWORK_FAILED）且 **Wikipedia 後援也拿不到** 時才 **throw**，讓 PAC 重試、
+ *   呼叫端據此標記降級。
+ * - **任一來源成功但查無景點**（真實的空結果）才回傳空陣列 `[]`，此情況使用內建範本
+ *   屬合理，不應視為降級。
  */
 export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]> {
   const { destName, lat, lon, interests, limit = 40, radiusMeters = 20000 } = opts;
@@ -269,6 +323,11 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
     throw new Error('OTM_GEONAME_FAILED');
   }
 
+  const wikiLocale = opts.locale || 'en';
+  const persist = async (pois: POI[]) => {
+    try { await AsyncStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), pois })); } catch { /* ignore */ }
+  };
+
   const apiStart = Date.now();
   try {
     const url = `${OTM_BASE}/radius?radius=${radiusMeters}&lon=${center.lon}&lat=${center.lat}`
@@ -277,13 +336,15 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
     if (!res.ok) {
       logger.warn(`OpenTripMap radius 回傳 ${res.status}。`);
       recordAPIMetric('fetchDestinationPOIs', Date.now() - apiStart, false, 1, false);
+      // P3：金鑰無效/未授權屬不可重試；限流與其他狀態歸類為可重試的 HTTP 失敗。
+      if (res.status === 401 || res.status === 403) throw new Error('OTM_INVALID_KEY');
+      if (res.status === 429) throw new Error('OTM_RATE_LIMITED');
       throw new Error(`OTM_HTTP_${res.status}`);
     }
     const raw = await res.json();
-    if (!Array.isArray(raw)) return [];
 
     const seen = new Set<string>();
-    const pois: POI[] = raw
+    const pois: POI[] = (Array.isArray(raw) ? raw : [])
       .filter((p: any) => p?.name && typeof p?.point?.lat === 'number' && typeof p?.point?.lon === 'number')
       .map((p: any): POI => ({
         xid: p.xid,
@@ -302,17 +363,36 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
       })
       .sort((a: POI, b: POI) => b.rate - a.rate);
 
-    // 寫入快取
-    try {
-      await AsyncStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), pois }));
-    } catch { /* ignore */ }
-
     recordAPIMetric('fetchDestinationPOIs', Date.now() - apiStart, true, 1, false);
-    return pois;
+
+    if (pois.length > 0) {
+      await persist(pois);
+      return pois;
+    }
+
+    // OTM 成功但查無景點：先試 Wikipedia 後援（可能有 OTM 分類外的鄰近地標），仍無才視為真空結果。
+    const wikiPois = await fetchPOIsViaWikipedia(center, wikiLocale, radiusMeters, limit);
+    if (wikiPois.length > 0) {
+      await persist(wikiPois);
+      return wikiPois;
+    }
+    return [];
   } catch (e: any) {
-    logger.warn('OpenTripMap 查詢失敗。', e);
+    logger.warn('OpenTripMap 查詢失敗，嘗試 Wikipedia 後援。', e);
     recordAPIMetric('fetchDestinationPOIs', Date.now() - apiStart, false, 1, false);
-    // 已是具語意的硬失敗代碼則原樣拋出；其餘（網路/逾時/JSON 解析）統一標記為連線失敗供重試。
+
+    // P1：主來源硬失敗時，只要有中心座標就改用免金鑰的 Wikipedia GeoSearch，盡量保住即時資料。
+    try {
+      const wikiPois = await fetchPOIsViaWikipedia(center, wikiLocale, radiusMeters, limit);
+      if (wikiPois.length > 0) {
+        await persist(wikiPois);
+        return wikiPois;
+      }
+    } catch (wikiErr) {
+      logger.warn('Wikipedia 後援亦失敗。', wikiErr);
+    }
+
+    // 後援也拿不到 —— 拋出具語意的失敗碼，呼叫端據此標記降級。
     if (typeof e?.message === 'string' && e.message.startsWith('OTM_')) throw e;
     throw new Error('OTM_NETWORK_FAILED');
   }

@@ -125,3 +125,55 @@ export async function fetchWikipediaSummaries(
   await Promise.all(workers);
   return result;
 }
+
+/**
+ * Wikipedia GeoSearch 取得座標附近的條目（P1：免金鑰的第二即時 POI 來源）。
+ *
+ * 當主來源 OpenTripMap 因金鑰失效／額度／服務中斷而無法取得即時景點時，
+ * 改以維基百科的 GeoSearch（無金鑰、有中文等多語條目）取得鄰近地標，
+ * 確保「只要網路存在」仍能產出真實可用的景點，而非直接退回靜態範本。
+ *
+ * 失敗時回傳空陣列（呼叫端再決定退回靜態範本）。
+ */
+export interface WikiGeoPlace {
+  pageid: number;
+  title: string;
+  lat: number;
+  lon: number;
+  dist: number;
+}
+
+export async function fetchWikipediaGeoSearch(
+  lat: number,
+  lon: number,
+  locale: string,
+  radiusMeters = 10000,
+  limit = 40
+): Promise<WikiGeoPlace[]> {
+  if (typeof lat !== 'number' || typeof lon !== 'number') return [];
+  const lang = localeToWikiLang(locale);
+  // gsradius 上限為 10000 公尺
+  const radius = Math.min(Math.max(radiusMeters, 10), 10000);
+  const url =
+    `https://${lang}.wikipedia.org/w/api.php?action=query&list=geosearch` +
+    `&gscoord=${lat}%7C${lon}&gsradius=${radius}&gslimit=${Math.min(limit, 50)}` +
+    `&format=json&origin=*`;
+  try {
+    const res = await fetchWithTimeout(url, adaptiveTimeout(6000));
+    if (!res.ok) return [];
+    const data = await res.json();
+    const arr = data?.query?.geosearch;
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .filter((p: any) => p?.title && typeof p?.lat === 'number' && typeof p?.lon === 'number')
+      .map((p: any): WikiGeoPlace => ({
+        pageid: p.pageid,
+        title: p.title,
+        lat: p.lat,
+        lon: p.lon,
+        dist: typeof p.dist === 'number' ? p.dist : 0,
+      }));
+  } catch {
+    return [];
+  }
+}

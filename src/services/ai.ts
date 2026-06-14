@@ -561,12 +561,13 @@ export const aiService = {
             lon: d.longitude,
             interests: alignedSurvey.interests || [],
             limit: limitPerDest,
+            locale: appLocale,
           }),
           // 重試全數失敗（硬失敗）時，丟出訊號讓下方 catch 記為降級，而非默默吞掉。
           () => { throw new Error('POI_LIVE_EXHAUSTED'); },
           `fetchDestinationPOIs_${d.name}`,
           2,
-          ['OTM_NO_KEY'] // 無金鑰無須重試，直接視為硬失敗
+          ['OTM_NO_KEY', 'OTM_INVALID_KEY'] // 金鑰缺失/無效無須重試，直接視為硬失敗
         );
         if (pois.length > 0) {
           poiByDest[d.name] = buildDestTemplateFromPOIs(pois, d.name, appLocale);
@@ -592,12 +593,13 @@ export const aiService = {
             lon: d.longitude,
             interests: ['food'],
             limit: Math.max(12, dayCount * 2),
+            locale: appLocale,
           }),
           // 重試全數失敗時回傳空陣列，下游午餐會自動退回內建餐廳清單（getDestRestaurants）。
           () => [] as POI[],
           `fetchDestinationPOIs_food_${d.name}`,
           2,
-          ['OTM_NO_KEY'] // 無金鑰無須重試
+          ['OTM_NO_KEY', 'OTM_INVALID_KEY'] // 金鑰缺失/無效無須重試
         );
         const seeds = foodPois
           .filter(p => p.name && p.lat && p.lon)
@@ -1733,11 +1735,12 @@ export async function regenerateActivityAlternatives(
         lon: lon && lon !== 0 ? lon : undefined,
         interests: survey?.interests || [],
         limit: 40,
+        locale,
       }),
       () => [],
       `fetchDestinationPOIs_alternatives_${region}`,
       2,
-      ['OTM_NO_KEY'] // 無金鑰無須重試
+      ['OTM_NO_KEY', 'OTM_INVALID_KEY'] // 金鑰缺失/無效無須重試
     );
   } catch (e) {
     console.warn('[regenerateActivityAlternatives] POI 取得失敗', e);
