@@ -171,3 +171,31 @@
   3. 餐廳種子 (`restByDest`) 的描述生成同步改用 `findLocalizedDescription || buildPoiDescription` 策略，確保餐廳也能取得個性化介紹。
   4. 此修改與既有的維基百科摘要補強 (`fetchWikipediaSummaries`) 不衝突：維基百科補強在 `buildDestTemplateFromPOIs` 之後執行，僅當維基摘要更長時才覆寫，因此流程為「內建獨特描述 > 分類通用描述 > 維基百科摘要（擇長覆寫）」。
 
+
+---
+
+## 2026-06-14（續2）— 離線模式誤判與景點重複問題修正
+
+### 修正 Wikipedia 後援誤判觸發離線模式
+- **問題分析**：當使用者沒有 OpenTripMap 金鑰，或金鑰被環境變數吃掉時，系統會自動後援到 Wikipedia GeoSearch。但若 Wikipedia 針對該地回傳 0 筆景點，程式會直接拋出 `OTM_NO_KEY` 錯誤。這個錯誤在 `PACEngine` 中被視為致命錯誤，導致行程引擎完全放棄後續處理，直接顯示「離線模式」警告標語。
+- **解決方案**：在 `poi.ts` 的 Wikipedia 後援邏輯中，將找不到景點的情境從拋出錯誤改為正常回傳空陣列 `[]`。如此一來，系統會正確認知為「該地查無景點」而非「網路或金鑰連線中斷」，從而繼續使用內建範本或自訂景點，不再隨意跳出離線警告。
+
+### 修正 Rule-Based 引擎生成的景點重複問題與空值列
+- **問題分析**：當目的地的景點數量（含 OTM 與內建）少於行程所需數量時，舊版 `selectAttraction` 函式會使用 `usedIndices.size % tpl.titles.length` 進行迴圈取值，導致短時間內產生大量重複景點。且如果範本因故完全為空，此邏輯還會造成空標題的「空值列」出現在 TimelineUI 中。
+- **解決方案**：
+  1. 修改 `selectAttraction`，當所有獨特景點都用完時不再 wrap around，而是直接回傳 `-1` 標記「無景點可用」。
+  2. 在 `generateFallbackItinerary` 中攔截 `-1` 的情況，自動安插通用型的「市區觀光 / 自由活動 (City Sightseeing / Free Time)」時段，並配以適合該時段（上、下午、夜間）的描述文字與預設圖示。徹底解決景點重複與無標題空值列的問題。
+
+### 重新套用 async 修正
+- **狀態補網**：重新套用了前一輪的 `generateFallbackItinerary` 轉為 `async` 並使用 `await` 呼叫的修復，確保 Promise 不會因為競態條件而造成後續的錯誤。
+
+### 移除累贅的「探索體驗」後綴
+- **問題分析**：前次更新的 `translateAndEnhancePoiName` 函式中，當 OpenTripMap (OTM) 取得真實景點但名稱無法匹配已知的英文後綴字根（如 Museum, Castle）時，會強制加上通用的 UI 語系後綴（如中文的「 探索體驗」）。這導致在 OTM 回傳真實資料（例如當地的夜市 `Khlong Thom Centre` 或餐廳）時，皆被不自然地冠上「探索體驗」，使使用者誤以為系統沒有產生真實景點。
+- **解決方案**：在 `destinations.ts` 中，將 Fallback 邏輯改為「直接返回原名」，移除強制附加後綴的行為。現在系統會原汁原味地顯示 OTM 回傳的當地景點真實名稱，不再產生令人困惑的重複字綴。
+
+### 實作動態旅遊指南包 (Guide Pack) 預載機制與簡化問卷
+- **問題分析**：使用者反應 OTM 抓取真實景點時，即使移除了預設後綴，但原本單純的機器直譯無法提供如官方地圖或部落客般豐富的在地化說明，且問卷中上傳檔案的功能形同虛設（因後端改為純離線規則引擎，無法用語意分析理解檔案內容）。
+- **解決方案**：
+  1. 移除了 `StepAttractions.tsx` 中上傳參考檔案與必去景點檔案的按鈕與邏輯，讓填寫介面更為俐落。
+  2. 透過子代理 (`guide_pack_agent`) 新增了 `guidePackManager.ts`，負責模擬/實作 OTA (Over-The-Air) 下載機制。當使用者選擇未建檔的目的地時，行程引擎會提前預載該地的專屬 Guide Pack。
+  3. 整合至 `ai.ts`：在 `buildDestTemplateFromPOIs` 中，當 OTM 回傳景點時，若在已下載的指南包內有對應的高品質資料（如部落客撰寫的描述、精準的在地名稱與官方相片），會優先取代 OTM 的預設資料。如此一來，即可給出「使用者可理解」的高品質內容，而非冷硬的翻譯。

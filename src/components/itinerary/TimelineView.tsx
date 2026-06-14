@@ -476,6 +476,7 @@ const isTimeConflict = (startTime: string, endTime: string, openingHours?: strin
 const checkAttractionWarning = (act: any, dateStr: string, isEn: boolean): string[] => {
   const warnings: string[] = [];
   if (!act || (act.type !== 'activity' && act.type !== 'attraction')) return warnings;
+  
   if (act.openingHours) {
     if (isTimeConflict(act.startTime, act.endTime, act.openingHours)) {
       warnings.push(isEn 
@@ -483,7 +484,22 @@ const checkAttractionWarning = (act: any, dateStr: string, isEn: boolean): strin
         : `⚠️ 警示：此時間段景點已關閉（營業時間：${act.openingHours}）。`
       );
     }
-    const dayOfWeek = getDayOfWeek(dateStr);
+  }
+
+  const dayOfWeek = getDayOfWeek(dateStr); // 0 = Sun, 1 = Mon, etc.
+  const dayNamesEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const dayNamesTw = ['日', '一', '二', '三', '四', '五', '六'];
+  const currentDayName = dayNamesEn[dayOfWeek];
+
+  if (act.closedDays && act.closedDays.length > 0) {
+    if (act.closedDays.includes(currentDayName) || act.closedDays.some((d: string) => d.toLowerCase() === currentDayName.toLowerCase())) {
+      warnings.push(isEn 
+        ? `⚠️ Warning: Closed on ${currentDayName}s.` 
+        : `⚠️ 警示：此景點在星期${dayNamesTw[dayOfWeek]} (${currentDayName}) 公休。`
+      );
+    }
+  } else {
+    // Default museum check if no explicit closedDays
     const titleLower = (act.title || '').toLowerCase();
     const typeLower = (act.type || '').toLowerCase();
     const isMuseum = titleLower.includes('博物館') || titleLower.includes('museum') || typeLower.includes('museum');
@@ -494,6 +510,7 @@ const checkAttractionWarning = (act: any, dateStr: string, isEn: boolean): strin
       );
     }
   }
+
   return warnings;
 };
 

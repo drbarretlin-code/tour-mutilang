@@ -34,6 +34,7 @@ export interface ItineraryDay {
   activities: Activity[];
   hotel?: HotelInfo;
   localTips?: LocalTip[];
+  routeGeometry?: string; // Cached OSRM route geometry for offline map rendering
 }
 
 export interface Activity {

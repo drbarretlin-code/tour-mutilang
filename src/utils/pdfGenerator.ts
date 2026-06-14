@@ -4,6 +4,10 @@ import { TripSurvey } from '../types/survey';
 export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey | null): string => {
   const { title, days } = itinerary;
 
+  const start = survey?.dates?.startDate ? new Date(survey.dates.startDate) : (days[0]?.date ? new Date(days[0].date) : new Date());
+  const end = survey?.dates?.endDate ? new Date(survey.dates.endDate) : (days[days.length - 1]?.date ? new Date(days[days.length - 1].date) : new Date(start.getTime() + 86400000 * 3));
+  const dayCount = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
+
   // 1. 行前準備卡片 (基於 survey 資料)
   let preparationCardHtml = '';
   if (survey) {
@@ -48,22 +52,172 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
     `;
   }
 
+  // 1b. 目的地氣候與穿搭建議
+  let weatherGuideHtml = '';
+  if (survey) {
+    const mainDest = survey.destinations?.[0]?.name || '台北';
+    const month = start.getMonth(); // 0-indexed
+    const isEn = !survey.locale?.startsWith('zh');
+
+    let seasonLabel = '';
+    let weatherDesc = '';
+    let clothingAdvice = '';
+
+    const isThailand = /曼谷|芭達雅|芭提雅|羅勇|泰國|bangkok|pattaya|phuket|thailand/i.test(mainDest);
+    const isJapan = /東京|大阪|京都|沖繩|北海道|日本|tokyo|osaka|kyoto|japan/i.test(mainDest);
+    const isKorea = /首爾|釜山|韓國|seoul|busan|korea/i.test(mainDest);
+
+    if (isThailand) {
+      if (month >= 2 && month <= 4) { // Mar-May
+        seasonLabel = isEn ? 'Hot Season' : '熱季 (夏季)';
+        weatherDesc = isEn ? 'Very hot and dry, average temp 30-38°C.' : '氣候炎熱乾燥，平均氣溫介於 30-38°C 之間。';
+        clothingAdvice = isEn ? 'Lightweight, breathable cotton clothes. Sunhat, sunglasses, and high-SPF sunscreen.' : '建議穿著輕便、透氣的棉質或麻質衣物。備妥遮陽帽、太陽眼鏡與高係數防曬乳。';
+      } else if (month >= 5 && month <= 9) { // Jun-Oct
+        seasonLabel = isEn ? 'Rainy Season' : '雨季';
+        weatherDesc = isEn ? 'Humid with sudden heavy downpours, average temp 28-34°C.' : '氣候潮濕，常有午後短暫雷陣雨或強降雨，氣溫約 28-34°C。';
+        clothingAdvice = isEn ? 'Short sleeves, shorts, and quick-dry apparel. Carry an umbrella and wear waterproof sandals.' : '穿著短袖、短褲及易乾衣物，出門務必攜帶折疊傘或雨衣，建議搭配防水涼鞋。';
+      } else { // Nov-Feb
+        seasonLabel = isEn ? 'Cool Season' : '涼季';
+        weatherDesc = isEn ? 'Pleasant and dry, average temp 24-30°C. Best time to visit.' : '氣候溫和舒適且乾燥，白天氣溫約 24-30°C，夜晚清涼。為最佳旅遊季節。';
+        clothingAdvice = isEn ? 'Summer wear for daytime. A light jacket is recommended for air-conditioned rooms or cool evenings.' : '白天穿著夏裝，但強烈建議攜帶薄外套，以因應強冷氣室內或夜晚的涼意。';
+      }
+    } else if (isJapan || isKorea) {
+      if (month >= 2 && month <= 4) { // Spring (Mar-May)
+        seasonLabel = isEn ? 'Spring (Cherry Blossoms)' : '春季 (櫻花季)';
+        weatherDesc = isEn ? 'Warm days but cool evenings, average temp 10-18°C.' : '氣候溫和，但早晚溫差較大，平均氣溫約 10-18°C。';
+        clothingAdvice = isEn ? 'Layered outfits: long-sleeve shirts, sweater, and a windbreaker or light coat.' : '建議採用洋蔥式穿法：長袖襯衫、針織衫/毛衣，搭配防風外套或春季大衣。';
+      } else if (month >= 5 && month <= 7) { // Summer / Rainy (Jun-Aug)
+        seasonLabel = isEn ? 'Summer (Festival Season)' : '夏季 (祭典季)';
+        weatherDesc = isEn ? 'Hot and humid with rainy periods, average temp 26-33°C.' : '高溫潮濕，梅雨過後較為炎熱，平均氣溫約 26-33°C。';
+        clothingAdvice = isEn ? 'Breathable t-shirts, shorts or skirts, sunglasses, and a sunhat. Keep an umbrella handy.' : '穿著透氣涼爽的 T-shirt、短褲或裙子，備妥防曬用品及折疊雨傘。';
+      } else if (month >= 8 && month <= 10) { // Autumn (Sep-Nov)
+        seasonLabel = isEn ? 'Autumn (Maple Foliage)' : '秋季 (楓葉季)';
+        weatherDesc = isEn ? 'Cool and pleasant, beautiful maple leaves, average temp 12-20°C.' : '氣候清涼舒適，晴空萬里，平均氣溫約 12-20°C。';
+        clothingAdvice = isEn ? 'Long sleeves, cardigan, light jacket or denim coat. A scarf might be useful in late autumn.' : '建議長袖、薄毛衣搭配夾克或牛仔大衣，深秋時段建議攜帶圍巾。';
+      } else { // Winter (Dec-Feb)
+        seasonLabel = isEn ? 'Winter (Snow Season)' : '冬季 (雪季)';
+        weatherDesc = isEn ? 'Cold, dry, and snowy in northern parts, average temp -2-8°C.' : '寒冷乾燥，部分地區會雪，平均氣溫約 -2 至 8°C。';
+        clothingAdvice = isEn ? 'Thermal innerwear, thick sweaters, heavy down jacket, gloves, wool hat, and boots.' : '發熱衣、厚毛衣、防寒羽絨大衣，並戴上毛帽、圍巾、手套，做好全方位防寒。';
+      }
+    } else {
+      seasonLabel = isEn ? 'General Season' : '通用季節指引';
+      weatherDesc = isEn ? 'Average seasonal climate conditions.' : '根據您出發的月份所規劃的當地氣候參考。';
+      clothingAdvice = isEn ? 'Wear comfortable clothes matching local weather. Bring a light jacket.' : '請穿著合適且舒適的休閒衣物，建議隨身攜帶一件防風薄外套。';
+    }
+
+    weatherGuideHtml = `
+      <div class="prep-card weather-card">
+        <h2 class="section-title">☀️ 目的地氣候與穿搭建議 (${mainDest})</h2>
+        <div class="prep-grid">
+          <div class="prep-col">
+            <p><strong>📅 出發月份：</strong>${month + 1} 月 (${seasonLabel})</p>
+            <p><strong>🌡️ 氣候概況：</strong>${weatherDesc}</p>
+          </div>
+          <div class="prep-col">
+            <p><strong>🧥 穿著建議：</strong>${clothingAdvice}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // 1c. 智慧打包行李確認單
+  let packingListHtml = '';
+  if (survey) {
+    const isEn = !survey.locale?.startsWith('zh');
+
+    const essentialItems = [
+      isEn ? 'Local Currency Cash' : '當地外幣現金',
+      isEn ? 'Passport (valid for 6 months)' : '護照正本 (效期大於6個月)',
+      isEn ? 'Credit / Debit Cards' : '信用卡 / 提款卡',
+      isEn ? 'Toothbrush & Toothpaste' : '個人盥洗用具 (牙刷/牙膏)',
+      isEn ? 'Personal Medication / First Aid' : '常備藥品 / 急救包',
+      isEn ? 'Sunscreen' : '防曬乳',
+      isEn ? 'Sanitizer / Wet Wipes' : '乾洗手 / 濕紙巾'
+    ];
+
+    const clothingItems = [
+      isEn ? `Underwear (${dayCount} sets)` : `內衣褲 (${dayCount} 套)`,
+      isEn ? `Socks (${dayCount} pairs)` : `襪子 (${dayCount} 雙)`,
+      isEn ? `Tops (${dayCount} shirts)` : `上衣 (${dayCount} 件)`,
+      isEn ? `Pants / Shorts (${Math.ceil(dayCount / 2)} pairs)` : `褲子 / 短褲 (${Math.ceil(dayCount / 2)} 件)`,
+      isEn ? 'Comfortable Walking Shoes' : '好走好穿的運動鞋',
+      isEn ? 'Lightweight Jacket' : '防風外套 / 薄外套'
+    ];
+
+    const electronicItems = [
+      isEn ? 'Mobile Phone & Charger' : '手機與充電頭 / 線材',
+      isEn ? 'Power Bank' : '行動電源 (需置於隨身行李)',
+      isEn ? 'Universal Travel Adapter' : '萬國轉接頭',
+      isEn ? 'Headphones / Earbuds' : '耳機'
+    ];
+
+    if (survey.travelers?.children?.length && survey.travelers.children.length > 0) {
+      essentialItems.push(isEn ? 'Kid Snacks & Toys' : '孩童零食與安撫玩具');
+      essentialItems.push(isEn ? 'Kid Toiletries / Diapers' : '孩童專用盥洗用品 / 尿布');
+    }
+
+    if (survey.transportModes?.includes('rental')) {
+      essentialItems.push(isEn ? 'International Driving Permit' : '國際駕照正本');
+      electronicItems.push(isEn ? 'Car Phone Mount' : '車用手機架');
+    }
+
+    const interests = (survey.interests || []) as string[];
+    if (interests.includes('water') || interests.includes('beach')) {
+      clothingItems.push(isEn ? 'Swimsuit & Goggles' : '泳裝與泳鏡');
+      clothingItems.push(isEn ? 'Sandals / Slippers' : '海灘拖鞋 / 涼鞋');
+      essentialItems.push(isEn ? 'Waterproof Phone Pouch' : '手機防水袋');
+    }
+
+    if (interests.includes('nature') || interests.includes('adventure')) {
+      essentialItems.push(isEn ? 'Insect Repellent' : '防蚊液 / 驅蚊貼片');
+      clothingItems.push(isEn ? 'Hiking / Trail Shoes' : '防滑登山鞋 / 健行鞋');
+      clothingItems.push(isEn ? 'Raincoat / Poncho' : '便攜型雨衣');
+    }
+
+    packingListHtml = `
+      <div class="prep-card packing-card">
+        <h2 class="section-title">🧳 智慧打包行李確認單 (紙本備查)</h2>
+        <div class="packing-grid">
+          <div class="packing-col">
+            <span class="packing-sub">💳 證件與重要物品</span>
+            <ul class="packing-list-items">
+              ${essentialItems.map(item => `<li><input type="checkbox" style="margin-right:6px;" /> ${item}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="packing-col">
+            <span class="packing-sub">👕 衣物與穿著</span>
+            <ul class="packing-list-items">
+              ${clothingItems.map(item => `<li><input type="checkbox" style="margin-right:6px;" /> ${item}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="packing-col">
+            <span class="packing-sub">🔌 數位電子配件</span>
+            <ul class="packing-list-items">
+              ${electronicItems.map(item => `<li><input type="checkbox" style="margin-right:6px;" /> ${item}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   // 2. 匯率與緊急求助指南
   const financeEmergencyHtml = `
     <div class="prep-card emergency-card">
-      <h2 class="section-title">🇹🇭 匯率消費與緊急求助指南</h2>
+      <h2 class="section-title">🚨 緊急聯絡與求助指南</h2>
       <div class="prep-grid">
         <div class="prep-col">
-          <p><strong>💵 預估匯率：</strong>1 TWD ≈ 1.10 THB（以當地實際換匯為準）</p>
-          <p><strong>🍔 每日生活費：</strong>預估約 1,500 ฿（約 1,364 NTD）/ 人</p>
+          <p><strong>🚨 緊急聯絡專線：</strong></p>
+          <ul class="emergency-list">
+            <li><strong>旅遊警察/求助專線：</strong>1155 (泰國) / 110 (日本) / 112 (韓國)</li>
+            <li><strong>急救與消防：</strong>1669 (泰國) / 119 (日本/韓國)</li>
+            <li><strong>24 小時通用緊急救難：</strong>191 (泰國) / 112 (歐美)</li>
+          </ul>
         </div>
         <div class="prep-col">
-          <p><strong>🚨 24 小時緊急求助熱線：</strong></p>
-          <ul class="emergency-list">
-            <li><strong>泰國旅遊警察 (英語服務)：</strong>1155</li>
-            <li><strong>泰國醫療急救：</strong>1669</li>
-            <li><strong>台灣駐泰國代表處：</strong>+66-81-8340919</li>
-          </ul>
+          <p><strong>💡 貼心提醒：</strong></p>
+          <p>出發前請確保護照有 6 個月以上效期，並將機票、飯店確認單與旅遊保險單截圖保存於手機，以防離線時無法讀取。</p>
         </div>
       </div>
     </div>
@@ -388,6 +542,8 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
         <p>您的專屬 AI 規劃行程表</p>
       </div>
       ${preparationCardHtml}
+      ${weatherGuideHtml}
+      ${packingListHtml}
       ${financeEmergencyHtml}
       ${daysHtml}
     </body>

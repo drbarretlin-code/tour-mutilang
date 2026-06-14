@@ -6,6 +6,7 @@ import { fetchDestinationPOIs, verifyOpenTripMapKey, POI, PoiCategory } from './
 import { fetchWikipediaSummaries } from './enrich';
 import { getBuiltInTemplate, getBuiltInRestaurants, findLocalizedName, findLocalizedDescription } from '../data/destinations';
 import { detectGuideCountryKey, isCoveredGuideCountry, getDownloadableGuideCountry, normalizeCountryKey } from './guidePacks';
+import { guidePackManager } from './guidePackManager';
 import { PACEngine } from './pac';
 import { createLogger } from './logger';
 
@@ -116,17 +117,34 @@ function buildDestTemplateFromPOIs(pois: POI[], destName: string, locale: string
     
     // 比對內建資料庫取得中文化及在地化的名稱與標題
     const localized = findLocalizedName(p.name, p.lat, p.lon, locale);
-    const titleVal = localized.title || p.name;
-    const localTitleVal = localized.localTitle || p.localName || p.name;
+    
+    // 透過 OTA Guide Pack 取得強化資料
+    const otaEnriched = guidePackManager.getEnrichedData(destName, p.name, p.lat, p.lon);
+    
+    let titleVal = p.name;
+    let localTitleVal = p.localName || p.name;
+    
+    if (otaEnriched && otaEnriched.title && otaEnriched.title[locale]) {
+      titleVal = otaEnriched.title[locale];
+      localTitleVal = otaEnriched.localTitle || localTitleVal;
+    } else if (localized.title) {
+      titleVal = localized.title;
+      localTitleVal = localized.localTitle || localTitleVal;
+    }
     
     tpl.titles.push(titleVal);
     tpl.localTitles.push(localTitleVal);
-    tpl.images.push(CATEGORY_IMAGE[p.category] || CATEGORY_IMAGE.other);
+    tpl.images.push(otaEnriched?.photoUrl || CATEGORY_IMAGE[p.category] || CATEGORY_IMAGE.other);
     tpl.coords!.push({ lat: p.lat, lon: p.lon });
     tpl.categories!.push(p.category || 'other');
-    // 優先使用內建資料庫的特色描述（每個景點獨一無二），無匹配時退回分類式通用描述
+    
     const builtInDesc = findLocalizedDescription(p.name, p.lat, p.lon, locale);
-    tpl.descs.push(builtInDesc || buildPoiDescription(p, destName, label, locale, localized.title));
+    let finalDesc = builtInDesc;
+    if (otaEnriched && otaEnriched.desc && otaEnriched.desc[locale]) {
+      finalDesc = otaEnriched.desc[locale];
+    }
+    
+    tpl.descs.push(finalDesc || buildPoiDescription(p, destName, label, locale, titleVal));
   }
   return tpl;
 }
@@ -656,12 +674,17 @@ export const aiService = {
     const dayCount = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / 86400000) + 1);
     const limitPerDest = Math.max(12, dayCount * 3);
 
+    const dests = alignedSurvey?.destinations || [];
+    
+    // 預載 OTA Guide Packs (針對非內建目的地)
+    const destNames = Array.from(new Set(dests.map(d => d?.name).filter(Boolean))) as string[];
+    await guidePackManager.preloadGuidePacks(destNames, appLocale);
+
     // 逐目的地抓取真實 POI（並行），組成範本。
     // 區分兩種「沒拿到即時資料」：
     //   (a) 硬失敗（連線/金鑰/HTTP）—— fetchDestinationPOIs 會 throw，PAC 重試後仍失敗則記為降級。
     //   (b) 該地真的查無景點 —— 回傳空陣列（成功），用內建範本屬合理，不算降級。
     const poiByDest: Record<string, DestTemplate> = {};
-    const dests = alignedSurvey?.destinations || [];
     let liveFetchFailed = false;       // 是否發生過 (a) 硬失敗
     let liveFailureReason = '';        // 最後一筆硬失敗原因（供診斷橫幅）
     await Promise.all(dests.map(async (d) => {
@@ -720,10 +743,11 @@ export const aiService = {
           .filter(p => p.name && p.lat && p.lon)
           .map((p): RestaurantSeed => {
             const localized = findLocalizedName(p.name, p.lat, p.lon, appLocale);
+            const otaEnriched = guidePackManager.getEnrichedData(d.name, p.name, p.lat, p.lon);
             return {
-              title: localized.title || p.name,
-              localTitle: localized.localTitle || p.localName || p.name,
-              desc: findLocalizedDescription(p.name, p.lat, p.lon, appLocale) || buildPoiDescription(p, d.name, '餐廳', appLocale, localized.title),
+              title: otaEnriched && otaEnriched.title && otaEnriched.title[appLocale] ? otaEnriched.title[appLocale] : (localized.title || p.name),
+              localTitle: otaEnriched?.localTitle || localized.localTitle || p.localName || p.name,
+              desc: (otaEnriched && otaEnriched.desc && otaEnriched.desc[appLocale]) ? otaEnriched.desc[appLocale] : (findLocalizedDescription(p.name, p.lat, p.lon, appLocale) || buildPoiDescription(p, d.name, '餐廳', appLocale, localized.title)),
               lat: p.lat,
               lon: p.lon,
               cost: 0,
@@ -759,7 +783,7 @@ export const aiService = {
       console.warn('[generateRuleBasedItinerary] 維基百科介紹補強失敗，沿用內建描述', e);
     }
 
-    const itinerary = this.generateFallbackItinerary(alignedSurvey, poiByDest, restByDest);
+    const itinerary = await this.generateFallbackItinerary(alignedSurvey, poiByDest, restByDest);
 
     // 誠實標記降級：只有發生「硬失敗」（連線/金鑰/HTTP，情況 a）才算降級；
     // 「該地查無景點」（情況 b）不算。如此可落實「只要網路存在就不該降級」的原則 ——
@@ -791,7 +815,7 @@ export const aiService = {
   /**
    * Generates a structural fallback itinerary matching survey inputs
    */
-  generateFallbackItinerary(survey: TripSurvey, poiByDest?: Record<string, DestTemplate>, restByDest?: Record<string, RestaurantSeed[]>): Itinerary {
+  async generateFallbackItinerary(survey: TripSurvey, poiByDest?: Record<string, DestTemplate>, restByDest?: Record<string, RestaurantSeed[]>): Promise<Itinerary> {
     const start = new Date(survey?.dates?.startDate || Date.now());
     const end = new Date(survey?.dates?.endDate || Date.now() + 86400000 * 3);
     const dayCount = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
@@ -1265,13 +1289,13 @@ export const aiService = {
 
       // 2. Morning Activity: 精力與興趣曲線 (High Energy)
       const morningIdx = selectAttraction(templates, usedIndices, ['cultural', 'historic', 'museum', 'nature', 'religion']);
-      usedIndices.add(morningIdx);
+      if (morningIdx !== -1) usedIndices.add(morningIdx);
 
-      let morningTitle = templates.titles[morningIdx]!;
-      let morningLocalTitle = templates.localTitles[morningIdx]!;
-      let morningDesc = templates.descs[morningIdx]!;
-      let morningPhoto = templates.images[morningIdx]!;
-      let morningCoord = templates.coords?.[morningIdx];
+      let morningTitle = morningIdx !== -1 ? templates.titles[morningIdx]! : (locale.startsWith('zh') ? '市區觀光 / 自由活動' : 'City Sightseeing / Free Time');
+      let morningLocalTitle = morningIdx !== -1 ? templates.localTitles[morningIdx]! : 'City Sightseeing';
+      let morningDesc = morningIdx !== -1 ? templates.descs[morningIdx]! : (locale.startsWith('zh') ? '享受自由的時光，您可以漫步市區、尋找特色小店，或是回到飯店稍作休息。' : 'Enjoy free time exploring the city, finding local shops, or resting at the hotel.');
+      let morningPhoto = morningIdx !== -1 ? templates.images[morningIdx]! : (templates.images[0] || 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600');
+      let morningCoord = morningIdx !== -1 ? templates.coords?.[morningIdx] : null;
       let morningLinks = [];
       let morningStartTime = morningTime;
       let currentMorningDuration = morningDuration;
@@ -1413,12 +1437,12 @@ export const aiService = {
       const avoidCats = (startingHour >= sunsetHour) ? ['nature', 'beach', 'park'] : [];
 
       const afternoonIdx = selectAttraction(templates, usedIndices, ['amusement', 'entertainment', 'shopping', 'market', 'beach', 'park', 'viewpoint', 'other'], avoidCats);
-      usedIndices.add(afternoonIdx);
+      if (afternoonIdx !== -1) usedIndices.add(afternoonIdx);
 
-      const afternoonTitle = templates.titles[afternoonIdx]!;
-      const afternoonLocalTitle = templates.localTitles[afternoonIdx]!;
-      const afternoonDesc = templates.descs[afternoonIdx]!;
-      const afternoonCoord = templates.coords?.[afternoonIdx];
+      const afternoonTitle = afternoonIdx !== -1 ? templates.titles[afternoonIdx]! : (locale.startsWith('zh') ? '市區觀光 / 自由活動' : 'City Sightseeing / Free Time');
+      const afternoonLocalTitle = afternoonIdx !== -1 ? templates.localTitles[afternoonIdx]! : 'City Sightseeing';
+      const afternoonDesc = afternoonIdx !== -1 ? templates.descs[afternoonIdx]! : (locale.startsWith('zh') ? '午後悠閒時光，適合在周邊隨意走走或在咖啡廳小憩。' : 'A relaxing afternoon suitable for a casual stroll or resting at a cafe.');
+      const afternoonCoord = afternoonIdx !== -1 ? templates.coords?.[afternoonIdx] : null;
       const afternoonLat = afternoonCoord ? afternoonCoord.lat : (currentDest.latitude || 0);
       const afternoonLon = afternoonCoord ? afternoonCoord.lon : (currentDest.longitude || 0);
 
@@ -1508,13 +1532,13 @@ export const aiService = {
       // 4c. Evening Activity (for packed pace, non-last-day)
       if (survey?.pace === 'packed' && !isLastDay) {
         const eveningIdx = selectAttraction(templates, usedIndices, ['shopping', 'market', 'viewpoint', 'entertainment', 'other'], ['nature', 'beach', 'park']);
-        usedIndices.add(eveningIdx);
+        if (eveningIdx !== -1) usedIndices.add(eveningIdx);
 
-        const eveningTitle = templates.titles[eveningIdx] || `${currentDest.name}${strings.commercialDistrict}`;
-        const eveningLocalTitle = templates.localTitles[eveningIdx] || eveningTitle;
-        const eveningDesc = templates.descs[eveningIdx] || strings.eveningActivityDesc;
-        const eveningCoord = templates.coords?.[eveningIdx];
-        const eveningPhoto = templates.images[eveningIdx] || templates.images[1];
+        const eveningTitle = eveningIdx !== -1 ? templates.titles[eveningIdx] : `${currentDest.name}${strings.commercialDistrict}`;
+        const eveningLocalTitle = eveningIdx !== -1 ? templates.localTitles[eveningIdx] : eveningTitle;
+        const eveningDesc = eveningIdx !== -1 ? templates.descs[eveningIdx] : strings.eveningActivityDesc;
+        const eveningCoord = eveningIdx !== -1 ? templates.coords?.[eveningIdx] : null;
+        const eveningPhoto = eveningIdx !== -1 ? templates.images[eveningIdx] : (templates.images[1] || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600');
 
         const lastActEnd = activities[activities.length - 1].endTime;
         const eveningTransit = getTransitInfo(primaryMode, 15, 5000);

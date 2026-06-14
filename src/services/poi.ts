@@ -329,12 +329,16 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
   // 唯有連 Wikipedia 也拿不到才拋 OTM_NO_KEY（不可重試），由呼叫端標記降級並引導設定。
   if (!apiKey) {
     logger.warn('無 OpenTripMap 金鑰，改用 Wikipedia GeoSearch 取得即時 POI。');
-    const wikiPois = await fetchPOIsViaWikipedia(center, wikiLocale, radiusMeters, limit);
-    if (wikiPois.length > 0) {
-      await persist(wikiPois);
-      return wikiPois;
+    try {
+      const wikiPois = await fetchPOIsViaWikipedia(center, wikiLocale, radiusMeters, limit);
+      if (wikiPois.length > 0) {
+        await persist(wikiPois);
+      }
+      return wikiPois; // 返回結果（即使是空陣列也不拋錯，代表查無景點）
+    } catch (wikiErr) {
+      logger.warn('Wikipedia 後援亦失敗。', wikiErr);
+      throw new Error('OTM_NO_KEY');
     }
-    throw new Error('OTM_NO_KEY');
   }
 
   const apiStart = Date.now();

@@ -7,8 +7,7 @@ import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { t } from '../../i18n';
 import { Ionicons } from '@expo/vector-icons';
-import * as DocumentPicker from 'expo-document-picker';
-import { readFileContent } from '../../utils/fileReader';
+
 
 export function StepAttractions() {
   const {
@@ -68,31 +67,7 @@ export function StepAttractions() {
     setSpecNotes('');
   };
 
-  const handleUploadRefFile = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' });
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        const asset = result.assets[0];
-        const content = await readFileContent(asset);
-        addReferenceAttraction('file', content, asset.name, asset.mimeType);
-      }
-    } catch (e) {
-      console.error('File pick error', e);
-    }
-  };
 
-  const handleUploadMustVisitFile = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({ type: '*/*' });
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        const asset = result.assets[0];
-        const content = await readFileContent(asset);
-        addMustVisitAttraction('file', content, mustDate || undefined, mustTime || undefined, asset.name, asset.mimeType);
-      }
-    } catch (e) {
-      console.error('File pick error', e);
-    }
-  };
 
   return (
     <ScrollView contentContainerStyle={{ padding: spacing.lg }} style={styles.container}>
@@ -114,12 +89,7 @@ export function StepAttractions() {
             onChangeText={setRefUrl}
             containerStyle={{ flex: 1, marginRight: spacing.sm }}
           />
-          <TouchableOpacity
-            onPress={handleUploadRefFile}
-            style={[styles.addBtn, { backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.md, marginRight: spacing.sm, borderColor: colors.border, borderWidth: 1 }]}
-          >
-            <Ionicons name="document-attach" size={24} color={colors.textSecondary} />
-          </TouchableOpacity>
+
           <TouchableOpacity
             onPress={handleAddRefUrl}
             style={[styles.addBtn, { backgroundColor: colors.primary500, borderRadius: borderRadius.md }]}
@@ -254,12 +224,7 @@ export function StepAttractions() {
             onChangeText={setMustUrl}
             containerStyle={{ flex: 1, marginRight: spacing.sm }}
           />
-          <TouchableOpacity
-            onPress={handleUploadMustVisitFile}
-            style={[styles.addBtn, { backgroundColor: colors.backgroundSecondary, borderRadius: borderRadius.md, borderColor: colors.border, borderWidth: 1 }]}
-          >
-            <Ionicons name="document-attach" size={24} color={colors.textSecondary} />
-          </TouchableOpacity>
+
         </View>
         <View style={{ marginTop: spacing.sm }} />
         <View style={styles.flexRowBetween}>

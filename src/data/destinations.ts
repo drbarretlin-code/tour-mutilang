@@ -1155,22 +1155,9 @@ function translateAndEnhancePoiName(poiName: string, targetLocale: string): { ti
     }
   }
 
-  // 3. Fallback: 如果完全沒有匹配字根，至少不要硬音譯，我們附加上 UI 語系的類型與提示，例如：
-  const fallbackSuffix: Record<string, string> = {
-    'zh-TW': '探索體驗',
-    'zh-CN': '探访体验',
-    'en': 'Exploration Experience',
-    'ja': '探索体験',
-    'ko': '탐방 체험',
-    'es': 'Experiencia de Exploración',
-    'ms': 'Pengalaman Penerokaan',
-    'pt': 'Experiência de Exploração',
-    'th': 'ประสบการณ์การสำรวจ',
-    'vi': 'Trải nghiệm khám phá'
-  };
-  const suffix = fallbackSuffix[targetLocale] || fallbackSuffix['en'];
+  // 3. Fallback: 如果完全沒有匹配字根，直接返回原名，不強制附加累贅後綴
   return {
-    title: `${poiName} ${suffix}`,
+    title: poiName,
     localTitle: poiName
   };
 }

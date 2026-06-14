@@ -32,7 +32,7 @@ import { useResponsive } from '../../src/hooks/useResponsive';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { generateItineraryHtml } from '../../src/utils/pdfGenerator';
-import { swapOutdoorWithIndoor } from '../../src/utils/itineraryRepairer';
+import { swapOutdoorWithIndoor, repairItineraryTimes } from '../../src/utils/itineraryRepairer';
 import { localSyncManager } from '../../src/services/localSyncManager';
 
 // Web-safe cache helpers: AsyncStorage on Web is unreliable, use localStorage directly
@@ -237,11 +237,25 @@ export default function ItineraryScreen() {
     activities[actIndex] = targetAct;
     activities[targetIndex] = act;
 
-    day.activities = activities.map((a, idx) => ({ ...a, order: idx }));
+    // Reset orders
+    activities.forEach((a, idx) => { a.order = idx; });
+    day.activities = activities;
     updatedItinerary.days[dayIndex] = day;
 
-    setItinerary(updatedItinerary);
-    await saveAndSyncItinerary(updatedItinerary);
+    // 實作順序調整後相鄰景點的真實交通重算與起訖時間順延自癒
+    // 我們以排在前面的活動 (較早的 targetIndex) 的 startTime 為基準，往後修復整天
+    const firstActId = activities[Math.min(actIndex, targetIndex)]!.id;
+    const firstActStartTime = activities[Math.min(actIndex, targetIndex)]!.startTime;
+    
+    // 從 utils/itineraryRepairer 呼叫 repairItineraryTimes
+    const repairedItinerary = repairItineraryTimes(updatedItinerary, day.dayNumber, firstActId, firstActStartTime);
+
+    // 由於 repairItineraryTimes 會順便重算交通時間並檢驗時間，這裡就不需要手動檢查。
+    // 但是我們還需要校驗「公休日與營業時間」並「動態顯示警告標籤」。
+    // 這一部分在 UI 的 TimelineView 中已經依賴 warningType 顯示。
+
+    setItinerary(repairedItinerary);
+    await saveAndSyncItinerary(repairedItinerary);
   };
 
   const handleUpdateNote = async (activityId: string, note: string) => {
