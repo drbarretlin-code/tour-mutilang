@@ -1,18 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { Itinerary } from '../../types/itinerary';
 import { t } from '../../i18n';
 
-interface Props {
+interface Props extends React.ComponentProps<typeof Pressable> {
   itinerary: Itinerary;
-  onPress?: (e?: any) => void;
   onEdit?: () => void;
   onDelete?: () => void;
 }
 
-export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
+export function ItineraryCard({ itinerary, onEdit, onDelete, ...props }: Props) {
   const { colors, typography, shadows, borderRadius, spacing } = useTheme();
 
   const dayCount = itinerary.days?.length || 0;
@@ -22,10 +21,15 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
   const bgImage = itinerary.mapImageUrl || itinerary.days?.[0]?.activities?.find(a => a.photoUrl?.startsWith('http'))?.photoUrl;
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={onPress}
-      style={[styles.card, shadows.sm, { borderRadius: 24, backgroundColor: colors.surface }]}
+    <Pressable
+      {...props}
+      style={({ pressed }) => [
+        styles.card, 
+        shadows.sm, 
+        { borderRadius: 24, backgroundColor: colors.surface },
+        pressed && { opacity: 0.8 },
+        typeof props.style === 'function' ? props.style({ pressed }) : props.style
+      ]}
     >
       <View style={[styles.imageContainer, { borderRadius: 24 }]}>
         {bgImage ? (
@@ -70,8 +74,8 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
                 )}
               </View>
             </View>
-          </View>
-        {/* Absolute positioned Action Buttons layer - Sibling to the main TouchableOpacity */}
+        </View>
+        {/* Absolute positioned Action Buttons layer - Sibling to the main view */}
         <View style={styles.actionContainer}>
           {onEdit && (
             <TouchableOpacity 
@@ -93,7 +97,7 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
           )}
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 

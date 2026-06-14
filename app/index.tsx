@@ -281,7 +281,14 @@ export default function HomeDashboard() {
                 key={item.id} 
                 href="/itinerary" 
                 asChild
-                onPress={() => setActiveItinerary(item)}
+                onPress={() => {
+                  setActiveItinerary(item);
+                  if (Platform.OS === 'web' && typeof window !== 'undefined') {
+                    try {
+                      window.localStorage.setItem('@trip_active_itinerary', JSON.stringify(item));
+                    } catch (e) {}
+                  }
+                }}
               >
                 <ItineraryCard 
                   itinerary={item} 
