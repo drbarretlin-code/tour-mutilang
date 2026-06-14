@@ -18,7 +18,7 @@ function getAirportData(regionName: string, locationName: string, activityTitle:
   // 1. 主要機場資料庫
   const airportsDb = [
     {
-      keys: ['narita', '成田', 'nrt'],
+      keys: ['narita', '成田', 'nrt', 'tokyo', '東京', 'japan', '日本'],
       flag: '🇯🇵',
       code: 'NRT',
       names: { tw: '東京成田國際機場', en: 'Narita International Airport' },
@@ -46,7 +46,7 @@ function getAirportData(regionName: string, locationName: string, activityTitle:
       }
     },
     {
-      keys: ['kansai', '關西', 'kix'],
+      keys: ['kansai', '關西', 'kix', 'osaka', '大阪', 'kyoto', '京都'],
       flag: '🇯🇵',
       code: 'KIX',
       names: { tw: '大阪關西國際機場', en: 'Kansai International Airport' },
@@ -60,7 +60,7 @@ function getAirportData(regionName: string, locationName: string, activityTitle:
       }
     },
     {
-      keys: ['taoyuan', '桃園', 'tpe'],
+      keys: ['taoyuan', '桃園', 'tpe', 'taipei', '台北', 'taiwan', '台灣'],
       flag: '🇹🇼',
       code: 'TPE',
       names: { tw: '台灣桃園國際機場', en: 'Taoyuan International Airport' },
@@ -88,7 +88,7 @@ function getAirportData(regionName: string, locationName: string, activityTitle:
       }
     },
     {
-      keys: ['suvarnabhumi', '蘇凡納布', 'bkk'],
+      keys: ['suvarnabhumi', '蘇凡納布', 'bkk', 'bangkok', '曼谷', 'thailand', '泰國'],
       flag: '🇹🇭',
       code: 'BKK',
       names: { tw: '曼谷蘇凡納布機場', en: 'Suvarnabhumi Airport' },
@@ -116,7 +116,7 @@ function getAirportData(regionName: string, locationName: string, activityTitle:
       }
     },
     {
-      keys: ['incheon', '仁川', 'icn'],
+      keys: ['incheon', '仁川', 'icn', 'seoul', '首爾', 'korea', '韓國'],
       flag: '🇰🇷',
       code: 'ICN',
       names: { tw: '首爾仁川國際機場', en: 'Incheon International Airport' },
@@ -144,7 +144,7 @@ function getAirportData(regionName: string, locationName: string, activityTitle:
       }
     },
     {
-      keys: ['changi', '樟宜', 'sin'],
+      keys: ['changi', '樟宜', 'sin', 'singapore', '新加坡'],
       flag: '🇸🇬',
       code: 'SIN',
       names: { tw: '新加坡樟宜機場', en: 'Changi Airport' },
@@ -158,7 +158,7 @@ function getAirportData(regionName: string, locationName: string, activityTitle:
       }
     },
     {
-      keys: ['heathrow', '希斯洛', 'lhr'],
+      keys: ['heathrow', '希斯洛', 'lhr', 'london', '倫敦', 'uk', '英國'],
       flag: '🇬🇧',
       code: 'LHR',
       names: { tw: '倫敦希斯洛機場', en: 'Heathrow Airport' },
@@ -172,7 +172,7 @@ function getAirportData(regionName: string, locationName: string, activityTitle:
       }
     },
     {
-      keys: ['kennedy', 'jfk', '甘迺迪'],
+      keys: ['kennedy', 'jfk', '甘迺迪', 'new york', '紐約', 'usa', '美國'],
       flag: '🇺🇸',
       code: 'JFK',
       names: { tw: '紐約甘迺迪國際機場', en: 'John F. Kennedy International Airport' },
@@ -186,7 +186,7 @@ function getAirportData(regionName: string, locationName: string, activityTitle:
       }
     },
     {
-      keys: ['charles de gaulle', 'roissy', '戴高樂', 'cdg'],
+      keys: ['charles de gaulle', 'roissy', '戴高樂', 'cdg', 'paris', '巴黎', 'france', '法國'],
       flag: '🇫🇷',
       code: 'CDG',
       names: { tw: '巴黎戴高樂機場', en: 'Charles de Gaulle Airport' },
@@ -614,9 +614,12 @@ export function TimelineView({
     }
 
     // Resolve via findLocalizedName to get the localized blogger-style title for the active UI locale
-    const localized = findLocalizedName(uiName, act.location?.latitude || 0, act.location?.longitude || 0, locale);
-    if (localized.title && localized.title !== uiName) {
-      uiName = localized.title;
+    // Skip for 'transport' to prevent airports using city-center coords from mis-matching with restaurants
+    if (act.type !== 'transport') {
+      const localized = findLocalizedName(uiName, act.location?.latitude || 0, act.location?.longitude || 0, locale);
+      if (localized.title && localized.title !== uiName) {
+        uiName = localized.title;
+      }
     }
 
     if (localName === uiName) {
