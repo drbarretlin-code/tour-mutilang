@@ -2,7 +2,12 @@
   "_comment": "內建目的地範本（離線/無 OpenTripMap 金鑰時的備援資料）。資料與邏輯解耦，新增目的地只需在此追加一筆物件，無需改動程式碼。keywords 為比對用關鍵字（小寫）。isDefault 標示找不到匹配時採用的預設目的地。title/desc 依語系 key 取值（zh-TW/zh-CN/en），缺值時退回 en。",
   "destinations": [
     {
-      "keywords": ["東京", "tokyo", "日本", "japan"],
+      "keywords": [
+        "東京",
+        "tokyo",
+        "日本",
+        "japan"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=600",
         "https://images.unsplash.com/photo-1542051841857-5f90071e7989?w=600",
@@ -53,6 +58,21 @@
             "zh-CN": "明治神宫是为了供奉明治天皇与昭宪皇太后而建的神社，于1920年落成，是东京最重要的神道信仰圣地之一。最令人惊叹的是，神宫并非坐落于荒野，而是被一片占地约70公顷、由全国各地献纳的约十万棵树木所构成的巨大人工森林环抱——这片“永恒之森”历经百年生长，如今已演替成生机盎然、近乎天然的都市林相，与一墙之隔的繁华原宿、涩谷形成强烈对比。踏入高耸的木造鸟居，沿着铺满碎石的参道缓步前行，两旁古木参天、绿荫蔽日，城市的喧嚣仿佛瞬间被隔绝，只余鸟鸣与踩踏碎石的沙沙声，令人身心沉淀。本殿庄严肃穆，旅客可在此体验投赛钱、二拜二拍手一拜的参拜礼仪，或在绘马上书写愿望、选购御守。每逢新年，这里更是全日本参拜人数最多的神社。是繁华东京市中心难得的静谧绿洲与神圣之所。",
             "en": "Meiji Jingu, completed in 1920, is a Shinto shrine dedicated to the deified spirits of Emperor Meiji and Empress Shoken, and one of Tokyo's most important sacred sites. Remarkably, the shrine does not sit in open wilderness but is embraced by a vast man-made forest of about 70 hectares, planted with some 100,000 trees donated from across Japan. This \"eternal forest\" has matured over a century into a lush, almost natural woodland — a stark contrast to bustling Harajuku and Shibuya just beyond its walls. Passing through the towering wooden torii gate and walking the gravel approach beneath a canopy of ancient trees, the noise of the city seems to vanish, leaving only birdsong and the crunch of gravel underfoot — a deeply calming experience. At the solemn main hall, visitors can offer coins and perform the two-bow, two-clap, one-bow ritual, write wishes on ema plaques, or buy protective omamori charms. At New Year it draws the largest number of worshippers of any shrine in Japan — a rare tranquil green oasis and sacred space in the heart of Tokyo."
           }
+        },
+        {
+          "localTitle": "東京スカイツリー",
+          "lat": 35.7101,
+          "lon": 139.8107,
+          "title": {
+            "zh-TW": "晴空塔雲端展望",
+            "zh-CN": "晴空塔云端展望",
+            "en": "Tokyo Skytree"
+          },
+          "desc": {
+            "zh-TW": "東京晴空塔位於墨田區，高達634公尺，2012年落成，是日本第一高塔，數字「634」取自當地古地名「武藏」的諧音。塔身以傳統日本建築的「起翹」與「凹陷」曲線為靈感，融合現代鋼骨工藝，白晝俐落、夜間以「雅」與「粹」兩種主題燈光交替點亮，成為東京天際線的新象徵。塔內設有350公尺與450公尺兩層展望台，可360度俯瞰整座關東平原，天氣晴朗時甚至能遠眺富士山；450公尺處的空中迴廊以玻璃環繞，行走其間宛如漫步雲端。塔下的Tokyo Solamachi購物城匯集美食、紀念品與水族館，適合一併安排。建議傍晚前登塔，一覽晝夜交替的絕景，並提前購票避開人潮。塔位於押上站旁，交通便捷；周邊仍保留濃厚的下町風情，可順遊淺草寺，徒步跨越隅田川即達，串成經典的東京懷舊半日遊。",
+            "zh-CN": "东京晴空塔位于墨田区，高达634米，2012年落成，是日本第一高塔，数字“634”取自当地古地名“武藏”的谐音。塔身以传统日本建筑的“起翘”与“凹陷”曲线为灵感，融合现代钢骨工艺，白昼俐落、夜间以“雅”与“粹”两种主题灯光交替点亮，成为东京天际线的新象征。塔内设有350米与450米两层展望台，可360度俯瞰整座关东平原，天气晴朗时甚至能远眺富士山；450米处的空中回廊以玻璃环绕，行走其间宛如漫步云端。塔下的Tokyo Solamachi购物城汇集美食、纪念品与水族馆，适合一并安排。建议傍晚前登塔，一览昼夜交替的绝景，并提前购票避开人潮。塔位于押上站旁，交通便捷；周边仍保留浓厚的下町风情，可顺游浅草寺，徒步跨越隅田川即达，串成经典的东京怀旧半日游。",
+            "en": "Tokyo Skytree, a 634-metre broadcasting tower in Sumida, opened in 2012 as Japan's tallest structure (its height nodding to the old place-name 'Musashi'). Its silhouette blends traditional curves with modern steel, lit nightly in alternating 'Iki' and 'Miyabi' themes. Observation decks at 350 m and 450 m give 360° views across the Kanto plain—even Mt. Fuji on clear days—while the glass skywalk feels like floating. The Tokyo Solamachi mall below adds dining, souvenirs and an aquarium. Visit around dusk for day-to-night views and book ahead."
+          }
         }
       ],
       "restaurants": [
@@ -61,7 +81,11 @@
           "lat": 35.6614,
           "lon": 139.7006,
           "cost": 1200,
-          "title": { "zh-TW": "一蘭拉麵 澀谷店", "zh-CN": "一兰拉面 涩谷店", "en": "Ichiran Ramen Shibuya" },
+          "title": {
+            "zh-TW": "一蘭拉麵 澀谷店",
+            "zh-CN": "一兰拉面 涩谷店",
+            "en": "Ichiran Ramen Shibuya"
+          },
           "desc": {
             "zh-TW": "以個人專注隔間與濃郁豚骨湯頭聞名的連鎖拉麵名店，可依喜好客製湯頭濃度與辣度。",
             "zh-CN": "以个人专注隔间与浓郁豚骨汤头闻名的连锁拉面名店，可依喜好客制汤头浓度与辣度。",
@@ -73,7 +97,11 @@
           "lat": 35.6657,
           "lon": 139.7106,
           "cost": 2000,
-          "title": { "zh-TW": "邁泉豬排 青山總店", "zh-CN": "迈泉猪排 青山总店", "en": "Tonkatsu Maisen Aoyama" },
+          "title": {
+            "zh-TW": "邁泉豬排 青山總店",
+            "zh-CN": "迈泉猪排 青山总店",
+            "en": "Tonkatsu Maisen Aoyama"
+          },
           "desc": {
             "zh-TW": "改建自老澡堂的炸豬排名店，豬排酥嫩多汁、入口即化，搭配自製醬汁堪稱東京一絕。",
             "zh-CN": "改建自老澡堂的炸猪排名店，猪排酥嫩多汁、入口即化，搭配自制酱汁堪称东京一绝。",
@@ -85,7 +113,11 @@
           "lat": 35.6655,
           "lon": 139.7707,
           "cost": 3000,
-          "title": { "zh-TW": "築地壽司清", "zh-CN": "筑地寿司清", "en": "Tsukiji Sushiko" },
+          "title": {
+            "zh-TW": "築地壽司清",
+            "zh-CN": "筑地寿司清",
+            "en": "Tsukiji Sushiko"
+          },
           "desc": {
             "zh-TW": "鄰近築地市場的老字號壽司店，使用當日直送鮮魚，江戶前握壽司新鮮細緻。",
             "zh-CN": "邻近筑地市场的老字号寿司店，使用当日直送鲜鱼，江户前握寿司新鲜细致。",
@@ -97,7 +129,11 @@
           "lat": 35.692,
           "lon": 139.773,
           "cost": 1500,
-          "title": { "zh-TW": "金子半之助天丼", "zh-CN": "金子半之助天丼", "en": "Kaneko Hannosuke Tendon" },
+          "title": {
+            "zh-TW": "金子半之助天丼",
+            "zh-CN": "金子半之助天丼",
+            "en": "Kaneko Hannosuke Tendon"
+          },
           "desc": {
             "zh-TW": "日本橋人氣天丼名店，現炸的星鰻、蝦與蔬菜天婦羅鋪滿丼飯，淋上祖傳醬汁，酥脆鹹甜、份量十足，常見排隊。",
             "zh-CN": "日本桥人气天丼名店，现炸的星鳗、虾与蔬菜天妇罗铺满丼饭，淋上祖传酱汁，酥脆咸甜、份量十足，常见排队。",
@@ -109,7 +145,11 @@
           "lat": 35.6812,
           "lon": 139.7671,
           "cost": 1200,
-          "title": { "zh-TW": "六厘舍沾麵", "zh-CN": "六厘舍蘸面", "en": "Rokurinsha Tsukemen" },
+          "title": {
+            "zh-TW": "六厘舍沾麵",
+            "zh-CN": "六厘舍蘸面",
+            "en": "Rokurinsha Tsukemen"
+          },
           "desc": {
             "zh-TW": "東京車站拉麵街的沾麵名店，濃厚魚介豚骨沾汁搭配彈牙粗麵，風味醇厚，是沾麵愛好者必訪，用餐時段常大排長龍。",
             "zh-CN": "东京车站拉面街的蘸面名店，浓厚鱼介豚骨蘸汁搭配弹牙粗面，风味醇厚，是蘸面爱好者必访，用餐时段常大排长龙。",
@@ -121,7 +161,11 @@
           "lat": 35.6585,
           "lon": 139.7454,
           "cost": 4000,
-          "title": { "zh-TW": "野田岩鰻魚飯", "zh-CN": "野田岩鳗鱼饭", "en": "Nodaiwa Unagi" },
+          "title": {
+            "zh-TW": "野田岩鰻魚飯",
+            "zh-CN": "野田岩鳗鱼饭",
+            "en": "Nodaiwa Unagi"
+          },
           "desc": {
             "zh-TW": "創業逾兩百年的鰻魚飯老舖，以備長炭細火慢烤的蒲燒鰻外酥內嫩、香氣四溢，是品味江戶傳統鰻魚料理的經典之選。",
             "zh-CN": "创业逾两百年的鳗鱼饭老铺，以备长炭细火慢烤的蒲烧鳗外酥内嫩、香气四溢，是品味江户传统鳗鱼料理的经典之选。",
@@ -131,7 +175,17 @@
       ]
     },
     {
-      "keywords": ["曼谷", "bangkok", "泰國", "泰国", "thai", "thailand", "芭達雅", "芭达雅", "pattaya"],
+      "keywords": [
+        "曼谷",
+        "bangkok",
+        "泰國",
+        "泰国",
+        "thai",
+        "thailand",
+        "芭達雅",
+        "芭达雅",
+        "pattaya"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=600",
         "https://images.unsplash.com/photo-1562790351-d273a961e0e9?w=600",
@@ -190,7 +244,11 @@
           "lat": 13.753,
           "lon": 100.5063,
           "cost": 120,
-          "title": { "zh-TW": "Thip Samai 鬼門炒河粉", "zh-CN": "Thip Samai 鬼门炒河粉", "en": "Thip Samai Pad Thai" },
+          "title": {
+            "zh-TW": "Thip Samai 鬼門炒河粉",
+            "zh-CN": "Thip Samai 鬼门炒河粉",
+            "en": "Thip Samai Pad Thai"
+          },
           "desc": {
             "zh-TW": "曼谷公認最具代表性的炒河粉名店，以蛋包炒河粉聞名，創業逾七十年，每晚門庭若市。",
             "zh-CN": "曼谷公认最具代表性的炒河粉名店，以蛋包炒河粉闻名，创业逾七十年，每晚门庭若市。",
@@ -202,7 +260,11 @@
           "lat": 13.7536,
           "lon": 100.5044,
           "cost": 800,
-          "title": { "zh-TW": "Jay Fai 米其林一星街頭海鮮", "zh-CN": "Jay Fai 米其林一星街头海鲜", "en": "Jay Fai (1 Michelin Star)" },
+          "title": {
+            "zh-TW": "Jay Fai 米其林一星街頭海鮮",
+            "zh-CN": "Jay Fai 米其林一星街头海鲜",
+            "en": "Jay Fai (1 Michelin Star)"
+          },
           "desc": {
             "zh-TW": "戴著護目鏡掌廚的傳奇老闆娘，以炭火現炒的蟹肉蛋包與海鮮冬蔭功享譽國際，米其林一星。",
             "zh-CN": "戴着护目镜掌厨的传奇老板娘，以炭火现炒的蟹肉蛋包与海鲜冬荫功享誉国际，米其林一星。",
@@ -214,7 +276,11 @@
           "lat": 13.7589,
           "lon": 100.5043,
           "cost": 350,
-          "title": { "zh-TW": "Krua Apsorn 家常泰菜名店", "zh-CN": "Krua Apsorn 家常泰菜名店", "en": "Krua Apsorn" },
+          "title": {
+            "zh-TW": "Krua Apsorn 家常泰菜名店",
+            "zh-CN": "Krua Apsorn 家常泰菜名店",
+            "en": "Krua Apsorn"
+          },
           "desc": {
             "zh-TW": "曾獲皇室御廚背書的家常泰菜餐廳，招牌咖哩蟹肉與炒水空心菜深受在地人喜愛。",
             "zh-CN": "曾获皇室御厨背书的家常泰菜餐厅，招牌咖喱蟹肉与炒水空心菜深受在地人喜爱。",
@@ -226,7 +292,11 @@
           "lat": 13.728,
           "lon": 100.524,
           "cost": 600,
-          "title": { "zh-TW": "建興酒家咖哩螃蟹", "zh-CN": "建兴酒家咖喱螃蟹", "en": "Somboon Seafood" },
+          "title": {
+            "zh-TW": "建興酒家咖哩螃蟹",
+            "zh-CN": "建兴酒家咖喱螃蟹",
+            "en": "Somboon Seafood"
+          },
           "desc": {
             "zh-TW": "創業逾五十年的曼谷海鮮名店，招牌咖哩炒蟹以濃郁蛋香咖哩裹覆肥美蟹肉，是必嚐的泰式海鮮經典。",
             "zh-CN": "创业逾五十年的曼谷海鲜名店，招牌咖喱炒蟹以浓郁蛋香咖喱裹覆肥美蟹肉，是必尝的泰式海鲜经典。",
@@ -238,7 +308,11 @@
           "lat": 13.744,
           "lon": 100.534,
           "cost": 200,
-          "title": { "zh-TW": "Som Tam Nua 青木瓜沙拉", "zh-CN": "Som Tam Nua 青木瓜沙拉", "en": "Som Tam Nua" },
+          "title": {
+            "zh-TW": "Som Tam Nua 青木瓜沙拉",
+            "zh-CN": "Som Tam Nua 青木瓜沙拉",
+            "en": "Som Tam Nua"
+          },
           "desc": {
             "zh-TW": "暹羅商圈人氣泰式東北菜餐廳，招牌青木瓜沙拉酸辣開胃、炸雞酥脆多汁，平價道地、用餐時段常排隊。",
             "zh-CN": "暹罗商圈人气泰式东北菜餐厅，招牌青木瓜沙拉酸辣开胃、炸鸡酥脆多汁，平价道地、用餐时段常排队。",
@@ -250,7 +324,11 @@
           "lat": 13.73,
           "lon": 100.569,
           "cost": 250,
-          "title": { "zh-TW": "After You 甜點咖啡", "zh-CN": "After You 甜点咖啡", "en": "After You Dessert Cafe" },
+          "title": {
+            "zh-TW": "After You 甜點咖啡",
+            "zh-CN": "After You 甜点咖啡",
+            "en": "After You Dessert Cafe"
+          },
           "desc": {
             "zh-TW": "風靡泰國的人氣甜點連鎖，招牌蜜糖吐司與澀谷刨冰綿密細緻、甜而不膩，是午後歇腳、滿足甜點控的最佳去處。",
             "zh-CN": "风靡泰国的人气甜点连锁，招牌蜜糖吐司与涩谷刨冰绵密细致、甜而不腻，是午后歇脚、满足甜点控的最佳去处。",
@@ -260,7 +338,13 @@
       ]
     },
     {
-      "keywords": ["台北", "台灣", "台湾", "taipei", "taiwan"],
+      "keywords": [
+        "台北",
+        "台灣",
+        "台湾",
+        "taipei",
+        "taiwan"
+      ],
       "isDefault": true,
       "images": [
         "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=600",
@@ -312,6 +396,36 @@
             "zh-CN": "夜市是台湾最具代表性的饮食文化核心，而士林夜市正是台北规模最大、历史最悠久的夜市之一，自清代慈諴宫庙口的小吃摊集结发展至今，已超过百年。这里汇聚了数百摊琳琅满目的庶民美食：超大片现炸鸡排、淋上蛋液的蚵仔煎、香气十足的大肠包小肠、生炒花枝、药炖排骨，以及风靡全球、源自台湾的珍珠奶茶，几乎囊括了所有经典台味，让人一路吃到撑。除了美食，士林夜市的地下美食街与周边街区还林立着服饰、鞋包、美妆与各式新奇小物的摊位，价格亲民、讨价还价之间充满人情味；穿插其中的还有套圈圈、弹珠台、射气球等怀旧夜市游戏，洋溢着浓厚的庶民欢乐气氛。无论是想大快朵颐、采买伴手礼，还是单纯感受台北入夜后熙来攘往的热闹与热情民风，士林夜市都是不可错过的必访之地。",
             "en": "Night markets are the heart of Taiwan's culinary culture, and Shilin is one of Taipei's largest and most historic, having grown from the food stalls around the Cixian Temple since the Qing dynasty — more than a century of history. Here hundreds of stalls serve a dazzling array of street food: oversized deep-fried chicken cutlets, egg-laden oyster omelets, fragrant \"big sausage wrapped in small sausage,\" stir-fried squid, herbal pork-rib soup, and the globally beloved Taiwan-born bubble tea — virtually every classic Taiwanese flavor, enough to eat your way to bursting. Beyond food, the underground food court and surrounding streets are lined with stalls of clothing, shoes and bags, cosmetics and novelty goods at friendly prices, where good-natured haggling adds to the warmth; interspersed are nostalgic carnival games like ring toss, pinball and balloon darts, brimming with cheerful local energy. Whether you want to feast, shop for souvenirs, or simply soak up the bustle and warm hospitality of Taipei after dark, Shilin Night Market is an unmissable destination."
           }
+        },
+        {
+          "localTitle": "國立故宮博物院",
+          "lat": 25.1023,
+          "lon": 121.5485,
+          "title": {
+            "zh-TW": "故宮博物院中華瑰寶",
+            "zh-CN": "故宫博物院中华瑰宝",
+            "en": "National Palace Museum"
+          },
+          "desc": {
+            "zh-TW": "國立故宮博物院坐落於台北士林，是全球華人世界最重要的藝術寶庫之一，典藏近70萬件橫跨八千年的中華歷史文物，多承襲自北京紫禁城的清宮舊藏，質量冠絕全球。館藏涵蓋商周青銅器、歷代書畫、宋元名瓷、玉器與善本古籍，其中以「翠玉白菜」、「肉形石」與毛公鼎最為膾炙人口，總是被遊客團團圍繞。由於文物數量龐大，展品採定期輪換，每次造訪皆有新意。博物院依山而建，正館為中國宮殿式建築，氣勢恢宏；園區內的至善園為江南風格庭園，可靜心散步。建議預留半天細品，並可租借語音導覽，深入了解每件國寶背後的故事。館內另設有兒童學藝中心與數位展廳，寓教於樂；分館「故宮南院」位於嘉義，主打亞洲藝術與文化交流，南部旅客亦可就近造訪。",
+            "zh-CN": "国立故宫博物院坐落于台北士林，是全球华人世界最重要的艺术宝库之一，典藏近70万件横跨八千年的中华历史文物，多承袭自北京紫禁城的清宫旧藏，质量冠绝全球。馆藏涵盖商周青铜器、历代书画、宋元名瓷、玉器与善本古籍，其中以“翠玉白菜”、“肉形石”与毛公鼎最为脍炙人口，总是被游客团团围绕。由于文物数量庞大，展品采定期轮换，每次造访皆有新意。博物院依山而建，正馆为中国宫殿式建筑，气势恢宏；园区内的至善园为江南风格庭园，可静心散步。建议预留半天细品，并可租借语音导览，深入了解每件国宝背后的故事。馆内另设有儿童学艺中心与数位展厅，寓教于乐；分馆“故宫南院”位于嘉义，主打亚洲艺术与文化交流，南部旅客亦可就近造访。",
+            "en": "Taipei's National Palace Museum holds one of the greatest collections of Chinese art on earth—nearly 700,000 artefacts spanning 8,000 years, much of it inherited from Beijing's Forbidden City. Highlights include Shang–Zhou bronzes, classical painting and calligraphy, Song–Yuan porcelain, jades and rare books, with the Jadeite Cabbage, Meat-shaped Stone and Mao Gong Ding drawing constant crowds. Because the holdings are so vast, exhibits rotate regularly. The palace-style main hall sits against the hills, with the Jiangnan-style Zhishan Garden alongside. Allow half a day and rent an audio guide to unlock each treasure's story."
+          }
+        },
+        {
+          "localTitle": "大安森林公園",
+          "lat": 25.0297,
+          "lon": 121.5359,
+          "title": {
+            "zh-TW": "大安森林公園都會之肺",
+            "zh-CN": "大安森林公园都会之肺",
+            "en": "Daan Forest Park"
+          },
+          "desc": {
+            "zh-TW": "大安森林公園是台北市中心最大的都會綠地，佔地約26公頃，素有「台北之肺」的美譽，是繁忙都市裡難得的喘息空間。園內遍植喬木與灌叢，林蔭蓊鬱、草坪開闊，環狀步道適合慢跑、散步與騎乘單車，假日常見全家野餐、孩童嬉戲的悠閒景象。生態池畔棲息著白鷺、夜鷺與多種候鳥，是城市中珍貴的生態樂園，賞鳥人士絡繹不絕；春季杜鵑與木棉盛開，繽紛動人。園區一隅設有露天音樂台，不時舉辦藝文表演，緊鄰的捷運大安森林公園站更以下沉式庭園與光井設計獲獎無數。交通便利、老少咸宜，很適合在密集的市區行程中插入一段放鬆的綠意時光。公園鄰近東門與大安站商圈，逛完永康街的鼎泰豐與芒果冰後，來此散步消食最為愜意，是體驗台北慢生活的最佳註腳。",
+            "zh-CN": "大安森林公园是台北市中心最大的都会绿地，占地约26公顷，素有“台北之肺”的美誉，是繁忙都市里难得的喘息空间。园内遍植乔木与灌丛，林荫蓊郁、草坪开阔，环状步道适合慢跑、散步与骑乘单车，假日常见全家野餐、孩童嬉戏的悠闲景象。生态池畔栖息着白鹭、夜鹭与多种候鸟，是城市中珍贵的生态乐园，赏鸟人士络绎不绝；春季杜鹃与木棉盛开，缤纷动人。园区一隅设有露天音乐台，不时举办艺文表演，紧邻的捷运大安森林公园站更以下沉式庭园与光井设计获奖无数。交通便利、老少咸宜，很适合在密集的市区行程中插入一段放松的绿意时光。公园邻近东门与大安站商圈，逛完永康街的鼎泰丰与芒果冰后，来此散步消食最为惬意，是体验台北慢生活的最佳注脚。",
+            "en": "Daan Forest Park is central Taipei's largest green space—about 26 hectares dubbed the 'lungs of Taipei,' a rare breather amid the busy city. Dense trees and open lawns line looping paths made for jogging, strolling and cycling, with families picnicking on weekends. An ecological pond hosts egrets, night herons and migratory birds, delighting birdwatchers, while azaleas and kapok bloom in spring. An open-air amphitheatre stages performances, and the adjacent MRT station is an award-winning sunken garden with light wells. Easy to reach and good for all ages—an ideal green pause in a packed city itinerary."
+          }
         }
       ],
       "restaurants": [
@@ -320,7 +434,11 @@
           "lat": 25.033,
           "lon": 121.563,
           "cost": 400,
-          "title": { "zh-TW": "鼎泰豐 信義店", "zh-CN": "鼎泰丰 信义店", "en": "Din Tai Fung Xinyi" },
+          "title": {
+            "zh-TW": "鼎泰豐 信義店",
+            "zh-CN": "鼎泰丰 信义店",
+            "en": "Din Tai Fung Xinyi"
+          },
           "desc": {
             "zh-TW": "享譽國際的小籠包名店，十八摺薄皮湯包鮮美多汁，米其林推薦、觀光客必訪。",
             "zh-CN": "享誉国际的小笼包名店，十八折薄皮汤包鲜美多汁，米其林推荐、观光客必访。",
@@ -332,7 +450,11 @@
           "lat": 25.0444,
           "lon": 121.5197,
           "cost": 120,
-          "title": { "zh-TW": "阜杭豆漿", "zh-CN": "阜杭豆浆", "en": "Fuhang Soy Milk" },
+          "title": {
+            "zh-TW": "阜杭豆漿",
+            "zh-CN": "阜杭豆浆",
+            "en": "Fuhang Soy Milk"
+          },
           "desc": {
             "zh-TW": "華山市場二樓的排隊名店，現烤厚燒餅夾蛋與鹹豆漿是台北經典早午餐。",
             "zh-CN": "华山市场二楼的排队名店，现烤厚烧饼夹蛋与咸豆浆是台北经典早午餐。",
@@ -344,7 +466,11 @@
           "lat": 25.0438,
           "lon": 121.507,
           "cost": 90,
-          "title": { "zh-TW": "阿宗麵線", "zh-CN": "阿宗面线", "en": "Ay-Chung Flour-Rice Noodles" },
+          "title": {
+            "zh-TW": "阿宗麵線",
+            "zh-CN": "阿宗面线",
+            "en": "Ay-Chung Flour-Rice Noodles"
+          },
           "desc": {
             "zh-TW": "西門町站著吃的傳奇小吃，柴魚高湯麵線淋上滷大腸與香菜，是台北街頭代表味。",
             "zh-CN": "西门町站着吃的传奇小吃，柴鱼高汤面线淋上卤大肠与香菜，是台北街头代表味。",
@@ -356,7 +482,11 @@
           "lat": 25.033,
           "lon": 121.53,
           "cost": 280,
-          "title": { "zh-TW": "永康牛肉麵", "zh-CN": "永康牛肉面", "en": "Yongkang Beef Noodles" },
+          "title": {
+            "zh-TW": "永康牛肉麵",
+            "zh-CN": "永康牛肉面",
+            "en": "Yongkang Beef Noodles"
+          },
           "desc": {
             "zh-TW": "永康街的牛肉麵名店，紅燒湯頭濃郁醇厚、牛肉軟嫩入味，是台北最具代表性的牛肉麵之一，常吸引各國饕客排隊朝聖。",
             "zh-CN": "永康街的牛肉面名店，红烧汤头浓郁醇厚、牛肉软嫩入味，是台北最具代表性的牛肉面之一，常吸引各国饕客排队朝圣。",
@@ -368,7 +498,11 @@
           "lat": 25.042,
           "lon": 121.543,
           "cost": 200,
-          "title": { "zh-TW": "度小月擔仔麵", "zh-CN": "度小月担仔面", "en": "Du Hsiao Yueh" },
+          "title": {
+            "zh-TW": "度小月擔仔麵",
+            "zh-CN": "度小月担仔面",
+            "en": "Du Hsiao Yueh"
+          },
           "desc": {
             "zh-TW": "源自台南、創業逾百年的擔仔麵名店，以肉燥、蝦湯與彈牙油麵交織出細緻古早味，份量小巧精緻，適合搭配多樣台式小點。",
             "zh-CN": "源自台南、创业逾百年的担仔面名店，以肉燥、虾汤与弹牙油面交织出细致古早味，份量小巧精致，适合搭配多样台式小点。",
@@ -380,7 +514,11 @@
           "lat": 25.057,
           "lon": 121.515,
           "cost": 200,
-          "title": { "zh-TW": "寧夏夜市小吃", "zh-CN": "宁夏夜市小吃", "en": "Ningxia Night Market" },
+          "title": {
+            "zh-TW": "寧夏夜市小吃",
+            "zh-CN": "宁夏夜市小吃",
+            "en": "Ningxia Night Market"
+          },
           "desc": {
             "zh-TW": "台北最具古早味的夜市之一，以蚵仔煎、麻油雞、芋頭粥與各式經典台灣小吃聞名，攤位密集、價格親民，是體驗在地夜市文化的好去處。",
             "zh-CN": "台北最具古早味的夜市之一，以蚵仔煎、麻油鸡、芋头粥与各式经典台湾小吃闻名，摊位密集、价格亲民，是体验在地夜市文化的好去处。",
@@ -390,7 +528,14 @@
       ]
     },
     {
-      "keywords": ["首爾", "首尔", "seoul", "韓國", "韩国", "korea"],
+      "keywords": [
+        "首爾",
+        "首尔",
+        "seoul",
+        "韓國",
+        "韩国",
+        "korea"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1538485399081-7191377e8241?w=600",
         "https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=600",
@@ -401,7 +546,11 @@
           "localTitle": "경복궁",
           "lat": 37.5796,
           "lon": 126.977,
-          "title": { "zh-TW": "景福宮古典宮闕巡禮", "zh-CN": "景福宫古典宫阙巡礼", "en": "Gyeongbokgung Palace" },
+          "title": {
+            "zh-TW": "景福宮古典宮闕巡禮",
+            "zh-CN": "景福宫古典宫阙巡礼",
+            "en": "Gyeongbokgung Palace"
+          },
           "desc": {
             "zh-TW": "景福宮是朝鮮王朝於1395年建立的正宮，也是首爾五大宮闕中規模最大、最具代表性的一座，「景福」二字寓意「享受太平盛世的洪福」。宮殿坐北朝南、背倚北岳山，氣勢恢宏，中軸線上依序排列著光化門、勤政殿、思政殿與康寧殿，飛簷斗拱、丹青彩繪盡顯朝鮮王宮的莊嚴典雅。雖歷經壬辰倭亂與日據時期的破壞，韓國政府已長期推動復原工程，再現昔日風貌。最受遊客喜愛的，是每日上演的「守門將換崗儀式」，身著傳統服飾的儀仗隊伴隨鼓樂列隊，重現古代宮廷場景。穿著韓服入場可免費參觀，因此宮內四處可見租借韓服拍照的遊客，與古色古香的建築相映成趣。宮後方還有香遠亭與慶會樓等優美的池上樓閣，是攝影的絕佳取景地，建議預留半日細細遊覽並順道走訪鄰近的北村與三清洞。",
             "zh-CN": "景福宫是朝鲜王朝于1395年建立的正宫，也是首尔五大宫阙中规模最大、最具代表性的一座，“景福”二字寓意“享受太平盛世的洪福”。宫殿坐北朝南、背倚北岳山，气势恢宏，中轴线上依序排列着光化门、勤政殿、思政殿与康宁殿，飞檐斗拱、丹青彩绘尽显朝鲜王宫的庄严典雅。虽历经壬辰倭乱与日据时期的破坏，韩国政府已长期推动复原工程，再现昔日风貌。最受游客喜爱的，是每日上演的“守门将换岗仪式”，身着传统服饰的仪仗队伴随鼓乐列队，重现古代宫廷场景。穿着韩服入场可免费参观，因此宫内四处可见租借韩服拍照的游客，与古色古香的建筑相映成趣。宫后方还有香远亭与庆会楼等优美的池上楼阁，是摄影的绝佳取景地，建议预留半日细细游览并顺道走访邻近的北村与三清洞。",
@@ -412,7 +561,11 @@
           "localTitle": "북촌한옥마을",
           "lat": 37.5826,
           "lon": 126.9831,
-          "title": { "zh-TW": "北村韓屋村古今交織", "zh-CN": "北村韩屋村古今交织", "en": "Bukchon Hanok Village" },
+          "title": {
+            "zh-TW": "北村韓屋村古今交織",
+            "zh-CN": "北村韩屋村古今交织",
+            "en": "Bukchon Hanok Village"
+          },
           "desc": {
             "zh-TW": "北村韓屋村坐落於景福宮與昌德宮兩大宮闕之間，自朝鮮王朝起便是兩班貴族與王室官員的居住地，至今仍保留著數百棟傳統「韓屋」建築，是首爾市區內最完整的歷史聚落。韓屋以木構樑柱、瓦頂曲線與「溫突」地暖系統著稱，依山勢層層而建的巷弄錯落有致，從高處俯瞰，灰瓦屋頂與遠方的現代高樓同框，形成古今交織的獨特畫面，正是北村最迷人的標誌性風景。漫步其間，可見許多韓屋已改建為傳統工藝體驗坊、茶館、藝廊與精品民宿，遊客能親手體驗韓紙工藝、結繩或品茶。由於此處仍有居民實際居住，參觀時請放低音量、勿擅闖民宅，做個體貼的旅人。建議清晨或傍晚前往，避開人潮並捕捉柔和光線下的韓屋之美，再順遊鄰近的三清洞咖啡街與仁寺洞文化街。",
             "zh-CN": "北村韩屋村坐落于景福宫与昌德宫两大宫阙之间，自朝鲜王朝起便是两班贵族与王室官员的居住地，至今仍保留着数百栋传统“韩屋”建筑，是首尔市区内最完整的历史聚落。韩屋以木构梁柱、瓦顶曲线与“温突”地暖系统著称，依山势层层而建的巷弄错落有致，从高处俯瞰，灰瓦屋顶与远方的现代高楼同框，形成古今交织的独特画面，正是北村最迷人的标志性风景。漫步其间，可见许多韩屋已改建为传统工艺体验坊、茶馆、艺廊与精品民宿，游客能亲手体验韩纸工艺、结绳或品茶。由于此处仍有居民实际居住，参观时请放低音量、勿擅闯民宅，做个体贴的旅人。建议清晨或傍晚前往，避开人潮并捕捉柔和光线下的韩屋之美，再顺游邻近的三清洞咖啡街与仁寺洞文化街。",
@@ -423,11 +576,45 @@
           "localTitle": "N서울타워 (남산)",
           "lat": 37.5512,
           "lon": 126.9882,
-          "title": { "zh-TW": "南山N首爾塔夜景", "zh-CN": "南山N首尔塔夜景", "en": "N Seoul Tower" },
+          "title": {
+            "zh-TW": "南山N首爾塔夜景",
+            "zh-CN": "南山N首尔塔夜景",
+            "en": "N Seoul Tower"
+          },
           "desc": {
             "zh-TW": "N首爾塔矗立於南山之巔，塔高約237公尺、加上山體海拔後總高逾480公尺，自1980年代起便是首爾最具代表性的天際線地標。登上塔頂的數位觀景台，可360度俯瞰整座首爾盆地：白晝可遠眺漢江蜿蜒、群山環抱的城市全景，入夜後則化身一片璀璨無垠的燈海，是公認首爾最浪漫的賞夜景據點。前往南山可選擇搭乘復古的南山纜車、循環巴士或沿登山步道健行而上，沿途林木蓊鬱、空氣清新。塔下平台最著名的，是綴滿成千上萬「愛情鎖」的圍欄——情侶們將寫上誓言的鎖頭扣於此處，象徵永恆不渝，已成為韓劇與情侶必訪的朝聖地。塔內另設有餐廳、咖啡廳與紀念品店，建議於日落前一小時抵達，一次飽覽白晝、黃昏與夜景三種截然不同的首爾面貌。",
             "zh-CN": "N首尔塔矗立于南山之巅，塔高约237米、加上山体海拔后总高逾480米，自1980年代起便是首尔最具代表性的天际线地标。登上塔顶的数位观景台，可360度俯瞰整座首尔盆地：白昼可远眺汉江蜿蜒、群山环抱的城市全景，入夜后则化身一片璀璨无垠的灯海，是公认首尔最浪漫的赏夜景据点。前往南山可选择搭乘复古的南山缆车、循环巴士或沿登山步道健行而上，沿途林木蓊郁、空气清新。塔下平台最著名的，是缀满成千上万“爱情锁”的围栏——情侣们将写上誓言的锁头扣于此处，象征永恒不渝，已成为韩剧与情侣必访的朝圣地。塔内另设有餐厅、咖啡厅与纪念品店，建议于日落前一小时抵达，一次饱览白昼、黄昏与夜景三种截然不同的首尔面貌。",
             "en": "N Seoul Tower crowns the summit of Namsan; at about 237 meters — over 480 meters including the mountain's elevation — it has been Seoul's defining skyline landmark since the 1980s. Its digital observatory offers a 360-degree panorama of the Seoul basin: by day, the winding Han River and a mountain-ringed cityscape; by night, an endless sea of glittering lights that make it the city's most romantic night-view spot. You can reach Namsan by the retro Namsan cable car, a circular shuttle bus, or hiking trails through fresh, wooded slopes. The terrace below is famous for railings smothered in tens of thousands of \"love locks,\" where couples fasten inscribed padlocks as a symbol of everlasting devotion — a pilgrimage site for K-drama fans and couples. The tower also houses restaurants, cafes and gift shops. Arrive about an hour before sunset to enjoy daylight, dusk and the night view all in one visit."
+          }
+        },
+        {
+          "localTitle": "명동",
+          "lat": 37.5637,
+          "lon": 126.985,
+          "title": {
+            "zh-TW": "明洞購物美食天堂",
+            "zh-CN": "明洞购物美食天堂",
+            "en": "Myeongdong"
+          },
+          "desc": {
+            "zh-TW": "明洞是首爾最繁華、最具代表性的購物與美食天堂，位於市中心精華地段，終日人潮鼎沸、霓虹閃爍。狹長的街巷兩側林立著國際精品、韓系平價時裝與琳瑯滿目的美妝店，從雪花秀、innisfree到各式面膜應有盡有，是體驗韓國美妝文化、掃貨血拼的首選之地，許多店家更備有中文與日文店員。入夜後，街道中央的路邊攤一字排開，烤龍蝦、起司年糕、雞蛋糕、糖餅與旋風馬鈴薯等街頭小吃香氣四溢，邊走邊吃是明洞的經典玩法。周邊還有樂天百貨、明洞聖堂與通往南山的纜車站，購物之餘亦可順遊。建議傍晚造訪，避開正午人潮並趕上夜市最熱鬧的時段。明洞亦設有眾多退稅櫃檯與民間換錢所，匯率普遍優於機場；步行可達南大門市場與首爾路7017空中步道，購物與散步一次滿足。",
+            "zh-CN": "明洞是首尔最繁华、最具代表性的购物与美食天堂，位于市中心精华地段，终日人潮鼎沸、霓虹闪烁。狭长的街巷两侧林立着国际精品、韩系平价时装与琳琅满目的美妆店，从雪花秀、innisfree到各式面膜应有尽有，是体验韩国美妆文化、扫货血拼的首选之地，许多店家更备有中文与日文店员。入夜后，街道中央的路边摊一字排开，烤龙虾、起司年糕、鸡蛋糕、糖饼与旋风马铃薯等街头小吃香气四溢，边走边吃是明洞的经典玩法。周边还有乐天百货、明洞圣堂与通往南山的缆车站，购物之余亦可顺游。建议傍晚造访，避开正午人潮并赶上夜市最热闹的时段。明洞亦设有众多退税柜台与民间换钱所，汇率普遍优于机场；步行可达南大门市场与首尔路7017空中步道，购物与散步一次满足。",
+            "en": "Myeongdong is Seoul's busiest shopping-and-street-food district, a neon-lit warren in the heart of the city. Its lanes brim with international labels, affordable Korean fashion and cosmetics shops—Sulwhasoo, innisfree, endless sheet masks—making it the go-to for K-beauty hauls, with many staff speaking Chinese and Japanese. After dark, food carts line the center selling grilled lobster, cheese tteokbokki, egg bread, hotteok and tornado potatoes—eating as you stroll is the classic way to enjoy it. Lotte Department Store, Myeongdong Cathedral and the Namsan cable car are close by. Come early evening to dodge midday crowds and catch the night market at its liveliest."
+          }
+        },
+        {
+          "localTitle": "동대문디자인플라자",
+          "lat": 37.5669,
+          "lon": 127.009,
+          "title": {
+            "zh-TW": "東大門不夜城與DDP",
+            "zh-CN": "东大门不夜城与DDP",
+            "en": "Dongdaemun (DDP)"
+          },
+          "desc": {
+            "zh-TW": "東大門是首爾不夜城的代名詞，以批發零售的服飾商圈與徹夜營業的購物大樓聞名，從入夜到凌晨人聲鼎沸，是時尚買家與夜貓子的天堂。區內Doota、Migliore等大型購物中心匯集數以千計的攤位，從韓系流行服飾、布料配件到鞋包一應俱全，價格實惠且更新極快。地標「東大門設計廣場（DDP）」由已故建築大師札哈·哈蒂操刀，以流線銀白的未來主義曲線造型震撼世人，內部設有展覽館、設計商店與創意市集，夜間外牆的LED玫瑰花海與燈光秀更是打卡熱點。鄰近還保有興仁之門古城門與清溪川步道，新舊交融。建議夜間造訪，感受首爾獨有的不眠魅力。巷弄裡的「東大門一隻雞」與燉排骨等宵夜名店終夜飄香，逛累了正好補充元氣，深夜的東大門依然熱鬧非凡、生氣勃勃。",
+            "zh-CN": "东大门是首尔不夜城的代名词，以批发零售的服饰商圈与彻夜营业的购物大楼闻名，从入夜到凌晨人声鼎沸，是时尚买家与夜猫子的天堂。区内Doota、Migliore等大型购物中心汇集数以千计的摊位，从韩系流行服饰、布料配件到鞋包一应俱全，价格实惠且更新极快。地标“东大门设计广场（DDP）”由已故建筑大师扎哈·哈迪德操刀，以流线银白的未来主义曲线造型震撼世人，内部设有展览馆、设计商店与创意市集，夜间外墙的LED玫瑰花海与灯光秀更是打卡热点。邻近还保有兴仁之门古城门与清溪川步道，新旧交融。建议夜间造访，感受首尔独有的不眠魅力。巷弄里的“东大门一只鸡”与炖排骨等宵夜名店终夜飘香，逛累了正好补充元气，深夜的东大门依然热闹非凡、生气勃勃。",
+            "en": "Dongdaemun is Seoul's city-that-never-sleeps, famous for wholesale-retail fashion malls trading deep into the night. Towers like Doota and Migliore pack thousands of stalls of Korean fashion, fabrics and footwear—cheap and constantly refreshed. The landmark Dongdaemun Design Plaza (DDP), by the late Zaha Hadid, stuns with sweeping silver futuristic curves, housing galleries, design shops and craft markets; its LED rose field and light shows are a photo magnet. The historic Heunginjimun gate and Cheonggyecheon stream stand nearby, old meeting new. Come at night to feel Seoul's sleepless energy."
           }
         }
       ],
@@ -437,7 +624,11 @@
           "lat": 37.5701,
           "lon": 126.9997,
           "cost": 12000,
-          "title": { "zh-TW": "廣藏市場在地小吃", "zh-CN": "广藏市场在地小吃", "en": "Gwangjang Market" },
+          "title": {
+            "zh-TW": "廣藏市場在地小吃",
+            "zh-CN": "广藏市场在地小吃",
+            "en": "Gwangjang Market"
+          },
           "desc": {
             "zh-TW": "百年歷史的傳統市場，以綠豆煎餅、生拌牛肉、紫菜飯捲與血腸聞名，攤位林立、煙火氣十足，是體驗首爾庶民美食的首選。",
             "zh-CN": "百年历史的传统市场，以绿豆煎饼、生拌牛肉、紫菜饭卷与血肠闻名，摊位林立、烟火气十足，是体验首尔庶民美食的首选。",
@@ -449,7 +640,11 @@
           "lat": 37.5765,
           "lon": 126.9722,
           "cost": 18000,
-          "title": { "zh-TW": "土俗村蔘雞湯", "zh-CN": "土俗村参鸡汤", "en": "Tosokchon Samgyetang" },
+          "title": {
+            "zh-TW": "土俗村蔘雞湯",
+            "zh-CN": "土俗村参鸡汤",
+            "en": "Tosokchon Samgyetang"
+          },
           "desc": {
             "zh-TW": "鄰近景福宮的蔘雞湯名店，以韓屋為店面，整隻童子雞燉入糯米、人蔘與紅棗，湯頭濃郁滋補，是韓國總統都曾造訪的人氣老店。",
             "zh-CN": "邻近景福宫的参鸡汤名店，以韩屋为店面，整只童子鸡炖入糯米、人参与红枣，汤头浓郁滋补，是韩国总统都曾造访的人气老店。",
@@ -461,7 +656,11 @@
           "lat": 37.5634,
           "lon": 126.9856,
           "cost": 11000,
-          "title": { "zh-TW": "明洞餃子刀削麵", "zh-CN": "明洞饺子刀削面", "en": "Myeongdong Kyoja" },
+          "title": {
+            "zh-TW": "明洞餃子刀削麵",
+            "zh-CN": "明洞饺子刀削面",
+            "en": "Myeongdong Kyoja"
+          },
           "desc": {
             "zh-TW": "明洞排隊名店，招牌刀削麵湯頭以雞骨慢熬、配上飽滿的肉餃與蒜香泡菜，份量實在、價格親民，深受在地人與遊客喜愛。",
             "zh-CN": "明洞排队名店，招牌刀削面汤头以鸡骨慢熬、配上饱满的肉饺与蒜香泡菜，份量实在、价格亲民，深受在地人与游客喜爱。",
@@ -471,7 +670,15 @@
       ]
     },
     {
-      "keywords": ["大阪", "osaka", "難波", "难波", "namba", "梅田", "umeda"],
+      "keywords": [
+        "大阪",
+        "osaka",
+        "難波",
+        "难波",
+        "namba",
+        "梅田",
+        "umeda"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1590559899731-a382839e5549?w=600",
         "https://images.unsplash.com/photo-1589452271712-64b8a66c7b71?w=600",
@@ -482,7 +689,11 @@
           "localTitle": "大阪城",
           "lat": 34.6873,
           "lon": 135.5259,
-          "title": { "zh-TW": "大阪城天守閣與護城河", "zh-CN": "大阪城天守阁与护城河", "en": "Osaka Castle" },
+          "title": {
+            "zh-TW": "大阪城天守閣與護城河",
+            "zh-CN": "大阪城天守阁与护城河",
+            "en": "Osaka Castle"
+          },
           "desc": {
             "zh-TW": "大阪城是日本戰國名將豐臣秀吉於1583年所築，曾是當時全日本規模最大、最具權勢象徵的城郭，見證了豐臣與德川兩大勢力交替的關鍵歷史。雄偉的天守閣巍然矗立於高聳的石垣之上，外觀金碧輝煌、黑瓦白牆相間，內部現已改建為歷史博物館，展示豐臣秀吉生平、戰國文物與大阪變遷史，登上頂層展望台還可俯瞰大阪市區全景。環繞天守的雙重護城河與巨型石垣氣勢磅礴，其中部分石塊重達上百噸，展現當年築城工程的浩大。城郭外圍是廣達一百餘公頃的大阪城公園，遍植櫻花與梅花，每逢春季粉櫻夾道、遊人如織，是關西最負盛名的賞櫻名所之一。建議搭配公園散步，從不同角度欣賞天守閣與護城河相映的經典畫面。",
             "zh-CN": "大阪城是日本战国名将丰臣秀吉于1583年所筑，曾是当时全日本规模最大、最具权势象征的城郭，见证了丰臣与德川两大势力交替的关键历史。雄伟的天守阁巍然矗立于高耸的石垣之上，外观金碧辉煌、黑瓦白墙相间，内部现已改建为历史博物馆，展示丰臣秀吉生平、战国文物与大阪变迁史，登上顶层展望台还可俯瞰大阪市区全景。环绕天守的双重护城河与巨型石垣气势磅礴，其中部分石块重达上百吨，展现当年筑城工程的浩大。城郭外围是广达一百余公顷的大阪城公园，遍植樱花与梅花，每逢春季粉樱夹道、游人如织，是关西最负盛名的赏樱名所之一。建议搭配公园散步，从不同角度欣赏天守阁与护城河相映的经典画面。",
@@ -493,7 +704,11 @@
           "localTitle": "道頓堀",
           "lat": 34.6687,
           "lon": 135.5013,
-          "title": { "zh-TW": "道頓堀霓虹美食街", "zh-CN": "道顿堀霓虹美食街", "en": "Dotonbori" },
+          "title": {
+            "zh-TW": "道頓堀霓虹美食街",
+            "zh-CN": "道顿堀霓虹美食街",
+            "en": "Dotonbori"
+          },
           "desc": {
             "zh-TW": "道頓堀是大阪最具代表性的繁華街區，沿著開鑿於十七世紀的道頓堀川兩岸延伸，自古便是商賈雲集、戲院林立的歡樂之地，如今更是大阪「食倒れ」（吃到傾家蕩產）飲食文化的核心象徵。入夜後，運河兩側巨型立體招牌與璀璨霓虹齊放光彩——奔跑的固力果跑者廣告看板、張牙舞爪的螃蟹道樂大蟹、巨型河豚燈籠，無一不令人目不暇給，是遊客必拍的經典畫面。街上章魚燒、大阪燒、串炸、拉麵與各式小吃香氣四溢，從平價攤車到名店餐廳應有盡有，可一路吃遍道地關西美味。亦可搭乘觀光遊船從水上欣賞兩岸燈火，或步行至鄰近的心齋橋商店街盡情購物。建議傍晚至夜間造訪，最能感受道頓堀那份喧鬧鼎沸、活力四射的獨特魅力。",
             "zh-CN": "道顿堀是大阪最具代表性的繁华街区，沿着开凿于十七世纪的道顿堀川两岸延伸，自古便是商贾云集、戏院林立的欢乐之地，如今更是大阪“吃倒”饮食文化的核心象征。入夜后，运河两侧巨型立体招牌与璀璨霓虹齐放光彩——奔跑的固力果跑者广告看板、张牙舞爪的螃蟹道乐大蟹、巨型河豚灯笼，无一不令人目不暇给，是游客必拍的经典画面。街上章鱼烧、大阪烧、串炸、拉面与各式小吃香气四溢，从平价摊车到名店餐厅应有尽有，可一路吃遍道地关西美味。亦可搭乘观光游船从水上欣赏两岸灯火，或步行至邻近的心斋桥商店街尽情购物。建议傍晚至夜间造访，最能感受道顿堀那份喧闹鼎沸、活力四射的独特魅力。",
@@ -504,7 +719,11 @@
           "localTitle": "通天閣",
           "lat": 34.6525,
           "lon": 135.5063,
-          "title": { "zh-TW": "通天閣與新世界懷舊街", "zh-CN": "通天阁与新世界怀旧街", "en": "Tsutenkaku Tower" },
+          "title": {
+            "zh-TW": "通天閣與新世界懷舊街",
+            "zh-CN": "通天阁与新世界怀旧街",
+            "en": "Tsutenkaku Tower"
+          },
           "desc": {
             "zh-TW": "通天閣是大阪南區「新世界」的精神象徵，初建於1912年、現存塔身為1956年重建，高約103公尺，名稱意為「通往天空的高塔」，曾是東洋第一高建築。塔頂展望台供奉著大阪獨有的幸運之神「比利肯」（Billiken），相傳撫摸其腳底便能帶來好運，是遊客爭相朝聖的招牌。塔身夜間點亮的霓虹燈色還會依隔日天氣變化，成為市民熟知的氣象預報。環繞塔下的新世界街區散發著濃濃昭和懷舊氣息：老式彈珠台店、將棋會所與一間間飄香的串炸老店比鄰而立，這裡正是大阪庶民美食「串カツ」（炸串）的發源地，沾醬絕不能沾兩次的規矩更是趣味十足。建議在此一邊大啖平價炸串、一邊感受老大阪的人情味與市井活力，是體驗道地下町文化的絕佳去處。",
             "zh-CN": "通天阁是大阪南区“新世界”的精神象征，初建于1912年、现存塔身为1956年重建，高约103米，名称意为“通往天空的高塔”，曾是东洋第一高建筑。塔顶展望台供奉着大阪独有的幸运之神“比利肯”（Billiken），相传抚摸其脚底便能带来好运，是游客争相朝圣的招牌。塔身夜间点亮的霓虹灯色还会依隔日天气变化，成为市民熟知的气象预报。环绕塔下的新世界街区散发着浓浓昭和怀旧气息：老式弹珠台店、将棋会所与一间间飘香的串炸老店比邻而立，这里正是大阪庶民美食“串カツ”（炸串）的发源地，沾酱绝不能沾两次的规矩更是趣味十足。建议在此一边大啖平价炸串、一边感受老大阪的人情味与市井活力，是体验道地下町文化的绝佳去处。",
@@ -518,7 +737,11 @@
           "lat": 34.6685,
           "lon": 135.5009,
           "cost": 1500,
-          "title": { "zh-TW": "美津大阪燒", "zh-CN": "美津大阪烧", "en": "Mizuno Okonomiyaki" },
+          "title": {
+            "zh-TW": "美津大阪燒",
+            "zh-CN": "美津大阪烧",
+            "en": "Mizuno Okonomiyaki"
+          },
           "desc": {
             "zh-TW": "道頓堀創業逾七十年的大阪燒名店，以山藥取代麵粉的招牌「山藥燒」口感蓬鬆綿密，現場鐵板煎製、香氣四溢，每日大排長龍。",
             "zh-CN": "道顿堀创业逾七十年的大阪烧名店，以山药取代面粉的招牌“山药烧”口感蓬松绵密，现场铁板煎制、香气四溢，每日大排长龙。",
@@ -530,7 +753,11 @@
           "lat": 34.6686,
           "lon": 135.5016,
           "cost": 5000,
-          "title": { "zh-TW": "螃蟹道樂 道頓堀本店", "zh-CN": "螃蟹道乐 道顿堀本店", "en": "Kani Doraku Dotonbori" },
+          "title": {
+            "zh-TW": "螃蟹道樂 道頓堀本店",
+            "zh-CN": "螃蟹道乐 道顿堀本店",
+            "en": "Kani Doraku Dotonbori"
+          },
           "desc": {
             "zh-TW": "門口巨型動態大蟹招牌聞名全日本的螃蟹專門店，提供火鍋、燒烤、刺身與蟹肉壽司等全蟹宴，新鮮肥美，是大阪指標性的螃蟹料理名店。",
             "zh-CN": "门口巨型动态大蟹招牌闻名全日本的螃蟹专门店，提供火锅、烧烤、刺身与蟹肉寿司等全蟹宴，新鲜肥美，是大阪指标性的螃蟹料理名店。",
@@ -542,7 +769,11 @@
           "lat": 34.6669,
           "lon": 135.5045,
           "cost": 900,
-          "title": { "zh-TW": "自由軒名物咖哩", "zh-CN": "自由轩名物咖喱", "en": "Jiyuken Curry" },
+          "title": {
+            "zh-TW": "自由軒名物咖哩",
+            "zh-CN": "自由轩名物咖喱",
+            "en": "Jiyuken Curry"
+          },
           "desc": {
             "zh-TW": "創業逾百年的大阪老字號，招牌「名物咖哩」將咖哩與飯拌炒、中央打上一顆生蛋，拌勻後濃郁香辣，是充滿懷舊風情的庶民美味。",
             "zh-CN": "创业逾百年的大阪老字号，招牌“名物咖喱”将咖喱与饭拌炒、中央打上一颗生蛋，拌匀后浓郁香辣，是充满怀旧风情的庶民美味。",
@@ -552,7 +783,12 @@
       ]
     },
     {
-      "keywords": ["新加坡", "singapore", "獅城", "狮城"],
+      "keywords": [
+        "新加坡",
+        "singapore",
+        "獅城",
+        "狮城"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=600",
         "https://images.unsplash.com/photo-1565967511849-76a60a516170?w=600",
@@ -563,7 +799,11 @@
           "localTitle": "Gardens by the Bay",
           "lat": 1.2816,
           "lon": 103.8636,
-          "title": { "zh-TW": "濱海灣花園擎天樹", "zh-CN": "滨海湾花园擎天树", "en": "Gardens by the Bay" },
+          "title": {
+            "zh-TW": "濱海灣花園擎天樹",
+            "zh-CN": "滨海湾花园擎天树",
+            "en": "Gardens by the Bay"
+          },
           "desc": {
             "zh-TW": "濱海灣花園是新加坡「花園城市」願景的極致展現，佔地逾百公頃，巧妙融合自然生態與未來科技。園區最具標誌性的，是高達25至50公尺的巨型「擎天樹」（Supertree）——這些以鋼骨打造的垂直花園遍植蕨類與蘭花，白晝是壯觀的綠色塔林，入夜後則上演聲光交織的「花園狂想曲」燈光秀，璀璨奪目、震撼人心。園內兩座巨型玻璃溫室同樣不容錯過：「花穹」收藏來自地中海與半乾旱地區的奇花異卉，是金氏世界紀錄認證最大的玻璃溫室；「雲霧林」則以一座高達35公尺、奔流而下的室內瀑布與雲霧繚繞的垂直植被令人驚嘆。連接擎天樹之間的空中步道更可俯瞰整座花園與濱海灣金沙的天際線。建議傍晚前往，一次飽覽白晝、夜景與燈光秀，是新加坡最具代表性的必訪地標。",
             "zh-CN": "滨海湾花园是新加坡“花园城市”愿景的极致展现，占地逾百公顷，巧妙融合自然生态与未来科技。园区最具标志性的，是高达25至50米的巨型“擎天树”（Supertree）——这些以钢骨打造的垂直花园遍植蕨类与兰花，白昼是壮观的绿色塔林，入夜后则上演声光交织的“花园狂想曲”灯光秀，璀璨夺目、震撼人心。园内两座巨型玻璃温室同样不容错过：“花穹”收藏来自地中海与半干旱地区的奇花异卉，是吉尼斯世界纪录认证最大的玻璃温室；“云雾林”则以一座高达35米、奔流而下的室内瀑布与云雾缭绕的垂直植被令人惊叹。连接擎天树之间的空中步道更可俯瞰整座花园与滨海湾金沙的天际线。建议傍晚前往，一次饱览白昼、夜景与灯光秀，是新加坡最具代表性的必访地标。",
@@ -574,7 +814,11 @@
           "localTitle": "Merlion Park",
           "lat": 1.2868,
           "lon": 103.8545,
-          "title": { "zh-TW": "魚尾獅公園與濱海灣", "zh-CN": "鱼尾狮公园与滨海湾", "en": "Merlion Park" },
+          "title": {
+            "zh-TW": "魚尾獅公園與濱海灣",
+            "zh-CN": "鱼尾狮公园与滨海湾",
+            "en": "Merlion Park"
+          },
           "desc": {
             "zh-TW": "魚尾獅是新加坡最家喻戶曉的國家象徵：獅頭代表傳說中發現此島的「獅城」由來，魚身則呼應其昔日作為小漁村的歷史。坐落於濱海灣畔的魚尾獅公園內，這座高8.6公尺、重達70噸的白色雕像晝夜不停地從口中噴出水柱注入海灣，已成為遊客來訪新加坡必拍的招牌畫面。公園正對著濱海灣，視野極佳：對岸即是宛如巨船凌空的濱海灣金沙酒店、貝殼造型的濱海藝術中心與摩天輪「新加坡飛行者」，構成一幅集現代建築之大成的壯麗天際線。每晚金沙酒店外牆與濱海灣花園還會上演免費的燈光水舞秀，從魚尾獅公園眺望最為清晰。建議於黃昏時分前來，欣賞華燈初上、海灣由暮色轉入璀璨夜景的迷人變化，並與經典的魚尾獅「接水」趣味合影。",
             "zh-CN": "鱼尾狮是新加坡最家喻户晓的国家象征：狮头代表传说中发现此岛的“狮城”由来，鱼身则呼应其昔日作为小渔村的历史。坐落于滨海湾畔的鱼尾狮公园内，这座高8.6米、重达70吨的白色雕像昼夜不停地从口中喷出水柱注入海湾，已成为游客来访新加坡必拍的招牌画面。公园正对着滨海湾，视野极佳：对岸即是宛如巨船凌空的滨海湾金沙酒店、贝壳造型的滨海艺术中心与摩天轮“新加坡飞行者”，构成一幅集现代建筑之大成的壮丽天际线。每晚金沙酒店外墙与滨海湾花园还会上演免费的灯光水舞秀，从鱼尾狮公园眺望最为清晰。建议于黄昏时分前来，欣赏华灯初上、海湾由暮色转入璀璨夜景的迷人变化，并与经典的鱼尾狮“接水”趣味合影。",
@@ -585,7 +829,11 @@
           "localTitle": "Sentosa",
           "lat": 1.2494,
           "lon": 103.8303,
-          "title": { "zh-TW": "聖淘沙度假島嶼", "zh-CN": "圣淘沙度假岛屿", "en": "Sentosa Island" },
+          "title": {
+            "zh-TW": "聖淘沙度假島嶼",
+            "zh-CN": "圣淘沙度假岛屿",
+            "en": "Sentosa Island"
+          },
           "desc": {
             "zh-TW": "聖淘沙是新加坡南端的度假勝地，名稱在馬來語中意為「和平與寧靜」，由一座昔日的軍事要塞與漁村蛻變為今日集主題樂園、海灘、高爾夫與奢華度假村於一身的歡樂之島。島上最吸睛的是「新加坡環球影城」，七大主題園區與變形金剛、木乃伊等刺激遊樂設施深受闔家喜愛；緊鄰的「海洋館」（S.E.A. Aquarium）則是全球最大水族館之一，巨型觀景窗前魟魚與鯊魚悠游而過，令人屏息。此外還有海濱沙灘、空中纜車、斜坡滑車、iFly室內跳傘與夜間燈光水舞秀「Wings of Time」等多元體驗，從刺激冒險到悠閒戲水一應俱全。前往聖淘沙可搭乘纜車、輕軌或步行跨海天橋，沿途已是風景。建議規劃一整日，依同行對象（親子、情侶或好友）挑選重點設施，盡享這座度假島嶼的繽紛樂趣。",
             "zh-CN": "圣淘沙是新加坡南端的度假胜地，名称在马来语中意为“和平与宁静”，由一座昔日的军事要塞与渔村蜕变为今日集主题乐园、海滩、高尔夫与奢华度假村于一身的欢乐之岛。岛上最吸睛的是“新加坡环球影城”，七大主题园区与变形金刚、木乃伊等刺激游乐设施深受阖家喜爱；紧邻的“海洋馆”（S.E.A. Aquarium）则是全球最大水族馆之一，巨型观景窗前魟鱼与鲨鱼悠游而过，令人屏息。此外还有海滨沙滩、空中缆车、斜坡滑车、iFly室内跳伞与夜间灯光水舞秀“Wings of Time”等多元体验，从刺激冒险到悠闲戏水一应俱全。前往圣淘沙可搭乘缆车、轻轨或步行跨海天桥，沿途已是风景。建议规划一整日，依同行对象（亲子、情侣或好友）挑选重点设施，尽享这座度假岛屿的缤纷乐趣。",
@@ -599,7 +847,11 @@
           "lat": 1.2803,
           "lon": 103.8447,
           "cost": 6,
-          "title": { "zh-TW": "天天海南雞飯", "zh-CN": "天天海南鸡饭", "en": "Tian Tian Hainanese Chicken Rice" },
+          "title": {
+            "zh-TW": "天天海南雞飯",
+            "zh-CN": "天天海南鸡饭",
+            "en": "Tian Tian Hainanese Chicken Rice"
+          },
           "desc": {
             "zh-TW": "麥士威熟食中心的人氣攤位，雞肉嫩滑、油飯香氣四溢、辣椒醬畫龍點睛，是新加坡國民美食海南雞飯的代表名店。",
             "zh-CN": "麦士威熟食中心的人气摊位，鸡肉嫩滑、油饭香气四溢、辣椒酱画龙点睛，是新加坡国民美食海南鸡饭的代表名店。",
@@ -611,7 +863,11 @@
           "lat": 1.288,
           "lon": 103.853,
           "cost": 12,
-          "title": { "zh-TW": "松發肉骨茶", "zh-CN": "松发肉骨茶", "en": "Song Fa Bak Kut Teh" },
+          "title": {
+            "zh-TW": "松發肉骨茶",
+            "zh-CN": "松发肉骨茶",
+            "en": "Song Fa Bak Kut Teh"
+          },
           "desc": {
             "zh-TW": "創立於1969年的肉骨茶名店，以胡椒風味的清澈湯頭燉煮排骨，湯鮮肉嫩、暖胃開胃，搭配油條與白飯是經典吃法。",
             "zh-CN": "创立于1969年的肉骨茶名店，以胡椒风味的清澈汤头炖煮排骨，汤鲜肉嫩、暖胃开胃，搭配油条与白饭是经典吃法。",
@@ -623,7 +879,11 @@
           "lat": 1.2807,
           "lon": 103.8504,
           "cost": 10,
-          "title": { "zh-TW": "老巴剎沙嗲街", "zh-CN": "老巴刹沙嗲街", "en": "Lau Pa Sat Satay Street" },
+          "title": {
+            "zh-TW": "老巴剎沙嗲街",
+            "zh-CN": "老巴刹沙嗲街",
+            "en": "Lau Pa Sat Satay Street"
+          },
           "desc": {
             "zh-TW": "坐落於金融區的維多利亞式古蹟熟食中心，入夜後鄰街化身炭烤沙嗲一條街，串串飄香的烤肉配上花生醬，是體驗新加坡多元小吃的好去處。",
             "zh-CN": "坐落于金融区的维多利亚式古迹熟食中心，入夜后邻街化身炭烤沙嗲一条街，串串飘香的烤肉配上花生酱，是体验新加坡多元小吃的好去处。",
@@ -633,7 +893,13 @@
       ]
     },
     {
-      "keywords": ["巴黎", "paris", "法國", "法国", "france"],
+      "keywords": [
+        "巴黎",
+        "paris",
+        "法國",
+        "法国",
+        "france"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600",
         "https://images.unsplash.com/photo-1431274172761-fca41d930114?w=600",
@@ -644,7 +910,11 @@
           "localTitle": "Tour Eiffel",
           "lat": 48.8584,
           "lon": 2.2945,
-          "title": { "zh-TW": "艾菲爾鐵塔浪漫地標", "zh-CN": "埃菲尔铁塔浪漫地标", "en": "Eiffel Tower" },
+          "title": {
+            "zh-TW": "艾菲爾鐵塔浪漫地標",
+            "zh-CN": "埃菲尔铁塔浪漫地标",
+            "en": "Eiffel Tower"
+          },
           "desc": {
             "zh-TW": "艾菲爾鐵塔是巴黎乃至整個法國最舉世聞名的象徵，由工程師古斯塔夫·艾菲爾為1889年世界博覽會而建，高約330公尺，落成時曾是全世界最高的人造建築。這座以鏤空鍛鐵桁架打造的龐然巨塔，當年被部分藝術家視為怪物般的存在，如今卻成為全球公認最浪漫優雅的地標，每年吸引近七百萬遊客登塔。鐵塔共設三層觀景台，遊客可搭乘電梯或徒步登上，將塞納河、戰神廣場、凱旋門與巴黎櫛比鱗次的奧斯曼式街景盡收眼底；頂層更附設香檳吧，可在高空舉杯。每當夜幕低垂，整座鐵塔披上金黃燈光，並於每個整點上演持續五分鐘、由兩萬顆燈泡交織而成的閃爍燈光秀，璀璨夢幻、教人屏息。建議於黃昏前抵達戰神廣場或夏佑宮平台，一次飽覽白晝、日落與夜間燈光秀的鐵塔之美。",
             "zh-CN": "埃菲尔铁塔是巴黎乃至整个法国最举世闻名的象征，由工程师古斯塔夫·埃菲尔为1889年世界博览会而建，高约330米，落成时曾是全世界最高的人造建筑。这座以镂空锻铁桁架打造的庞然巨塔，当年被部分艺术家视为怪物般的存在，如今却成为全球公认最浪漫优雅的地标，每年吸引近七百万游客登塔。铁塔共设三层观景台，游客可搭乘电梯或徒步登上，将塞纳河、战神广场、凯旋门与巴黎栉比鳞次的奥斯曼式街景尽收眼底；顶层更附设香槟吧，可在高空举杯。每当夜幕低垂，整座铁塔披上金黄灯光，并于每个整点上演持续五分钟、由两万颗灯泡交织而成的闪烁灯光秀，璀璨梦幻、教人屏息。建议于黄昏前抵达战神广场或夏约宫平台，一次饱览白昼、日落与夜间灯光秀的铁塔之美。",
@@ -655,7 +925,11 @@
           "localTitle": "Musée du Louvre",
           "lat": 48.8606,
           "lon": 2.3376,
-          "title": { "zh-TW": "羅浮宮藝術殿堂", "zh-CN": "卢浮宫艺术殿堂", "en": "Louvre Museum" },
+          "title": {
+            "zh-TW": "羅浮宮藝術殿堂",
+            "zh-CN": "卢浮宫艺术殿堂",
+            "en": "Louvre Museum"
+          },
           "desc": {
             "zh-TW": "羅浮宮是全世界參觀人數最多、典藏最豐富的藝術博物館，前身為十二世紀的中世紀城堡，歷經數百年擴建後成為法國王室宮殿，1793年法國大革命後正式對公眾開放。館藏橫跨古文明至十九世紀，逾三萬八千件展品中，鎮館三寶最為人津津樂道：神秘微笑的《蒙娜麗莎》、優雅斷臂的《米洛的維納斯》與展翅欲飛的《薩莫色雷斯的勝利女神》，吸引全球藝術愛好者朝聖。建築本身亦是藝術——華麗的宮殿迴廊與貝聿銘設計、矗立於拿破崙廣場中央的玻璃金字塔，形成古典與現代交融的經典畫面，入夜後金字塔點燈倒映於水池，美不勝收。由於館藏浩瀚，難以一日看盡，建議出發前先鎖定欲參觀的展區與作品、預先網路購票以免大排長龍，並善用語音導覽，方能在有限時間內細細品味這座人類文明的藝術寶庫。",
             "zh-CN": "卢浮宫是全世界参观人数最多、典藏最丰富的艺术博物馆，前身为十二世纪的中世纪城堡，历经数百年扩建后成为法国王室宫殿，1793年法国大革命后正式对公众开放。馆藏横跨古文明至十九世纪，逾三万八千件展品中，镇馆三宝最为人津津乐道：神秘微笑的《蒙娜丽莎》、优雅断臂的《米洛的维纳斯》与展翅欲飞的《萨莫色雷斯的胜利女神》，吸引全球艺术爱好者朝圣。建筑本身亦是艺术——华丽的宫殿回廊与贝聿铭设计、矗立于拿破仑广场中央的玻璃金字塔，形成古典与现代交融的经典画面，入夜后金字塔点灯倒映于水池，美不胜收。由于馆藏浩瀚，难以一日看尽，建议出发前先锁定欲参观的展区与作品、预先网络购票以免大排长龙，并善用语音导览，方能在有限时间内细细品味这座人类文明的艺术宝库。",
@@ -666,11 +940,45 @@
           "localTitle": "Basilique du Sacré-Cœur",
           "lat": 48.8867,
           "lon": 2.3431,
-          "title": { "zh-TW": "蒙馬特聖心堂", "zh-CN": "蒙马特圣心堂", "en": "Sacré-Cœur & Montmartre" },
+          "title": {
+            "zh-TW": "蒙馬特聖心堂",
+            "zh-CN": "蒙马特圣心堂",
+            "en": "Sacré-Cœur & Montmartre"
+          },
           "desc": {
             "zh-TW": "聖心堂矗立於巴黎市區最高點——海拔約130公尺的蒙馬特山丘之巔，於1875至1914年間興建，以潔白的石灰華石材打造，融合羅馬與拜占庭風格的圓頂在陽光下潔白耀眼，是巴黎最上鏡的地標之一。登上教堂前的階梯平台，整座巴黎市景一覽無遺，是欣賞日落與夜景的絕佳去處；教堂內部則以巨幅的基督鑲嵌畫穹頂令人仰望讚嘆。山丘下的蒙馬特街區，自十九世紀末便是藝術家與波希米亞文化的搖籃，畢卡索、梵谷、雷諾瓦等大師都曾在此居住創作。如今漫步於蜿蜒石板巷弄間，仍可見小丘廣場（Place du Tertre）上為遊客作畫的街頭藝術家、復古咖啡館與葡萄園，處處流淌著濃郁的藝術與浪漫氣息。建議搭配纜索車登頂，留意此區人潮較多、扒手出沒，妥善保管隨身財物。",
             "zh-CN": "圣心堂矗立于巴黎市区最高点——海拔约130米的蒙马特山丘之巅，于1875至1914年间兴建，以洁白的石灰华石材打造，融合罗马与拜占庭风格的圆顶在阳光下洁白耀眼，是巴黎最上镜的地标之一。登上教堂前的阶梯平台，整座巴黎市景一览无遗，是欣赏日落与夜景的绝佳去处；教堂内部则以巨幅的基督镶嵌画穹顶令人仰望赞叹。山丘下的蒙马特街区，自十九世纪末便是艺术家与波希米亚文化的摇篮，毕加索、梵高、雷诺阿等大师都曾在此居住创作。如今漫步于蜿蜒石板巷弄间，仍可见小丘广场（Place du Tertre）上为游客作画的街头艺术家、复古咖啡馆与葡萄园，处处流淌着浓郁的艺术与浪漫气息。建议搭配缆索车登顶，留意此区人潮较多、扒手出没，妥善保管随身财物。",
             "en": "The Sacré-Cœur Basilica crowns the summit of Montmartre, at about 130 meters the highest point in central Paris. Built between 1875 and 1914 from gleaming travertine stone, its Romano-Byzantine domes shine brilliantly white in the sun, making it one of Paris's most photogenic landmarks. From the steps in front, the whole city spreads out below — a superb spot for sunset and night views — while inside, a vast mosaic of Christ on the dome inspires awe. The Montmartre district below the hill has been a cradle of artists and bohemian culture since the late 19th century, home at times to Picasso, Van Gogh and Renoir. Wandering its winding cobbled lanes today you'll still find street artists painting visitors on the Place du Tertre, vintage cafes and even a vineyard, all steeped in art and romance. Consider taking the funicular up, and stay alert in this crowded area for pickpockets — keep your belongings secure."
+          }
+        },
+        {
+          "localTitle": "Château de Versailles",
+          "lat": 48.8049,
+          "lon": 2.1204,
+          "title": {
+            "zh-TW": "凡爾賽宮金碧宮闕",
+            "zh-CN": "凡尔赛宫金碧宫阙",
+            "en": "Palace of Versailles"
+          },
+          "desc": {
+            "zh-TW": "凡爾賽宮坐落於巴黎西南郊，是法國波旁王朝鼎盛時期的權力象徵。太陽王路易十四傾全國之力，將原本的狩獵行宮擴建為歐洲最宏偉壯麗的宮殿。宮內金碧輝煌，最負盛名的「鏡廳」長達73公尺，十七面巨大鏡牆映照花園與水晶吊燈，正是當年接見使節、簽署《凡爾賽條約》的歷史舞台。國王與王后的寢宮、皇家禮拜堂與歌劇院皆極盡奢華，訴說法蘭西宮廷的繁華與興衰。宮外是占地遼闊、由勒諾特爾設計的法式幾何花園，噴泉、運河與雕像對稱排列，夏季週末更有音樂噴泉秀。建議預留大半天，搭乘RER C線前往，並提前線上購票以避開長龍。離宮不遠處還有大、小特里亞農宮與瑪麗·安東妮的田園村莊，是王后逃離宮廷喧囂的私密天地，園林間綠意盎然、別有風情。",
+            "zh-CN": "凡尔赛宫坐落于巴黎西南郊，是法国波旁王朝鼎盛时期的权力象征。太阳王路易十四倾全国之力，将原本的狩猎行宫扩建为欧洲最宏伟壮丽的宫殿。宫内金碧辉煌，最负盛名的“镜厅”长达73米，十七面巨大镜墙映照花园与水晶吊灯，正是当年接见使节、签署《凡尔赛条约》的历史舞台。国王与王后的寝宫、皇家礼拜堂与歌剧院皆极尽奢华，诉说法兰西宫廷的繁华与兴衰。宫外是占地辽阔、由勒诺特尔设计的法式几何花园，喷泉、运河与雕像对称排列，夏季周末更有音乐喷泉秀。建议预留大半天，搭乘RER C线前往，并提前在线购票以避开长龙。离宫不远处还有大、小特里亚农宫与玛丽·安东妮的田园村庄，是王后逃离宫廷喧嚣的私密天地，园林间绿意盎然、别有风情。",
+            "en": "The Palace of Versailles, southwest of Paris, was the seat of French royal power at its height. The Sun King Louis XIV transformed a hunting lodge into Europe's grandest palace, crowned by the 73-metre Hall of Mirrors—where the Treaty of Versailles was later signed. Opulent royal apartments, the chapel and opera house, and Le Nôtre's vast geometric gardens with symmetrical fountains and canals complete the spectacle (with musical fountain shows on summer weekends). Take RER C and book ahead to skip the queues; allow most of a day."
+          }
+        },
+        {
+          "localTitle": "Croisière sur la Seine",
+          "lat": 48.86,
+          "lon": 2.305,
+          "title": {
+            "zh-TW": "塞納河遊船浪漫巡航",
+            "zh-CN": "塞纳河游船浪漫巡航",
+            "en": "Seine River Cruise"
+          },
+          "desc": {
+            "zh-TW": "塞納河如一條銀帶穿越巴黎市中心，沿岸風光被聯合國教科文組織列為世界文化遺產，搭乘遊船順流而行是飽覽花都精華最優雅的方式。船程多由艾菲爾鐵塔附近的碼頭出發，約一小時往返，沿途緩緩經過奧賽美術館、羅浮宮、西堤島上的巴黎聖母院與藝術橋，三十餘座造型各異的橋樑在頭頂掠過，每一座都承載著故事。白晝可細看河岸的奧斯曼式建築與舊書攤；黃昏與夜間最受歡迎——華燈初上時鐵塔點亮、河水倒映金光，浪漫氛圍達到頂點。船型從平價的Bateaux-Mouches到附晚餐的豪華遊船皆有，建議選擇日落時段，並攜帶薄外套以防河上風涼。若選夜遊，別錯過新橋與河中央自由女神像的縮小複製品；多數遊船備有多國語音導覽，沿途逐一解說地標典故，輕鬆又愜意。",
+            "zh-CN": "塞纳河如一条银带穿越巴黎市中心，沿岸风光被联合国教科文组织列为世界文化遗产，搭乘游船顺流而行是饱览花都精华最优雅的方式。船程多由埃菲尔铁塔附近的码头出发，约一小时往返，沿途缓缓经过奥赛美术馆、卢浮宫、西堤岛上的巴黎圣母院与艺术桥，三十余座造型各异的桥梁在头顶掠过，每一座都承载着故事。白昼可细看河岸的奥斯曼式建筑与旧书摊；黄昏与夜间最受欢迎——华灯初上时铁塔点亮、河水倒映金光，浪漫氛围达到顶点。船型从平价的Bateaux-Mouches到附晚餐的豪华游船皆有，建议选择日落时段，并携带薄外套以防河上风凉。若选夜游，别错过新桥与河中央自由女神像的缩小复制品；多数游船备有多国语音导览，沿途逐一解说地标典故，轻松又惬意。",
+            "en": "The Seine threads through central Paris, its UNESCO-listed banks best seen by boat. Cruises depart near the Eiffel Tower for about an hour, gliding past the Musée d'Orsay, the Louvre, Notre-Dame on Île de la Cité and the Pont des Arts, beneath dozens of storied bridges. By day you catch the Haussmann facades and riverside bookstalls; sunset and evening sailings are the most magical, when the lit Tower shimmers on the water. Options run from budget Bateaux-Mouches to dinner cruises—pick the golden hour and bring a light jacket."
           }
         }
       ],
@@ -680,7 +988,11 @@
           "lat": 48.8718,
           "lon": 2.3431,
           "cost": 20,
-          "title": { "zh-TW": "Chartier 百年平價餐館", "zh-CN": "Chartier 百年平价餐馆", "en": "Bouillon Chartier" },
+          "title": {
+            "zh-TW": "Chartier 百年平價餐館",
+            "zh-CN": "Chartier 百年平价餐馆",
+            "en": "Bouillon Chartier"
+          },
           "desc": {
             "zh-TW": "創業於1896年的巴黎老牌大眾餐館，金碧輝煌的美好年代裝潢搭配親民價格，供應法式蝸牛、油封鴨等經典家常菜，氣氛熱鬧、值得一訪。",
             "zh-CN": "创业于1896年的巴黎老牌大众餐馆，金碧辉煌的美好年代装潢搭配亲民价格，供应法式蜗牛、油封鸭等经典家常菜，气氛热闹、值得一访。",
@@ -692,7 +1004,11 @@
           "lat": 48.853,
           "lon": 2.338,
           "cost": 35,
-          "title": { "zh-TW": "Le Comptoir 小酒館", "zh-CN": "Le Comptoir 小酒馆", "en": "Le Comptoir du Relais" },
+          "title": {
+            "zh-TW": "Le Comptoir 小酒館",
+            "zh-CN": "Le Comptoir 小酒馆",
+            "en": "Le Comptoir du Relais"
+          },
           "desc": {
             "zh-TW": "聖日耳曼德佩區的人氣小酒館，由名廚 Yves Camdeborde 主理，以精緻又道地的現代法式小酒館料理聞名，午間較易入座。",
             "zh-CN": "圣日耳曼德佩区的人气小酒馆，由名厨 Yves Camdeborde 主理，以精致又道地的现代法式小酒馆料理闻名，午间较易入座。",
@@ -704,7 +1020,11 @@
           "lat": 48.8575,
           "lon": 2.359,
           "cost": 10,
-          "title": { "zh-TW": "瑪黑區 L'As 法拉費", "zh-CN": "玛黑区 L'As 法拉费", "en": "L'As du Fallafel" },
+          "title": {
+            "zh-TW": "瑪黑區 L'As 法拉費",
+            "zh-CN": "玛黑区 L'As 法拉费",
+            "en": "L'As du Fallafel"
+          },
           "desc": {
             "zh-TW": "瑪黑區猶太街上的傳奇沙威瑪/法拉費小店，份量飽滿、酥脆多汁、價格實惠，常見大排長龍，是平價快食的人氣首選。",
             "zh-CN": "玛黑区犹太街上的传奇沙威玛/法拉费小店，份量饱满、酥脆多汁、价格实惠，常见大排长龙，是平价快食的人气首选。",
@@ -714,7 +1034,16 @@
       ]
     },
     {
-      "keywords": ["紐約", "纽约", "new york", "newyork", "nyc", "曼哈頓", "曼哈顿", "manhattan"],
+      "keywords": [
+        "紐約",
+        "纽约",
+        "new york",
+        "newyork",
+        "nyc",
+        "曼哈頓",
+        "曼哈顿",
+        "manhattan"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600",
         "https://images.unsplash.com/photo-1538970272646-f61fabb3a8a2?w=600",
@@ -725,7 +1054,11 @@
           "localTitle": "Statue of Liberty",
           "lat": 40.6892,
           "lon": -74.0445,
-          "title": { "zh-TW": "自由女神像", "zh-CN": "自由女神像", "en": "Statue of Liberty" },
+          "title": {
+            "zh-TW": "自由女神像",
+            "zh-CN": "自由女神像",
+            "en": "Statue of Liberty"
+          },
           "desc": {
             "zh-TW": "自由女神像矗立於紐約港自由島之上，是法國於1886年為慶祝美國獨立百年所贈的禮物，象徵自由、民主與美法友誼，1984年獲列為聯合國世界文化遺產。雕像由設計師巴托爾迪操刀、艾菲爾鐵塔的工程師艾菲爾負責內部鋼骨結構，全高（含基座）逾93公尺，女神右手高舉火炬、左手捧著刻有美國獨立日期的法典，腳邊則是斷裂的鎖鏈，寓意掙脫壓迫。對十九、二十世紀飄洋過海的數百萬移民而言，這座女神是抵達新大陸時望見的第一道希望之光，承載著「美國夢」的深刻情感。遊客可搭乘渡輪登島，近距離仰望女神，並可預約登上基座或皇冠展望台俯瞰曼哈頓天際線；鄰近的艾利斯島移民博物館亦值得一訪。建議提前網路購票、預留半日，搭船途中還能飽覽紐約港與下城摩天樓群的壯麗景致。",
             "zh-CN": "自由女神像矗立于纽约港自由岛之上，是法国于1886年为庆祝美国独立百年所赠的礼物，象征自由、民主与美法友谊，1984年获列为联合国世界文化遗产。雕像由设计师巴托尔迪操刀、埃菲尔铁塔的工程师埃菲尔负责内部钢骨结构，全高（含基座）逾93米，女神右手高举火炬、左手捧着刻有美国独立日期的法典，脚边则是断裂的锁链，寓意挣脱压迫。对十九、二十世纪飘洋过海的数百万移民而言，这座女神是抵达新大陆时望见的第一道希望之光，承载着“美国梦”的深刻情感。游客可搭乘渡轮登岛，近距离仰望女神，并可预约登上基座或皇冠展望台俯瞰曼哈顿天际线；邻近的埃利斯岛移民博物馆亦值得一访。建议提前网络购票、预留半日，搭船途中还能饱览纽约港与下城摩天楼群的壮丽景致。",
@@ -736,7 +1069,11 @@
           "localTitle": "Times Square",
           "lat": 40.758,
           "lon": -73.9855,
-          "title": { "zh-TW": "時代廣場霓虹不夜城", "zh-CN": "时代广场霓虹不夜城", "en": "Times Square" },
+          "title": {
+            "zh-TW": "時代廣場霓虹不夜城",
+            "zh-CN": "时代广场霓虹不夜城",
+            "en": "Times Square"
+          },
           "desc": {
             "zh-TW": "時代廣場位於曼哈頓中城百老匯與第七大道交會處，得名自昔日《紐約時報》總部所在地，是全世界最知名、人潮最洶湧的商業與娛樂中心之一，素有「世界的十字路口」之稱。廣場最震撼的景象，是四面八方鋪天蓋地的巨型 LED 廣告看板與霓虹燈牆，日夜不息地閃爍流轉，將整片夜空映得亮如白晝，置身其中能強烈感受紐約的繁華與能量。這裡同時是百老匯劇院區的心臟，周邊匯聚數十家頂級劇院，《獅子王》《歌劇魅影》等經典音樂劇長年上演；街頭則充滿扮裝藝人、街頭表演與各國遊客的喧鬧。每年除夕夜的「水晶球降落」跨年倒數，更吸引全球數十億人透過轉播共同迎接新年。建議白天與夜晚各造訪一次感受不同氛圍，並提前購買百老匯戲票，留意此區人潮擁擠、保管好隨身物品。",
             "zh-CN": "时代广场位于曼哈顿中城百老汇与第七大道交会处，得名自昔日《纽约时报》总部所在地，是全世界最知名、人潮最汹涌的商业与娱乐中心之一，素有“世界的十字路口”之称。广场最震撼的景象，是四面八方铺天盖地的巨型 LED 广告看板与霓虹灯墙，日夜不息地闪烁流转，将整片夜空映得亮如白昼，置身其中能强烈感受纽约的繁华与能量。这里同时是百老汇剧院区的心脏，周边汇聚数十家顶级剧院，《狮子王》《歌剧魅影》等经典音乐剧长年上演；街头则充满扮装艺人、街头表演与各国游客的喧闹。每年除夕夜的“水晶球降落”跨年倒数，更吸引全球数十亿人透过转播共同迎接新年。建议白天与夜晚各造访一次感受不同氛围，并提前购买百老汇戏票，留意此区人潮拥挤、保管好随身物品。",
@@ -747,11 +1084,45 @@
           "localTitle": "Central Park",
           "lat": 40.7829,
           "lon": -73.9654,
-          "title": { "zh-TW": "中央公園都會綠洲", "zh-CN": "中央公园都会绿洲", "en": "Central Park" },
+          "title": {
+            "zh-TW": "中央公園都會綠洲",
+            "zh-CN": "中央公园都会绿洲",
+            "en": "Central Park"
+          },
           "desc": {
             "zh-TW": "中央公園是紐約曼哈頓心臟地帶的一片廣達約340公頃的巨型綠地，於1857年起依景觀建築師奧姆斯特德與沃克斯的設計開闢，是全美第一座大型景觀公園，更是世界上最著名的都會公園。在高樓林立的曼哈頓中央闢出如此遼闊的自然空間，本身就是都市規劃史上的壯舉。園內景致豐富多變：開闊的綿羊草原、波光粼粼的湖泊與水庫、林蔭步道、貝塞斯達噴泉、草莓園（紀念約翰·藍儂）、城堡瞭望台與動物園等，四季風情各異——春櫻、夏綠、秋楓、冬雪皆美不勝收。這裡是紐約客日常慢跑、野餐、划船、溜冰與舉辦露天音樂會的生活舞台，也是無數電影的取景地。漫步園中，抬頭即見綠樹環抱中的摩天樓天際線，自然與都會交融的畫面正是紐約的經典印象。建議租輛單車或悠閒步行，依時間挑選重點區域細細品味。",
             "zh-CN": "中央公园是纽约曼哈顿心脏地带的一片广达约340公顷的巨型绿地，于1857年起依景观建筑师奥姆斯特德与沃克斯的设计开辟，是全美第一座大型景观公园，更是世界上最著名的都会公园。在高楼林立的曼哈顿中央辟出如此辽阔的自然空间，本身就是都市规划史上的壮举。园内景致丰富多变：开阔的绵羊草原、波光粼粼的湖泊与水库、林荫步道、贝塞斯达喷泉、草莓园（纪念约翰·列侬）、城堡瞭望台与动物园等，四季风情各异——春樱、夏绿、秋枫、冬雪皆美不胜收。这里是纽约客日常慢跑、野餐、划船、溜冰与举办露天音乐会的生活舞台，也是无数电影的取景地。漫步园中，抬头即见绿树环抱中的摩天楼天际线，自然与都会交融的画面正是纽约的经典印象。建议租辆单车或悠闲步行，依时间挑选重点区域细细品味。",
             "en": "Central Park is a vast 340-hectare green space in the heart of Manhattan, laid out from 1857 to the design of landscape architects Olmsted and Vaux. It was the first major landscaped park in the United States and is the world's most famous urban park; carving out such an expanse of nature amid Manhattan's towers was a landmark feat of city planning. Its scenery is wonderfully varied: the open Sheep Meadow, glittering lakes and reservoir, shaded paths, Bethesda Fountain, Strawberry Fields (honoring John Lennon), Belvedere Castle and a zoo, each season distinct — cherry blossoms in spring, greenery in summer, foliage in autumn and snow in winter. It is where New Yorkers jog, picnic, row boats, skate and hold open-air concerts, and the backdrop of countless films. Stroll here and look up to see the skyline framed by trees — the fusion of nature and city that defines New York. Rent a bike or walk at leisure, choosing key areas to savor based on your time."
+          }
+        },
+        {
+          "localTitle": "Empire State Building",
+          "lat": 40.7484,
+          "lon": -73.9857,
+          "title": {
+            "zh-TW": "帝國大廈裝飾藝術地標",
+            "zh-CN": "帝国大厦装饰艺术地标",
+            "en": "Empire State Building"
+          },
+          "desc": {
+            "zh-TW": "帝國大廈是紐約最具代表性的摩天地標，1931年落成時即以381公尺（連同天線達443公尺）的高度傲視全球，並蟬聯世界第一高樓近四十年，是裝飾藝術（Art Deco）建築的經典傑作。大樓矗立於曼哈頓中城第五大道，無數電影曾在此取景，從《金剛》到《西雅圖夜未眠》，使它成為流行文化中的浪漫象徵。86樓的戶外觀景台可360度飽覽曼哈頓棋盤式街景、中央公園與哈德遜河；102樓的封閉式觀景台則可登得更高。夜間大樓塔尖會依節慶與紀念日變換璀璨燈色，成為城市夜空的焦點。建議於日落前後登頂，一次收藏白晝、晚霞與萬家燈火的曼哈頓全景，並提前購票避開排隊。二樓設有沉浸式展覽，細數大樓的興建傳奇與流行文化軌跡；旺季更推出限量的日出時段票，可獨享靜謐曙光下整座城市甦醒的動人時刻。",
+            "zh-CN": "帝国大厦是纽约最具代表性的摩天地标，1931年落成时即以381米（连同天线达443米）的高度傲视全球，并蝉联世界第一高楼近四十年，是装饰艺术（Art Deco）建筑的经典杰作。大楼矗立于曼哈顿中城第五大道，无数电影曾在此取景，从《金刚》到《西雅图夜未眠》，使它成为流行文化中的浪漫象征。86楼的户外观景台可360度饱览曼哈顿棋盘式街景、中央公园与哈德逊河；102楼的封闭式观景台则可登得更高。夜间大楼塔尖会依节庆与纪念日变换璀璨灯色，成为城市夜空的焦点。建议于日落前后登顶，一次收藏白昼、晚霞与万家灯火的曼哈顿全景，并提前购票避开排队。二楼设有沉浸式展览，细数大楼的兴建传奇与流行文化轨迹；旺季更推出限量的日出时段票，可独享静谧曙光下整座城市苏醒的动人时刻。",
+            "en": "The Empire State Building is New York's defining skyscraper—at completion in 1931 it stood 381 m (443 m with the antenna), reigning as the world's tallest for nearly four decades, an Art Deco masterpiece. Rising over Fifth Avenue in Midtown, it has starred in countless films from King Kong to Sleepless in Seattle, cementing its romantic place in pop culture. The 86th-floor open-air deck gives 360° views of Manhattan's grid, Central Park and the Hudson; the enclosed 102nd floor climbs higher still. At night the spire glows in colors for holidays and causes. Visit around sunset for day, dusk and city-lights views, and book ahead."
+          }
+        },
+        {
+          "localTitle": "The Metropolitan Museum of Art",
+          "lat": 40.7794,
+          "lon": -73.9632,
+          "title": {
+            "zh-TW": "大都會藝術博物館",
+            "zh-CN": "大都会艺术博物馆",
+            "en": "The Metropolitan Museum of Art"
+          },
+          "desc": {
+            "zh-TW": "大都會藝術博物館坐落於中央公園東側第五大道，是全美規模最大、與羅浮宮齊名的世界級藝術殿堂，典藏超過兩百萬件跨越五千年的人類藝術瑰寶。館藏包羅萬象，從古埃及完整遷建的丹鐸神廟、希臘羅馬雕塑，到歐洲大師的繪畫、亞洲書畫瓷器、伊斯蘭藝術與美國館，乃至華麗的歐洲盔甲與服裝典藏（每年Met Gala即源於此），琳瑯滿目、目不暇給。建築本身為宏偉的布雜學院風格，挑高的大廳令人屏息。由於館藏浩瀚，一天難以盡覽，建議入館先索取地圖、鎖定感興趣的展廳，並可登上頂樓花園露台俯瞰中央公園與曼哈頓天際線。門票對紐約州居民採自由樂捐。其分館「修道院博物館（The Cloisters）」位於曼哈頓北端，專展中世紀藝術；博物館所在的第五大道更串起整條知名的「博物館大道」。",
+            "zh-CN": "大都会艺术博物馆坐落于中央公园东侧第五大道，是全美规模最大、与卢浮宫齐名的世界级艺术殿堂，典藏超过两百万件跨越五千年的人类艺术瑰宝。馆藏包罗万象，从古埃及完整迁建的丹铎神庙、希腊罗马雕塑，到欧洲大师的绘画、亚洲书画瓷器、伊斯兰艺术与美国馆，乃至华丽的欧洲盔甲与服装典藏（每年Met Gala即源于此），琳琅满目、目不暇给。建筑本身为宏伟的布扎学院风格，挑高的大厅令人屏息。由于馆藏浩瀚，一天难以尽览，建议入馆先索取地图、锁定感兴趣的展厅，并可登上顶楼花园露台俯瞰中央公园与曼哈顿天际线。门票对纽约州居民采自由乐捐。其分馆“修道院博物馆（The Cloisters）”位于曼哈顿北端，专展中世纪艺术；博物馆所在的第五大道更串起整条知名的“博物馆大道”。",
+            "en": "The Metropolitan Museum of Art, on Fifth Avenue along Central Park, is America's largest art museum and a peer of the Louvre, holding over two million works across 5,000 years. Its scope is staggering—the reconstructed Egyptian Temple of Dendur, Greco-Roman sculpture, European master paintings, Asian art and ceramics, Islamic galleries, the American Wing, and dazzling arms-and-armor and costume collections (home of the Met Gala). The Beaux-Arts building's soaring Great Hall takes your breath away. Too vast for one day—grab a map, target a few wings, and head to the rooftop garden for views over Central Park. Admission is pay-what-you-wish for New York State residents."
           }
         }
       ],
@@ -761,7 +1132,11 @@
           "lat": 40.7223,
           "lon": -73.9874,
           "cost": 25,
-          "title": { "zh-TW": "Katz's 燻牛肉三明治", "zh-CN": "Katz's 熏牛肉三明治", "en": "Katz's Delicatessen" },
+          "title": {
+            "zh-TW": "Katz's 燻牛肉三明治",
+            "zh-CN": "Katz's 熏牛肉三明治",
+            "en": "Katz's Delicatessen"
+          },
           "desc": {
             "zh-TW": "創業於1888年的紐約傳奇熟食店，招牌手切煙燻牛肉（pastrami）三明治份量驚人、肥嫩多汁，是下東城百年不墜的人氣名店。",
             "zh-CN": "创业于1888年的纽约传奇熟食店，招牌手切烟熏牛肉（pastrami）三明治份量惊人、肥嫩多汁，是下东城百年不坠的人气名店。",
@@ -773,7 +1148,11 @@
           "lat": 40.7305,
           "lon": -74.0027,
           "cost": 5,
-          "title": { "zh-TW": "Joe's 經典紐約披薩", "zh-CN": "Joe's 经典纽约披萨", "en": "Joe's Pizza" },
+          "title": {
+            "zh-TW": "Joe's 經典紐約披薩",
+            "zh-CN": "Joe's 经典纽约披萨",
+            "en": "Joe's Pizza"
+          },
           "desc": {
             "zh-TW": "格林威治村創立逾五十年的人氣披薩店，現烤薄脆的經典紐約式起司切片，平價快速、外帶站著吃最對味，是道地紐約日常滋味。",
             "zh-CN": "格林威治村创立逾五十年的人气披萨店，现烤薄脆的经典纽约式起司切片，平价快速、外带站着吃最对味，是道地纽约日常滋味。",
@@ -785,7 +1164,11 @@
           "lat": 40.7414,
           "lon": -73.9882,
           "cost": 12,
-          "title": { "zh-TW": "Shake Shack 漢堡", "zh-CN": "Shake Shack 汉堡", "en": "Shake Shack" },
+          "title": {
+            "zh-TW": "Shake Shack 漢堡",
+            "zh-CN": "Shake Shack 汉堡",
+            "en": "Shake Shack"
+          },
           "desc": {
             "zh-TW": "發跡於麥迪遜廣場公園的人氣漢堡品牌，多汁的安格斯牛肉漢堡搭配奶昔與起司薯條，新鮮現做、風靡全球，是紐約速食新經典。",
             "zh-CN": "发迹于麦迪逊广场公园的人气汉堡品牌，多汁的安格斯牛肉汉堡搭配奶昔与起司薯条，新鲜现做、风靡全球，是纽约速食新经典。",
@@ -795,7 +1178,13 @@
       ]
     },
     {
-      "keywords": ["倫敦", "伦敦", "london", "英國", "英国"],
+      "keywords": [
+        "倫敦",
+        "伦敦",
+        "london",
+        "英國",
+        "英国"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600",
         "https://images.unsplash.com/photo-1543832923-44667a44c804?w=600",
@@ -806,7 +1195,11 @@
           "localTitle": "Big Ben & Houses of Parliament",
           "lat": 51.4995,
           "lon": -0.1248,
-          "title": { "zh-TW": "西敏宮與大笨鐘", "zh-CN": "威斯敏斯特宫与大本钟", "en": "Big Ben & Houses of Parliament" },
+          "title": {
+            "zh-TW": "西敏宮與大笨鐘",
+            "zh-CN": "威斯敏斯特宫与大本钟",
+            "en": "Big Ben & Houses of Parliament"
+          },
           "desc": {
             "zh-TW": "西敏宮（國會大廈）矗立於泰晤士河畔，是英國國會上、下議院的所在地，也是哥德復興式建築的傑作，與西敏寺、聖瑪格麗特教堂共同列為世界文化遺產。其最著名的標誌，是位於宮殿北端、高約96公尺的鐘樓「伊莉莎白塔」，塔內那口重逾13噸的巨大報時鐘即是世人熟知的「大笨鐘」（Big Ben），其渾厚悠揚的鐘聲透過廣播傳遍全球，早已成為倫敦乃至英國的聽覺象徵。整座宮殿擁有逾千個房間、繁複精緻的尖塔與雕飾，臨河立面在夕陽與夜燈映照下格外壯麗。遊客可於西敏橋上取景，將大笨鐘與往來紅色雙層巴士一同入鏡，是倫敦最經典的明信片畫面；對岸的倫敦眼摩天輪則提供俯瞰全景的絕佳視角。建議搭配鄰近的西敏寺、白廳與聖詹姆斯公園一併步行遊覽。",
             "zh-CN": "威斯敏斯特宫（国会大厦）矗立于泰晤士河畔，是英国国会上、下议院的所在地，也是哥特复兴式建筑的杰作，与威斯敏斯特教堂、圣玛格丽特教堂共同列为世界文化遗产。其最著名的标志，是位于宫殿北端、高约96米的钟楼“伊丽莎白塔”，塔内那口重逾13吨的巨大报时钟即是世人熟知的“大本钟”（Big Ben），其浑厚悠扬的钟声透过广播传遍全球，早已成为伦敦乃至英国的听觉象征。整座宫殿拥有逾千个房间、繁复精致的尖塔与雕饰，临河立面在夕阳与夜灯映照下格外壮丽。游客可于威斯敏斯特桥上取景，将大本钟与往来红色双层巴士一同入镜，是伦敦最经典的明信片画面；对岸的伦敦眼摩天轮则提供俯瞰全景的绝佳视角。建议搭配邻近的威斯敏斯特教堂、白厅与圣詹姆斯公园一并步行游览。",
@@ -817,7 +1210,11 @@
           "localTitle": "Tower Bridge",
           "lat": 51.5055,
           "lon": -0.0754,
-          "title": { "zh-TW": "倫敦塔橋", "zh-CN": "伦敦塔桥", "en": "Tower Bridge" },
+          "title": {
+            "zh-TW": "倫敦塔橋",
+            "zh-CN": "伦敦塔桥",
+            "en": "Tower Bridge"
+          },
           "desc": {
             "zh-TW": "倫敦塔橋橫跨泰晤士河，於1894年落成，是倫敦最具辨識度的地標之一，常被誤稱為「倫敦橋」。這座結合吊橋與懸索橋結構的維多利亞式建築，以兩座高聳的哥德復興式塔樓與天藍色鋼骨橋身著稱，造型典雅而雄偉。塔橋最精彩之處在於其可開合的橋面設計：當大型船隻需要通過時，中央橋面會向上掀起讓道，這項百年機械工程至今仍定期上演，是遊客爭相目睹的奇景（開橋時刻表可於官網查詢）。遊客可購票進入塔內的展覽館，了解塔橋的建造歷史與維多利亞時代的蒸汽機房，並登上連接兩塔、高懸於河面之上的玻璃地板天橋，腳下車船往來、河景盡收眼底，刺激又震撼。鄰近即是倫敦塔、市政廳與河岸步道。建議於黃昏前後造訪，欣賞塔橋燈光點亮、倒映河面的迷人景致。",
             "zh-CN": "伦敦塔桥横跨泰晤士河，于1894年落成，是伦敦最具辨识度的地标之一，常被误称为“伦敦桥”。这座结合吊桥与悬索桥结构的维多利亚式建筑，以两座高耸的哥特复兴式塔楼与天蓝色钢骨桥身著称，造型典雅而雄伟。塔桥最精彩之处在于其可开合的桥面设计：当大型船只需要通过时，中央桥面会向上掀起让道，这项百年机械工程至今仍定期上演，是游客争相目睹的奇景（开桥时刻表可于官网查询）。游客可购票进入塔内的展览馆，了解塔桥的建造历史与维多利亚时代的蒸汽机房，并登上连接两塔、高悬于河面之上的玻璃地板天桥，脚下车船往来、河景尽收眼底，刺激又震撼。邻近即是伦敦塔、市政厅与河岸步道。建议于黄昏前后造访，欣赏塔桥灯光点亮、倒映河面的迷人景致。",
@@ -828,7 +1225,11 @@
           "localTitle": "British Museum",
           "lat": 51.5194,
           "lon": -0.127,
-          "title": { "zh-TW": "大英博物館", "zh-CN": "大英博物馆", "en": "British Museum" },
+          "title": {
+            "zh-TW": "大英博物館",
+            "zh-CN": "大英博物馆",
+            "en": "British Museum"
+          },
           "desc": {
             "zh-TW": "大英博物館創立於1753年，是世界上歷史最悠久、館藏最浩瀚的綜合性博物館之一，珍藏逾八百萬件橫跨兩百萬年人類文明的文物，且常年免費開放，堪稱認識世界歷史的殿堂。館內鎮館之寶不勝枚舉：解開古埃及象形文字之謎的「羅塞塔石碑」、雅典帕德嫩神廟的「埃爾金大理石雕」、古埃及法老木乃伊與石棺、亞述帝國的人面飛獅浮雕，以及來自中國、希臘、美索不達米亞等地的稀世珍品，令人目不暇給。建築本身亦極具看點，由諾曼·福斯特設計、覆以巨型玻璃鋼構穹頂的「大中庭」是歐洲最大的有頂廣場，明亮通透、氣勢恢宏。由於館藏太過龐大，難以一次看完，建議行前先選定感興趣的文明展區、善用免費地圖與導覽，集中參觀重點精華，方能在有限時間內滿載而歸。",
             "zh-CN": "大英博物馆创立于1753年，是世界上历史最悠久、馆藏最浩瀚的综合性博物馆之一，珍藏逾八百万件横跨两百万年人类文明的文物，且常年免费开放，堪称认识世界历史的殿堂。馆内镇馆之宝不胜枚举：解开古埃及象形文字之谜的“罗塞塔石碑”、雅典帕特农神庙的“埃尔金大理石雕”、古埃及法老木乃伊与石棺、亚述帝国的人面飞狮浮雕，以及来自中国、希腊、美索不达米亚等地的稀世珍品，令人目不暇给。建筑本身亦极具看点，由诺曼·福斯特设计、覆以巨型玻璃钢构穹顶的“大中庭”是欧洲最大的有顶广场，明亮通透、气势恢宏。由于馆藏太过庞大，难以一次看完，建议行前先选定感兴趣的文明展区、善用免费地图与导览，集中参观重点精华，方能在有限时间内满载而归。",
@@ -842,7 +1243,11 @@
           "lat": 51.5055,
           "lon": -0.0909,
           "cost": 15,
-          "title": { "zh-TW": "波羅市場美食", "zh-CN": "波罗市场美食", "en": "Borough Market" },
+          "title": {
+            "zh-TW": "波羅市場美食",
+            "zh-CN": "波罗市场美食",
+            "en": "Borough Market"
+          },
           "desc": {
             "zh-TW": "倫敦最古老的食材市集之一，匯聚來自英國與世界各地的鮮食攤位，從現煎牛排三明治、生蠔到各國熟食小吃應有盡有，是美食愛好者的天堂。",
             "zh-CN": "伦敦最古老的食材市集之一，汇聚来自英国与世界各地的鲜食摊位，从现煎牛排三明治、生蚝到各国熟食小吃应有尽有，是美食爱好者的天堂。",
@@ -854,7 +1259,11 @@
           "lat": 51.5118,
           "lon": -0.13,
           "cost": 25,
-          "title": { "zh-TW": "Dishoom 孟買咖哩館", "zh-CN": "Dishoom 孟买咖喱馆", "en": "Dishoom" },
+          "title": {
+            "zh-TW": "Dishoom 孟買咖哩館",
+            "zh-CN": "Dishoom 孟买咖喱馆",
+            "en": "Dishoom"
+          },
           "desc": {
             "zh-TW": "重現舊孟買波斯咖啡館風情的人氣印度餐廳，招牌黑豆咖哩與培根馬薩拉麵包卷令人難忘，氣氛復古迷人，常需排隊候位。",
             "zh-CN": "重现旧孟买波斯咖啡馆风情的人气印度餐厅，招牌黑豆咖喱与培根马萨拉面包卷令人难忘，气氛复古迷人，常需排队候位。",
@@ -866,7 +1275,11 @@
           "lat": 51.5126,
           "lon": -0.1289,
           "cost": 40,
-          "title": { "zh-TW": "The Ivy 經典英式餐廳", "zh-CN": "The Ivy 经典英式餐厅", "en": "The Ivy" },
+          "title": {
+            "zh-TW": "The Ivy 經典英式餐廳",
+            "zh-CN": "The Ivy 经典英式餐厅",
+            "en": "The Ivy"
+          },
           "desc": {
             "zh-TW": "西區劇院區的百年名店，以優雅裝潢與經典英式料理聞名，從炸魚薯條到週日烤肉一應俱全，是體驗倫敦正統餐飲氛圍的好選擇。",
             "zh-CN": "西区剧院区的百年名店，以优雅装潢与经典英式料理闻名，从炸鱼薯条到周日烤肉一应俱全，是体验伦敦正统餐饮氛围的好选择。",
@@ -876,7 +1289,14 @@
       ]
     },
     {
-      "keywords": ["香港", "hong kong", "hongkong", "尖沙咀", "中環", "中环"],
+      "keywords": [
+        "香港",
+        "hong kong",
+        "hongkong",
+        "尖沙咀",
+        "中環",
+        "中环"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1536599018102-9f803c140fc1?w=600",
         "https://images.unsplash.com/photo-1518599807935-37015b9cefcb?w=600",
@@ -887,7 +1307,11 @@
           "localTitle": "太平山頂 (The Peak)",
           "lat": 22.2759,
           "lon": 114.1455,
-          "title": { "zh-TW": "太平山頂維港夜景", "zh-CN": "太平山顶维港夜景", "en": "Victoria Peak" },
+          "title": {
+            "zh-TW": "太平山頂維港夜景",
+            "zh-CN": "太平山顶维港夜景",
+            "en": "Victoria Peak"
+          },
           "desc": {
             "zh-TW": "太平山頂（俗稱「山頂」）海拔約552公尺，是香港島的最高峰，自殖民時期便是達官顯貴的居住勝地，如今更是俯瞰維多利亞港璀璨夜景的世界級觀景台。從山頂遠眺，香港島與九龍兩岸鱗次櫛比的摩天大樓沿著維港兩側展開，入夜後萬家燈火與大樓霓虹交相輝映，被譽為「世界三大夜景」之一，景象令人屏息。前往山頂最經典的方式，是搭乘擁有逾130年歷史的「山頂纜車」——這條陡峭的登山纜車沿途以傾斜視角掠過林立高樓，本身就是一趟難忘的體驗。抵達後可登上造型獨特的「凌霄閣」摩天台428觀景平台，將全景盡收眼底；周邊亦有商場、餐廳與山頂環迴步道，可悠閒散步賞景。建議於日落前抵達，一次飽覽白晝、黃昏與夜景三種風貌，並提前購票避開排隊人潮。",
             "zh-CN": "太平山顶（俗称“山顶”）海拔约552米，是香港岛的最高峰，自殖民时期便是达官显贵的居住胜地，如今更是俯瞰维多利亚港璀璨夜景的世界级观景台。从山顶远眺，香港岛与九龙两岸鳞次栉比的摩天大楼沿着维港两侧展开，入夜后万家灯火与大楼霓虹交相辉映，被誉为“世界三大夜景”之一，景象令人屏息。前往山顶最经典的方式，是搭乘拥有逾130年历史的“山顶缆车”——这条陡峭的登山缆车沿途以倾斜视角掠过林立高楼，本身就是一趟难忘的体验。抵达后可登上造型独特的“凌霄阁”摩天台428观景平台，将全景尽收眼底；周边亦有商场、餐厅与山顶环回步道，可悠闲散步赏景。建议于日落前抵达，一次饱览白昼、黄昏与夜景三种风貌，并提前购票避开排队人潮。",
@@ -898,7 +1322,11 @@
           "localTitle": "尖沙咀星光大道",
           "lat": 22.2937,
           "lon": 114.1722,
-          "title": { "zh-TW": "尖沙咀星光大道海濱", "zh-CN": "尖沙咀星光大道海滨", "en": "Tsim Sha Tsui & Victoria Harbour" },
+          "title": {
+            "zh-TW": "尖沙咀星光大道海濱",
+            "zh-CN": "尖沙咀星光大道海滨",
+            "en": "Tsim Sha Tsui & Victoria Harbour"
+          },
           "desc": {
             "zh-TW": "尖沙咀位於九龍半島南端，是香港最繁華的購物、文化與觀光樞紐，臨海的「星光大道」沿維多利亞港鋪展，是欣賞港島天際線最熱門的海濱長廊。漫步其間，可見仿效好萊塢、鑲嵌香港影壇巨星手印與名牌的地磚，以及李小龍、梅艷芳的紀念銅像，向香港璀璨的電影黃金年代致敬。每晚八點，維港兩岸數十棟摩天大樓會聯合上演金氏世界紀錄認證的「幻彩詠香江」燈光音樂秀，雷射與燈光隨樂曲在夜空中舞動，從星光大道觀賞最為震撼。周邊匯聚香港文化中心、太空館、藝術館、半島酒店與廣東道名店街，文化與購物一應俱全；亦可搭乘百年「天星小輪」橫渡維港至中環，以平實票價飽覽海上風光。建議傍晚前往，散步、賞景並守候八點的燈光秀。",
             "zh-CN": "尖沙咀位于九龙半岛南端，是香港最繁华的购物、文化与观光枢纽，临海的“星光大道”沿维多利亚港铺展，是欣赏港岛天际线最热门的海滨长廊。漫步其间，可见仿效好莱坞、镶嵌香港影坛巨星手印与名牌的地砖，以及李小龙、梅艳芳的纪念铜像，向香港璀璨的电影黄金年代致敬。每晚八点，维港两岸数十栋摩天大楼会联合上演吉尼斯世界纪录认证的“幻彩咏香江”灯光音乐秀，镭射与灯光随乐曲在夜空中舞动，从星光大道观赏最为震撼。周边汇聚香港文化中心、太空馆、艺术馆、半岛酒店与广东道名店街，文化与购物一应俱全；亦可搭乘百年“天星小轮”横渡维港至中环，以平实票价饱览海上风光。建议傍晚前往，散步、赏景并守候八点的灯光秀。",
@@ -909,7 +1337,11 @@
           "localTitle": "天壇大佛 (寶蓮禪寺)",
           "lat": 22.254,
           "lon": 113.905,
-          "title": { "zh-TW": "昂坪天壇大佛", "zh-CN": "昂坪天坛大佛", "en": "Tian Tan Buddha" },
+          "title": {
+            "zh-TW": "昂坪天壇大佛",
+            "zh-CN": "昂坪天坛大佛",
+            "en": "Tian Tan Buddha"
+          },
           "desc": {
             "zh-TW": "天壇大佛坐落於大嶼山昂坪高地，鄰近百年古剎寶蓮禪寺，於1993年落成，是一尊高約34公尺、重逾250噸的戶外青銅釋迦牟尼佛坐像，落成時為全球最大的同類佛像，莊嚴宏偉、俯瞰四方。大佛端坐於蓮花寶座之上，右手作「施無畏印」、左手結「與願印」，面容慈祥安詳，象徵為眾生消災賜福。參拜者需拾級而上268級石階方能抵達佛像基座，沿途俯瞰群山與雲海，更添朝聖的虔敬之感；基座內部設有展廳，珍藏佛舍利。前往昂坪最具特色的方式，是搭乘「昂坪360」纜車，約25分鐘的空中旅程橫越山海與機場，飽覽大嶼山壯麗風光。周邊還有寶蓮禪寺、心經簡林與昂坪市集等景點。建議安排一整日，從喧囂都市走進這片清幽的佛教淨土。",
             "zh-CN": "天坛大佛坐落于大屿山昂坪高地，邻近百年古刹宝莲禅寺，于1993年落成，是一尊高约34米、重逾250吨的户外青铜释迦牟尼佛坐像，落成时为全球最大的同类佛像，庄严宏伟、俯瞰四方。大佛端坐于莲花宝座之上，右手作“施无畏印”、左手结“与愿印”，面容慈祥安详，象征为众生消灾赐福。参拜者需拾级而上268级石阶方能抵达佛像基座，沿途俯瞰群山与云海，更添朝圣的虔敬之感；基座内部设有展厅，珍藏佛舍利。前往昂坪最具特色的方式，是搭乘“昂坪360”缆车，约25分钟的空中旅程横越山海与机场，饱览大屿山壮丽风光。周边还有宝莲禅寺、心经简林与昂坪市集等景点。建议安排一整日，从喧嚣都市走进这片清幽的佛教净土。",
@@ -923,7 +1355,11 @@
           "lat": 22.305,
           "lon": 114.17,
           "cost": 80,
-          "title": { "zh-TW": "添好運點心", "zh-CN": "添好运点心", "en": "Tim Ho Wan" },
+          "title": {
+            "zh-TW": "添好運點心",
+            "zh-CN": "添好运点心",
+            "en": "Tim Ho Wan"
+          },
           "desc": {
             "zh-TW": "以平價米其林一星聞名全球的港式點心店，招牌酥皮焗叉燒包外酥內嫩、甜鹹交融，蝦餃、腸粉同樣出色，是體驗香港飲茶文化的人氣首選。",
             "zh-CN": "以平价米其林一星闻名全球的港式点心店，招牌酥皮焗叉烧包外酥内嫩、甜咸交融，虾饺、肠粉同样出色，是体验香港饮茶文化的人气首选。",
@@ -935,7 +1371,11 @@
           "lat": 22.2825,
           "lon": 114.1547,
           "cost": 60,
-          "title": { "zh-TW": "麥奀記雲吞麵", "zh-CN": "麦奀记云吞面", "en": "Mak's Noodle" },
+          "title": {
+            "zh-TW": "麥奀記雲吞麵",
+            "zh-CN": "麦奀记云吞面",
+            "en": "Mak's Noodle"
+          },
           "desc": {
             "zh-TW": "中環老字號雲吞麵名店，以彈牙的銀絲細麵、鮮甜的大地魚湯頭與飽滿的鮮蝦雲吞聞名，是香港傳統麵食的經典代表。",
             "zh-CN": "中环老字号云吞面名店，以弹牙的银丝细面、鲜甜的大地鱼汤头与饱满的鲜虾云吞闻名，是香港传统面食的经典代表。",
@@ -947,7 +1387,11 @@
           "lat": 22.2845,
           "lon": 114.1545,
           "cost": 90,
-          "title": { "zh-TW": "蓮香樓懷舊茶樓", "zh-CN": "莲香楼怀旧茶楼", "en": "Lin Heung Tea House" },
+          "title": {
+            "zh-TW": "蓮香樓懷舊茶樓",
+            "zh-CN": "莲香楼怀旧茶楼",
+            "en": "Lin Heung Tea House"
+          },
           "desc": {
             "zh-TW": "百年歷史的傳統廣式茶樓，保留推車叫賣點心的懷舊風情，蓮蓉包、雞球大包與各式燒賣現點現取，氣氛喧鬧熱絡，充滿老香港情懷。",
             "zh-CN": "百年历史的传统广式茶楼，保留推车叫卖点心的怀旧风情，莲蓉包、鸡球大包与各式烧卖现点现取，气氛喧闹热络，充满老香港情怀。",
@@ -957,7 +1401,15 @@
       ]
     },
     {
-      "keywords": ["羅馬", "罗马", "rome", "roma", "義大利", "意大利", "italy"],
+      "keywords": [
+        "羅馬",
+        "罗马",
+        "rome",
+        "roma",
+        "義大利",
+        "意大利",
+        "italy"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600",
         "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=600",
@@ -968,7 +1420,11 @@
           "localTitle": "Colosseo",
           "lat": 41.8902,
           "lon": 12.4922,
-          "title": { "zh-TW": "羅馬競技場", "zh-CN": "罗马斗兽场", "en": "Colosseum" },
+          "title": {
+            "zh-TW": "羅馬競技場",
+            "zh-CN": "罗马斗兽场",
+            "en": "Colosseum"
+          },
           "desc": {
             "zh-TW": "羅馬競技場（鬥獸場）是古羅馬帝國最宏偉的建築傑作與永恆象徵，於公元80年由維斯帕先與提圖斯皇帝建成，是史上規模最大的圓形競技場，可容納約五萬至八萬名觀眾。這座橢圓形巨構以拱券與多立克、愛奧尼、科林斯三式柱式層層堆疊，展現古羅馬登峰造極的工程與美學成就。當年此處上演角鬥士搏鬥、人獸對決與盛大公開表演，看台依社會階級分區而坐，地底下則是關押猛獸與角鬥士的迷宮般通道與升降裝置。歷經地震與盜採石材的損毀，競技場雖已殘缺，斑駁的殘垣斷壁反而更添歲月的滄桑與震撼，被列為世界文化遺產與「新世界七大奇蹟」之一。遊客可購票入內，沿看台與競技場走道想像當年的喧囂盛況。建議預先網路購票或參加導覽避開長龍，並搭配鄰近的羅馬廣場與帕拉提諾山一併遊覽。",
             "zh-CN": "罗马斗兽场（竞技场）是古罗马帝国最宏伟的建筑杰作与永恒象征，于公元80年由维斯帕先与提图斯皇帝建成，是史上规模最大的圆形竞技场，可容纳约五万至八万名观众。这座椭圆形巨构以拱券与多立克、爱奥尼、科林斯三式柱式层层堆叠，展现古罗马登峰造极的工程与美学成就。当年此处上演角斗士搏斗、人兽对决与盛大公开表演，看台依社会阶级分区而坐，地底下则是关押猛兽与角斗士的迷宫般通道与升降装置。历经地震与盗采石材的损毁，斗兽场虽已残缺，斑驳的残垣断壁反而更添岁月的沧桑与震撼，被列为世界文化遗产与“新世界七大奇迹”之一。游客可购票入内，沿看台与竞技场走道想象当年的喧嚣盛况。建议预先网络购票或参加导览避开长龙，并搭配邻近的罗马广场与帕拉蒂诺山一并游览。",
@@ -979,7 +1435,11 @@
           "localTitle": "Fontana di Trevi",
           "lat": 41.9009,
           "lon": 12.4833,
-          "title": { "zh-TW": "特雷維噴泉許願池", "zh-CN": "特雷维喷泉许愿池", "en": "Trevi Fountain" },
+          "title": {
+            "zh-TW": "特雷維噴泉許願池",
+            "zh-CN": "特雷维喷泉许愿池",
+            "en": "Trevi Fountain"
+          },
           "desc": {
             "zh-TW": "特雷維噴泉（許願池）是羅馬最華麗壯觀的巴洛克噴泉，於1762年完工，高約26公尺、寬約49公尺，幾乎占滿整座小廣場的立面，是無數遊客心目中羅馬最浪漫的地標。噴泉以海神尼普頓駕馭海馬戰車破浪而出的群雕為主體，兩側分別象徵「豐饒」與「健康」的女神，搭配翻騰奔流的清泉與蔚藍水池，動感十足、氣勢磅礴，背景則是典雅的波利宮立面。最為人津津樂道的，是流傳已久的擲幣傳說：背對噴泉、以右手越過左肩投入一枚硬幣，便能確保重返羅馬；投兩枚將邂逅愛情、三枚則會步入婚姻。每日從池中撈起的錢幣高達數千歐元，並悉數捐作慈善之用。由於此處終日人潮鼎沸，建議於清晨或深夜造訪，較能從容欣賞噴泉之美並拍下無人打擾的經典畫面。",
             "zh-CN": "特雷维喷泉（许愿池）是罗马最华丽壮观的巴洛克喷泉，于1762年完工，高约26米、宽约49米，几乎占满整座小广场的立面，是无数游客心目中罗马最浪漫的地标。喷泉以海神尼普顿驾驭海马战车破浪而出的群雕为主体，两侧分别象征“丰饶”与“健康”的女神，搭配翻腾奔流的清泉与蔚蓝水池，动感十足、气势磅礴，背景则是典雅的波利宫立面。最为人津津乐道的，是流传已久的掷币传说：背对喷泉、以右手越过左肩投入一枚硬币，便能确保重返罗马；投两枚将邂逅爱情、三枚则会步入婚姻。每日从池中捞起的钱币高达数千欧元，并悉数捐作慈善之用。由于此处终日人潮鼎沸，建议于清晨或深夜造访，较能从容欣赏喷泉之美并拍下无人打扰的经典画面。",
@@ -990,11 +1450,30 @@
           "localTitle": "Basilica di San Pietro",
           "lat": 41.9022,
           "lon": 12.4539,
-          "title": { "zh-TW": "梵蒂岡聖彼得大教堂", "zh-CN": "梵蒂冈圣彼得大教堂", "en": "St. Peter's Basilica" },
+          "title": {
+            "zh-TW": "梵蒂岡聖彼得大教堂",
+            "zh-CN": "梵蒂冈圣彼得大教堂",
+            "en": "St. Peter's Basilica"
+          },
           "desc": {
             "zh-TW": "聖彼得大教堂坐落於梵蒂岡城國，是天主教會最神聖的中心與全球最大的教堂之一，建於相傳為耶穌門徒聖彼得殉道與安葬之地。教堂歷經逾百年興建，匯聚了文藝復興與巴洛克時期最頂尖的藝術巨匠——布拉曼特、米開朗基羅、拉斐爾與貝尼尼皆參與其中。由米開朗基羅設計、高逾136公尺的巨型穹頂氣勢恢宏，是羅馬天際線的標誌，遊客可登頂俯瞰聖彼得廣場與整座永恆之城。教堂內部金碧輝煌、聖像林立，珍藏著米開朗基羅25歲完成的曠世傑作《聖殤》（哀悼基督）大理石雕，以及貝尼尼設計的青銅華蓋與宗座祭壇，藝術價值無與倫比。教堂前由貝尼尼設計的橢圓形柱廊廣場，兩臂環抱寓意教會擁抱信眾，宏偉而莊嚴。入內免費但需通過安檢且有嚴格服裝規定（須遮蓋肩膀與膝蓋），建議清晨前往避開人潮。",
             "zh-CN": "圣彼得大教堂坐落于梵蒂冈城国，是天主教会最神圣的中心与全球最大的教堂之一，建于相传为耶稣门徒圣彼得殉道与安葬之地。教堂历经逾百年兴建，汇聚了文艺复兴与巴洛克时期最顶尖的艺术巨匠——布拉曼特、米开朗基罗、拉斐尔与贝尼尼皆参与其中。由米开朗基罗设计、高逾136米的巨型穹顶气势恢宏，是罗马天际线的标志，游客可登顶俯瞰圣彼得广场与整座永恒之城。教堂内部金碧辉煌、圣像林立，珍藏着米开朗基罗25岁完成的旷世杰作《圣殇》（哀悼基督）大理石雕，以及贝尼尼设计的青铜华盖与宗座祭坛，艺术价值无与伦比。教堂前由贝尼尼设计的椭圆形柱廊广场，两臂环抱寓意教会拥抱信众，宏伟而庄严。入内免费但需通过安检且有严格服装规定（须遮盖肩膀与膝盖），建议清晨前往避开人潮。",
             "en": "St. Peter's Basilica stands in Vatican City as the holiest center of the Catholic Church and one of the largest churches in the world, built over the site where the apostle St. Peter is traditionally believed to have been martyred and buried. Constructed over more than a century, it brought together the greatest masters of the Renaissance and Baroque — Bramante, Michelangelo, Raphael and Bernini all contributed. Michelangelo's towering dome, over 136 meters high, is a defining feature of Rome's skyline, and visitors can climb to its top for views over St. Peter's Square and the Eternal City. The opulent, statue-filled interior holds Michelangelo's sublime Pietà, carved when he was 25, and Bernini's bronze baldachin over the papal altar — art of unrivaled value. The elliptical colonnaded square before it, also by Bernini, embraces visitors with two great arms symbolizing the Church welcoming the faithful, grand and solemn. Entry is free but subject to security checks and a strict dress code (shoulders and knees covered); visit early to avoid the crowds."
+          }
+        },
+        {
+          "localTitle": "Musei Vaticani",
+          "lat": 41.9065,
+          "lon": 12.4536,
+          "title": {
+            "zh-TW": "梵蒂岡博物館與西斯汀禮拜堂",
+            "zh-CN": "梵蒂冈博物馆与西斯廷礼拜堂",
+            "en": "Vatican Museums"
+          },
+          "desc": {
+            "zh-TW": "梵蒂岡博物館位於全世界最小的國家梵蒂岡城內，是歷代教宗數百年來蒐藏的曠世藝術總和，被譽為人類文明的瑰寶寶庫。博物館由二十餘座展館與長廊串連而成，珍藏埃及木乃伊、希臘羅馬雕塑、文藝復興繪畫與掛毯地圖等無數名作，沿途天花板與牆面皆是精雕細琢的濕壁畫。參觀動線的高潮是米開朗基羅獨力完成的「西斯汀禮拜堂」，穹頂的《創世紀》與祭壇牆的《最後的審判》氣勢磅礡、震撼人心，是親眼見證才能體會的藝術奇蹟（堂內禁止攝影與喧嘩）。著名的「拉斐爾房間」與螺旋階梯亦不容錯過。由於人潮極多，強烈建議提前線上預約並選擇早場，預留至少半天細細欣賞。須注意進入須符合莊重著裝規定（須覆蓋肩膀與膝蓋）；每月最後一個週日免費開放，但人潮也更為洶湧，宜及早前往排隊。",
+            "zh-CN": "梵蒂冈博物馆位于全世界最小的国家梵蒂冈城内，是历代教宗数百年来搜藏的旷世艺术总和，被誉为人类文明的瑰宝宝库。博物馆由二十余座展馆与长廊串连而成，珍藏埃及木乃伊、希腊罗马雕塑、文艺复兴绘画与挂毯地图等无数名作，沿途天花板与墙面皆是精雕细琢的湿壁画。参观动线的高潮是米开朗基罗独力完成的“西斯廷礼拜堂”，穹顶的《创世纪》与祭坛墙的《最后的审判》气势磅礴、震撼人心，是亲眼见证才能体会的艺术奇迹（堂内禁止摄影与喧哗）。著名的“拉斐尔房间”与螺旋阶梯亦不容错过。由于人潮极多，强烈建议提前在线预约并选择早场，预留至少半天细细欣赏。须注意进入须符合庄重着装规定（须覆盖肩膀与膝盖）；每月最后一个周日免费开放，但人潮也更为汹涌，宜及早前往排队。",
+            "en": "The Vatican Museums, inside the world's smallest state, gather centuries of papal art into one of humanity's great treasuries. Two dozen galleries and corridors hold Egyptian mummies, Greco-Roman sculpture, Renaissance painting and tapestry-and-map halls, with frescoed ceilings throughout. The climax is the Sistine Chapel, painted single-handedly by Michelangelo—the Genesis ceiling and the Last Judgment on the altar wall are awe-inspiring in person (no photos or talking inside). Don't miss the Raphael Rooms and the spiral staircase. Crowds are intense, so book online for an early slot and allow at least half a day."
           }
         }
       ],
@@ -1004,7 +1483,11 @@
           "lat": 41.8945,
           "lon": 12.472,
           "cost": 30,
-          "title": { "zh-TW": "Roscioli 義式餐館", "zh-CN": "Roscioli 意式餐馆", "en": "Roscioli" },
+          "title": {
+            "zh-TW": "Roscioli 義式餐館",
+            "zh-CN": "Roscioli 意式餐馆",
+            "en": "Roscioli"
+          },
           "desc": {
             "zh-TW": "結合熟食店、餐廳與酒窖的羅馬名店，招牌培根蛋黃義大利麵與起司胡椒麵堪稱經典，食材講究、風味濃郁，常需提前訂位。",
             "zh-CN": "结合熟食店、餐厅与酒窖的罗马名店，招牌培根蛋黄意大利面与起司胡椒面堪称经典，食材讲究、风味浓郁，常需提前订位。",
@@ -1016,7 +1499,11 @@
           "lat": 41.889,
           "lon": 12.472,
           "cost": 25,
-          "title": { "zh-TW": "Da Enzo 家常羅馬菜", "zh-CN": "Da Enzo 家常罗马菜", "en": "Da Enzo al 29" },
+          "title": {
+            "zh-TW": "Da Enzo 家常羅馬菜",
+            "zh-CN": "Da Enzo 家常罗马菜",
+            "en": "Da Enzo al 29"
+          },
           "desc": {
             "zh-TW": "特拉斯提弗列區的人氣家庭小館，以道地傳統羅馬菜聞名，炸節瓜花、培根蛋麵與烤羊排深受好評，氣氛溫馨、份量實在，常見排隊。",
             "zh-CN": "特拉斯提弗列区的人气家庭小馆，以道地传统罗马菜闻名，炸节瓜花、培根蛋面与烤羊排深受好评，气氛温馨、份量实在，常见排队。",
@@ -1028,7 +1515,11 @@
           "lat": 41.907,
           "lon": 12.447,
           "cost": 12,
-          "title": { "zh-TW": "Pizzarium 切片披薩", "zh-CN": "Pizzarium 切片披萨", "en": "Pizzarium Bonci" },
+          "title": {
+            "zh-TW": "Pizzarium 切片披薩",
+            "zh-CN": "Pizzarium 切片披萨",
+            "en": "Pizzarium Bonci"
+          },
           "desc": {
             "zh-TW": "由「披薩界米開朗基羅」邦奇主理的羅馬式方形切片披薩名店，餅皮酥脆有勁、配料創意豐富，按重量計價、外帶站著吃，是平價美味之選。",
             "zh-CN": "由“披萨界米开朗基罗”邦奇主理的罗马式方形切片披萨名店，饼皮酥脆有劲、配料创意丰富，按重量计价、外带站着吃，是平价美味之选。",
@@ -1038,7 +1529,14 @@
       ]
     },
     {
-      "keywords": ["杜拜", "迪拜", "dubai", "阿聯", "阿联酋", "uae"],
+      "keywords": [
+        "杜拜",
+        "迪拜",
+        "dubai",
+        "阿聯",
+        "阿联酋",
+        "uae"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600",
         "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=600",
@@ -1049,7 +1547,11 @@
           "localTitle": "برج خليفة (Burj Khalifa)",
           "lat": 25.1972,
           "lon": 55.2744,
-          "title": { "zh-TW": "哈里發塔世界第一高樓", "zh-CN": "哈利法塔世界第一高楼", "en": "Burj Khalifa" },
+          "title": {
+            "zh-TW": "哈里發塔世界第一高樓",
+            "zh-CN": "哈利法塔世界第一高楼",
+            "en": "Burj Khalifa"
+          },
           "desc": {
             "zh-TW": "哈里發塔於2010年落成，以高達828公尺、樓層逾160層之姿穩居「世界第一高樓」寶座，是杜拜傲視全球的現代建築奇蹟與城市象徵。塔身造型靈感取自沙漠中的蜘蛛蘭花瓣，採三葉式平面層層內縮、向天際旋升，外覆逾兩萬六千片帷幕玻璃，在烈日下熠熠生輝。遊客可搭乘全球最快的電梯之一，迅速登上第124、125層的「At the Top」觀景台，或更高的148層頂級觀景平台，將整座杜拜的摩天樓群、棕櫚島與一望無際的阿拉伯沙漠與波斯灣盡收眼底，日落時分尤為震撼。塔下緊鄰全球最大的杜拜購物中心，廣場上的「杜拜噴泉」則是世界最大的音樂噴泉，每晚伴隨燈光與樂曲噴出高達150公尺的水柱，免費觀賞、美不勝收。建議預約傍晚時段登塔，並守候入夜後的噴泉秀，一次體驗杜拜的奢華與璀璨。",
             "zh-CN": "哈利法塔于2010年落成，以高达828米、楼层逾160层之姿稳居“世界第一高楼”宝座，是迪拜傲视全球的现代建筑奇迹与城市象征。塔身造型灵感取自沙漠中的蜘蛛兰花瓣，采三叶式平面层层内缩、向天际旋升，外覆逾两万六千片帷幕玻璃，在烈日下熠熠生辉。游客可搭乘全球最快的电梯之一，迅速登上第124、125层的“At the Top”观景台，或更高的148层顶级观景平台，将整座迪拜的摩天楼群、棕榈岛与一望无际的阿拉伯沙漠与波斯湾尽收眼底，日落时分尤为震撼。塔下紧邻全球最大的迪拜购物中心，广场上的“迪拜喷泉”则是世界最大的音乐喷泉，每晚伴随灯光与乐曲喷出高达150米的水柱，免费观赏、美不胜收。建议预约傍晚时段登塔，并守候入夜后的喷泉秀，一次体验迪拜的奢华与璀璨。",
@@ -1060,7 +1562,11 @@
           "localTitle": "برج العرب (Burj Al Arab)",
           "lat": 25.1412,
           "lon": 55.1853,
-          "title": { "zh-TW": "帆船酒店地標", "zh-CN": "帆船酒店地标", "en": "Burj Al Arab" },
+          "title": {
+            "zh-TW": "帆船酒店地標",
+            "zh-CN": "帆船酒店地标",
+            "en": "Burj Al Arab"
+          },
           "desc": {
             "zh-TW": "帆船酒店（阿拉伯塔）於1999年開幕，矗立於一座專為其填海打造的人工島上，以高達321公尺、宛如一張迎風鼓起的單桅帆船造型聞名於世，是杜拜最具辨識度的地標與奢華的代名詞。這座號稱「全球唯一七星級」的酒店，內部裝潢極盡金碧輝煌——大量真金箔、義大利大理石與水晶吊燈鋪陳出令人咋舌的尊榮氣派，套房均為複層樓中樓設計，並配備專屬管家服務。酒店頂端設有懸挑於海面之上的直升機停機坪（曾上演費德勒與阿格西的高空網球對決），以及270度環海的高空餐廳。雖非住客或用餐賓客無法入內，但其臨海的優雅身影本身便是絕佳的觀景與攝影對象。遊客可於鄰近的朱美拉公共海灘或茶餐廳遠眺帆船酒店，欣賞它在藍天碧海與夜間燈光變幻下的迷人風采，感受杜拜獨樹一格的奢華美學。",
             "zh-CN": "帆船酒店（阿拉伯塔）于1999年开幕，矗立于一座专为其填海打造的人工岛上，以高达321米、宛如一张迎风鼓起的单桅帆船造型闻名于世，是迪拜最具辨识度的地标与奢华的代名词。这座号称“全球唯一七星级”的酒店，内部装潢极尽金碧辉煌——大量真金箔、意大利大理石与水晶吊灯铺陈出令人咋舌的尊荣气派，套房均为复层楼中楼设计，并配备专属管家服务。酒店顶端设有悬挑于海面之上的直升机停机坪（曾上演费德勒与阿加西的高空网球对决），以及270度环海的高空餐厅。虽非住客或用餐宾客无法入内，但其临海的优雅身影本身便是绝佳的观景与摄影对象。游客可于邻近的朱美拉公共海滩或茶餐厅远眺帆船酒店，欣赏它在蓝天碧海与夜间灯光变幻下的迷人风采，感受迪拜独树一格的奢华美学。",
@@ -1071,7 +1577,11 @@
           "localTitle": "دبي مول (The Dubai Mall)",
           "lat": 25.1985,
           "lon": 55.2796,
-          "title": { "zh-TW": "杜拜購物中心與噴泉", "zh-CN": "迪拜购物中心与喷泉", "en": "The Dubai Mall & Fountain" },
+          "title": {
+            "zh-TW": "杜拜購物中心與噴泉",
+            "zh-CN": "迪拜购物中心与喷泉",
+            "en": "The Dubai Mall & Fountain"
+          },
           "desc": {
             "zh-TW": "杜拜購物中心是全球面積最大的購物中心之一，遠不只是血拼天堂，更是一座包羅萬象的綜合娛樂城。商場內進駐逾一千二百家品牌商店與數百間餐廳，從平價到頂級奢華應有盡有，並設有溜冰場、大型電玩城與精品電影院。最受遊客喜愛的，是館內的「杜拜水族館與水底動物園」——一面高8.3公尺、寬33公尺的巨型觀景窗後，逛街人潮可免費欣賞數萬尾海洋生物悠游其中，鯊魚與魟魚近在咫尺，相當壯觀。商場外的人工湖上，每晚定時上演世界最大的音樂噴泉「杜拜噴泉」，水柱隨阿拉伯與世界名曲噴湧起舞、最高達150公尺，並以哈里發塔為璀璨背景，免費觀賞、震撼人心。由於腹地廣闊，建議預留充裕時間，結合購物、用餐、水族館與夜間噴泉秀，在涼爽的室內悠閒度過杜拜炎熱的午後與夜晚。",
             "zh-CN": "迪拜购物中心是全球面积最大的购物中心之一，远不只是血拼天堂，更是一座包罗万象的综合娱乐城。商场内进驻逾一千二百家品牌商店与数百间餐厅，从平价到顶级奢华应有尽有，并设有溜冰场、大型电玩城与精品电影院。最受游客喜爱的，是馆内的“迪拜水族馆与水底动物园”——一面高8.3米、宽33米的巨型观景窗后，逛街人潮可免费欣赏数万尾海洋生物悠游其中，鲨鱼与魟鱼近在咫尺，相当壮观。商场外的人工湖上，每晚定时上演世界最大的音乐喷泉“迪拜喷泉”，水柱随阿拉伯与世界名曲喷涌起舞、最高达150米，并以哈利法塔为璀璨背景，免费观赏、震撼人心。由于腹地广阔，建议预留充裕时间，结合购物、用餐、水族馆与夜间喷泉秀，在凉爽的室内悠闲度过迪拜炎热的午后与夜晚。",
@@ -1085,7 +1595,11 @@
           "lat": 25.2607,
           "lon": 55.292,
           "cost": 40,
-          "title": { "zh-TW": "Al Ustad 波斯烤肉", "zh-CN": "Al Ustad 波斯烤肉", "en": "Al Ustad Special Kabab" },
+          "title": {
+            "zh-TW": "Al Ustad 波斯烤肉",
+            "zh-CN": "Al Ustad 波斯烤肉",
+            "en": "Al Ustad Special Kabab"
+          },
           "desc": {
             "zh-TW": "創業逾半世紀的老杜拜傳奇烤肉店，以炭烤波斯風味烤肉串與番紅花飯聞名，價格實惠、份量豪邁，牆上掛滿名人合照，人情味十足。",
             "zh-CN": "创业逾半世纪的老迪拜传奇烤肉店，以炭烤波斯风味烤肉串与藏红花饭闻名，价格实惠、份量豪迈，墙上挂满名人合照，人情味十足。",
@@ -1097,7 +1611,11 @@
           "lat": 25.231,
           "lon": 55.279,
           "cost": 25,
-          "title": { "zh-TW": "Ravi 巴基斯坦餐館", "zh-CN": "Ravi 巴基斯坦餐馆", "en": "Ravi Restaurant" },
+          "title": {
+            "zh-TW": "Ravi 巴基斯坦餐館",
+            "zh-CN": "Ravi 巴基斯坦餐馆",
+            "en": "Ravi Restaurant"
+          },
           "desc": {
             "zh-TW": "杜拜家喻戶曉的平價巴基斯坦餐館，咖哩、烤餅與烤肉道地濃郁、份量十足，深受各國居民與遊客喜愛，是體驗在地庶民美食的首選。",
             "zh-CN": "迪拜家喻户晓的平价巴基斯坦餐馆，咖喱、烤饼与烤肉道地浓郁、份量十足，深受各国居民与游客喜爱，是体验在地庶民美食的首选。",
@@ -1109,7 +1627,11 @@
           "lat": 25.1342,
           "lon": 55.1853,
           "cost": 120,
-          "title": { "zh-TW": "Pierchic 海上海鮮餐廳", "zh-CN": "Pierchic 海上海鲜餐厅", "en": "Pierchic" },
+          "title": {
+            "zh-TW": "Pierchic 海上海鮮餐廳",
+            "zh-CN": "Pierchic 海上海鲜餐厅",
+            "en": "Pierchic"
+          },
           "desc": {
             "zh-TW": "坐落於延伸入海的木棧橋盡頭的高級海鮮餐廳，以無敵海景與正對帆船酒店的浪漫視野聞名，新鮮海鮮料理精緻，是慶祝與約會的奢華之選。",
             "zh-CN": "坐落于延伸入海的木栈桥尽头的高级海鲜餐厅，以无敌海景与正对帆船酒店的浪漫视野闻名，新鲜海鲜料理精致，是庆祝与约会的奢华之选。",
@@ -1119,7 +1641,14 @@
       ]
     },
     {
-      "keywords": ["伊斯坦堡", "伊斯坦布尔", "istanbul", "土耳其", "turkey", "türkiye"],
+      "keywords": [
+        "伊斯坦堡",
+        "伊斯坦布尔",
+        "istanbul",
+        "土耳其",
+        "turkey",
+        "türkiye"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=600",
         "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?w=600",
@@ -1130,7 +1659,11 @@
           "localTitle": "Ayasofya",
           "lat": 41.0086,
           "lon": 28.9802,
-          "title": { "zh-TW": "聖索菲亞大教堂", "zh-CN": "圣索菲亚大教堂", "en": "Hagia Sophia" },
+          "title": {
+            "zh-TW": "聖索菲亞大教堂",
+            "zh-CN": "圣索菲亚大教堂",
+            "en": "Hagia Sophia"
+          },
           "desc": {
             "zh-TW": "聖索菲亞大教堂坐落於伊斯坦堡舊城核心，是一座橫跨近一千五百年、見證帝國與信仰更迭的曠世建築。它於公元537年由拜占庭皇帝查士丁尼一世建成，作為東正教大教堂長達九百餘年，曾是當時全世界最大的教堂；1453年鄂圖曼帝國攻陷君士坦丁堡後改為清真寺，加建了四座宣禮塔；二十世紀一度成為博物館，2020年再度恢復為清真寺。其最令人嘆為觀止的，是直徑逾30公尺、彷彿懸浮於空中的巨型穹頂，開創了建築史上的新紀元；內部金光閃爍的拜占庭馬賽克聖像與伊斯蘭書法圓盤並存，象徵著基督教與伊斯蘭兩大文明在此交會融合的獨特歷史。漫步其間，斑駁的大理石、高聳的廊柱與柔和灑落的天光令人肅然起敬。建議搭配鄰近的藍色清真寺與地下水宮殿一併遊覽，並留意清真寺禮拜時段與服裝規定。",
             "zh-CN": "圣索菲亚大教堂坐落于伊斯坦布尔旧城核心，是一座横跨近一千五百年、见证帝国与信仰更迭的旷世建筑。它于公元537年由拜占庭皇帝查士丁尼一世建成，作为东正教大教堂长达九百余年，曾是当时全世界最大的教堂；1453年奥斯曼帝国攻陷君士坦丁堡后改为清真寺，加建了四座宣礼塔；二十世纪一度成为博物馆，2020年再度恢复为清真寺。其最令人叹为观止的，是直径逾30米、仿佛悬浮于空中的巨型穹顶，开创了建筑史上的新纪元；内部金光闪烁的拜占庭马赛克圣像与伊斯兰书法圆盘并存，象征着基督教与伊斯兰两大文明在此交会融合的独特历史。漫步其间，斑驳的大理石、高耸的廊柱与柔和洒落的天光令人肃然起敬。建议搭配邻近的蓝色清真寺与地下水宫殿一并游览，并留意清真寺礼拜时段与服装规定。",
@@ -1141,7 +1674,11 @@
           "localTitle": "Sultanahmet Camii",
           "lat": 41.0054,
           "lon": 28.9768,
-          "title": { "zh-TW": "藍色清真寺", "zh-CN": "蓝色清真寺", "en": "Blue Mosque" },
+          "title": {
+            "zh-TW": "藍色清真寺",
+            "zh-CN": "蓝色清真寺",
+            "en": "Blue Mosque"
+          },
           "desc": {
             "zh-TW": "藍色清真寺正式名稱為「蘇丹艾哈邁德清真寺」，於1616年完工，與聖索菲亞大教堂隔著廣場遙遙相望，是鄂圖曼帝國古典建築的巔峰之作，也是伊斯坦堡至今仍在使用的重要禮拜場所。其「藍色」之名，源自內部牆面與穹頂鋪滿的逾兩萬片伊茲尼克手工藍彩瓷磚——在兩百餘扇彩繪玻璃窗灑入的柔光映照下，整座殿堂泛著夢幻而靜謐的藍色光暈，美得令人屏息。清真寺以六座高聳的宣禮塔聞名（在當時為罕見的破格設計），層層堆疊、向上收束的灰色圓頂群在天際線上勾勒出優雅而磅礴的輪廓。寺前廣闊的庭院與噴泉同樣是欣賞建築之美的絕佳位置。由於仍為宗教場所，入內需脫鞋、女性須包覆頭髮，並避開每日五次的禮拜時段；參觀免費。建議清晨前往，光線最美且人潮較少。",
             "zh-CN": "蓝色清真寺正式名称为“苏丹艾哈迈德清真寺”，于1616年完工，与圣索菲亚大教堂隔着广场遥遥相望，是奥斯曼帝国古典建筑的巅峰之作，也是伊斯坦布尔至今仍在使用的重要礼拜场所。其“蓝色”之名，源自内部墙面与穹顶铺满的逾两万片伊兹尼克手工蓝彩瓷砖——在两百余扇彩绘玻璃窗洒入的柔光映照下，整座殿堂泛着梦幻而宁静的蓝色光晕，美得令人屏息。清真寺以六座高耸的宣礼塔闻名（在当时为罕见的破格设计），层层堆叠、向上收束的灰色圆顶群在天际线上勾勒出优雅而磅礴的轮廓。寺前广阔的庭院与喷泉同样是欣赏建筑之美的绝佳位置。由于仍为宗教场所，入内需脱鞋、女性须包覆头发，并避开每日五次的礼拜时段；参观免费。建议清晨前往，光线最美且人潮较少。",
@@ -1152,7 +1689,11 @@
           "localTitle": "Kapalı Çarşı (Grand Bazaar)",
           "lat": 41.0107,
           "lon": 28.968,
-          "title": { "zh-TW": "大巴札市集", "zh-CN": "大巴扎集市", "en": "Grand Bazaar" },
+          "title": {
+            "zh-TW": "大巴札市集",
+            "zh-CN": "大巴扎集市",
+            "en": "Grand Bazaar"
+          },
           "desc": {
             "zh-TW": "伊斯坦堡大巴札是世界上歷史最悠久、規模最大的室內市集之一，自鄂圖曼帝國於十五世紀建立至今已逾五百年，宛如一座由逾六十條街巷、四千多家店鋪交織而成的迷宮城中城，每日吸引數十萬人潮穿梭其間。踏入這座有頂市集，拱形穹頂下繪滿繽紛圖騰，兩旁鱗次櫛比的店家販售著土耳其地毯、手工瓷磚、銅器燈具、皮件、香料、土耳其軟糖與璀璨的金飾珠寶，琳瑯滿目、目不暇給，空氣中瀰漫著香料與紅茶的氣息。在這裡購物，討價還價是不可或缺的傳統與樂趣——熱情的店家會邀你喝杯土耳其紅茶、慢慢攀談議價，充滿濃濃的人情味與東方市集風情。即使無意採購，單純穿梭於這座活生生的歷史迷宮、感受其喧鬧與色彩，也是體驗伊斯坦堡的精髓。建議保管好隨身財物，並預留充裕時間盡情探索。",
             "zh-CN": "伊斯坦布尔大巴扎是世界上历史最悠久、规模最大的室内集市之一，自奥斯曼帝国于十五世纪建立至今已逾五百年，宛如一座由逾六十条街巷、四千多家店铺交织而成的迷宫城中城，每日吸引数十万人潮穿梭其间。踏入这座有顶集市，拱形穹顶下绘满缤纷图腾，两旁鳞次栉比的店家贩售着土耳其地毯、手工瓷砖、铜器灯具、皮件、香料、土耳其软糖与璀璨的金饰珠宝，琳琅满目、目不暇给，空气中弥漫着香料与红茶的气息。在这里购物，讨价还价是不可或缺的传统与乐趣——热情的店家会邀你喝杯土耳其红茶、慢慢攀谈议价，充满浓浓的人情味与东方集市风情。即使无意采购，单纯穿梭于这座活生生的历史迷宫、感受其喧闹与色彩，也是体验伊斯坦布尔的精髓。建议保管好随身财物，并预留充裕时间尽情探索。",
@@ -1166,7 +1707,11 @@
           "lat": 40.9905,
           "lon": 29.026,
           "cost": 250,
-          "title": { "zh-TW": "Çiya 安納托利亞家鄉菜", "zh-CN": "Çiya 安纳托利亚家乡菜", "en": "Çiya Sofrası" },
+          "title": {
+            "zh-TW": "Çiya 安納托利亞家鄉菜",
+            "zh-CN": "Çiya 安纳托利亚家乡菜",
+            "en": "Çiya Sofrası"
+          },
           "desc": {
             "zh-TW": "亞洲岸卡德柯伊區的傳奇餐館，專研復興安納托利亞各地的失傳家鄉菜，燉菜、烤肉與野菜料理風味獨特道地，是深度體驗土耳其飲食文化的首選。",
             "zh-CN": "亚洲岸卡德柯伊区的传奇餐馆，专研复兴安纳托利亚各地的失传家乡菜，炖菜、烤肉与野菜料理风味独特道地，是深度体验土耳其饮食文化的首选。",
@@ -1178,7 +1723,11 @@
           "lat": 41.017,
           "lon": 28.97,
           "cost": 350,
-          "title": { "zh-TW": "Hamdi 烤肉餐廳", "zh-CN": "Hamdi 烤肉餐厅", "en": "Hamdi Restaurant" },
+          "title": {
+            "zh-TW": "Hamdi 烤肉餐廳",
+            "zh-CN": "Hamdi 烤肉餐厅",
+            "en": "Hamdi Restaurant"
+          },
           "desc": {
             "zh-TW": "鄰近埃及市集的知名烤肉餐廳，以道地的東南部開心果烤肉串與各式烤肉聞名，頂樓座位更可俯瞰金角灣與舊城天際線，景觀與美食兼得。",
             "zh-CN": "邻近埃及集市的知名烤肉餐厅，以道地的东南部开心果烤肉串与各式烤肉闻名，顶楼座位更可俯瞰金角湾与旧城天际线，景观与美食兼得。",
@@ -1190,7 +1739,11 @@
           "lat": 41.024,
           "lon": 28.977,
           "cost": 120,
-          "title": { "zh-TW": "Güllüoğlu 果仁蜜餅", "zh-CN": "Güllüoğlu 果仁蜜饼", "en": "Karaköy Güllüoğlu" },
+          "title": {
+            "zh-TW": "Güllüoğlu 果仁蜜餅",
+            "zh-CN": "Güllüoğlu 果仁蜜饼",
+            "en": "Karaköy Güllüoğlu"
+          },
           "desc": {
             "zh-TW": "創業逾百年的土耳其國寶級果仁蜜餅（baklava）名店，層層酥皮包裹開心果、淋上糖蜜，甜而不膩、酥香四溢，是品嚐道地土耳其甜點的經典之選。",
             "zh-CN": "创业逾百年的土耳其国宝级果仁蜜饼（baklava）名店，层层酥皮包裹开心果、淋上糖蜜，甜而不腻、酥香四溢，是品尝道地土耳其甜点的经典之选。",
@@ -1200,7 +1753,14 @@
       ]
     },
     {
-      "keywords": ["雪梨", "悉尼", "sydney", "澳洲", "澳大利亚", "australia"],
+      "keywords": [
+        "雪梨",
+        "悉尼",
+        "sydney",
+        "澳洲",
+        "澳大利亚",
+        "australia"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=600",
         "https://images.unsplash.com/photo-1523428096881-5bd79d043006?w=600",
@@ -1211,7 +1771,11 @@
           "localTitle": "Sydney Opera House",
           "lat": -33.8568,
           "lon": 151.2153,
-          "title": { "zh-TW": "雪梨歌劇院", "zh-CN": "悉尼歌剧院", "en": "Sydney Opera House" },
+          "title": {
+            "zh-TW": "雪梨歌劇院",
+            "zh-CN": "悉尼歌剧院",
+            "en": "Sydney Opera House"
+          },
           "desc": {
             "zh-TW": "雪梨歌劇院矗立於雪梨港灣的便利朗角，是二十世紀最具代表性的建築傑作之一，也是澳洲的國家象徵，2007年獲列為世界文化遺產。由丹麥建築師約恩·烏松設計，其外觀宛如一片片揚起的白色風帆，又似綻放的貝殼，覆蓋著逾百萬片瑞典製的米白色瓷磚，在陽光下泛著珍珠般的光澤，造型前衛而優雅。這座歷時14年、克服重重工程難題才於1973年落成的建築，內部設有音樂廳、歌劇院、戲劇院等多個表演場館，全年上演歌劇、芭蕾、交響樂與戲劇等藝術饗宴。遊客可參加導覽深入了解其建築巧思與幕後故事，或購票欣賞一場演出。歌劇院臨海而立，與一旁的港灣大橋相互輝映，無論白晝、黃昏或夜間燈光點亮時皆美不勝收。建議從對岸的麥覺理夫人之椅或搭乘渡輪，捕捉歌劇院與大橋同框的經典畫面。",
             "zh-CN": "悉尼歌剧院矗立于悉尼港湾的便利朗角，是二十世纪最具代表性的建筑杰作之一，也是澳洲的国家象征，2007年获列为世界文化遗产。由丹麦建筑师约恩·乌松设计，其外观宛如一片片扬起的白色风帆，又似绽放的贝壳，覆盖着逾百万片瑞典制的米白色瓷砖，在阳光下泛着珍珠般的光泽，造型前卫而优雅。这座历时14年、克服重重工程难题才于1973年落成的建筑，内部设有音乐厅、歌剧院、戏剧院等多个表演场馆，全年上演歌剧、芭蕾、交响乐与戏剧等艺术飨宴。游客可参加导览深入了解其建筑巧思与幕后故事，或购票欣赏一场演出。歌剧院临海而立，与一旁的港湾大桥相互辉映，无论白昼、黄昏或夜间灯光点亮时皆美不胜收。建议从对岸的麦觉理夫人之椅或搭乘渡轮，捕捉歌剧院与大桥同框的经典画面。",
@@ -1222,7 +1786,11 @@
           "localTitle": "Sydney Harbour Bridge",
           "lat": -33.8523,
           "lon": 151.2108,
-          "title": { "zh-TW": "雪梨港灣大橋", "zh-CN": "悉尼港湾大桥", "en": "Sydney Harbour Bridge" },
+          "title": {
+            "zh-TW": "雪梨港灣大橋",
+            "zh-CN": "悉尼港湾大桥",
+            "en": "Sydney Harbour Bridge"
+          },
           "desc": {
             "zh-TW": "雪梨港灣大橋是橫跨雪梨港、連接南北兩岸的鋼鐵巨拱，於1932年落成，是世界上最大的鋼拱橋之一，因其圓拱造型被當地人暱稱為「老衣架」。大橋全長約1149公尺、拱頂距海面達134公尺，氣勢磅礴，與一旁的歌劇院共同構成雪梨最具代表性的港灣天際線。除了作為交通要道，大橋最熱門的體驗莫過於「攀橋」（BridgeClimb）——遊客可在專業嚮導帶領下，攀登至拱橋最高處，360度俯瞰整座雪梨港、市區與歌劇院的壯麗全景，是膽識與美景兼具的難忘冒險。若不想攀高，亦可登上南端的橋塔瞭望台，或沿著行人步道悠閒漫步過橋，同樣能飽覽港灣風光。每年除夕夜，大橋更是雪梨跨年煙火秀的絕對主角，璀璨煙花自橋身傾瀉而下，吸引全球目光。建議於黃昏時分造訪，欣賞大橋與港灣由暮色轉入夜景的迷人變化。",
             "zh-CN": "悉尼港湾大桥是横跨悉尼港、连接南北两岸的钢铁巨拱，于1932年落成，是世界上最大的钢拱桥之一，因其圆拱造型被当地人昵称为“老衣架”。大桥全长约1149米、拱顶距海面达134米，气势磅礴，与一旁的歌剧院共同构成悉尼最具代表性的港湾天际线。除了作为交通要道，大桥最热门的体验莫过于“攀桥”（BridgeClimb）——游客可在专业向导带领下，攀登至拱桥最高处，360度俯瞰整座悉尼港、市区与歌剧院的壮丽全景，是胆识与美景兼具的难忘冒险。若不想攀高，亦可登上南端的桥塔瞭望台，或沿着行人步道悠闲漫步过桥，同样能饱览港湾风光。每年除夕夜，大桥更是悉尼跨年烟火秀的绝对主角，璀璨烟花自桥身倾泻而下，吸引全球目光。建议于黄昏时分造访，欣赏大桥与港湾由暮色转入夜景的迷人变化。",
@@ -1233,7 +1801,11 @@
           "localTitle": "Bondi Beach",
           "lat": -33.8908,
           "lon": 151.2743,
-          "title": { "zh-TW": "邦代海灘", "zh-CN": "邦迪海滩", "en": "Bondi Beach" },
+          "title": {
+            "zh-TW": "邦代海灘",
+            "zh-CN": "邦迪海滩",
+            "en": "Bondi Beach"
+          },
           "desc": {
             "zh-TW": "邦代海灘是雪梨最知名、最具代表性的城市海灘，距市中心僅約八公里，一彎金黃色的弧形沙灘綿延近一公里，碧藍的海浪終年湧動，是衝浪者的天堂與澳洲海灘文化的象徵。這裡洋溢著悠閒奔放的海濱氣息：沙灘上日光浴的人群、海中乘風破浪的衝浪客、岸邊的救生員瞭望塔，構成一幅生氣勃勃的夏日圖景。海灘南端的「邦代冰山泳池」是建於海崖邊的露天海水泳池，浪花不時翻越池壁灌入，與大海融為一體，是全球最上鏡的泳池之一。從邦代沿著壯麗的海崖步道健行至庫吉海灘（Bondi to Coogee Walk），一路飽覽嶙峋海岸、海蝕崖與點點海灣美景，是不容錯過的經典路線。海灘周邊還有眾多咖啡館、餐廳與精品小店。建議安排半日，盡情享受戲水、漫步與澳式海濱的閒適生活。",
             "zh-CN": "邦迪海滩是悉尼最知名、最具代表性的城市海滩，距市中心仅约八公里，一弯金黄色的弧形沙滩绵延近一公里，碧蓝的海浪终年涌动，是冲浪者的天堂与澳洲海滩文化的象征。这里洋溢着悠闲奔放的海滨气息：沙滩上日光浴的人群、海中乘风破浪的冲浪客、岸边的救生员瞭望塔，构成一幅生气勃勃的夏日图景。海滩南端的“邦迪冰山泳池”是建于海崖边的露天海水泳池，浪花不时翻越池壁灌入，与大海融为一体，是全球最上镜的泳池之一。从邦迪沿着壮丽的海崖步道健行至库吉海滩（Bondi to Coogee Walk），一路饱览嶙峋海岸、海蚀崖与点点海湾美景，是不容错过的经典路线。海滩周边还有众多咖啡馆、餐厅与精品小店。建议安排半日，尽情享受戏水、漫步与澳式海滨的闲适生活。",
@@ -1247,7 +1819,11 @@
           "lat": -33.865,
           "lon": 151.207,
           "cost": 60,
-          "title": { "zh-TW": "Mr Wong 粵式餐廳", "zh-CN": "Mr Wong 粤式餐厅", "en": "Mr Wong" },
+          "title": {
+            "zh-TW": "Mr Wong 粵式餐廳",
+            "zh-CN": "Mr Wong 粤式餐厅",
+            "en": "Mr Wong"
+          },
           "desc": {
             "zh-TW": "雪梨市中心的人氣高檔粵式餐廳，融合道地廣式點心、烤鴨與現代風格，氣氛時尚熱絡，是體驗雪梨多元美食場景的熱門之選，建議訂位。",
             "zh-CN": "悉尼市中心的人气高档粤式餐厅，融合道地广式点心、烤鸭与现代风格，气氛时尚热络，是体验悉尼多元美食场景的热门之选，建议订位。",
@@ -1259,7 +1835,11 @@
           "lat": -33.899,
           "lon": 151.211,
           "cost": 15,
-          "title": { "zh-TW": "Bourke Street 烘焙坊", "zh-CN": "Bourke Street 烘焙坊", "en": "Bourke Street Bakery" },
+          "title": {
+            "zh-TW": "Bourke Street 烘焙坊",
+            "zh-CN": "Bourke Street 烘焙坊",
+            "en": "Bourke Street Bakery"
+          },
           "desc": {
             "zh-TW": "雪梨家喻戶曉的人氣烘焙坊，招牌肉派、酸種麵包與焦糖布丁塔深受喜愛，現烤香氣四溢，是悠閒早午餐與外帶輕食的絕佳選擇。",
             "zh-CN": "悉尼家喻户晓的人气烘焙坊，招牌肉派、酸种面包与焦糖布丁塔深受喜爱，现烤香气四溢，是悠闲早午餐与外带轻食的绝佳选择。",
@@ -1271,7 +1851,11 @@
           "lat": -33.869,
           "lon": 151.222,
           "cost": 12,
-          "title": { "zh-TW": "Harry's 招牌肉派", "zh-CN": "Harry's 招牌肉派", "en": "Harry's Café de Wheels" },
+          "title": {
+            "zh-TW": "Harry's 招牌肉派",
+            "zh-CN": "Harry's 招牌肉派",
+            "en": "Harry's Café de Wheels"
+          },
           "desc": {
             "zh-TW": "創業於1938年的雪梨傳奇路邊派攤，招牌「老虎派」在肉派上鋪滿馬鈴薯泥、青豌豆與肉汁，份量飽滿、平價暖心，是道地的雪梨平民美味。",
             "zh-CN": "创业于1938年的悉尼传奇路边派摊，招牌“老虎派”在肉派上铺满马铃薯泥、青豌豆与肉汁，份量饱满、平价暖心，是道地的悉尼平民美味。",
@@ -1281,7 +1865,11 @@
       ]
     },
     {
-      "keywords": ["曼徹斯特", "曼彻斯特", "manchester"],
+      "keywords": [
+        "曼徹斯特",
+        "曼彻斯特",
+        "manchester"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1588097261951-1cba0e051f2b?w=600",
         "https://images.unsplash.com/photo-1605640840605-14ac1855827b?w=600",
@@ -1292,7 +1880,11 @@
           "localTitle": "Old Trafford",
           "lat": 53.4631,
           "lon": -2.2913,
-          "title": { "zh-TW": "老特拉福德球場", "zh-CN": "老特拉福德球场", "en": "Old Trafford Stadium" },
+          "title": {
+            "zh-TW": "老特拉福德球場",
+            "zh-CN": "老特拉福德球场",
+            "en": "Old Trafford Stadium"
+          },
           "desc": {
             "zh-TW": "老特拉福德球場是英格蘭足球勁旅「曼聯」（Manchester United）的主場，自1910年啟用至今逾百年，可容納約七萬四千名觀眾，是英國最大的俱樂部球場，被球王比利譽為「夢劇場」（Theatre of Dreams）。對全球數以億計的曼聯球迷而言，這裡無疑是足球聖地。即使非比賽日，球場也開放導覽行程與博物館參觀：遊客可走進球員更衣室、踏上球員通道、坐上教練席，近距離感受比賽日的熱血氛圍；館內博物館則陳列著曼聯逾百年的輝煌獎盃、傳奇球星文物與動人歷史，包括1958年慕尼黑空難的紀念展區，令人動容。若能購得比賽日門票，親臨現場感受滿場球迷高唱隊歌、為紅魔吶喊助威的震撼，更是足球迷此生難忘的體驗。球場交通便利，可搭乘輕軌電車前往。建議球迷預留充裕時間參觀博物館與選購紀念品。",
             "zh-CN": "老特拉福德球场是英格兰足球劲旅“曼联”（Manchester United）的主场，自1910年启用至今逾百年，可容纳约七万四千名观众，是英国最大的俱乐部球场，被球王贝利誉为“梦剧场”（Theatre of Dreams）。对全球数以亿计的曼联球迷而言，这里无疑是足球圣地。即使非比赛日，球场也开放导览行程与博物馆参观：游客可走进球员更衣室、踏上球员通道、坐上教练席，近距离感受比赛日的热血氛围；馆内博物馆则陈列着曼联逾百年的辉煌奖杯、传奇球星文物与动人历史，包括1958年慕尼黑空难的纪念展区，令人动容。若能购得比赛日门票，亲临现场感受满场球迷高唱队歌、为红魔呐喊助威的震撼，更是足球迷此生难忘的体验。球场交通便利，可搭乘轻轨电车前往。建议球迷预留充裕时间参观博物馆与选购纪念品。",
@@ -1303,7 +1895,11 @@
           "localTitle": "Manchester Town Hall",
           "lat": 53.4794,
           "lon": -2.2453,
-          "title": { "zh-TW": "曼徹斯特市政廳", "zh-CN": "曼彻斯特市政厅", "en": "Manchester Town Hall" },
+          "title": {
+            "zh-TW": "曼徹斯特市政廳",
+            "zh-CN": "曼彻斯特市政厅",
+            "en": "Manchester Town Hall"
+          },
           "desc": {
             "zh-TW": "曼徹斯特市政廳坐落於市中心的阿爾伯特廣場，於1877年落成，是英國維多利亞時期哥德復興式建築的傑出代表，見證了曼徹斯特作為工業革命重鎮的鼎盛榮光。建築外觀莊嚴恢宏，正面高聳的鐘樓達85公尺，內部則以華麗的拱廊、雕飾與描繪曼徹斯特歷史的壁畫聞名，尤以「大廳」（Great Hall）內由福特·馬多克斯·布朗繪製的十二幅壁畫最為珍貴，生動再現了這座城市的發展軌跡。其宏偉的立面與精緻的細節，使它成為無數影視作品取景的場景。市政廳前的阿爾伯特廣場是市民活動與節慶的中心，每逢耶誕季節更會化身熱鬧非凡的耶誕市集。漫步周邊，還可順道走訪鄰近的中央圖書館、聖彼得廣場與工業遺跡，感受這座城市深厚的歷史底蘊與從工業到文創的蛻變。建議留意市政廳的整修開放狀況，並於白天造訪欣賞建築之美。",
             "zh-CN": "曼彻斯特市政厅坐落于市中心的阿尔伯特广场，于1877年落成，是英国维多利亚时期哥特复兴式建筑的杰出代表，见证了曼彻斯特作为工业革命重镇的鼎盛荣光。建筑外观庄严恢宏，正面高耸的钟楼达85米，内部则以华丽的拱廊、雕饰与描绘曼彻斯特历史的壁画闻名，尤以“大厅”（Great Hall）内由福特·马多克斯·布朗绘制的十二幅壁画最为珍贵，生动再现了这座城市的发展轨迹。其宏伟的立面与精致的细节，使它成为无数影视作品取景的场景。市政厅前的阿尔伯特广场是市民活动与节庆的中心，每逢圣诞季节更会化身热闹非凡的圣诞市集。漫步周边，还可顺道走访邻近的中央图书馆、圣彼得广场与工业遗迹，感受这座城市深厚的历史底蕴与从工业到文创的蜕变。建议留意市政厅的整修开放状况，并于白天造访欣赏建筑之美。",
@@ -1314,7 +1910,11 @@
           "localTitle": "Science and Industry Museum",
           "lat": 53.4775,
           "lon": -2.2553,
-          "title": { "zh-TW": "科學與工業博物館", "zh-CN": "科学与工业博物馆", "en": "Science and Industry Museum" },
+          "title": {
+            "zh-TW": "科學與工業博物館",
+            "zh-CN": "科学与工业博物馆",
+            "en": "Science and Industry Museum"
+          },
           "desc": {
             "zh-TW": "科學與工業博物館坐落於世界上現存最古老的客運鐵路車站之一——1830年啟用的利物浦路車站舊址，本身即是工業革命的活見證，免費對外開放。曼徹斯特素有「世界第一座工業城市」之稱，這座博物館正是為頌揚這段改變人類歷史的科技與工業成就而設。館內展廳豐富多元：轟鳴運轉的蒸汽機與紡織機重現了棉紡工業的盛況；鐵道展區陳列著早期的蒸汽火車頭；另有航空、電力、通訊與電腦運算等主題展區，生動呈現從工業革命到資訊時代的科技演進歷程。許多展品皆可互動操作，寓教於樂，是親子同遊、激發孩子對科學興趣的絕佳場所。漫步於這些見證人類智慧結晶的機械與廠房之間，更能深刻體會曼徹斯特在現代文明發展史上的關鍵地位。建議預留半日，細細探索各展區並參與現場的操作示範。",
             "zh-CN": "科学与工业博物馆坐落于世界上现存最古老的客运铁路车站之一——1830年启用的利物浦路车站旧址，本身即是工业革命的活见证，免费对外开放。曼彻斯特素有“世界第一座工业城市”之称，这座博物馆正是为颂扬这段改变人类历史的科技与工业成就而设。馆内展厅丰富多元：轰鸣运转的蒸汽机与纺织机重现了棉纺工业的盛况；铁道展区陈列着早期的蒸汽火车头；另有航空、电力、通讯与电脑运算等主题展区，生动呈现从工业革命到资讯时代的科技演进历程。许多展品皆可互动操作，寓教于乐，是亲子同游、激发孩子对科学兴趣的绝佳场所。漫步于这些见证人类智慧结晶的机械与厂房之间，更能深刻体会曼彻斯特在现代文明发展史上的关键地位。建议预留半日，细细探索各展区并参与现场的操作示范。",
@@ -1328,7 +1928,11 @@
           "lat": 53.4858,
           "lon": -2.235,
           "cost": 18,
-          "title": { "zh-TW": "Mackie Mayor 美食市集", "zh-CN": "Mackie Mayor 美食市集", "en": "Mackie Mayor" },
+          "title": {
+            "zh-TW": "Mackie Mayor 美食市集",
+            "zh-CN": "Mackie Mayor 美食市集",
+            "en": "Mackie Mayor"
+          },
           "desc": {
             "zh-TW": "由維多利亞時期古老肉市改建而成的人氣美食市集，挑高磚拱空間內匯聚多家精選攤位，從手工披薩、烤肉到精釀啤酒一應俱全，氣氛熱絡迷人。",
             "zh-CN": "由维多利亚时期古老肉市改建而成的人气美食市集，挑高砖拱空间内汇聚多家精选摊位，从手工披萨、烤肉到精酿啤酒一应俱全，气氛热络迷人。",
@@ -1340,7 +1944,11 @@
           "lat": 53.4845,
           "lon": -2.237,
           "cost": 8,
-          "title": { "zh-TW": "This & That 咖哩飯", "zh-CN": "This & That 咖喱饭", "en": "This & That" },
+          "title": {
+            "zh-TW": "This & That 咖哩飯",
+            "zh-CN": "This & That 咖喱饭",
+            "en": "This & That"
+          },
           "desc": {
             "zh-TW": "藏身北區巷弄、創業逾三十年的傳奇平價咖哩店，招牌「米飯三選一」（rice and three）讓你配上三款咖哩，份量驚人、價格佛心，是曼城學生與上班族的最愛。",
             "zh-CN": "藏身北区巷弄、创业逾三十年的传奇平价咖喱店，招牌“米饭三选一”（rice and three）让你配上三款咖喱，份量惊人、价格佛心，是曼城学生与上班族的最爱。",
@@ -1352,7 +1960,11 @@
           "lat": 53.479,
           "lon": -2.241,
           "cost": 20,
-          "title": { "zh-TW": "Bundobust 印度素食小館", "zh-CN": "Bundobust 印度素食小馆", "en": "Bundobust" },
+          "title": {
+            "zh-TW": "Bundobust 印度素食小館",
+            "zh-CN": "Bundobust 印度素食小馆",
+            "en": "Bundobust"
+          },
           "desc": {
             "zh-TW": "結合印度街頭素食與精釀啤酒的人氣餐酒館，招牌香料薯球、咖哩餃與街頭小食風味出眾，氣氛輕鬆時髦，深受年輕族群喜愛。",
             "zh-CN": "结合印度街头素食与精酿啤酒的人气餐酒馆，招牌香料薯球、咖喱饺与街头小食风味出众，气氛轻松时髦，深受年轻族群喜爱。",
@@ -1362,7 +1974,10 @@
       ]
     },
     {
-      "keywords": ["京都", "kyoto"],
+      "keywords": [
+        "京都",
+        "kyoto"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600",
         "https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600",
@@ -1373,7 +1988,11 @@
           "localTitle": "金閣寺 (鹿苑寺)",
           "lat": 35.0394,
           "lon": 135.7292,
-          "title": { "zh-TW": "金閣寺", "zh-CN": "金阁寺", "en": "Kinkaku-ji (Golden Pavilion)" },
+          "title": {
+            "zh-TW": "金閣寺",
+            "zh-CN": "金阁寺",
+            "en": "Kinkaku-ji (Golden Pavilion)"
+          },
           "desc": {
             "zh-TW": "金閣寺正式名稱為「鹿苑寺」，是京都最具代表性的世界文化遺產，原為室町幕府третьего將軍足利義滿於1397年所建的山莊，其過世後依遺願改為禪寺。寺院的核心是一座三層樓閣「舍利殿」，因二、三層外牆皆貼覆耀眼的純金箔而得名「金閣」，在陽光下金光燦爛、富麗堂皇。最教人讚嘆的，是金閣倒映於前方「鏡湖池」澄澈水面的經典畫面——金碧輝煌的樓閣與藍天、綠樹、池水相映成趣，無論春櫻、夏綠、秋楓或冬雪皆呈現截然不同的絕美風情，尤以白雪覆頂的「雪化妝」金閣最為夢幻難得。現存的金閣為1955年依原貌重建（原建築於1950年遭縱火焚毀，此事件後由三島由紀夫寫成名作《金閣寺》）。園內並設有迴遊式庭園、茶亭與不動堂，可沿著參觀路線悠閒漫步。建議清晨開門時前往，避開人潮並捕捉金閣最澄澈的倒影。",
             "zh-CN": "金阁寺正式名称为“鹿苑寺”，是京都最具代表性的世界文化遗产，原为室町幕府第三代将军足利义满于1397年所建的山庄，其过世后依遗愿改为禅寺。寺院的核心是一座三层楼阁“舍利殿”，因二、三层外墙皆贴覆耀眼的纯金箔而得名“金阁”，在阳光下金光灿烂、富丽堂皇。最教人赞叹的，是金阁倒映于前方“镜湖池”澄澈水面的经典画面——金碧辉煌的楼阁与蓝天、绿树、池水相映成趣，无论春樱、夏绿、秋枫或冬雪皆呈现截然不同的绝美风情，尤以白雪覆顶的“雪化妆”金阁最为梦幻难得。现存的金阁为1955年依原貌重建（原建筑于1950年遭纵火焚毁，此事件后由三岛由纪夫写成名作《金阁寺》）。园内并设有回游式庭园、茶亭与不动堂，可沿着参观路线悠闲漫步。建议清晨开门时前往，避开人潮并捕捉金阁最澄澈的倒影。",
@@ -1384,7 +2003,11 @@
           "localTitle": "伏見稲荷大社",
           "lat": 34.9671,
           "lon": 135.7727,
-          "title": { "zh-TW": "伏見稻荷大社千本鳥居", "zh-CN": "伏见稻荷大社千本鸟居", "en": "Fushimi Inari Taisha" },
+          "title": {
+            "zh-TW": "伏見稻荷大社千本鳥居",
+            "zh-CN": "伏见稻荷大社千本鸟居",
+            "en": "Fushimi Inari Taisha"
+          },
           "desc": {
             "zh-TW": "伏見稻荷大社創建於公元711年，是日本全國約三萬座稻荷神社的總本宮，供奉著掌管五穀豐收與生意興隆的稻荷大神，香火鼎盛、信眾遍及全日本。神社最舉世聞名的，是沿著後方稻荷山蜿蜒而上、綿延約四公里的「千本鳥居」——數以千計朱紅色的鳥居一座緊接一座、層層相疊，形成一條條彷彿沒有盡頭的緋紅隧道，由信徒與企業為祈願或還願所奉納，鳥居背面皆刻有奉納者姓名與年份。漫步於這條光影交錯的鳥居隧道中，朱紅與綠意交織，神聖而夢幻，是全日本最具代表性的攝影場景之一。神社境內隨處可見稻荷神的使者——口銜稻穗或鑰匙的狐狸石像，更添神秘氛圍。登上稻荷山頂約需兩小時，沿途設有多處茶屋與展望點，可俯瞰京都市景。神社全天開放、免費參拜。建議清晨前往，享受人潮稀少、靜謐空靈的鳥居之美。",
             "zh-CN": "伏见稻荷大社创建于公元711年，是日本全国约三万座稻荷神社的总本宫，供奉着掌管五谷丰收与生意兴隆的稻荷大神，香火鼎盛、信众遍及全日本。神社最举世闻名的，是沿着后方稻荷山蜿蜒而上、绵延约四公里的“千本鸟居”——数以千计朱红色的鸟居一座紧接一座、层层相叠，形成一条条仿佛没有尽头的绯红隧道，由信徒与企业为祈愿或还愿所奉纳，鸟居背面皆刻有奉纳者姓名与年份。漫步于这条光影交错的鸟居隧道中，朱红与绿意交织，神圣而梦幻，是全日本最具代表性的摄影场景之一。神社境内随处可见稻荷神的使者——口衔稻穗或钥匙的狐狸石像，更添神秘氛围。登上稻荷山顶约需两小时，沿途设有多处茶屋与展望点，可俯瞰京都市景。神社全天开放、免费参拜。建议清晨前往，享受人潮稀少、静谧空灵的鸟居之美。",
@@ -1395,7 +2018,11 @@
           "localTitle": "清水寺",
           "lat": 34.9949,
           "lon": 135.785,
-          "title": { "zh-TW": "清水寺與清水舞台", "zh-CN": "清水寺与清水舞台", "en": "Kiyomizu-dera" },
+          "title": {
+            "zh-TW": "清水寺與清水舞台",
+            "zh-CN": "清水寺与清水舞台",
+            "en": "Kiyomizu-dera"
+          },
           "desc": {
             "zh-TW": "清水寺創建於公元778年，是京都歷史最悠久的寺院之一，也是聯合國世界文化遺產，因境內湧出的清澈泉水「音羽瀑布」而得名。寺院最負盛名的，是其本堂前方那座凌空架設於陡峭山坡上的「清水舞台」——這座以139根巨大櫸木立柱、不用一根釘子卯榫接合而成的木造平台，距谷底高達13公尺，工法精湛令人嘆服，日語俗諺「從清水舞台一躍而下」更用以比喻下定破釜沉舟的決心。佇立舞台之上，可將京都市區景致與滿山林木盡收眼底，春櫻爛漫、秋楓似火時尤為絕景。寺內的「音羽瀑布」分為三道細流，分別象徵學業、戀愛與長壽，遊客可持長柄杓接水飲用祈福；鄰近的地主神社則以結緣聞名。從清水寺沿著二年坂、三年坂的古樸石板坡道下行，兩旁盡是傳統町屋商店與茶屋，洋溢濃濃古都風情。建議清晨或傍晚前往，避開人潮並欣賞最美的光線。",
             "zh-CN": "清水寺创建于公元778年，是京都历史最悠久的寺院之一，也是联合国世界文化遗产，因境内涌出的清澈泉水“音羽瀑布”而得名。寺院最负盛名的，是其本堂前方那座凌空架设于陡峭山坡上的“清水舞台”——这座以139根巨大榉木立柱、不用一根钉子卯榫接合而成的木造平台，距谷底高达13米，工法精湛令人叹服，日语俗谚“从清水舞台一跃而下”更用以比喻下定破釜沉舟的决心。伫立舞台之上，可将京都市区景致与满山林木尽收眼底，春樱烂漫、秋枫似火时尤为绝景。寺内的“音羽瀑布”分为三道细流，分别象征学业、恋爱与长寿，游客可持长柄杓接水饮用祈福；邻近的地主神社则以结缘闻名。从清水寺沿着二年坂、三年坂的古朴石板坡道下行，两旁尽是传统町屋商店与茶屋，洋溢浓浓古都风情。建议清晨或傍晚前往，避开人潮并欣赏最美的光线。",
@@ -1409,7 +2036,11 @@
           "lat": 35.005,
           "lon": 135.7649,
           "cost": 2000,
-          "title": { "zh-TW": "錦市場美食巡禮", "zh-CN": "锦市场美食巡礼", "en": "Nishiki Market" },
+          "title": {
+            "zh-TW": "錦市場美食巡禮",
+            "zh-CN": "锦市场美食巡礼",
+            "en": "Nishiki Market"
+          },
           "desc": {
             "zh-TW": "有「京都廚房」之稱的四百年歷史傳統市場，狹長街道兩旁聚集逾百家攤商，販售京漬物、湯豆腐、玉子燒、抹茶甜點與各式京野菜，是邊走邊吃、體驗京都飲食文化的最佳去處。",
             "zh-CN": "有“京都厨房”之称的四百年历史传统市场，狭长街道两旁聚集逾百家摊商，贩售京渍物、汤豆腐、玉子烧、抹茶甜点与各式京野菜，是边走边吃、体验京都饮食文化的最佳去处。",
@@ -1421,7 +2052,11 @@
           "lat": 34.996,
           "lon": 135.782,
           "cost": 4000,
-          "title": { "zh-TW": "順正湯豆腐", "zh-CN": "顺正汤豆腐", "en": "Junsei Yudofu" },
+          "title": {
+            "zh-TW": "順正湯豆腐",
+            "zh-CN": "顺正汤豆腐",
+            "en": "Junsei Yudofu"
+          },
           "desc": {
             "zh-TW": "鄰近清水寺、南禪寺一帶的湯豆腐名店，於典雅的日式庭園座席中品嚐以京都名水製成的細嫩湯豆腐，清淡鮮美、禪意十足，是體驗京都精進料理的經典之選。",
             "zh-CN": "邻近清水寺、南禅寺一带的汤豆腐名店，于典雅的日式庭园座席中品尝以京都名水制成的细嫩汤豆腐，清淡鲜美、禅意十足，是体验京都精进料理的经典之选。",
@@ -1433,7 +2068,11 @@
           "lat": 35.0118,
           "lon": 135.7607,
           "cost": 1800,
-          "title": { "zh-TW": "尾張屋蕎麥麵", "zh-CN": "尾张屋荞麦面", "en": "Honke Owariya Soba" },
+          "title": {
+            "zh-TW": "尾張屋蕎麥麵",
+            "zh-CN": "尾张屋荞麦面",
+            "en": "Honke Owariya Soba"
+          },
           "desc": {
             "zh-TW": "創業逾五百年的京都蕎麥麵老舖，招牌「寶來蕎麥」以多層漆器分裝蕎麥麵與豐富配料，可自由搭配享用，麵條香Q、湯頭高雅，是品味京都傳統的好選擇。",
             "zh-CN": "创业逾五百年的京都荞麦面老铺，招牌“宝来荞麦”以多层漆器分装荞麦面与丰富配料，可自由搭配享用，面条香Q、汤头高雅，是品味京都传统的好选择。",
@@ -1443,7 +2082,12 @@
       ]
     },
     {
-      "keywords": ["清邁", "清迈", "chiang mai", "chiangmai"],
+      "keywords": [
+        "清邁",
+        "清迈",
+        "chiang mai",
+        "chiangmai"
+      ],
       "images": [
         "https://images.unsplash.com/photo-1598935898639-81586f7d2129?w=600",
         "https://images.unsplash.com/photo-1528181304800-259b08848526?w=600",
@@ -1454,7 +2098,11 @@
           "localTitle": "วัดพระธาตุดอยสุเทพ",
           "lat": 18.8048,
           "lon": 98.9217,
-          "title": { "zh-TW": "雙龍寺 (素帖山寺)", "zh-CN": "双龙寺 (素贴山寺)", "en": "Wat Phra That Doi Suthep" },
+          "title": {
+            "zh-TW": "雙龍寺 (素帖山寺)",
+            "zh-CN": "双龙寺 (素贴山寺)",
+            "en": "Wat Phra That Doi Suthep"
+          },
           "desc": {
             "zh-TW": "素帖山雙龍寺是清邁最神聖、最具代表性的佛寺，坐落於海拔約1080公尺的素帖山上，俯瞰整座清邁城。相傳於1383年，僧侶將佛舍利安置於白象背上任其行走，白象登上素帖山後三度鳴叫、原地轉圈倒下，被視為神諭，遂於該處建寺供奉，成就這段流傳至今的建寺傳奇。前往寺院需登上一道由兩條巨大七頭蛇（Naga）雕塑護衛、共306級的階梯，「雙龍寺」之名即源於此，沿著龍身拾級而上，莊嚴而壯觀。寺院核心是一座金光閃耀的鍍金舍利塔，在陽光下熠熠生輝，四周環繞著精緻的佛像、壁畫與鐘陣，信徒虔誠地繞塔祈福、敬獻鮮花。寺前的觀景平台則可將清邁市區、機場與遼闊平原盡收眼底，景致絕佳。建議清晨前往，避開人潮、感受山寺的清幽與莊嚴，並留意入寺需脫鞋與遮蓋肩膝的服裝規定。",
             "zh-CN": "素贴山双龙寺是清迈最神圣、最具代表性的佛寺，坐落于海拔约1080米的素贴山上，俯瞰整座清迈城。相传于1383年，僧侣将佛舍利安置于白象背上任其行走，白象登上素贴山后三度鸣叫、原地转圈倒下，被视为神谕，遂于该处建寺供奉，成就这段流传至今的建寺传奇。前往寺院需登上一道由两条巨大七头蛇（Naga）雕塑护卫、共306级的阶梯，“双龙寺”之名即源于此，沿着龙身拾级而上，庄严而壮观。寺院核心是一座金光闪耀的镀金舍利塔，在阳光下熠熠生辉，四周环绕着精致的佛像、壁画与钟阵，信徒虔诚地绕塔祈福、敬献鲜花。寺前的观景平台则可将清迈市区、机场与辽阔平原尽收眼底，景致绝佳。建议清晨前往，避开人潮、感受山寺的清幽与庄严，并留意入寺需脱鞋与遮盖肩膝的服装规定。",
@@ -1465,7 +2113,11 @@
           "localTitle": "วัดเจดีย์หลวง",
           "lat": 18.787,
           "lon": 98.9866,
-          "title": { "zh-TW": "柴迪隆寺 (古城)", "zh-CN": "柴迪隆寺 (古城)", "en": "Wat Chedi Luang & Old City" },
+          "title": {
+            "zh-TW": "柴迪隆寺 (古城)",
+            "zh-CN": "柴迪隆寺 (古城)",
+            "en": "Wat Chedi Luang & Old City"
+          },
           "desc": {
             "zh-TW": "柴迪隆寺坐落於清邁古城的核心，是城內最具歷史分量的寺廟之一，始建於十四世紀末，歷經數代國王增建。寺院最震撼的，是一座以紅磚砌成的巨大蘭納式古塔——這座佛塔原高逾80公尺，曾是當時王國最高的建築，並一度供奉著泰國國寶玉佛，惜於1545年的一場大地震中嚴重損毀，塔頂坍塌。如今僅存的塔身雖已殘缺，但斑駁的紅磚、四面殘存的階梯與大象雕飾，反而散發出一股飽經風霜、撼動人心的滄桑之美與歷史厚重感。寺內仍有僧侶修行，遊客可參加「與僧侶對談」（Monk Chat）的活動，在悠閒交流中了解佛教與當地文化。柴迪隆寺所在的清邁古城，四周仍保留著昔日的方形護城河與城牆遺跡，城內巷弄間散布著數十座古寺、咖啡館與民宿，極適合以步行或單車悠閒探索。建議搭配周邊古寺與週日步行街一併安排。",
             "zh-CN": "柴迪隆寺坐落于清迈古城的核心，是城内最具历史分量的寺庙之一，始建于十四世纪末，历经数代国王增建。寺院最震撼的，是一座以红砖砌成的巨大兰纳式古塔——这座佛塔原高逾80米，曾是当时王国最高的建筑，并一度供奉着泰国国宝玉佛，惜于1545年的一场大地震中严重损毁，塔顶坍塌。如今仅存的塔身虽已残缺，但斑驳的红砖、四面残存的阶梯与大象雕饰，反而散发出一股饱经风霜、撼动人心的沧桑之美与历史厚重感。寺内仍有僧侣修行，游客可参加“与僧侣对谈”（Monk Chat）的活动，在悠闲交流中了解佛教与当地文化。柴迪隆寺所在的清迈古城，四周仍保留着昔日的方形护城河与城墙遗迹，城内巷弄间散布着数十座古寺、咖啡馆与民宿，极适合以步行或单车悠闲探索。建议搭配周边古寺与周日步行街一并安排。",
@@ -1476,7 +2128,11 @@
           "localTitle": "ถนนคนเดินวันอาทิตย์",
           "lat": 18.788,
           "lon": 98.993,
-          "title": { "zh-TW": "週日步行街夜市", "zh-CN": "周日步行街夜市", "en": "Sunday Walking Street" },
+          "title": {
+            "zh-TW": "週日步行街夜市",
+            "zh-CN": "周日步行街夜市",
+            "en": "Sunday Walking Street"
+          },
           "desc": {
             "zh-TW": "清邁週日步行街是泰北最熱鬧、最具特色的市集，每逢週日傍晚至深夜，古城內的拉差達濃路便封街化身為一條綿延逾一公里的露天市集，從塔佩門一路延伸，人潮川流不息。這裡是清邁手工藝與文創的寶庫：成百上千的攤位販售著泰北山區部落的手織布、銀飾、木雕、紙傘、香氛皂、文青插畫與各式伴手禮，許多更是攤主親手創作，價格實惠、別具巧思，是採買特色紀念品的絕佳去處。市集間穿插著街頭藝人的現場表演與按摩攤位，更少不了琳瑯滿目的泰北街頭小吃——芒果糯米、泰式奶茶、烤肉串、蝦餅與各式甜點香氣四溢，可一路吃喝。沿途的古寺廣場入夜後也點燈開放，別有一番風情。建議放慢腳步、隨興穿梭，盡情感受清邁悠閒愜意又充滿藝術氣息的夜晚，並留意保管隨身財物。",
             "zh-CN": "清迈周日步行街是泰北最热闹、最具特色的集市，每逢周日傍晚至深夜，古城内的拉差达浓路便封街化身为一条绵延逾一公里的露天集市，从塔佩门一路延伸，人潮川流不息。这里是清迈手工艺与文创的宝库：成百上千的摊位贩售着泰北山区部落的手织布、银饰、木雕、纸伞、香氛皂、文青插画与各式伴手礼，许多更是摊主亲手创作，价格实惠、别具巧思，是采买特色纪念品的绝佳去处。集市间穿插着街头艺人的现场表演与按摩摊位，更少不了琳琅满目的泰北街头小吃——芒果糯米、泰式奶茶、烤肉串、虾饼与各式甜点香气四溢，可一路吃喝。沿途的古寺广场入夜后也点灯开放，别有一番风情。建议放慢脚步、随兴穿梭，尽情感受清迈悠闲惬意又充满艺术气息的夜晚，并留意保管随身财物。",
@@ -1490,7 +2146,11 @@
           "lat": 18.796,
           "lon": 98.987,
           "cost": 60,
-          "title": { "zh-TW": "Khao Soi Khun Yai 咖哩麵", "zh-CN": "Khao Soi Khun Yai 咖喱面", "en": "Khao Soi Khun Yai" },
+          "title": {
+            "zh-TW": "Khao Soi Khun Yai 咖哩麵",
+            "zh-CN": "Khao Soi Khun Yai 咖喱面",
+            "en": "Khao Soi Khun Yai"
+          },
           "desc": {
             "zh-TW": "清邁人氣金麵（Khao Soi）名店，以濃郁椰香咖哩湯頭、滑順蛋麵搭配酥脆炸麵與軟嫩雞腿，是泰北招牌美食的代表，平價道地、僅營業半天常售罄。",
             "zh-CN": "清迈人气金面（Khao Soi）名店，以浓郁椰香咖喱汤头、滑顺蛋面搭配酥脆炸面与软嫩鸡腿，是泰北招牌美食的代表，平价道地、仅营业半天常售罄。",
@@ -1502,7 +2162,11 @@
           "lat": 18.79,
           "lon": 98.978,
           "cost": 120,
-          "title": { "zh-TW": "SP Chicken 炭烤雞", "zh-CN": "SP Chicken 炭烤鸡", "en": "SP Chicken" },
+          "title": {
+            "zh-TW": "SP Chicken 炭烤雞",
+            "zh-CN": "SP Chicken 炭烤鸡",
+            "en": "SP Chicken"
+          },
           "desc": {
             "zh-TW": "古城內人氣炭烤雞店，以泰北香料醃製、炭火慢烤的烤雞外酥內嫩、香氣逼人，搭配糯米飯與青木瓜沙拉是經典吃法，平價美味、用餐時段常排隊。",
             "zh-CN": "古城内人气炭烤鸡店，以泰北香料腌制、炭火慢烤的烤鸡外酥内嫩、香气逼人，搭配糯米饭与青木瓜沙拉是经典吃法，平价美味、用餐时段常排队。",
@@ -1514,7 +2178,11 @@
           "lat": 18.8,
           "lon": 98.967,
           "cost": 200,
-          "title": { "zh-TW": "Tong Tem Toh 泰北菜", "zh-CN": "Tong Tem Toh 泰北菜", "en": "Tong Tem Toh" },
+          "title": {
+            "zh-TW": "Tong Tem Toh 泰北菜",
+            "zh-CN": "Tong Tem Toh 泰北菜",
+            "en": "Tong Tem Toh"
+          },
           "desc": {
             "zh-TW": "尼曼路一帶的人氣泰北傳統餐廳，於質樸的柚木老屋中供應道地的泰北咖哩、香腸與沾醬拼盤，風味地道、用料新鮮，氣氛閒適，深受在地人與遊客喜愛。",
             "zh-CN": "尼曼路一带的人气泰北传统餐厅，于质朴的柚木老屋中供应道地的泰北咖喱、香肠与沾酱拼盘，风味地道、用料新鲜，气氛闲适，深受在地人与游客喜爱。",
