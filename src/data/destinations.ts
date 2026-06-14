@@ -112,7 +112,7 @@ export function findLocalizedName(poiName: string, lat: number, lon: number, loc
     for (const a of d.attractions) {
       const latDiff = Math.abs(a.lat - lat);
       const lonDiff = Math.abs(a.lon - lon);
-      if (latDiff < 0.005 && lonDiff < 0.005) {
+      if (latDiff < 0.0005 && lonDiff < 0.0005) {
         return {
           title: pickText(a.title, locale),
           localTitle: a.localTitle
@@ -123,7 +123,7 @@ export function findLocalizedName(poiName: string, lat: number, lon: number, loc
     for (const r of d.restaurants) {
       const latDiff = Math.abs(r.lat - lat);
       const lonDiff = Math.abs(r.lon - lon);
-      if (latDiff < 0.005 && lonDiff < 0.005) {
+      if (latDiff < 0.0005 && lonDiff < 0.0005) {
         return {
           title: pickText(r.title, locale),
           localTitle: r.localTitle

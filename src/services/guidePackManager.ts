@@ -86,11 +86,8 @@ class GuidePackManager {
       };
     }
 
-    // Default generic OTA enrichment for unmapped POIs in this destination
-    return {
-      title: { 'en': `${poiName} (Featured by Local Guides)`, 'zh-TW': `${poiName} (在地指南推薦)`, 'zh-CN': `${poiName} (在地指南推荐)` },
-      desc: { 'en': `One of the featured attractions in the ${destName} OTA Guide Pack. This spot is highly rated by travel bloggers and local guides.`, 'zh-TW': `本景點為 ${destName} OTA 指南包特別推薦，深受旅遊部落客與在地嚮導好評，值得一訪。` }
-    };
+    // If no OTA data is found, return null so the system falls back to its AI-generated or built-in descriptions.
+    return null;
   }
 }
 
