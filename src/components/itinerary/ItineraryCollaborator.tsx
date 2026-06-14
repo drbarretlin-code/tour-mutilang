@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../../context/ThemeContext';
 import { Itinerary, Activity } from '../../types/itinerary';
@@ -151,6 +151,13 @@ export function ItineraryCollaborator({ itinerary, survey }: ItineraryCollaborat
                 : '已開啟共享草稿模式，可邀請旅伴針對每日排程投票表決！'}
             </Text>
           </View>
+          <TouchableOpacity 
+            style={{ backgroundColor: colors.primary600, paddingHorizontal: 12, paddingVertical: 8, borderRadius: borderRadius.md, flexDirection: 'row', alignItems: 'center' }}
+            onPress={() => Alert.alert(isEn ? 'Invite Link Copied' : '邀請連結已複製', isEn ? 'You can now share this link with your friends.' : '您可以將連結傳送給旅伴一起投票！')}
+          >
+            <Ionicons name="share-social" size={16} color="#FFF" style={{ marginRight: 6 }} />
+            <Text style={[typography.labelMedium, { color: '#FFF', fontWeight: '700' }]}>{isEn ? 'Invite' : '邀請旅伴'}</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -279,6 +286,31 @@ export function ItineraryCollaborator({ itinerary, survey }: ItineraryCollaborat
                     </Text>
                   </TouchableOpacity>
                 </View>
+                
+                {/* Owner Finalize Action */}
+                {(upCount > 0 || downCount > 0) && (
+                  <View style={{ marginTop: 16, paddingTop: 16, borderTopWidth: 1, borderTopColor: colors.border, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Text style={[typography.labelSmall, { color: colors.textSecondary, flex: 1 }]}>
+                      {isEn ? 'Finalize decision:' : '💡 根據旅伴投票結果，由您決定：'}
+                    </Text>
+                    <View style={{ flexDirection: 'row', gap: 8 }}>
+                      <TouchableOpacity 
+                        style={{ paddingHorizontal: 12, paddingVertical: 6, backgroundColor: colors.success50, borderRadius: borderRadius.sm, borderWidth: 1, borderColor: colors.success500 }}
+                        onPress={() => Alert.alert(isEn ? 'Confirmed' : '已確認', isEn ? 'This activity has been locked into the itinerary.' : '此景點已確認保留於行程中！')}
+                      >
+                        <Text style={[typography.labelSmall, { color: colors.success700, fontWeight: '700' }]}>{isEn ? 'Keep' : '確認保留'}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity 
+                        style={{ paddingHorizontal: 12, paddingVertical: 6, backgroundColor: colors.error50, borderRadius: borderRadius.sm, borderWidth: 1, borderColor: colors.error500 }}
+                        onPress={() => {
+                          if (onRemoveActivity) onRemoveActivity(currentDay.dayNumber, act.id);
+                        }}
+                      >
+                        <Text style={[typography.labelSmall, { color: colors.error700, fontWeight: '700' }]}>{isEn ? 'Remove' : '移除行程'}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
               </View>
             );
           })

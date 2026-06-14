@@ -258,6 +258,33 @@ export default function ItineraryScreen() {
     await saveAndSyncItinerary(repairedItinerary);
   };
 
+  const handleRemoveActivity = async (dayNumber: number, activityId: string) => {
+    if (!itinerary) return;
+
+    const updatedItinerary = { ...itinerary, days: [...itinerary.days] };
+    const dayIndex = updatedItinerary.days.findIndex(d => d.dayNumber === dayNumber);
+    if (dayIndex === -1) return;
+
+    const day = { ...updatedItinerary.days[dayIndex]! };
+    let activities = [...day.activities];
+
+    const actIndex = activities.findIndex(a => a.id === activityId);
+    if (actIndex === -1) return;
+
+    activities.splice(actIndex, 1);
+    activities.forEach((a, idx) => { a.order = idx; });
+    day.activities = activities;
+    updatedItinerary.days[dayIndex] = day;
+
+    const firstAct = activities.length > 0 ? activities[0] : undefined;
+    const repairedItinerary = firstAct 
+      ? repairItineraryTimes(updatedItinerary, day.dayNumber, firstAct.id, firstAct.startTime)
+      : updatedItinerary;
+
+    setItinerary(repairedItinerary);
+    await saveAndSyncItinerary(repairedItinerary);
+  };
+
   const handleUpdateNote = async (activityId: string, note: string) => {
     if (!itinerary || !activeDay) return;
     
@@ -600,6 +627,7 @@ export default function ItineraryScreen() {
         <ItineraryCollaborator
           itinerary={activeItinerary}
           survey={contextSurvey!}
+          onRemoveActivity={handleRemoveActivity}
         />
       )}
 
