@@ -1022,11 +1022,7 @@ export function TimelineView({
                 <View style={styles.verticalTransitContainer}>
                   <View style={[styles.transitVerticalLine, { backgroundColor: '#E2E8F0', height: 48 }]} />
                   {(() => {
-                    let osrmDist = undefined;
-                    if (routeLegs && routeLegs[index] && routeLegs[index].distance) {
-                      osrmDist = routeLegs[index].distance / 1000;
-                    }
-                    return renderVerticalTransitBadge(activities[index + 1].transport, act.location, activities[index + 1].location, osrmDist);
+                    return renderVerticalTransitBadge(activities[index + 1].transport, act.location, activities[index + 1].location, undefined);
                   })()}
                 </View>
               )}
