@@ -22,7 +22,11 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
   const bgImage = itinerary.mapImageUrl || itinerary.days?.[0]?.activities?.find(a => a.photoUrl?.startsWith('http'))?.photoUrl;
 
   return (
-    <View style={[styles.card, shadows.sm, { borderRadius: 24, backgroundColor: colors.surface }]}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={onPress}
+      style={[styles.card, shadows.sm, { borderRadius: 24, backgroundColor: colors.surface }]}
+    >
       <View style={[styles.imageContainer, { borderRadius: 24 }]}>
         {bgImage ? (
           <ImageBackground source={{ uri: bgImage }} style={styles.imageBackground} resizeMode="cover">
@@ -32,13 +36,8 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
           <View style={[styles.imageBackground, { backgroundColor: colors.primary500 }]} />
         )}
 
-        {/* Clickable Area for navigation - absolute filled to cover the card */}
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={onPress}
-          style={StyleSheet.absoluteFill}
-        >
-          <View style={styles.content}>
+        {/* Content Area */}
+        <View style={[StyleSheet.absoluteFill, styles.content]}>
             <View style={styles.header}>
               <View style={[styles.badge, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
                 <Ionicons name="calendar-outline" size={12} color="#fff" style={{ marginRight: 4 }} />
@@ -72,8 +71,6 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
               </View>
             </View>
           </View>
-        </TouchableOpacity>
-
         {/* Absolute positioned Action Buttons layer - Sibling to the main TouchableOpacity */}
         <View style={styles.actionContainer}>
           {onEdit && (
@@ -96,7 +93,7 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
           )}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
