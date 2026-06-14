@@ -375,7 +375,8 @@ function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
 }
 
 export function getFallbackGuideInfo(country: string): any {
-  const safeCountry = country || '泰國';
+  // 不再硬編泰國為預設；未提供國家時走通用國際備援，避免對其他國家誤用泰國資訊。
+  const safeCountry = country || '';
   const locale = i18n.locale || 'zh-TW';
   const isEn = !locale.startsWith('zh');
 
@@ -496,25 +497,47 @@ export function getFallbackGuideInfo(country: string): any {
     };
   }
 
-  // Default Fallback is Thailand
+  // 泰國（涵蓋國家之一）：僅在確實偵測為泰國時回傳，避免對其他國家誤用泰國資訊。
+  if (key === 'thailand') {
+    return {
+      currencyCode: "THB",
+      currencyName: isEn ? "Thai Baht" : "泰銖",
+      emergencyContacts: [
+        { title: isEn ? "Tourist Police" : "觀光警察", subTitle: isEn ? "English Support" : "中英文與24小時服務", phone: "1155" },
+        { title: isEn ? "Police" : "報警與緊急求助", subTitle: isEn ? "24-hour service" : "24小時免費服務", phone: "191" },
+        { title: isEn ? "Ambulance/Fire" : "救護車與火警", subTitle: isEn ? "24-hour service" : "24小時免費服務", phone: "199" }
+      ],
+      usefulPhrases: [
+        { local: "Sawasdee krub/ka", zh: isEn ? "Hello" : "你好", isHighlight: false },
+        { local: "Khob khun krub/ka", zh: isEn ? "Thank you" : "謝謝", isHighlight: false },
+        { local: "Nee tao rai?", zh: isEn ? "How much is this?" : "這多少錢？", isHighlight: true }
+      ],
+      guideItems: [
+        { item: isEn ? "Pad Thai" : "路邊攤泰式炒河粉", priceRange: "50 - 80 THB" },
+        { item: isEn ? "Coconut (1 Pcs)" : "椰子水 (一粒)", priceRange: "40 - 60 THB" },
+        { item: isEn ? "Thai Massage (1 Hour)" : "泰式古法按摩 (1小時)", priceRange: "250 - 400 THB" }
+      ]
+    };
+  }
+
+  // 通用國際備援：未涵蓋的國家不應誤用任何特定國家（如泰國）的資訊。
+  // 採語系中性的國際緊急號碼與英文片語，並標記 isGeneric 供 UI 提示「此目的地尚無專屬指南」。
+  // 貨幣以 USD 作為通用估算參考（UI 仍會提示可下載該國專屬指南）。
   return {
-    currencyCode: "THB",
-    currencyName: isEn ? "Thai Baht" : "泰銖",
+    isGeneric: true,
+    currencyCode: "USD",
+    currencyName: isEn ? "Local currency (USD reference)" : "當地貨幣（以美元估算）",
     emergencyContacts: [
-      { title: isEn ? "Tourist Police" : "觀光警察", subTitle: isEn ? "English Support" : "中英文與24小時服務", phone: "1155" },
-      { title: isEn ? "Police" : "報警與緊急求助", subTitle: isEn ? "24-hour service" : "24小時免費服務", phone: "191" },
-      { title: isEn ? "Ambulance/Fire" : "救護車與火警", subTitle: isEn ? "24-hour service" : "24小時免費服務", phone: "199" }
+      { title: isEn ? "Emergency (EU/Intl)" : "國際緊急電話", subTitle: isEn ? "Police/Ambulance/Fire" : "警察／救護／消防", phone: "112" },
+      { title: isEn ? "Emergency (US/CA)" : "北美緊急電話", subTitle: isEn ? "Police/Ambulance/Fire" : "警察／救護／消防", phone: "911" },
+      { title: isEn ? "Local tourist info" : "當地觀光諮詢", subTitle: isEn ? "Check on arrival" : "抵達後於機場／飯店洽詢", phone: "-" }
     ],
     usefulPhrases: [
-      { local: "Sawasdee krub/ka", zh: isEn ? "Hello" : "你好", isHighlight: false },
-      { local: "Khob khun krub/ka", zh: isEn ? "Thank you" : "謝謝", isHighlight: false },
-      { local: "Nee tao rai?", zh: isEn ? "How much is this?" : "這多少錢？", isHighlight: true }
+      { local: "Hello", zh: isEn ? "Hello" : "你好", isHighlight: false },
+      { local: "Thank you", zh: isEn ? "Thank you" : "謝謝", isHighlight: false },
+      { local: "How much is this?", zh: isEn ? "How much is this?" : "這多少錢？", isHighlight: true }
     ],
-    guideItems: [
-      { item: isEn ? "Pad Thai" : "路邊攤泰式炒河粉", priceRange: "50 - 80 THB" },
-      { item: isEn ? "Coconut (1 Pcs)" : "椰子水 (一粒)", priceRange: "40 - 60 THB" },
-      { item: isEn ? "Thai Massage (1 Hour)" : "泰式古法按摩 (1小時)", priceRange: "250 - 400 THB" }
-    ]
+    guideItems: []
   };
 }
 
@@ -562,6 +585,7 @@ export const aiService = {
             interests: alignedSurvey.interests || [],
             limit: limitPerDest,
             locale: appLocale,
+            country: d.country,
           }),
           // 重試全數失敗（硬失敗）時，丟出訊號讓下方 catch 記為降級，而非默默吞掉。
           () => { throw new Error('POI_LIVE_EXHAUSTED'); },
@@ -594,6 +618,7 @@ export const aiService = {
             interests: ['food'],
             limit: Math.max(12, dayCount * 2),
             locale: appLocale,
+            country: d.country,
           }),
           // 重試全數失敗時回傳空陣列，下游午餐會自動退回內建餐廳清單（getDestRestaurants）。
           () => [] as POI[],
@@ -654,15 +679,16 @@ export const aiService = {
     itinerary.generatedByFallback = liveFetchFailed;
 
     if (itinerary.generatedByFallback) {
-      // 查明根因（金鑰/網路）寫入 fallbackReason，供診斷橫幅顯示與營運排查。
+      // 查明根因（金鑰/網路）寫入 fallbackReason。此欄會顯示於 UI 橫幅且面向全球使用者，
+      // 故採語系中性的技術代碼/英文，而非特定語言敘述（橫幅另有 i18n 標籤說明）。
       let diagMsg = '';
       try {
         const diag = await verifyOpenTripMapKey();
-        diagMsg = `金鑰=${diag.status}（${diag.source}）；網路=${PACEngine.getState().network}`;
+        diagMsg = `key=${diag.status}(${diag.source}); network=${PACEngine.getState().network}`;
       } catch {
-        diagMsg = `網路=${PACEngine.getState().network}`;
+        diagMsg = `network=${PACEngine.getState().network}`;
       }
-      itinerary.fallbackReason = `即時景點資料取得失敗（${liveFailureReason}）；${diagMsg}`;
+      itinerary.fallbackReason = `live POI fetch failed (${liveFailureReason}); ${diagMsg}`;
       logger.warn(`行程降級：${itinerary.fallbackReason}（即時命中 ${liveDestCount}/${namedDests.length}）`);
     } else {
       logger.info(`行程未降級：即時命中 ${liveDestCount}/${namedDests.length} 個目的地（其餘為查無景點，使用內建範本屬合理）。`);

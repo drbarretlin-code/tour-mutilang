@@ -3,8 +3,8 @@ import { InterestTag } from '../types/survey';
 import { createLogger } from './logger';
 import { recordAPIMetric } from './metrics';
 import { PACEngine } from './pac';
-import { resolveLocalCityCoords } from '../constants/destinations';
 import { fetchWikipediaGeoSearch } from './enrich';
+import { geocodeDestination } from './geocoder';
 
 const logger = createLogger('poi');
 
@@ -191,27 +191,29 @@ async function fetchWithTimeout(url: string, ms: number): Promise<Response> {
 }
 
 /**
- * 解析城市中心座標，優先序（P0/P2）：
+ * 解析城市中心座標，優先序（全球化）：
  *   1. survey 已帶的座標（最準）
- *   2. 本地座標字典 resolveLocalCityCoords（免金鑰、涵蓋 geoname 解析不到的次級城市）
- *   3. 線上 geoname（需金鑰）
- * geoname 回 NOT_FOUND（HTTP 200 但無座標）視為確定性失敗，不應重試。
+ *   2. 全球地理編碼器 geocodeDestination（內建字典 → Geoapify → Nominatim，多語、全球）
+ *   3. OTM geoname（英文端點，最後退路）
+ * 帶入 country 以消除同名城市歧義（如「芭達雅」vs 台中「大雅」）。
  */
 async function resolveCenter(
   destName: string,
   lat: number | undefined,
   lon: number | undefined,
-  apiKey: string
+  apiKey: string | null,
+  country?: string,
+  locale?: string
 ): Promise<{ lat: number; lon: number } | null> {
   if (typeof lat === 'number' && typeof lon === 'number' && lat !== 0 && lon !== 0) {
     return { lat, lon };
   }
-  // 本地座標字典優先：常見目的地（含芭達雅/羅勇等 geoname 解析不到者）直接命中，免依賴線上地理編碼。
-  const local = resolveLocalCityCoords(destName);
-  if (local) {
-    logger.info(`「${destName}」中心座標命中本地字典，免用 geoname。`);
-    return local;
-  }
+  // 全球地理編碼（內建字典優先，再 Geoapify/Nominatim）：適用任意國家城市與任意語系名稱。
+  const geo = await geocodeDestination(destName, country, locale || 'en');
+  if (geo) return geo;
+
+  // 最後退路：OTM geoname（英文端點，對次級城市常 NOT_FOUND）。無 OTM 金鑰則略過。
+  if (!apiKey) return null;
   try {
     const url = `${OTM_BASE}/geoname?name=${encodeURIComponent(destName)}&apikey=${apiKey}`;
     const res = await fetchWithTimeout(url, adaptiveTimeout(6000));
@@ -220,7 +222,6 @@ async function resolveCenter(
     if (typeof data?.lat === 'number' && typeof data?.lon === 'number') {
       return { lat: data.lat, lon: data.lon };
     }
-    // status:NOT_FOUND（HTTP 200 但無座標）—— 名稱無法解析，記錄供診斷。
     logger.warn(`geoname 無法解析「${destName}」（${data?.status || 'NO_COORDS'}）。`);
   } catch {
     /* ignore */
@@ -235,8 +236,10 @@ interface FetchPOIOptions {
   interests: InterestTag[];
   limit?: number;
   radiusMeters?: number;
-  /** App 語系，供 Wikipedia GeoSearch 後援來源選擇維基子網域（預設 en）。 */
+  /** App 語系，供地理編碼與 Wikipedia GeoSearch 後援選擇語言（預設 en）。 */
   locale?: string;
+  /** 國家名稱（使用者語系），供地理編碼消除同名城市歧義。 */
+  country?: string;
 }
 
 /**
@@ -277,10 +280,9 @@ async function fetchPOIsViaWikipedia(
  *   4. 皆無 → 由呼叫端退回內建靜態範本
  *
  * 重要語意（供呼叫端區分「連線降級」與「該地真的沒景點」）：
- * - **硬失敗**（無金鑰 OTM_NO_KEY／金鑰無效 OTM_INVALID_KEY／座標解析失敗
- *   OTM_GEONAME_FAILED／HTTP OTM_HTTP_xxx／限流 OTM_RATE_LIMITED／網路逾時
- *   OTM_NETWORK_FAILED）且 **Wikipedia 後援也拿不到** 時才 **throw**，讓 PAC 重試、
- *   呼叫端據此標記降級。
+ * - **硬失敗**（座標解析失敗 GEOCODE_FAILED／無金鑰 OTM_NO_KEY／金鑰無效 OTM_INVALID_KEY／
+ *   HTTP OTM_HTTP_xxx／限流 OTM_RATE_LIMITED／網路逾時 OTM_NETWORK_FAILED）且
+ *   **Wikipedia 後援也拿不到** 時才 **throw**，讓 PAC 重試、呼叫端據此標記降級。
  * - **任一來源成功但查無景點**（真實的空結果）才回傳空陣列 `[]`，此情況使用內建範本
  *   屬合理，不應視為降級。
  */
@@ -310,23 +312,30 @@ export async function fetchDestinationPOIs(opts: FetchPOIOptions): Promise<POI[]
   } catch { /* ignore cache errors */ }
 
   const apiKey = await resolveApiKey();
-  if (!apiKey) {
-    // 無金鑰屬不可重試的設定問題：拋出 fatal error，呼叫端據此明確標記降級並引導設定。
-    logger.warn('找不到 OpenTripMap API 金鑰（EXPO_PUBLIC_OPENTRIPMAP_KEY 或本機設定）。');
-    throw new Error('OTM_NO_KEY');
-  }
-
-  const center = await resolveCenter(destName, lat, lon, apiKey);
-  if (!center) {
-    // 座標解析失敗（多為網路問題）：拋錯讓 PAC 重試。
-    logger.warn(`無法解析「${destName}」的中心座標。`);
-    throw new Error('OTM_GEONAME_FAILED');
-  }
-
   const wikiLocale = opts.locale || 'en';
   const persist = async (pois: POI[]) => {
     try { await AsyncStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), pois })); } catch { /* ignore */ }
   };
+
+  // 中心座標：以全球地理編碼解析（不依賴 OTM 金鑰），帶 country 消歧義。
+  const center = await resolveCenter(destName, lat, lon, apiKey, opts.country, opts.locale);
+  if (!center) {
+    // 連座標都解析不到（地理編碼全失敗，多為網路問題）：拋錯讓 PAC 重試/標記降級。
+    logger.warn(`無法解析「${destName}」的中心座標。`);
+    throw new Error('GEOCODE_FAILED');
+  }
+
+  // 無 OTM 金鑰時不直接放棄：改走免金鑰的 Wikipedia GeoSearch，仍能取得即時 POI。
+  // 唯有連 Wikipedia 也拿不到才拋 OTM_NO_KEY（不可重試），由呼叫端標記降級並引導設定。
+  if (!apiKey) {
+    logger.warn('無 OpenTripMap 金鑰，改用 Wikipedia GeoSearch 取得即時 POI。');
+    const wikiPois = await fetchPOIsViaWikipedia(center, wikiLocale, radiusMeters, limit);
+    if (wikiPois.length > 0) {
+      await persist(wikiPois);
+      return wikiPois;
+    }
+    throw new Error('OTM_NO_KEY');
+  }
 
   const apiStart = Date.now();
   try {

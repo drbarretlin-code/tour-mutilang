@@ -394,7 +394,36 @@ export const SUGGESTED_DESTINATIONS: SuggestedDestination[] = [
     country_zh_cn: '美国',
     latitude: 34.0522,
     longitude: -118.2437
-  }
+  },
+  // --- 全球擴充：歐洲 ---
+  { name: '阿姆斯特丹', country: '荷蘭', name_en: 'Amsterdam', name_zh_tw: '阿姆斯特丹', name_zh_cn: '阿姆斯特丹', country_en: 'Netherlands', country_zh_tw: '荷蘭', country_zh_cn: '荷兰', latitude: 52.3676, longitude: 4.9041 },
+  { name: '柏林', country: '德國', name_en: 'Berlin', name_zh_tw: '柏林', name_zh_cn: '柏林', country_en: 'Germany', country_zh_tw: '德國', country_zh_cn: '德国', latitude: 52.5200, longitude: 13.4050 },
+  { name: '慕尼黑', country: '德國', name_en: 'Munich', name_zh_tw: '慕尼黑', name_zh_cn: '慕尼黑', country_en: 'Germany', country_zh_tw: '德國', country_zh_cn: '德国', latitude: 48.1351, longitude: 11.5820 },
+  { name: '馬德里', country: '西班牙', name_en: 'Madrid', name_zh_tw: '馬德里', name_zh_cn: '马德里', country_en: 'Spain', country_zh_tw: '西班牙', country_zh_cn: '西班牙', latitude: 40.4168, longitude: -3.7038 },
+  { name: '里斯本', country: '葡萄牙', name_en: 'Lisbon', name_zh_tw: '里斯本', name_zh_cn: '里斯本', country_en: 'Portugal', country_zh_tw: '葡萄牙', country_zh_cn: '葡萄牙', latitude: 38.7223, longitude: -9.1393 },
+  { name: '布拉格', country: '捷克', name_en: 'Prague', name_zh_tw: '布拉格', name_zh_cn: '布拉格', country_en: 'Czechia', country_zh_tw: '捷克', country_zh_cn: '捷克', latitude: 50.0755, longitude: 14.4378 },
+  { name: '維也納', country: '奧地利', name_en: 'Vienna', name_zh_tw: '維也納', name_zh_cn: '维也纳', country_en: 'Austria', country_zh_tw: '奧地利', country_zh_cn: '奥地利', latitude: 48.2082, longitude: 16.3738 },
+  { name: '蘇黎世', country: '瑞士', name_en: 'Zurich', name_zh_tw: '蘇黎世', name_zh_cn: '苏黎世', country_en: 'Switzerland', country_zh_tw: '瑞士', country_zh_cn: '瑞士', latitude: 47.3769, longitude: 8.5417 },
+  { name: '雅典', country: '希臘', name_en: 'Athens', name_zh_tw: '雅典', name_zh_cn: '雅典', country_en: 'Greece', country_zh_tw: '希臘', country_zh_cn: '希腊', latitude: 37.9838, longitude: 23.7275 },
+  // --- 中東 ---
+  { name: '杜拜', country: '阿聯酋', name_en: 'Dubai', name_zh_tw: '杜拜', name_zh_cn: '迪拜', country_en: 'United Arab Emirates', country_zh_tw: '阿聯酋', country_zh_cn: '阿联酋', latitude: 25.2048, longitude: 55.2708 },
+  { name: '伊斯坦堡', country: '土耳其', name_en: 'Istanbul', name_zh_tw: '伊斯坦堡', name_zh_cn: '伊斯坦布尔', country_en: 'Turkey', country_zh_tw: '土耳其', country_zh_cn: '土耳其', latitude: 41.0082, longitude: 28.9784 },
+  // --- 美洲 ---
+  { name: '舊金山', country: '美國', name_en: 'San Francisco', name_zh_tw: '舊金山', name_zh_cn: '旧金山', country_en: 'United States', country_zh_tw: '美國', country_zh_cn: '美国', latitude: 37.7749, longitude: -122.4194 },
+  { name: '多倫多', country: '加拿大', name_en: 'Toronto', name_zh_tw: '多倫多', name_zh_cn: '多伦多', country_en: 'Canada', country_zh_tw: '加拿大', country_zh_cn: '加拿大', latitude: 43.6532, longitude: -79.3832 },
+  { name: '溫哥華', country: '加拿大', name_en: 'Vancouver', name_zh_tw: '溫哥華', name_zh_cn: '温哥华', country_en: 'Canada', country_zh_tw: '加拿大', country_zh_cn: '加拿大', latitude: 49.2827, longitude: -123.1207 },
+  { name: '墨西哥城', country: '墨西哥', name_en: 'Mexico City', name_zh_tw: '墨西哥城', name_zh_cn: '墨西哥城', country_en: 'Mexico', country_zh_tw: '墨西哥', country_zh_cn: '墨西哥', latitude: 19.4326, longitude: -99.1332 },
+  { name: '里約熱內盧', country: '巴西', name_en: 'Rio de Janeiro', name_zh_tw: '里約熱內盧', name_zh_cn: '里约热内卢', country_en: 'Brazil', country_zh_tw: '巴西', country_zh_cn: '巴西', latitude: -22.9068, longitude: -43.1729 },
+  { name: '布宜諾斯艾利斯', country: '阿根廷', name_en: 'Buenos Aires', name_zh_tw: '布宜諾斯艾利斯', name_zh_cn: '布宜诺斯艾利斯', country_en: 'Argentina', country_zh_tw: '阿根廷', country_zh_cn: '阿根廷', latitude: -34.6037, longitude: -58.3816 },
+  // --- 非洲 ---
+  { name: '開羅', country: '埃及', name_en: 'Cairo', name_zh_tw: '開羅', name_zh_cn: '开罗', country_en: 'Egypt', country_zh_tw: '埃及', country_zh_cn: '埃及', latitude: 30.0444, longitude: 31.2357 },
+  { name: '開普敦', country: '南非', name_en: 'Cape Town', name_zh_tw: '開普敦', name_zh_cn: '开普敦', country_en: 'South Africa', country_zh_tw: '南非', country_zh_cn: '南非', latitude: -33.9249, longitude: 18.4241 },
+  { name: '馬拉喀什', country: '摩洛哥', name_en: 'Marrakesh', name_zh_tw: '馬拉喀什', name_zh_cn: '马拉喀什', country_en: 'Morocco', country_zh_tw: '摩洛哥', country_zh_cn: '摩洛哥', latitude: 31.6295, longitude: -7.9811 },
+  // --- 亞洲擴充 ---
+  { name: '北京', country: '中國', name_en: 'Beijing', name_zh_tw: '北京', name_zh_cn: '北京', country_en: 'China', country_zh_tw: '中國', country_zh_cn: '中国', latitude: 39.9042, longitude: 116.4074 },
+  { name: '上海', country: '中國', name_en: 'Shanghai', name_zh_tw: '上海', name_zh_cn: '上海', country_en: 'China', country_zh_tw: '中國', country_zh_cn: '中国', latitude: 31.2304, longitude: 121.4737 },
+  { name: '峇里島', country: '印尼', name_en: 'Bali', name_zh_tw: '峇里島', name_zh_cn: '巴厘岛', country_en: 'Indonesia', country_zh_tw: '印尼', country_zh_cn: '印尼', latitude: -8.4095, longitude: 115.1889 },
+  { name: '德里', country: '印度', name_en: 'Delhi', name_zh_tw: '德里', name_zh_cn: '德里', country_en: 'India', country_zh_tw: '印度', country_zh_cn: '印度', latitude: 28.6139, longitude: 77.2090 }
 ];
 
 /**

@@ -285,8 +285,8 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
             <View style={{ marginTop: 8 }}>
               <Text style={[typography.bodySmall, { color: colors.primary700, marginBottom: guideData.downloadableCountry ? 8 : 0 }]}>
                 {guideData.downloadableCountry
-                  ? `目的地「${guideData.downloadableCountry.label}」尚未涵蓋，目前顯示泰國預設範本。`
-                  : '此目的地尚無對應的離線指南範本，目前顯示泰國預設範本。'}
+                  ? `目的地「${guideData.downloadableCountry.label}」尚未涵蓋，目前顯示通用國際範本。`
+                  : '此目的地尚無對應的離線指南範本，目前顯示通用國際範本。'}
               </Text>
               {guideData.downloadableCountry && (
                 <TouchableOpacity

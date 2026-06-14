@@ -20,13 +20,17 @@ function adaptiveTimeout(baseMs: number): number {
 const WIKI_CACHE_PREFIX = '@wiki_summary_';
 const WIKI_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 30; // 30 天
 
-/** 將 App 語系對應到維基百科的子網域語言代碼 */
+/** 將 App 語系對應到維基百科的子網域語言代碼（涵蓋所有支援的 UI 語系） */
 function localeToWikiLang(locale: string): string {
-  if (locale.startsWith('zh')) return 'zh';
-  if (locale.startsWith('ja')) return 'ja';
-  if (locale.startsWith('ko')) return 'ko';
-  if (locale.startsWith('th')) return 'th';
-  if (locale.startsWith('vi')) return 'vi';
+  const l = (locale || 'en').toLowerCase();
+  if (l.startsWith('zh')) return 'zh';
+  if (l.startsWith('ja')) return 'ja';
+  if (l.startsWith('ko')) return 'ko';
+  if (l.startsWith('th')) return 'th';
+  if (l.startsWith('vi')) return 'vi';
+  if (l.startsWith('es')) return 'es';
+  if (l.startsWith('pt')) return 'pt';
+  if (l.startsWith('ms')) return 'ms';
   return 'en';
 }
 

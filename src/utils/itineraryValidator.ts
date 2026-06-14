@@ -58,18 +58,12 @@ export function getTravelTime(
     return Math.round((distKm / 30) * 60) + 10;
   }
 
-  // Fallback: 基於行政區域估算
-  const r1 = region1 || '曼谷';
-  const r2 = region2 || '曼谷';
-
-  if (r1 !== r2) {
-    if ((r1 === '曼谷' && r2 === '羅勇') || (r1 === '羅勇' && r2 === '曼谷')) return 150;
-    if ((r1 === '曼谷' && r2 === '芭達雅') || (r1 === '芭達雅' && r2 === '曼谷')) return 120;
-    if ((r1 === '芭達雅' && r2 === '羅勇') || (r1 === '羅勇' && r2 === '芭達雅')) return 60;
-    if ((r1 === '曼谷' && r2 === '曼谷近郊') || (r1 === '曼谷近郊' && r2 === '曼谷')) return 60;
-    return 90;
-  }
-  return 40; // 同一區域預設 40 分鐘
+  // Fallback（無座標時）：採通用、與國家無關的估算 —— 不同區域 90 分、同區域 40 分。
+  // 全球地理編碼修復後，絕大多數活動皆有座標而走上方 haversine，此處僅為極端缺資料時的保底。
+  const r1 = region1 || '';
+  const r2 = region2 || '';
+  if (r1 && r2 && r1 !== r2) return 90;
+  return 40;
 }
 
 // 時間字串轉換為分鐘數
@@ -106,10 +100,9 @@ export function validateActivityTime(
     return { hasConflict: false, reason: '無效的天數' };
   }
 
-  const dayRegion = dayData.region || '曼谷';
-  const activityRegion = activity.location?.address?.includes('羅勇') ? '羅勇' :
-                         activity.location?.address?.includes('芭達雅') || activity.location?.address?.includes('Pattaya') ? '芭達雅' :
-                         dayRegion; // 預設為該天主要區域
+  // 與國家無關：以該天的 region 為基準（活動座標存在時，距離估算會走 haversine，不依賴此值）。
+  const dayRegion = dayData.region || '';
+  const activityRegion = dayRegion;
 
   const itemMins = timeToMins(activity.startTime);
   const itemDuration = activity.duration || getActivityDuration(activity.type, activity.title);
