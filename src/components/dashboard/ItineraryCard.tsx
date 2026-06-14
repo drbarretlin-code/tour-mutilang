@@ -7,7 +7,7 @@ import { t } from '../../i18n';
 
 interface Props {
   itinerary: Itinerary;
-  onPress: () => void;
+  onPress?: (e?: any) => void;
   onEdit?: () => void;
   onDelete?: () => void;
 }
@@ -75,7 +75,7 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
         <View style={styles.actionContainer}>
           {onEdit && (
             <TouchableOpacity 
-              onPress={onEdit} 
+              onPress={(e) => { e.stopPropagation(); e.preventDefault(); onEdit(); }} 
               style={styles.actionBtn}
               activeOpacity={0.7}
             >
@@ -84,7 +84,7 @@ export function ItineraryCard({ itinerary, onPress, onEdit, onDelete }: Props) {
           )}
           {onDelete && (
             <TouchableOpacity 
-              onPress={onDelete} 
+              onPress={(e) => { e.stopPropagation(); e.preventDefault(); onDelete(); }} 
               style={styles.actionBtn}
               activeOpacity={0.7}
             >

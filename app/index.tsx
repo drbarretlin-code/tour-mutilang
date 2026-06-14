@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, ActivityIndicator, Text, TouchableOpacity, Alert, Platform, Image, ScrollView } from 'react-native';
-import { useRouter, useFocusEffect } from 'expo-router';
+import { useRouter, Link, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../src/context/AuthContext';
@@ -277,13 +277,18 @@ export default function HomeDashboard() {
 
           <View style={{ width: '100%' }}>
             {itineraries.map((item) => (
-              <ItineraryCard 
-                key={item.id}
-                itinerary={item} 
-                onPress={() => handleItineraryPress(item)} 
-                onEdit={() => handleEditSurveyPlan(item)}
-                onDelete={() => handleDeleteItinerary(item.id)}
-              />
+              <Link 
+                key={item.id} 
+                href="/itinerary" 
+                asChild
+                onPress={() => setActiveItinerary(item)}
+              >
+                <ItineraryCard 
+                  itinerary={item} 
+                  onEdit={() => handleEditSurveyPlan(item)}
+                  onDelete={() => handleDeleteItinerary(item.id)}
+                />
+              </Link>
             ))}
           </View>
         </ScrollView>
