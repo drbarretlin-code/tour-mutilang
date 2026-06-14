@@ -66,8 +66,13 @@ export interface BuiltInTemplate {
 /** 取得指定目的地、指定語系的內建景點範本（對齊 getDestTemplates 既有形狀）。 */
 export function getBuiltInTemplate(destName: string, locale: string): BuiltInTemplate {
   const d = matchDestination(destName);
+  const imgs = d.images.slice();
+  // 圖片陣列與景點數對齊：景點多於圖片時循環取用，避免索引越界導致活動缺圖。
+  const images = d.attractions.length > 0
+    ? d.attractions.map((_, i) => (imgs.length ? imgs[i % imgs.length] : ''))
+    : imgs;
   return {
-    images: d.images.slice(),
+    images,
     titles: d.attractions.map(a => pickText(a.title, locale)),
     localTitles: d.attractions.map(a => a.localTitle),
     descs: d.attractions.map(a => pickText(a.desc, locale)),

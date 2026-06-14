@@ -2190,6 +2190,435 @@
           }
         }
       ]
+    },
+    {
+      "keywords": [
+        "馬德里",
+        "马德里",
+        "madrid",
+        "西班牙",
+        "spain"
+      ],
+      "images": [
+        "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600",
+        "https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600",
+        "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "Museo del Prado",
+          "lat": 40.4138,
+          "lon": -3.6921,
+          "title": {
+            "zh-TW": "普拉多博物館藝術殿堂",
+            "zh-CN": "普拉多博物馆艺术殿堂",
+            "en": "Museo del Prado"
+          },
+          "desc": {
+            "zh-TW": "普拉多博物館是西班牙首屈一指、躋身世界頂級的藝術殿堂，與羅浮宮、烏菲茲齊名，典藏自十二世紀以來的歐洲繪畫瑰寶逾八千幅。館藏以西班牙黃金時代大師為核心，維拉斯奎茲的《侍女圖》被譽為西洋繪畫史上最偉大的作品之一，哥雅的《1808年5月3日》與晚年陰鬱深沉的「黑色繪畫」系列同樣震撼人心；此外葛雷柯、魯本斯、提香與波希《人間樂園》三聯畫等名作亦琳瑯滿目。博物館坐落於「藝術金三角」之中，與提森與蘇菲亞王后兩大美術館比鄰而立，是藝術愛好者的天堂。館藏浩瀚，建議先鎖定鎮館之寶按圖索驥；每日閉館前兩小時開放免費入場，但人潮較多，宜衡量取捨。提森—博內米薩美術館與典藏畢卡索《格爾尼卡》的蘇菲亞王后藝術中心就在步行範圍內，三館可串成一日藝術巡禮。",
+            "zh-CN": "普拉多博物馆是西班牙首屈一指、跻身世界顶级的艺术殿堂，与卢浮宫、乌菲兹齐名，典藏自十二世纪以来的欧洲绘画瑰宝逾八千幅。馆藏以西班牙黄金时代大师为核心，委拉斯开兹的《宫娥》被誉为西洋绘画史上最伟大的作品之一，戈雅的《1808年5月3日》与晚年阴郁深沉的“黑色绘画”系列同样震撼人心；此外格列柯、鲁本斯、提香与博斯《人间乐园》三联画等名作亦琳琅满目。博物馆坐落于“艺术金三角”之中，与提森与索菲亚王后两大美术馆比邻而立，是艺术爱好者的天堂。馆藏浩瀚，建议先锁定镇馆之宝按图索骥；每日闭馆前两小时开放免费入场，但人潮较多，宜衡量取舍。提森—博内米萨美术馆与典藏毕加索《格尔尼卡》的索菲亚王后艺术中心就在步行范围内，三馆可串成一日艺术巡礼。",
+            "en": "The Museo del Prado is Spain's premier art museum and one of the world's finest, ranking with the Louvre and the Uffizi, holding over 8,000 European paintings from the 12th century on. Its heart is the Spanish Golden Age: Velázquez's Las Meninas is hailed as one of the greatest paintings ever, while Goya's The Third of May 1808 and brooding Black Paintings are equally powerful—alongside El Greco, Rubens, Titian and Bosch's Garden of Earthly Delights. It anchors Madrid's 'Golden Triangle of Art' beside the Thyssen and Reina Sofía. The collection is vast—target the masterpieces first; the last two hours daily are free but crowded."
+          }
+        },
+        {
+          "localTitle": "Puerta del Sol",
+          "lat": 40.4169,
+          "lon": -3.7036,
+          "title": {
+            "zh-TW": "太陽門廣場城市心臟",
+            "zh-CN": "太阳门广场城市心脏",
+            "en": "Puerta del Sol"
+          },
+          "desc": {
+            "zh-TW": "太陽門廣場是馬德里的城市心臟，也是整個西班牙的地理原點——廣場地面上鑲嵌著「零公里」標誌，全國公路里程皆由此起算，是旅人必訪的打卡點。這座半月形廣場自古即是市民集會、慶典與重大歷史事件的舞台，四周環繞著新古典主義建築，其中鐘樓所在的舊郵政大樓最為醒目，每年跨年夜萬人聚集於此，隨著鐘聲吃下十二顆葡萄祈福，是西班牙最具代表性的節慶傳統。廣場上還矗立著馬德里市徽「熊與草莓樹」的青銅雕像，以及波旁王朝國王卡洛斯三世的騎馬像。此處是四通八達的交通與商圈樞紐，向西連接通往王宮的主street，向東銜接購物大道，無論白天黑夜都人潮川流、熱鬧非凡，最適合作為暢遊舊城的起點。由此步行數分鐘即可抵達主廣場（Plaza Mayor）與聖米格爾市場，串成漫遊舊城的黃金路線。",
+            "zh-CN": "太阳门广场是马德里的城市心脏，也是整个西班牙的地理原点——广场地面上镶嵌着“零公里”标志，全国公路里程皆由此起算，是旅人必访的打卡点。这座半月形广场自古即是市民集会、庆典与重大历史事件的舞台，四周环绕着新古典主义建筑，其中钟楼所在的旧邮政大楼最为醒目，每年跨年夜万人聚集于此，随着钟声吃下十二颗葡萄祈福，是西班牙最具代表性的节庆传统。广场上还矗立着马德里市徽“熊与草莓树”的青铜雕像，以及波旁王朝国王卡洛斯三世的骑马像。此处是四通八达的交通与商圈枢纽，向西连接通往王宫的主街，向东衔接购物大道，无论白天黑夜都人潮川流、热闹非凡，最适合作为畅游旧城的起点。由此步行数分钟即可抵达主广场（Plaza Mayor）与圣米格尔市场，串成漫游旧城的黄金路线。",
+            "en": "Puerta del Sol is the beating heart of Madrid and the geographic origin of all Spain—the 'Kilometre Zero' plaque set in its pavement marks where the country's roads begin. This half-moon square has hosted gatherings, festivities and pivotal history for centuries, ringed by neoclassical facades dominated by the clock-topped old Post Office, where thousands gather each New Year's Eve to eat twelve grapes with the chimes—Spain's signature tradition. Here too stand the bronze 'Bear and the Strawberry Tree' (Madrid's emblem) and an equestrian statue of Carlos III. A transport and shopping hub, it streams with people day and night—an ideal starting point for the old town."
+          }
+        },
+        {
+          "localTitle": "Palacio Real de Madrid",
+          "lat": 40.4179,
+          "lon": -3.7143,
+          "title": {
+            "zh-TW": "馬德里王宮歐陸宮闕",
+            "zh-CN": "马德里王宫欧陆宫阙",
+            "en": "Royal Palace of Madrid"
+          },
+          "desc": {
+            "zh-TW": "馬德里王宮是西班牙王室的官方宮殿，也是西歐規模最大的皇宮，擁有超過三千個房間，氣勢恢宏無與倫比。宮殿建於十八世紀，坐落於昔日摩爾人城堡的舊址之上，以白色石灰岩與花崗岩打造，融合巴洛克與新古典主義風格，外觀莊嚴典雅。如今西班牙王室已不在此居住，僅用於國事典禮，因此大部分廳室對外開放參觀。內部極盡奢華，加斯帕里尼廳的洛可可裝飾、御座廳的天頂濕壁畫、瓷器廳與規模驚人的皇家軍械庫皆令人嘆為觀止，更收藏有提埃波羅、哥雅與卡拉瓦喬的名畫，以及全球唯一完整的史特拉底瓦里弦樂四重奏古琴。宮前的兵器廣場與東方廣場開闊壯麗，與比鄰的阿穆德納主教座堂相映成趣，是俯瞰與拍照的絕佳地點。每月特定日子宮前還會舉行隆重的衛兵交接儀式，吸引眾多遊客駐足觀賞，氣氛莊嚴而盛大。",
+            "zh-CN": "马德里王宫是西班牙王室的官方宫殿，也是西欧规模最大的皇宫，拥有超过三千个房间，气势恢宏无与伦比。宫殿建于十八世纪，坐落于昔日摩尔人城堡的旧址之上，以白色石灰岩与花岗岩打造，融合巴洛克与新古典主义风格，外观庄严典雅。如今西班牙王室已不在此居住，仅用于国事典礼，因此大部分厅室对外开放参观。内部极尽奢华，加斯帕里尼厅的洛可可装饰、御座厅的天顶湿壁画、瓷器厅与规模惊人的皇家军械库皆令人叹为观止，更收藏有提埃波罗、戈雅与卡拉瓦乔的名画，以及全球唯一完整的斯特拉迪瓦里弦乐四重奏古琴。宫前的兵器广场与东方广场开阔壮丽，与比邻的阿穆德纳主教座堂相映成趣，是俯瞰与拍照的绝佳地点。每月特定日子宫前还会举行隆重的卫兵交接仪式，吸引众多游客驻足观赏，气氛庄严而盛大。",
+            "en": "The Royal Palace of Madrid is the official residence of the Spanish Crown and the largest palace in Western Europe, with over 3,000 rooms of overwhelming grandeur. Built in the 18th century on the site of a former Moorish fortress in white limestone and granite, it blends Baroque and neoclassical styles. The royal family no longer lives here—it is used for state ceremonies—so most halls are open to visitors. Inside dazzles: the Rococo Gasparini Room, frescoed Throne Room, Porcelain Room and a staggering Royal Armoury, plus paintings by Tiepolo, Goya and Caravaggio and the world's only complete Stradivarius string quartet. The Plaza de la Armería and Plaza de Oriente outside, beside Almudena Cathedral, are superb for photos."
+          }
+        },
+        {
+          "localTitle": "Mercado de San Miguel",
+          "lat": 40.4154,
+          "lon": -3.709,
+          "title": {
+            "zh-TW": "聖米格爾市場美食天堂",
+            "zh-CN": "圣米格尔市场美食天堂",
+            "en": "Mercado de San Miguel"
+          },
+          "desc": {
+            "zh-TW": "聖米格爾市場是馬德里最負盛名的美食市集，緊鄰主廣場（Plaza Mayor），是體驗西班牙飲食文化最熱鬧、最道地的去處。這座建於二十世紀初的市場以鑄鐵骨架與整片玻璃帷幕打造，是馬德里碩果僅存的鐵造市場建築，本身即為優雅的歷史地標。經整修後轉型為高級美食市集，三十餘個攤位環繞其中，從伊比利火腿、新鮮生蠔、烤章魚、油漬橄欖到各式 tapas 小點與西班牙烘蛋，琳瑯滿目、香氣四溢；更有現切火腿、現開海鮮與精釀啤酒、桑格利亞和雪莉酒，讓人一站嚐遍全西班牙的風味。市場採站立式用餐，氛圍輕鬆喧騰，最適合三五好友邊走邊吃、邊飲邊聊。傍晚時分人潮最盛、氣氛最熱烈，建議避開正午用餐尖峰，悠閒地展開一場味蕾的西班牙巡禮。",
+            "zh-CN": "圣米格尔市场是马德里最负盛名的美食市集，紧邻主广场（Plaza Mayor），是体验西班牙饮食文化最热闹、最地道的去处。这座建于二十世纪初的市场以铸铁骨架与整片玻璃帷幕打造，是马德里硕果仅存的铁造市场建筑，本身即为优雅的历史地标。经整修后转型为高级美食市集，三十余个摊位环绕其中，从伊比利火腿、新鲜生蚝、烤章鱼、油渍橄榄到各式 tapas 小点与西班牙烘蛋，琳琅满目、香气四溢；更有现切火腿、现开海鲜与精酿啤酒、桑格利亚和雪莉酒，让人一站尝遍全西班牙的风味。市场采站立式用餐，氛围轻松喧腾，最适合三五好友边走边吃、边饮边聊。傍晚时分人潮最盛、气氛最热烈，建议避开正午用餐尖峰，悠闲地展开一场味蕾的西班牙巡礼。",
+            "en": "Mercado de San Miguel is Madrid's most famous gourmet market, right by the Plaza Mayor—the liveliest, most authentic way to taste Spanish food culture. Built in the early 20th century with a cast-iron frame and glass walls, it is the city's last surviving iron market building, an elegant landmark in its own right. Restored into an upscale food hall, its 30-plus stalls brim with Iberian ham, fresh oysters, grilled octopus, marinated olives, endless tapas and tortilla, plus carved ham, just-shucked seafood, craft beer, sangria and sherry—all of Spain in one place. Dining is standing-room and buzzing, perfect for grazing with friends. Evenings are busiest; skip the noon rush and savour a leisurely Spanish tasting tour."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "Sobrino de Botín",
+          "lat": 40.4144,
+          "lon": -3.7083,
+          "cost": 45,
+          "title": {
+            "zh-TW": "Botín 百年烤乳豬名店",
+            "zh-CN": "Botín 百年烤乳猪名店",
+            "en": "Sobrino de Botín"
+          },
+          "desc": {
+            "zh-TW": "金氏紀錄認證、創立於1725年的世界最古老餐廳，招牌柴燒烤乳豬與烤羊肉外酥內嫩，是馬德里必嚐的傳統美味，建議提前訂位。",
+            "zh-CN": "吉尼斯纪录认证、创立于1725年的世界最古老餐厅，招牌柴烧烤乳猪与烤羊肉外酥内嫩，是马德里必尝的传统美味，建议提前订位。",
+            "en": "The world's oldest restaurant (1725, Guinness-certified); its wood-fired roast suckling pig and lamb are crisp and tender—a Madrid classic. Book ahead."
+          }
+        },
+        {
+          "localTitle": "Chocolatería San Ginés",
+          "lat": 40.4173,
+          "lon": -3.7065,
+          "cost": 8,
+          "title": {
+            "zh-TW": "San Ginés 百年吉拿棒",
+            "zh-CN": "San Ginés 百年吉拿棒",
+            "en": "Chocolatería San Ginés"
+          },
+          "desc": {
+            "zh-TW": "創業逾百年的老字號，現炸吉拿棒與油條沾濃稠熱巧克力是馬德里經典宵夜，24小時營業，深夜時分仍座無虛席。",
+            "zh-CN": "创业逾百年的老字号，现炸吉拿棒与油条沾浓稠热巧克力是马德里经典宵夜，24小时营业，深夜时分仍座无虚席。",
+            "en": "A century-old institution: freshly fried churros dipped in thick hot chocolate, Madrid's classic late-night treat. Open 24 hours and packed even after midnight."
+          }
+        }
+      ]
+    },
+    {
+      "keywords": [
+        "米蘭",
+        "米兰",
+        "milan",
+        "milano",
+        "義大利",
+        "意大利",
+        "italy"
+      ],
+      "images": [
+        "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600",
+        "https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600",
+        "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "Duomo di Milano",
+          "lat": 45.4642,
+          "lon": 9.19,
+          "title": {
+            "zh-TW": "米蘭主教座堂哥德瑰寶",
+            "zh-CN": "米兰主教座堂哥特瑰宝",
+            "en": "Milan Cathedral (Duomo)"
+          },
+          "desc": {
+            "zh-TW": "米蘭主教座堂是義大利最大、世界第三大的天主教堂，也是哥德式建築的曠世傑作，前後耗時近六百年才告完工。教堂以潔白大理石打造，外觀布滿多達三千四百餘尊雕像、一百三十五座尖塔與無數飛扶壁，繁複華麗、精雕細琢，宛如一座向天空生長的石造森林；最高的尖塔頂端佇立著鍍金的聖母瑪利亞像，是米蘭的守護象徵。教堂內部同樣懾人，巨大的彩繪玻璃窗在陽光下流轉著聖經故事的光影，幽深的廊柱直入穹頂。最不容錯過的是登上屋頂露台，近距離漫步於尖塔與雕像之間，將米蘭市景乃至晴日的阿爾卑斯山盡收眼底。教堂前的主教座堂廣場是城市的核心，終日人潮聚集、鴿群飛舞。建議提前購票並通過安檢，可分別參觀教堂主體與屋頂。廣場周邊亦是逛街購物與品嚐義式冰淇淋的好去處，無論晝夜都洋溢著濃濃的義式風情。",
+            "zh-CN": "米兰主教座堂是意大利最大、世界第三大的天主教堂，也是哥特式建筑的旷世杰作，前后耗时近六百年才告完工。教堂以洁白大理石打造，外观布满多达三千四百余尊雕像、一百三十五座尖塔与无数飞扶壁，繁复华丽、精雕细琢，宛如一座向天空生长的石造森林；最高的尖塔顶端伫立着镀金的圣母玛利亚像，是米兰的守护象征。教堂内部同样慑人，巨大的彩绘玻璃窗在阳光下流转着圣经故事的光影，幽深的廊柱直入穹顶。最不容错过的是登上屋顶露台，近距离漫步于尖塔与雕像之间，将米兰市景乃至晴日的阿尔卑斯山尽收眼底。教堂前的主教座堂广场是城市的核心，终日人潮聚集、鸽群飞舞。建议提前购票并通过安检，可分别参观教堂主体与屋顶。广场周边亦是逛街购物与品尝意式冰淇淋的好去处，无论昼夜都洋溢着浓浓的意式风情。",
+            "en": "Milan Cathedral is Italy's largest church and the world's third largest, a Gothic masterpiece that took nearly six centuries to complete. Built of white marble, its facade bristles with over 3,400 statues, 135 spires and countless flying buttresses—an ornate stone forest reaching skyward, crowned by the gilded Madonnina that watches over the city. Inside, vast stained-glass windows scatter biblical light among soaring columns. The highlight is the rooftop terraces, where you walk among the spires and statues with views over Milan to the Alps on clear days. The Piazza del Duomo before it is the city's core, thronged with people and pigeons. Book ahead and pass security; cathedral and rooftop are ticketed separately."
+          }
+        },
+        {
+          "localTitle": "Galleria Vittorio Emanuele II",
+          "lat": 45.4659,
+          "lon": 9.1899,
+          "title": {
+            "zh-TW": "埃馬努埃萊二世長廊",
+            "zh-CN": "埃马努埃莱二世长廊",
+            "en": "Galleria Vittorio Emanuele II"
+          },
+          "desc": {
+            "zh-TW": "埃馬努埃萊二世長廊是世界上歷史最悠久的購物拱廊之一，緊鄰主教座堂廣場，被米蘭人暱稱為「米蘭的客廳」。長廊建於十九世紀，以紀念義大利統一後的首位國王命名，兩條玻璃拱頂的長廊呈十字交會，中央是一座壯觀的玻璃鋼骨八角形圓頂，採光通透、氣派非凡。地面鋪滿精緻的馬賽克拼花，描繪義大利各大城市的市徽；其中杜林市徽上的公牛圖案最為著名，相傳只要以腳跟踩在公牛的「要害」上原地轉三圈，就能帶來好運與重返米蘭的緣分，地磚因此被遊客磨出了一個凹洞。長廊內進駐 Prada 創始店、LV、Gucci 等頂級精品與百年咖啡館、餐廳，是奢華購物與優雅小憩的代名詞，更是連接主教座堂與斯卡拉歌劇院的華麗通道。夜幕低垂時，玻璃圓頂下燈火璀璨，更添幾分優雅華貴的氛圍，值得駐足細賞與拍照。",
+            "zh-CN": "埃马努埃莱二世长廊是世界上历史最悠久的购物拱廊之一，紧邻主教座堂广场，被米兰人昵称为“米兰的客厅”。长廊建于十九世纪，以纪念意大利统一后的首位国王命名，两条玻璃拱顶的长廊呈十字交会，中央是一座壮观的玻璃钢骨八角形圆顶，采光通透、气派非凡。地面铺满精致的马赛克拼花，描绘意大利各大城市的市徽；其中都灵市徽上的公牛图案最为著名，相传只要以脚跟踩在公牛的“要害”上原地转三圈，就能带来好运与重返米兰的缘分，地砖因此被游客磨出了一个凹洞。长廊内进驻 Prada 创始店、LV、Gucci 等顶级精品与百年咖啡馆、餐厅，是奢华购物与优雅小憩的代名词，更是连接主教座堂与斯卡拉歌剧院的华丽通道。夜幕低垂时，玻璃圆顶下灯火璀璨，更添几分优雅华贵的氛围，值得驻足细赏与拍照。",
+            "en": "The Galleria Vittorio Emanuele II is one of the world's oldest shopping arcades, beside the Duomo and nicknamed 'Milan's drawing room.' Built in the 19th century and named for unified Italy's first king, its two glass-vaulted arms cross beneath a magnificent octagonal iron-and-glass dome flooding the space with light. The floor is laid with fine mosaics of Italian city emblems; the bull of Turin's coat of arms is the most famous—legend says spinning three times on your heel on the bull brings luck and a return to Milan, wearing a hollow into the tile. Home to the original Prada store, Louis Vuitton, Gucci and historic cafés, it is luxury shopping and elegant repose, and the ornate link between the Duomo and La Scala."
+          }
+        },
+        {
+          "localTitle": "Castello Sforzesco",
+          "lat": 45.4706,
+          "lon": 9.179,
+          "title": {
+            "zh-TW": "斯福爾扎城堡",
+            "zh-CN": "斯福尔扎城堡",
+            "en": "Sforza Castle"
+          },
+          "desc": {
+            "zh-TW": "斯福爾扎城堡是米蘭最重要的歷史地標之一，由十五世紀統治米蘭的斯福爾扎公爵家族在舊有要塞的基礎上擴建而成，曾是文藝復興時期歐洲最強大、最豪華的宮廷之一。城堡以紅磚砌築，外觀雄渾厚實，中央高聳的菲拉雷特塔是其顯著標誌；昔日達文西與布拉曼特等大師都曾在此為公爵效力，城堡的部分廳室天頂裝飾即出自達文西之手。如今城堡已轉型為龐大的博物館群，匯集了多座主題館藏，其中最著名的是米開朗基羅生前最後、未完成的遺作《隆達尼尼聖殤像》，蒼勁而動人；此外還有古代藝術、家具、樂器與埃及文物等豐富收藏。城堡後方緊連著米蘭最大的綠地森皮奧內公園，綠意盎然，是市民散步休憩的好去處，可順道一遊和平門。城堡的入內庭院免費開放，僅參觀博物館需購票，很適合悠閒散步、感受歷史氛圍。",
+            "zh-CN": "斯福尔扎城堡是米兰最重要的历史地标之一，由十五世纪统治米兰的斯福尔扎公爵家族在旧有要塞的基础上扩建而成，曾是文艺复兴时期欧洲最强大、最豪华的宫廷之一。城堡以红砖砌筑，外观雄浑厚实，中央高耸的菲拉雷特塔是其显著标志；昔日达芬奇与布拉曼特等大师都曾在此为公爵效力，城堡的部分厅室天顶装饰即出自达芬奇之手。如今城堡已转型为庞大的博物馆群，汇集了多座主题馆藏，其中最著名的是米开朗基罗生前最后、未完成的遗作《隆达尼尼圣殇像》，苍劲而动人；此外还有古代艺术、家具、乐器与埃及文物等丰富收藏。城堡后方紧连着米兰最大的绿地森皮奥内公园，绿意盎然，是市民散步休憩的好去处，可顺道一游和平门。城堡的入内庭院免费开放，仅参观博物馆需购票，很适合悠闲散步、感受历史氛围。",
+            "en": "Sforza Castle is one of Milan's most important landmarks, expanded from an earlier fortress by the Sforza dukes who ruled in the 15th century—once among the grandest, most powerful courts of Renaissance Europe. Built of red brick with a massive presence and the soaring Filarete Tower at its center, it employed masters like Leonardo da Vinci and Bramante; Leonardo decorated parts of its ceilings. Today it houses a vast museum complex, most famously Michelangelo's last, unfinished Rondanini Pietà—raw and deeply moving—plus ancient art, furniture, instruments and Egyptian holdings. Behind it stretches Sempione Park, Milan's largest green space, ideal for a stroll past the Arch of Peace."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "Luini",
+          "lat": 45.4655,
+          "lon": 9.1907,
+          "cost": 6,
+          "title": {
+            "zh-TW": "Luini 炸餡餅 Panzerotti",
+            "zh-CN": "Luini 炸馅饼 Panzerotti",
+            "en": "Luini"
+          },
+          "desc": {
+            "zh-TW": "主教座堂旁的米蘭排隊名店，招牌 panzerotti 炸餡餅外皮酥脆、內餡爆漿，番茄起司口味最經典，是平價又道地的街頭美味。",
+            "zh-CN": "主教座堂旁的米兰排队名店，招牌 panzerotti 炸馅饼外皮酥脆、内馅爆浆，番茄起司口味最经典，是平价又地道的街头美味。",
+            "en": "A beloved queue-worthy spot by the Duomo; its panzerotti—crisp fried turnovers oozing tomato and mozzarella—are the classic, cheap and authentic Milanese street snack."
+          }
+        },
+        {
+          "localTitle": "Trattoria Milanese",
+          "lat": 45.4636,
+          "lon": 9.1832,
+          "cost": 35,
+          "title": {
+            "zh-TW": "Trattoria Milanese 傳統菜",
+            "zh-CN": "Trattoria Milanese 传统菜",
+            "en": "Trattoria Milanese"
+          },
+          "desc": {
+            "zh-TW": "經營數十年的老字號，供應道地的米蘭燉飯（番紅花黃金燉飯）與米蘭炸牛排，份量實在、風味傳統，是品嚐倫巴底家鄉味的好選擇。",
+            "zh-CN": "经营数十年的老字号，供应地道的米兰炖饭（番红花黄金炖饭）与米兰炸牛排，分量实在、风味传统，是品尝伦巴第家乡味的好选择。",
+            "en": "A decades-old institution serving authentic risotto alla milanese (golden saffron risotto) and breaded cotoletta—hearty, traditional Lombard home cooking."
+          }
+        }
+      ]
+    },
+    {
+      "keywords": [
+        "阿姆斯特丹",
+        "阿姆斯特丹",
+        "amsterdam",
+        "荷蘭",
+        "荷兰",
+        "netherlands"
+      ],
+      "images": [
+        "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600",
+        "https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600",
+        "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "Rijksmuseum",
+          "lat": 52.36,
+          "lon": 4.8852,
+          "title": {
+            "zh-TW": "荷蘭國家博物館",
+            "zh-CN": "荷兰国家博物馆",
+            "en": "Rijksmuseum"
+          },
+          "desc": {
+            "zh-TW": "荷蘭國家博物館是荷蘭規模最大、最重要的藝術與歷史博物館，坐落於阿姆斯特丹博物館廣場，宏偉的紅磚建築融合哥德與文藝復興風格，本身即是國寶級地標。博物館典藏八千餘件展品，系統地呈現荷蘭自中世紀至今八百年的藝術與歷史，尤以十七世紀「荷蘭黃金時代」的繪畫收藏舉世無雙。鎮館之寶是林布蘭氣勢磅礡的巨幅群像《夜巡》，獨佔榮譽展廳盡頭，光影戲劇性十足、震撼人心；維梅爾的《倒牛奶的女僕》與《讀信的藍衣女子》以細膩寧靜的日常之美令人駐足，哈爾斯與梵谷的作品亦在其列。除繪畫外，還有精美的台夫特藍陶、銀器、船舶模型與亞洲館藏。博物館下方的拱廊與後方的花園免費開放。館藏龐大，建議善用官方導覽路線，優先欣賞鎮館名作。館前廣場的大型城市標誌一帶綠意盎然，也是熱門的拍照打卡與野餐休憩去處。",
+            "zh-CN": "荷兰国家博物馆是荷兰规模最大、最重要的艺术与历史博物馆，坐落于阿姆斯特丹博物馆广场，宏伟的红砖建筑融合哥特与文艺复兴风格，本身即是国宝级地标。博物馆典藏八千余件展品，系统地呈现荷兰自中世纪至今八百年的艺术与历史，尤以十七世纪“荷兰黄金时代”的绘画收藏举世无双。镇馆之宝是伦勃朗气势磅礴的巨幅群像《夜巡》，独占荣誉展厅尽头，光影戏剧性十足、震撼人心；维米尔的《倒牛奶的女仆》与《读信的蓝衣女子》以细腻宁静的日常之美令人驻足，哈尔斯与梵高的作品亦在其列。除绘画外，还有精美的代尔夫特蓝陶、银器、船舶模型与亚洲馆藏。博物馆下方的拱廊与后方的花园免费开放。馆藏庞大，建议善用官方导览路线，优先欣赏镇馆名作。馆前广场的大型城市标志一带绿意盎然，也是热门的拍照打卡与野餐休憩去处。",
+            "en": "The Rijksmuseum is the Netherlands' largest and most important art and history museum, on Amsterdam's Museumplein—its grand red-brick Gothic-Renaissance building a national landmark in itself. Over 8,000 works trace 800 years of Dutch art and history, with an unrivalled collection from the 17th-century Golden Age. Its treasure is Rembrandt's monumental group portrait The Night Watch, commanding the Gallery of Honour with dramatic light; Vermeer's The Milkmaid and Woman in Blue Reading a Letter captivate with quiet everyday beauty, alongside Hals and Van Gogh. Beyond paintings there are Delft blue ceramics, silver, ship models and an Asian pavilion. The passage below and the rear gardens are free. Use the official route and prioritise the masterpieces."
+          }
+        },
+        {
+          "localTitle": "Van Gogh Museum",
+          "lat": 52.3584,
+          "lon": 4.8811,
+          "title": {
+            "zh-TW": "梵谷博物館",
+            "zh-CN": "梵高博物馆",
+            "en": "Van Gogh Museum"
+          },
+          "desc": {
+            "zh-TW": "梵谷博物館收藏了全世界最多的文森·梵谷作品，是深入認識這位荷蘭後印象派天才的不二之地。博物館典藏逾兩百幅油畫、五百幅素描與其與弟弟西奧往來的數百封書信，依時間順序完整呈現梵谷從早期陰鬱的《吃馬鈴薯的人》，到旅居巴黎後色彩漸亮，再到法國南部時期燃燒生命般的創作歷程。館內可一次飽覽《向日葵》、《盛開的杏花》、《麥田裡的絲柏樹》與多幅自畫像等代表作，透過畫作與書信交織，觀者得以走進這位藝術家熾烈而孤獨的內心世界，動人至深。博物館同時收藏高更、莫內等同時代畫家的作品作為對照。由於慕名而來者眾，館方採全面預約制、分時段入場，現場不售票，務必提前於官網購票；建議預留兩至三小時，靜靜感受畫布上奔放的筆觸與情感。",
+            "zh-CN": "梵高博物馆收藏了全世界最多的文森·梵高作品，是深入认识这位荷兰后印象派天才的不二之地。博物馆典藏逾两百幅油画、五百幅素描与其与弟弟西奥往来的数百封书信，依时间顺序完整呈现梵高从早期阴郁的《吃马铃薯的人》，到旅居巴黎后色彩渐亮，再到法国南部时期燃烧生命般的创作历程。馆内可一次饱览《向日葵》、《盛开的杏花》、《麦田里的丝柏树》与多幅自画像等代表作，透过画作与书信交织，观者得以走进这位艺术家炽烈而孤独的内心世界，动人至深。博物馆同时收藏高更、莫奈等同时代画家的作品作为对照。由于慕名而来者众，馆方采全面预约制、分时段入场，现场不售票，务必提前于官网购票；建议预留两至三小时，静静感受画布上奔放的笔触与情感。",
+            "en": "The Van Gogh Museum holds the world's largest collection of Vincent van Gogh's work—the definitive place to understand the Dutch Post-Impressionist genius. Over 200 paintings, 500 drawings and hundreds of letters to his brother Theo chart his journey chronologically, from the dark early Potato Eaters, through brightening Paris years, to the blazing output of southern France. Here you can see Sunflowers, Almond Blossom, Wheatfield with Cypresses and many self-portraits together; paintings and letters interweave to draw you into the artist's intense, lonely inner world. Works by contemporaries like Gauguin and Monet provide context. Demand is huge—entry is timed and online-only with no door sales, so book ahead; allow two to three hours."
+          }
+        },
+        {
+          "localTitle": "Anne Frank Huis",
+          "lat": 52.3752,
+          "lon": 4.884,
+          "title": {
+            "zh-TW": "安妮之家",
+            "zh-CN": "安妮之家",
+            "en": "Anne Frank House"
+          },
+          "desc": {
+            "zh-TW": "安妮之家是一座感人至深的歷史見證，位於阿姆斯特丹一條運河旁的尋常房屋。二戰期間，猶太少女安妮·法蘭克一家為躲避納粹迫害，藏身於父親公司後棟的「密室」中長達兩年多，安妮在此寫下了舉世聞名的《安妮日記》，以稚嫩而早熟的筆觸記錄恐懼、希望與成長，直到一家人遭密報被捕、最終死於集中營。如今這棟建築被改建為博物館，參觀者可沿著當年的路線，穿過那扇偽裝成書櫃的密室入口，走進狹小昏暗、終日不得拉開窗簾的藏匿空間，牆上仍貼著安妮當年的剪報與照片，原版日記亦在此展出，無聲訴說著那段沉重的歷史。展覽以安妮的文字貫穿，提醒世人勿忘戰爭與仇恨的代價。博物館採線上限時預約制，名額極為搶手，務必提早數週於官網訂票。參觀全程約一小時，氛圍肅穆莊重，是一趟發人深省、關於人權與和平的教育之旅。",
+            "zh-CN": "安妮之家是一座感人至深的历史见证，位于阿姆斯特丹一条运河旁的寻常房屋。二战期间，犹太少女安妮·弗兰克一家为躲避纳粹迫害，藏身于父亲公司后栋的“密室”中长达两年多，安妮在此写下了举世闻名的《安妮日记》，以稚嫩而早熟的笔触记录恐惧、希望与成长，直到一家人遭密报被捕、最终死于集中营。如今这栋建筑被改建为博物馆，参观者可沿着当年的路线，穿过那扇伪装成书柜的密室入口，走进狭小昏暗、终日不得拉开窗帘的藏匿空间，墙上仍贴着安妮当年的剪报与照片，原版日记亦在此展出，无声诉说着那段沉重的历史。展览以安妮的文字贯穿，提醒世人勿忘战争与仇恨的代价。博物馆采在线限时预约制，名额极为抢手，务必提早数周于官网订票。参观全程约一小时，氛围肃穆庄重，是一趟发人深省、关于人权与和平的教育之旅。",
+            "en": "The Anne Frank House is a deeply moving historical witness, an ordinary canal-side house in Amsterdam. During WWII, the Jewish teenager Anne Frank and her family hid for over two years from Nazi persecution in the 'Secret Annexe' behind her father's business, where Anne wrote her world-famous diary—recording fear, hope and growing up with precocious tenderness—until the family was betrayed, arrested and perished in the camps. Now a museum, it lets visitors follow their route through the bookcase-disguised entrance into the cramped, dim hiding place where curtains were never opened; Anne's clippings and photos still line the walls, and the original diary is on display, silently telling that heavy history. The exhibition is woven with Anne's words, urging the world to remember the cost of war and hatred. Entry is timed and online-only and books out fast—reserve weeks ahead."
+          }
+        },
+        {
+          "localTitle": "Grachtengordel",
+          "lat": 52.3739,
+          "lon": 4.8838,
+          "title": {
+            "zh-TW": "阿姆斯特丹運河帶",
+            "zh-CN": "阿姆斯特丹运河带",
+            "en": "Amsterdam Canal Belt"
+          },
+          "desc": {
+            "zh-TW": "阿姆斯特丹的運河帶開鑿於十七世紀荷蘭黃金時代，由紳士運河、皇帝運河與王子運河等同心半環狀水道交織而成，全長逾百公里、跨越上千座橋樑，2010年被聯合國教科文組織列為世界文化遺產，是這座「北方威尼斯」最迷人的靈魂。運河兩岸排列著一棟棟細長高聳、山形屋頂各異其趣的荷蘭傳統商人宅邸，許多牆面微微前傾，頂端突出的吊鉤是昔日搬運貨物的巧思；春日鬱金香點綴窗台，夏夜燈火與橋影倒映水面，浪漫如畫。漫步於約旦區（Jordaan）的靜謐巷弄，穿梭於文青小店、咖啡館與隱密的庭院之間，是感受在地生活最愜意的方式；而搭乘玻璃頂遊船穿行水道，則能從水上飽覽運河屋與橋樑之美。無論騎單車、散步或夜遊，運河帶都是阿姆斯特丹不可錯過的經典體驗。",
+            "zh-CN": "阿姆斯特丹的运河带开凿于十七世纪荷兰黄金时代，由绅士运河、皇帝运河与王子运河等同心半环状水道交织而成，全长逾百公里、跨越上千座桥梁，2010年被联合国教科文组织列为世界文化遗产，是这座“北方威尼斯”最迷人的灵魂。运河两岸排列着一栋栋细长高耸、山形屋顶各异其趣的荷兰传统商人宅邸，许多墙面微微前倾，顶端突出的吊钩是昔日搬运货物的巧思；春日郁金香点缀窗台，夏夜灯火与桥影倒映水面，浪漫如画。漫步于约旦区（Jordaan）的静谧巷弄，穿梭于文青小店、咖啡馆与隐密的庭院之间，是感受在地生活最惬意的方式；而搭乘玻璃顶游船穿行水道，则能从水上饱览运河屋与桥梁之美。无论骑单车、散步或夜游，运河带都是阿姆斯特丹不可错过的经典体验。",
+            "en": "Amsterdam's Canal Belt was dug in the 17th-century Dutch Golden Age—the concentric half-rings of the Herengracht, Keizersgracht and Prinsengracht weaving over 100 km of water across a thousand bridges, UNESCO-listed since 2010 and the soul of this 'Venice of the North.' The banks are lined with tall, narrow merchant houses topped by varied gables, many leaning slightly forward with hoisting hooks once used to haul goods; tulips dot the sills in spring and lights and bridges mirror the water on summer nights. Wandering the quiet lanes of the Jordaan among indie shops, cafés and hidden courtyards is the loveliest way to feel local life, while a glass-topped canal cruise shows off the canal houses from the water. By bike, on foot or after dark, the canals are an essential Amsterdam experience."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "Foodhallen",
+          "lat": 52.3662,
+          "lon": 4.869,
+          "cost": 18,
+          "title": {
+            "zh-TW": "Foodhallen 美食市集",
+            "zh-CN": "Foodhallen 美食市集",
+            "en": "Foodhallen"
+          },
+          "desc": {
+            "zh-TW": "由舊電車車庫改建的室內美食市集，匯集數十攤跨國街頭美食，從荷蘭炸丸子、生鯡魚到亞洲小吃與精釀啤酒，氣氛時尚熱鬧，適合多人共享。",
+            "zh-CN": "由旧电车车库改建的室内美食市集，汇集数十摊跨国街头美食，从荷兰炸丸子、生鲱鱼到亚洲小吃与精酿啤酒，气氛时尚热闹，适合多人共享。",
+            "en": "An indoor food hall in a converted tram depot with dozens of international street-food stalls—Dutch bitterballen, raw herring, Asian bites and craft beer—stylish, lively and great for sharing."
+          }
+        },
+        {
+          "localTitle": "The Pancake Bakery",
+          "lat": 52.3744,
+          "lon": 4.8843,
+          "cost": 16,
+          "title": {
+            "zh-TW": "荷蘭煎餅老店",
+            "zh-CN": "荷兰煎饼老店",
+            "en": "The Pancake Bakery"
+          },
+          "desc": {
+            "zh-TW": "運河畔的人氣荷蘭煎餅專賣店，巨大薄煎餅可選甜鹹各式配料，份量十足，是體驗荷蘭家常風味的經典選擇。",
+            "zh-CN": "运河畔的人气荷兰煎饼专卖店，巨大薄煎饼可选甜咸各式配料，分量十足，是体验荷兰家常风味的经典选择。",
+            "en": "A popular canal-side spot for Dutch pancakes—huge, thin and topped sweet or savoury; filling and a classic taste of Dutch home cooking."
+          }
+        }
+      ]
+    },
+    {
+      "keywords": [
+        "巴塞隆納",
+        "巴塞罗那",
+        "barcelona",
+        "巴塞隆拿",
+        "西班牙",
+        "spain"
+      ],
+      "images": [
+        "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600",
+        "https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600",
+        "https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=600"
+      ],
+      "attractions": [
+        {
+          "localTitle": "Basílica de la Sagrada Família",
+          "lat": 41.4036,
+          "lon": 2.1744,
+          "title": {
+            "zh-TW": "聖家堂高第曠世巨作",
+            "zh-CN": "圣家堂高迪旷世巨作",
+            "en": "Sagrada Família"
+          },
+          "desc": {
+            "zh-TW": "聖家堂是建築鬼才安東尼·高第傾注後半生心血的曠世巨作，也是巴塞隆納的象徵與精神核心。這座宏偉的天主教聖殿自1882年動工，至今仍在興建中，預計於高第逝世百週年前後完工，是全球最著名的「未完成」建築。高第以大自然為靈感，將哥德與新藝術風格推向極致，外觀的「誕生立面」與「受難立面」雕飾繁複、敘事生動，高聳的尖塔有如石筍直指蒼穹。然而真正令人屏息的是教堂內部：林立的傾斜廊柱宛如一片石造森林向上開枝散葉，繽紛的彩繪玻璃將陽光化為流動的紅橙與藍綠光河，灑落整個殿堂，神聖而夢幻，令無數訪客為之動容。建議提前於官網購票並加購登塔行程，可俯瞰巴塞隆納市景；清晨或午後光線最美，是攝影與感受光影魔法的最佳時刻。教堂周邊設有公園與露天咖啡座，適合於參觀前後稍作休憩、遠眺塔尖的雄姿。",
+            "zh-CN": "圣家堂是建筑鬼才安东尼·高迪倾注后半生心血的旷世巨作，也是巴塞罗那的象征与精神核心。这座宏伟的天主教圣殿自1882年动工，至今仍在兴建中，预计于高迪逝世百周年前后完工，是全球最著名的“未完成”建筑。高迪以大自然为灵感，将哥特与新艺术风格推向极致，外观的“诞生立面”与“受难立面”雕饰繁复、叙事生动，高耸的尖塔有如石笋直指苍穹。然而真正令人屏息的是教堂内部：林立的倾斜廊柱宛如一片石造森林向上开枝散叶，缤纷的彩绘玻璃将阳光化为流动的红橙与蓝绿光河，洒落整个殿堂，神圣而梦幻，令无数访客为之动容。建议提前于官网购票并加购登塔行程，可俯瞰巴塞罗那市景；清晨或午后光线最美，是摄影与感受光影魔法的最佳时刻。教堂周边设有公园与露天咖啡座，适合于参观前后稍作休憩、远眺塔尖的雄姿。",
+            "en": "The Sagrada Família is the magnum opus of architectural genius Antoni Gaudí, who devoted the second half of his life to it—the symbol and spiritual heart of Barcelona. Begun in 1882 and still under construction (aiming for completion around the centenary of Gaudí's death), it is the world's most famous 'unfinished' building. Drawing on nature, Gaudí pushed Gothic and Art Nouveau to their limits: the intricate, storytelling Nativity and Passion facades and spires like stone shoots reaching skyward. Yet the breathtaking part is inside—leaning columns branch upward like a stone forest, while vivid stained glass turns sunlight into flowing rivers of red-orange and blue-green across the nave, sacred and dreamlike. Book online and add a tower visit for city views; early morning or afternoon light is most magical for photos."
+          }
+        },
+        {
+          "localTitle": "Park Güell",
+          "lat": 41.4145,
+          "lon": 2.1527,
+          "title": {
+            "zh-TW": "奎爾公園馬賽克花園",
+            "zh-CN": "奎尔公园马赛克花园",
+            "en": "Park Güell"
+          },
+          "desc": {
+            "zh-TW": "奎爾公園是高第為實業家奎爾構思的夢幻花園住宅區，雖然當年的開發計畫未能成功，卻為世人留下一座充滿童趣與奇想的露天藝術傑作，名列世界文化遺產。公園坐落於巴塞隆納北側的山丘上，高第在此將建築與自然地景完美融合，運用碎瓷與彩色馬賽克拼貼出繽紛斑斕的曲線造型，宛如進入童話世界。入口處兩棟糖果屋般的薑餅屋衛舍、階梯上色彩斑斕的馬賽克蜥蜴噴泉（暱稱「El Drac」）是最具代表性的打卡地標；拾級而上是由八十六根多立克石柱撐起的百柱廳，其上即是著名的波浪形馬賽克長椅環繞的大露台，可一覽巴塞隆納市區直到地中海的壯麗全景。園區自然區免費開放，而包含主要地標的「紀念區」則需購票並分時段入場，建議提前預訂，避開正午烈日。",
+            "zh-CN": "奎尔公园是高迪为实业家奎尔构思的梦幻花园住宅区，虽然当年的开发计划未能成功，却为世人留下一座充满童趣与奇想的露天艺术杰作，名列世界文化遗产。公园坐落于巴塞罗那北侧的山丘上，高迪在此将建筑与自然地景完美融合，运用碎瓷与彩色马赛克拼贴出缤纷斑斓的曲线造型，宛如进入童话世界。入口处两栋糖果屋般的姜饼屋卫舍、阶梯上色彩斑斓的马赛克蜥蜴喷泉（昵称“El Drac”）是最具代表性的打卡地标；拾级而上是由八十六根多立克石柱撑起的百柱厅，其上即是著名的波浪形马赛克长椅环绕的大露台，可一览巴塞罗那市区直到地中海的壮丽全景。园区自然区免费开放，而包含主要地标的“纪念区”则需购票并分时段入场，建议提前预订，避开正午烈日。",
+            "en": "Park Güell is Gaudí's whimsical garden-city dream for the industrialist Eusebi Güell—though the development failed, it left the world an open-air masterpiece of childlike wonder, a UNESCO site. Set on a hill north of Barcelona, Gaudí fused architecture with the landscape, using broken tiles and colourful mosaics to form swirling shapes like a fairy tale. The gingerbread-house gatehouses and the mosaic salamander fountain (nicknamed 'El Drac') on the steps are the iconic photo spots; above, the Hypostyle Hall's 86 Doric columns support the great terrace ringed by the famous undulating mosaic bench, with sweeping views over the city to the Mediterranean. The natural park area is free, while the 'Monumental Zone' with the main sights is ticketed and timed—book ahead and avoid the midday sun."
+          }
+        },
+        {
+          "localTitle": "Casa Batlló",
+          "lat": 41.3917,
+          "lon": 2.1649,
+          "title": {
+            "zh-TW": "巴特由之家高第建築",
+            "zh-CN": "巴特约之家高迪建筑",
+            "en": "Casa Batlló"
+          },
+          "desc": {
+            "zh-TW": "巴特由之家是高第於二十世紀初改建的一棟住宅，被譽為現代主義建築的巔峰之作，坐落於巴塞隆納精華的「不和諧街區」上，名列世界文化遺產。整棟建築幾乎找不到一條直線，高第以海洋與骨骼為靈感，將立面打造得宛如有生命般流動——波浪起伏的牆面鑲滿藍綠色調的碎瓷與彩色玻璃，在陽光下閃爍如海面粼光；陽台造型猶如面具或骷髏，當地人因而暱稱其為「骨頭之家」。屋頂覆蓋著色彩斑斕、形似龍鱗的瓦片，煙囪化身為奇幻的雕塑，相傳整座屋頂正演繹著聖喬治屠龍的傳說。室內同樣精彩，從採光天井到木質曲線門窗，無一不展現高第對光線、通風與自然形態的極致追求。如今館方提供擴增實境導覽與夜間燈光秀，讓參觀體驗更為生動，建議提前購票避開人潮。",
+            "zh-CN": "巴特约之家是高迪于二十世纪初改建的一栋住宅，被誉为现代主义建筑的巅峰之作，坐落于巴塞罗那精华的“不和谐街区”上，名列世界文化遗产。整栋建筑几乎找不到一条直线，高迪以海洋与骨骼为灵感，将立面打造得宛如有生命般流动——波浪起伏的墙面镶满蓝绿色调的碎瓷与彩色玻璃，在阳光下闪烁如海面粼光；阳台造型犹如面具或骷髅，当地人因而昵称其为“骨头之家”。屋顶覆盖着色彩斑斓、形似龙鳞的瓦片，烟囱化身为奇幻的雕塑，相传整座屋顶正演绎着圣乔治屠龙的传说。室内同样精彩，从采光天井到木质曲线门窗，无一不展现高迪对光线、通风与自然形态的极致追求。如今馆方提供扩增实境导览与夜间灯光秀，让参观体验更为生动，建议提前购票避开人潮。",
+            "en": "Casa Batlló, remodelled by Gaudí in the early 20th century, is hailed as a pinnacle of Modernisme on Barcelona's prestigious 'Block of Discord,' a UNESCO site. The building has almost no straight lines—inspired by the sea and by bones, Gaudí made the facade seem alive: undulating walls studded with blue-green broken tiles and coloured glass shimmer like the sea in sunlight, while the balconies resemble masks or skulls, earning it the local nickname 'House of Bones.' The roof is clad in scale-like tiles resembling a dragon's back, its chimneys turned into fantastical sculptures—said to depict Saint George slaying the dragon. Inside is just as remarkable, from the light well to curving wooden doors and windows, all showing Gaudí's mastery of light, airflow and natural form. AR guides and evening light shows now enrich the visit; book ahead to avoid crowds."
+          }
+        },
+        {
+          "localTitle": "La Rambla",
+          "lat": 41.3797,
+          "lon": 2.173,
+          "title": {
+            "zh-TW": "蘭布拉大道城市動脈",
+            "zh-CN": "兰布拉大道城市动脉",
+            "en": "La Rambla"
+          },
+          "desc": {
+            "zh-TW": "蘭布拉大道是巴塞隆納最著名、最具活力的林蔭大道，全長約一點二公里，自加泰隆尼亞廣場一路延伸至海濱的哥倫布紀念柱，是貫穿舊城的城市動脈。寬闊的中央步道兩側梧桐成蔭，終日人聲鼎沸——街頭藝人、肖像畫家、花卉與書報攤、露天咖啡座交織出熱鬧繽紛的街頭風情，是感受巴塞隆納脈動最直接的方式。大道兩旁名勝林立：可一探色彩斑斕、海鮮蔬果琳瑯滿目的波蓋利亞市場（La Boqueria），這是老饕與攝影者的天堂；亦可欣賞地面上由米羅創作的圓形馬賽克拼貼、典雅的利塞奧大劇院與奎爾宮等。漫步其間，向東鑽進巷弄即是迷人的哥德區。需提醒此處遊客如織，扒手亦較活躍，務必看管好隨身財物，盡情享受這條歐洲最知名的散步大道。大道盡頭的海濱舊港、水族館與哥倫布紀念柱亦值得順道一遊，感受地中海港都風情。",
+            "zh-CN": "兰布拉大道是巴塞罗那最著名、最具活力的林荫大道，全长约一点二公里，自加泰罗尼亚广场一路延伸至海滨的哥伦布纪念柱，是贯穿旧城的城市动脉。宽阔的中央步道两侧梧桐成荫，终日人声鼎沸——街头艺人、肖像画家、花卉与书报摊、露天咖啡座交织出热闹缤纷的街头风情，是感受巴塞罗那脉动最直接的方式。大道两旁名胜林立：可一探色彩斑斓、海鲜蔬果琳琅满目的波盖利亚市场（La Boqueria），这是老饕与摄影者的天堂；亦可欣赏地面上由米罗创作的圆形马赛克拼贴、典雅的利塞奥大剧院与奎尔宫等。漫步其间，向东钻进巷弄即是迷人的哥特区。需提醒此处游客如织，扒手亦较活跃，务必看管好随身财物，尽情享受这条欧洲最知名的散步大道。大道尽头的海滨旧港、水族馆与哥伦布纪念柱亦值得顺道一游，感受地中海港都风情。",
+            "en": "La Rambla is Barcelona's most famous, most vibrant boulevard—about 1.2 km from Plaça de Catalunya down to the Columbus Monument by the sea, the artery running through the old town. Plane trees shade the broad central promenade, alive all day with street performers, portrait artists, flower and news stalls and outdoor cafés—the most direct way to feel the city's pulse. Sights line the way: the dazzling La Boqueria market, a paradise of seafood, fruit and colour for foodies and photographers; a circular Miró mosaic underfoot; the elegant Liceu opera house and Palau Güell. Stroll along and slip east into the enchanting Gothic Quarter. Note it is packed and pickpockets are active—mind your belongings while enjoying one of Europe's best-known promenades."
+          }
+        }
+      ],
+      "restaurants": [
+        {
+          "localTitle": "Cervecería Catalana",
+          "lat": 41.3925,
+          "lon": 2.162,
+          "cost": 28,
+          "title": {
+            "zh-TW": "Catalana 人氣 Tapas",
+            "zh-CN": "Catalana 人气 Tapas",
+            "en": "Cervecería Catalana"
+          },
+          "desc": {
+            "zh-TW": "巴塞隆納最人氣的 tapas 酒館之一，吧台上擺滿琳瑯滿目的小點與串燒，伊比利火腿、炸花枝與蒜香蝦皆是招牌，氣氛熱絡、常需排隊。",
+            "zh-CN": "巴塞罗那最人气的 tapas 酒馆之一，吧台上摆满琳琅满目的小点与串烧，伊比利火腿、炸花枝与蒜香虾皆是招牌，气氛热络、常需排队。",
+            "en": "One of Barcelona's most popular tapas bars, its counter laden with small plates and skewers—Iberian ham, fried calamari and garlic prawns are favourites; lively and often with a queue."
+          }
+        },
+        {
+          "localTitle": "Quimet & Quimet",
+          "lat": 41.3741,
+          "lon": 2.169,
+          "cost": 22,
+          "title": {
+            "zh-TW": "Quimet 站立式小酒館",
+            "zh-CN": "Quimet 站立式小酒馆",
+            "en": "Quimet & Quimet"
+          },
+          "desc": {
+            "zh-TW": "家族經營數代的迷你站立式酒館，以層疊罐頭海鮮與起司的「montaditos」小點與精選葡萄酒聞名，空間雖小卻風味十足，是內行人的最愛。",
+            "zh-CN": "家族经营数代的迷你站立式酒馆，以层叠罐头海鲜与起司的“montaditos”小点与精选葡萄酒闻名，空间虽小却风味十足，是内行人的最爱。",
+            "en": "A tiny family-run standing bar famous for 'montaditos'—layered canned seafood and cheese on bread—paired with fine wines; small in size but big on flavour, an insider favourite."
+          }
+        }
+      ]
     }
   ]
 }
