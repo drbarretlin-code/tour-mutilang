@@ -145,6 +145,14 @@ export const CombinedItineraryView: React.FC<Props> = ({ itinerary, activeDay, m
           contentContainerStyle={styles.scrollContent}
         >
           {(() => {
+            let routeLegs: any[] = [];
+            try {
+              if (currentDayData.routeGeometry) {
+                const geoData = JSON.parse(currentDayData.routeGeometry);
+                if (geoData && geoData.legs) routeLegs = geoData.legs;
+              }
+            } catch (e) {}
+
             const points = currentDayData.activities.map((act) => ({
               ...act,
               isHotel: act.type === 'hotel',
@@ -154,7 +162,10 @@ export const CombinedItineraryView: React.FC<Props> = ({ itinerary, activeDay, m
               let distanceStr = '';
               if (index < points.length - 1) {
                 const nextPt = points[index + 1];
-                const distanceKm = getRouteDistanceKm(nextPt.transport, pt.location, nextPt.location);
+                let distanceKm = getRouteDistanceKm(nextPt.transport, pt.location, nextPt.location);
+                if (routeLegs && routeLegs[index] && routeLegs[index].distance) {
+                  distanceKm = routeLegs[index].distance / 1000;
+                }
                 if (distanceKm > 0) distanceStr = `${distanceKm.toFixed(1)} km`;
               }
 

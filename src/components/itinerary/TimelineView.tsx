@@ -430,9 +430,9 @@ export function TimelineView({
   const locale = i18n.locale || 'zh-TW';
   const isEn = !locale.startsWith('zh');
 
-  const renderVerticalTransitBadge = (transport: any, from?: any, to?: any) => {
+  const renderVerticalTransitBadge = (transport: any, from?: any, to?: any, osrmDistanceKm?: number) => {
     const tData = transport || { mode: 'drive', duration: 10 };
-    const distKm = getRouteDistanceKm(tData, from, to);
+    const distKm = osrmDistanceKm !== undefined ? osrmDistanceKm : getRouteDistanceKm(tData, from, to);
     const distStr = distKm > 0 ? `${distKm.toFixed(1)} km` : '';
     
     let iconName: any = 'car-outline';
@@ -1021,7 +1021,13 @@ export function TimelineView({
               {!showGapRecommendation && !isLast && (
                 <View style={styles.verticalTransitContainer}>
                   <View style={[styles.transitVerticalLine, { backgroundColor: '#E2E8F0', height: 48 }]} />
-                  {renderVerticalTransitBadge(activities[index + 1].transport, act.location, activities[index + 1].location)}
+                  {(() => {
+                    let osrmDist = undefined;
+                    if (routeLegs && routeLegs[index] && routeLegs[index].distance) {
+                      osrmDist = routeLegs[index].distance / 1000;
+                    }
+                    return renderVerticalTransitBadge(activities[index + 1].transport, act.location, activities[index + 1].location, osrmDist);
+                  })()}
                 </View>
               )}
             </View>

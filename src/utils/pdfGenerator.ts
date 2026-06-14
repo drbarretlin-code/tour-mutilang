@@ -515,6 +515,10 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
           margin: 10mm;
         }
         @media print {
+          html, body {
+            height: auto !important;
+            overflow: visible !important;
+          }
           body {
             background-color: #FFFFFF;
             padding: 0;
