@@ -667,10 +667,10 @@ export function DestinationGuide({ onNavigateToTranslator, countryName }: Props)
           <View style={[styles.toolRow, { borderTopColor: colors.border, borderTopWidth: 1, paddingTop: 16, marginTop: 16 }]}>
             <Text style={[typography.bodyMedium, { color: colors.text, flexShrink: 1 }]}>{t('itinerary.destinationGuide.phrases.translator')}</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              {/* 直接前往 Google Cloud 申請語音/翻譯所需的 API 金鑰 */}
+              {/* 直接前往 Google AI Studio 申請所需的 API 金鑰 */}
               <TouchableOpacity
                 style={[styles.openToolBtn, { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.primary200, borderRadius: borderRadius.md, flexDirection: 'row', alignItems: 'center', gap: 4 }]}
-                onPress={() => Linking.openURL('https://console.cloud.google.com/apis/credentials')}
+                onPress={() => Linking.openURL('https://aistudio.google.com/app/apikey')}
               >
                 <Ionicons name="key-outline" size={14} color={colors.primary700} />
                 <Text style={[typography.labelMedium, { color: colors.primary700, fontWeight: '700' }]}>{t('itinerary.destinationGuide.phrases.applyApiKey')}</Text>
