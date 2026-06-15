@@ -48,7 +48,7 @@ const POI_CACHE_PREFIX = '@poi_cache_';
 const POI_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 14; // 14 天
 
 /** 將 App 的興趣標籤對應到 OpenTripMap 的 kinds 分類 */
-const INTEREST_TO_KINDS: Record<InterestTag, string[]> = {
+export const INTEREST_TO_KINDS: Record<InterestTag, string[]> = {
   culture: ['cultural', 'historic', 'architecture'],
   nature: ['natural', 'gardens_and_parks', 'view_points'],
   food: ['foods'],
@@ -65,7 +65,7 @@ const INTEREST_TO_KINDS: Record<InterestTag, string[]> = {
 };
 
 /** 由 OpenTripMap 的 kinds 字串推導出一個主要分類，供後續描述與圖片使用 */
-function deriveCategory(kinds: string): PoiCategory {
+export function deriveCategory(kinds: string): PoiCategory {
   const k = kinds || '';
   if (k.includes('religion')) return 'religion';
   if (k.includes('beaches')) return 'beach';

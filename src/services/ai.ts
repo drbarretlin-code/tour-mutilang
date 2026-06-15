@@ -1,8 +1,8 @@
-import { TripSurvey } from '../types/survey';
+import { TripSurvey, InterestTag } from '../types/survey';
 import { Itinerary, ItineraryDay, Activity, TransportInfo } from '../types/itinerary';
 import i18n from '../i18n';
 import { SUGGESTED_DESTINATIONS } from '../constants/destinations';
-import { fetchDestinationPOIs, verifyOpenTripMapKey, POI, PoiCategory } from './poi';
+import { fetchDestinationPOIs, verifyOpenTripMapKey, POI, PoiCategory, INTEREST_TO_KINDS, deriveCategory } from './poi';
 import { fetchWikipediaSummaries } from './enrich';
 import { getBuiltInTemplate, getBuiltInRestaurants, findLocalizedName, findLocalizedDescription } from '../data/destinations';
 import { detectGuideCountryKey, isCoveredGuideCountry, getDownloadableGuideCountry, normalizeCountryKey } from './guidePacks';
@@ -719,6 +719,22 @@ export const aiService = {
 
     const dests = alignedSurvey?.destinations || [];
     
+    // 初始化未分配興趣池，用於總體行程興趣全覆蓋
+    const unassignedInterests = new Set<InterestTag>(alignedSurvey?.interests || []);
+    const consumeInterestForSlot = (slotTypes: string[]) => {
+      for (const interest of Array.from(unassignedInterests)) {
+        const kinds = INTEREST_TO_KINDS[interest] || [];
+        const cats = kinds.map(deriveCategory);
+        for (const cat of cats) {
+          if (slotTypes.includes(cat)) {
+            unassignedInterests.delete(interest);
+            return [cat, ...slotTypes.filter(t => t !== cat)];
+          }
+        }
+      }
+      return slotTypes;
+    };
+
     // 預載 OTA Guide Packs (針對非內建目的地)
     const destNames = Array.from(new Set(dests.map(d => d?.name).filter(Boolean))) as string[];
     await guidePackManager.preloadGuidePacks(destNames, appLocale);
@@ -1356,7 +1372,8 @@ export const aiService = {
       }
 
       // 2. Morning Activity: 精力與興趣曲線 (High Energy)
-      const morningIdx = selectAttraction(templates, usedIndices, ['cultural', 'historic', 'museum', 'nature', 'religion']);
+      const morningTargetCats = consumeInterestForSlot(['cultural', 'historic', 'museum', 'nature', 'religion']);
+      const morningIdx = selectAttraction(templates, usedIndices, morningTargetCats);
       if (morningIdx !== -1) usedIndices.add(morningIdx);
 
       let morningTitle = morningIdx !== -1 ? templates.titles[morningIdx]! : (locale.startsWith('zh') ? '市區觀光 / 自由活動' : 'City Sightseeing / Free Time');
@@ -1492,7 +1509,8 @@ export const aiService = {
       const lunchLat = lunchPick ? lunchPick.lat : (currentDest.latitude || 0);
       const lunchLon = lunchPick ? lunchPick.lon : (currentDest.longitude || 0);
 
-      const afternoonIdx = selectAttraction(templates, usedIndices, ['amusement', 'entertainment', 'shopping', 'market', 'beach', 'park', 'viewpoint', 'other'], []);
+      const afternoonTargetCats = consumeInterestForSlot(['amusement', 'entertainment', 'shopping', 'market', 'beach', 'park', 'viewpoint', 'other']);
+      const afternoonIdx = selectAttraction(templates, usedIndices, afternoonTargetCats, []);
       if (afternoonIdx !== -1) usedIndices.add(afternoonIdx);
 
       const afternoonTitle = afternoonIdx !== -1 ? templates.titles[afternoonIdx]! : (locale.startsWith('zh') ? '市區觀光 / 自由活動' : 'City Sightseeing / Free Time');
@@ -1589,7 +1607,8 @@ export const aiService = {
 
       // 4c. Evening Activity (for packed pace, non-last-day)
       if (survey?.pace === 'packed' && !isLastDay) {
-        const eveningIdx = selectAttraction(templates, usedIndices, ['shopping', 'market', 'viewpoint', 'entertainment', 'other'], ['nature', 'beach', 'park']);
+        const eveningTargetCats = consumeInterestForSlot(['shopping', 'market', 'viewpoint', 'entertainment', 'other']);
+        const eveningIdx = selectAttraction(templates, usedIndices, eveningTargetCats, ['nature', 'beach', 'park']);
         if (eveningIdx !== -1) usedIndices.add(eveningIdx);
 
         const eveningTitle = eveningIdx !== -1 ? templates.titles[eveningIdx] : `${currentDest.name}${strings.commercialDistrict}`;
@@ -2028,20 +2047,22 @@ export async function regenerateActivityAlternatives(
 ): Promise<Activity[]> {
   const locale = survey?.locale || i18n.locale || 'zh-TW';
   const labels = CATEGORY_LABEL[locale] || CATEGORY_LABEL['en'];
-  const targetCategories = ACTIVITY_TYPE_TO_POI_CATEGORIES[currentActivity.type] || ['cultural', 'historic', 'viewpoint', 'other'];
 
   const lat = currentActivity.location?.latitude;
   const lon = currentActivity.location?.longitude;
 
   let pois: POI[] = [];
+  const targetInterests = survey?.interests || [];
+
   try {
     pois = await PACEngine.executeWithHealing(
       () => fetchDestinationPOIs({
         destName: region,
         lat: lat && lat !== 0 ? lat : undefined,
         lon: lon && lon !== 0 ? lon : undefined,
-        interests: currentActivity.type === 'restaurant' ? ['food'] : (survey?.interests || []).filter(i => i !== 'food'),
-        limit: 40,
+        interests: targetInterests,
+        radiusMeters: 1000,
+        limit: 100, // fetch more to ensure we get a good spread
         locale,
       }),
       () => [],
@@ -2053,20 +2074,80 @@ export async function regenerateActivityAlternatives(
     console.warn('[regenerateActivityAlternatives] POI 取得失敗', e);
   }
 
-  const excludeName = currentActivity.title.trim().toLowerCase();
-  let candidates = pois.filter(p =>
-    targetCategories.includes(p.category) && p.name.trim().toLowerCase() !== excludeName
-  );
-  if (candidates.length < 3) {
-    candidates = pois.filter(p => p.name.trim().toLowerCase() !== excludeName);
+  // If we got very few POIs within 1km, try fetching again with 5km as fallback
+  if (pois.length < 8) {
+    try {
+      const fallbackPois = await PACEngine.executeWithHealing(
+        () => fetchDestinationPOIs({
+          destName: region,
+          lat: lat && lat !== 0 ? lat : undefined,
+          lon: lon && lon !== 0 ? lon : undefined,
+          interests: targetInterests,
+          radiusMeters: 5000,
+          limit: 100,
+          locale,
+        }),
+        () => [],
+        `fetchDestinationPOIs_alternatives_fallback_${region}`,
+        1,
+        ['OTM_NO_KEY', 'OTM_INVALID_KEY']
+      );
+      // Merge unique POIs
+      const existingIds = new Set(pois.map(p => p.xid));
+      for (const p of fallbackPois) {
+        if (!existingIds.has(p.xid)) {
+          pois.push(p);
+        }
+      }
+    } catch (e) {
+      console.warn('[regenerateActivityAlternatives] Fallback POI 取得失敗', e);
+    }
   }
+
+  const excludeName = currentActivity.title.trim().toLowerCase();
+  const validPois = pois.filter(p => p.name.trim().toLowerCase() !== excludeName);
+
+  // Group by category to ensure diversity based on interests
+  const groupedPois: Record<string, POI[]> = {};
+  for (const p of validPois) {
+    if (!groupedPois[p.category]) groupedPois[p.category] = [];
+    groupedPois[p.category].push(p);
+  }
+
+  let candidates: POI[] = [];
+  const selectedXids = new Set<string>();
+
+  // Pick the best from each available category first
+  const categories = Object.keys(groupedPois);
+  for (const cat of categories) {
+    // Sort by rate descending
+    groupedPois[cat].sort((a, b) => b.rate - a.rate);
+    const best = groupedPois[cat][0];
+    if (best) {
+      candidates.push(best);
+      selectedXids.add(best.xid);
+    }
+  }
+
+  // If we need more to reach 8, fill with remaining highest rated
+  const remaining = validPois
+    .filter(p => !selectedXids.has(p.xid))
+    .sort((a, b) => b.rate - a.rate);
+
+  for (const p of remaining) {
+    if (candidates.length >= 8) break;
+    candidates.push(p);
+    selectedXids.add(p.xid);
+  }
+
+  // If still no candidates, fallback to static restaurants if applicable
   if (candidates.length === 0) {
     // 餐廳/咖啡無 POI 資料時，退回內建實體餐廳清單，確保「換一個」仍能提供真實選擇。
     if (currentActivity.type === 'restaurant' || currentActivity.type === 'cafe') {
       const seeds = getDestRestaurants(region, locale)
         .filter(s => s.title.trim().toLowerCase() !== excludeName && s.localTitle.trim().toLowerCase() !== excludeName);
       if (seeds.length > 0) {
-        return seeds.slice(0, 3).map((s, idx) => ({
+        return seeds.slice(0, 8).map((s, idx) => ({
           ...currentActivity,
           id: `${currentActivity.id}-alt-${idx}`,
           title: s.title,
@@ -2086,7 +2167,7 @@ export async function regenerateActivityAlternatives(
   }
 
   return candidates
-    .slice(0, 3)
+    .slice(0, 8)
     .map(poi => buildAlternativeFromPOI(poi, currentActivity, nextActivity, region, locale, labels));
 }
 
