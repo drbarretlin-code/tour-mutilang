@@ -312,7 +312,7 @@ function getRideHailingInfo(regionName: string, isEn: boolean) {
       platform2Color: '#1A1A1A',
       transitLabel: isEn ? 'yoxi / Uber' : 'yoxi / Uber',
     };
-  } else if (rName.includes('泰國') || rName.includes('曼谷') || rName.includes('thailand') || rName.includes('bangkok') || rName.includes('bkk')) {
+  } else if (rName.includes('泰國') || rName.includes('曼谷') || rName.includes('芭達雅') || rName.includes('普吉') || rName.includes('清邁') || rName.includes('thailand') || rName.includes('bangkok') || rName.includes('bkk') || rName.includes('pattaya') || rName.includes('phuket') || rName.includes('chiang')) {
     return {
       platform1Name: isEn ? 'Grab' : 'Grab App',
       platform1Url: 'https://www.grab.com/',

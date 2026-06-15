@@ -1091,7 +1091,7 @@ export const aiService = {
     const isHotelItem = (v?: string, notes?: string) => {
       if (notes && /住宿飯店|hotel/i.test(notes)) return true;
       if (v && /研討會|conference|seminar|展覽/i.test(v)) return false;
-      return !!v && /飯店|hotel|resort|villa|inn|住宿|旅館|ホテル/i.test(v);
+      return !!v && /飯店|酒店|旅店|民宿|hotel|resort|villa|inn|住宿|旅館|ホテル/i.test(v);
     };
     const parseRange = (raw?: string): { startStr: string; endStr: string } | null => {
       if (!raw) return null;
