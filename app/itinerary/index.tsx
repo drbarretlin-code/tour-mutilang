@@ -98,9 +98,27 @@ export default function ItineraryScreen() {
   useEffect(() => {
     let cancelled = false;
     verifyOpenTripMapKey()
-      .then(d => { if (!cancelled) setOtmDiag(d); })
-      .catch(() => { /* ignore */ });
-    return () => { cancelled = true; };
+      .then(diag => { if (!cancelled) setOtmDiag(diag); })
+      .catch(() => { if (!cancelled) setOtmDiag(null); });
+
+    // 設定真正的離線連線偵測
+    if (typeof navigator !== 'undefined') {
+      setIsOffline(!navigator.onLine);
+    }
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
+    }
+
+    return () => {
+      cancelled = true;
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+      }
+    };
   }, []);
 
   const itineraryRef = useRef(itinerary);
@@ -124,7 +142,6 @@ export default function ItineraryScreen() {
           if (cachedItinerary) {
             currentIt = JSON.parse(cachedItinerary) as Itinerary;
             setItinerary(currentIt);
-            setIsOffline(true);
           }
         }
 
