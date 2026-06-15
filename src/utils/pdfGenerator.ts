@@ -579,26 +579,33 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
         }
         @media print {
           html, body {
-            height: auto !important;
-            overflow: visible !important;
+            height: auto;
+            width: 100%;
           }
           body {
             background-color: #FFFFFF;
             padding: 0;
-            max-width: 100%;
+            margin: 0;
+            max-width: none;
           }
           .day-section {
             box-shadow: none;
             padding: 8px 0;
             border: none;
             border-bottom: 1px solid #E2E8F0;
+            page-break-before: always;
+            break-before: page;
           }
           .prep-card {
             box-shadow: none;
             border: 1px solid #CBD5E1;
+            page-break-before: auto;
+            break-before: auto;
           }
           .activity-card {
             border: 1px solid #CBD5E1;
+            page-break-inside: avoid;
+            break-inside: avoid;
           }
         }
       </style>

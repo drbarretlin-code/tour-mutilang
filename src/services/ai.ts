@@ -1084,9 +1084,10 @@ export const aiService = {
     const destUsedRestIndices: Record<string, Set<number>> = {};
 
     // Collect references from user input survey (Attractions / URLs)
-    const userMustVisits = survey?.mustVisitAttractions || [];
-    const userReferences = survey?.referenceAttractions || [];
-    const userSpecificLocations = survey?.specificLocations || [];
+    // Deep clone arrays to avoid mutating survey state when marking matched=true
+    const userMustVisits = (survey?.mustVisitAttractions || []).map(a => ({ ...a, matched: false }));
+    const userReferences = (survey?.referenceAttractions || []).map(a => ({ ...a, matched: false }));
+    const userSpecificLocations = (survey?.specificLocations || []).map(l => ({ ...l, matched: false }));
 
     // 判斷某筆特定地點是否為住宿（飯店/度假村/villa…），以及其涵蓋的日期範圍。
     const isHotelItem = (v?: string, notes?: string, isAccommodation?: boolean) => {
@@ -1101,8 +1102,15 @@ export const aiService = {
       // Ensure zero-padding and year for mm-dd formats
       if (/^\d{1,2}-\d{1,2}[~\-]\d{1,2}-\d{1,2}$/.test(s)) {
         const year = survey?.dates?.startDate ? new Date(survey.dates.startDate).getFullYear() : new Date().getFullYear();
-        const parts = s.split(/[~\-]/);
-        s = `${year}-${parts[0]}~${year}-${parts[1]}`;
+        const splitChar = s.includes('~') ? '~' : '-';
+        const parts = s.split(splitChar);
+        if (parts.length === 4) {
+          // It was something like 06-15-06-18
+          s = `${year}-${parts[0]}-${parts[1]}~${year}-${parts[2]}-${parts[3]}`;
+        } else if (parts.length === 2) {
+          // It was something like 06-15~06-18
+          s = `${year}-${parts[0]}~${year}-${parts[1]}`;
+        }
       } else if (/^\d{1,2}-\d{1,2}$/.test(s)) {
         const year = survey?.dates?.startDate ? new Date(survey.dates.startDate).getFullYear() : new Date().getFullYear();
         s = `${year}-${s}`;
@@ -1845,7 +1853,7 @@ export const aiService = {
         date: dateStr,
         title: dayTitleTemplate,
         summary: daySummaryTemplate,
-        region: currentDest.name,
+        region: currentDest.country ? `${currentDest.name}, ${currentDest.country}` : currentDest.name,
         estimatedCost: {
           amount: (survey?.dailyMealBudget || 800) * ((survey?.travelers?.adults || 2) + (survey?.travelers?.children || []).length),
           currency
