@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Switch } from 'react-native';
 import { useSurvey } from '../../context/SurveyContext';
 import { useTheme } from '../../context/ThemeContext';
 import { Card } from '../common/Card';
@@ -81,6 +81,7 @@ export function StepAttractions() {
   const [specTime, setSpecTime] = useState('');
   const [specDuration, setSpecDuration] = useState('');
   const [specNotes, setSpecNotes] = useState('');
+  const [specIsAccommodation, setSpecIsAccommodation] = useState(false);
 
   // Add URL Reference
   const handleAddRefUrl = () => {
@@ -124,7 +125,8 @@ export function StepAttractions() {
       specLat,
       specLng,
       specPlaceId,
-      specAddress
+      specAddress,
+      specIsAccommodation
     );
     setSpecName('');
     setSpecLat(undefined);
@@ -135,6 +137,7 @@ export function StepAttractions() {
     setSpecTime('');
     setSpecDuration('');
     setSpecNotes('');
+    setSpecIsAccommodation(false);
   };
 
 
@@ -212,7 +215,7 @@ export function StepAttractions() {
         <View style={{ marginTop: spacing.sm }} />
         <View style={styles.flexRowBetween}>
           <Input
-            placeholder={t('survey.attractions.specificLocation.specifyDate')}
+            placeholder="e.g. 2026-07-14 or 07-14~07-16"
             value={specDate}
             onChangeText={setSpecDate}
             containerStyle={{ width: '48%' }}
@@ -240,6 +243,14 @@ export function StepAttractions() {
             containerStyle={{ width: '48%' }}
           />
         </View>
+        <View style={[styles.flexRow, { marginTop: spacing.sm }]}>
+          <Switch
+            value={specIsAccommodation}
+            onValueChange={setSpecIsAccommodation}
+            trackColor={{ false: colors.border, true: colors.primary500 }}
+          />
+          <Text style={[typography.bodyMedium, { color: colors.text, marginLeft: spacing.xs }]}>此地點為住宿飯店（將安排為當晚住宿）</Text>
+        </View>
         <Button
           title={t('survey.attractions.specificLocation.addBtn')}
           variant="outlined"
@@ -253,10 +264,10 @@ export function StepAttractions() {
           {(survey?.specificLocations || []).map((item) => (
             <View key={item.id} style={[styles.attachmentBadge, { backgroundColor: colors.backgroundSecondary, borderColor: colors.border }]}>
               <View style={[styles.flexRow, { flex: 1 }]}>
-                <Ionicons name="location" size={18} color={colors.primary500} style={{ marginRight: spacing.xs }} />
+                <Ionicons name={item.isAccommodation ? "bed" : "location"} size={18} color={item.isAccommodation ? colors.primary500 : colors.primary500} style={{ marginRight: spacing.xs }} />
                 <View style={{ flex: 1 }}>
                   <Text numberOfLines={1} style={[typography.bodyMedium, { color: colors.text, fontWeight: '600' }]}>
-                    {item.value}
+                    {item.value} {item.isAccommodation && <Text style={{ color: colors.primary500, fontSize: 12 }}>(住宿)</Text>}
                   </Text>
                   {(item.preferredDate || item.preferredTime || item.duration || item.notes) && (
                     <Text style={[typography.bodySmall, { color: colors.textSecondary }]}>

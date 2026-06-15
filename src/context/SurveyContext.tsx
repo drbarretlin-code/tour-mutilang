@@ -24,7 +24,7 @@ interface SurveyContextType {
   removeReferenceAttraction: (id: string) => void;
   addMustVisitAttraction: (type: 'url' | 'image' | 'file' | 'text', value: string, preferredDate?: string, preferredTime?: string, fileName?: string, mimeType?: string, lat?: number, lng?: number, placeId?: string, address?: string) => void;
   removeMustVisitAttraction: (id: string) => void;
-  addSpecificLocation: (type: 'url' | 'image' | 'file' | 'text', value: string, preferredDate?: string, preferredTime?: string, duration?: number, notes?: string, fileName?: string, mimeType?: string, lat?: number, lng?: number, placeId?: string, address?: string) => void;
+  addSpecificLocation: (type: 'url' | 'image' | 'file' | 'text', value: string, preferredDate?: string, preferredTime?: string, duration?: number, notes?: string, fileName?: string, mimeType?: string, lat?: number, lng?: number, placeId?: string, address?: string, isAccommodation?: boolean) => void;
   removeSpecificLocation: (id: string) => void;
   saveDraft: () => Promise<void>;
   submitSurvey: () => Promise<void>;
@@ -236,10 +236,11 @@ export function SurveyProvider({ children }: { children: ReactNode }) {
     lat?: number,
     lng?: number,
     placeId?: string,
-    address?: string
+    address?: string,
+    isAccommodation?: boolean
   ) => {
     const id = Math.random().toString(36).substring(2, 9);
-    const newItem = { id, type, value, preferredDate, preferredTime, duration, notes, fileName, mimeType, lat, lng, placeId, address };
+    const newItem = { id, type, value, preferredDate, preferredTime, duration, notes, fileName, mimeType, lat, lng, placeId, address, isAccommodation };
     updateSurvey({
       specificLocations: [...(survey.specificLocations || []), newItem]
     });

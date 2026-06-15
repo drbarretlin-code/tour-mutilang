@@ -1088,7 +1088,8 @@ export const aiService = {
     const userSpecificLocations = survey?.specificLocations || [];
 
     // 判斷某筆特定地點是否為住宿（飯店/度假村/villa…），以及其涵蓋的日期範圍。
-    const isHotelItem = (v?: string, notes?: string) => {
+    const isHotelItem = (v?: string, notes?: string, isAccommodation?: boolean) => {
+      if (isAccommodation) return true;
       if (notes && /住宿飯店|hotel/i.test(notes)) return true;
       if (v && /研討會|conference|seminar|展覽/i.test(v)) return false;
       return !!v && /飯店|酒店|旅店|民宿|hotel|resort|villa|inn|住宿|旅館|ホテル/i.test(v);
@@ -1107,7 +1108,7 @@ export const aiService = {
     // 因現實邏輯中退房當日不會續住，當晚應改採下一段住宿（由呼叫端再查詢次日日期取得）。
     const resolveHotelForDate = (dateStr: string, excludeCheckoutDay = false): { name: string; notes: string } | null => {
       for (const loc of userSpecificLocations) {
-        if (!isHotelItem(loc.value, loc.notes)) continue;
+        if (!isHotelItem(loc.value, loc.notes, loc.isAccommodation)) continue;
         const r = loc.preferredDate ? parseRange(loc.preferredDate) : { 
           startStr: survey?.dates?.startDate ? new Date(survey.dates.startDate).toISOString().split('T')[0] : '1970-01-01', 
           endStr: survey?.dates?.endDate ? new Date(survey.dates.endDate).toISOString().split('T')[0] : '2999-12-31' 

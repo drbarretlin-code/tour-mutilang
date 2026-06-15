@@ -160,6 +160,7 @@ export interface MultiModalInput {
   lng?: number;
   placeId?: string;
   address?: string;
+  isAccommodation?: boolean;
 }
 
 // ─── Composite Survey Data ───
