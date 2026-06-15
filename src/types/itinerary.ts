@@ -98,6 +98,15 @@ export interface CostEstimate {
   }[];
 }
 
+export interface SurveyLocation {
+  value: string;
+  notes?: string;
+  preferredDate?: string;
+  preferredTime?: string;
+  preferredDay?: number;
+  matched?: boolean;
+}
+
 export interface HotelInfo {
   name: string;
   address: string;

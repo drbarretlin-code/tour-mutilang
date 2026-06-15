@@ -1261,9 +1261,15 @@ export const aiService = {
       const activities: Activity[] = [];
 
       // 非住宿的特定地點才當作當日景點插入；住宿改由 hotel loop 起訖點處理，不重複列為景點。
-      const matchedSpecific = userSpecificLocations.find(item => !isHotelItem(item.value, item.notes) && item.preferredDate === dateStr)
-        || userSpecificLocations.find(item => !isHotelItem(item.value, item.notes) && (() => { const r = parseRange(item.preferredDate); return !!r && dateStr >= r.startStr && dateStr <= r.endStr; })());
-      const matchedMust = matchedSpecific ? null : (userMustVisits.find(item => item.preferredDate === dateStr) || userMustVisits[i]);
+      let matchedSpecific = userSpecificLocations.find(item => !item.matched && !isHotelItem(item.value, item.notes) && (item.preferredDate === dateStr || item.preferredDay === i + 1))
+        || userSpecificLocations.find(item => !item.matched && !isHotelItem(item.value, item.notes) && (() => { const r = parseRange(item.preferredDate); return !!r && dateStr >= r.startStr && dateStr <= r.endStr; })());
+      if (matchedSpecific) matchedSpecific.matched = true;
+
+      let matchedMust = matchedSpecific ? null : userMustVisits.find(item => !item.matched && (item.preferredDate === dateStr || item.preferredDay === i + 1));
+      if (!matchedSpecific && !matchedMust) {
+         matchedMust = userMustVisits.find(item => !item.matched && !item.preferredDate && !item.preferredDay);
+      }
+      if (matchedMust) matchedMust.matched = true;
 
       // 1. Depart Hotel or Arrive at Airport
       if (i === 0) {

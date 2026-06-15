@@ -492,10 +492,17 @@ export function TimelineView({
 
   const getActivityTypeLabel = (type: string) => {
     switch (type) {
-      case 'transport': return t('itinerary.timelineView.types.transport');
-      case 'meal': return t('itinerary.timelineView.types.meal');
+      case 'transport':
+      case 'flight': return t('itinerary.timelineView.types.transport');
+      case 'meal':
+      case 'restaurant':
+      case 'cafe': return t('itinerary.timelineView.types.meal');
       case 'hotel': return t('itinerary.timelineView.types.hotel');
-      case 'attraction': return t('itinerary.timelineView.types.attraction');
+      case 'attraction':
+      case 'activity': return t('itinerary.timelineView.types.attraction');
+      case 'shopping': return '🛍️ 購物';
+      case 'spa': return '💆 SPA';
+      case 'entertainment': return '🎟️ 娛樂';
       default: return t('itinerary.timelineView.types.default');
     }
   };
@@ -517,8 +524,9 @@ export function TimelineView({
     // Resolve via findLocalizedName to get the localized blogger-style title for the active UI locale
     // Skip for 'transport' to prevent airports using city-center coords from mis-matching with restaurants
     if (act.type !== 'transport') {
-      const localized = findLocalizedName(uiName, act.location?.latitude || 0, act.location?.longitude || 0, locale);
-      if (localized.title && localized.title !== uiName) {
+      const searchName = uiName.replace(/^(午餐：|晚餐：|夜間活動：|Lunch: |Dinner: |Evening Activity: )/, '');
+      const localized = findLocalizedName(searchName, act.location?.latitude || 0, act.location?.longitude || 0, locale);
+      if (localized.title && localized.title !== searchName) {
         uiName = localized.title;
       }
     }
