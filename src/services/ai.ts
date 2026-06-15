@@ -1688,6 +1688,8 @@ export const aiService = {
         });
       } else {
         const lastAct = activities[activities.length - 1];
+        const hotelLat = currentDest.latitude || 0;
+        const hotelLon = currentDest.longitude || 0;
         const lastActLat = lastAct ? lastAct.location.latitude : hotelLat;
         const lastActLon = lastAct ? lastAct.location.longitude : hotelLon;
         const distToHotel = Math.round(getDistance(lastActLat, lastActLon, hotelLat, hotelLon));
