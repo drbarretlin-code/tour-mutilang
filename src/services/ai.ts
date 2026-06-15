@@ -1455,21 +1455,12 @@ export const aiService = {
       const lunchPick = lunchPickObj?.restaurant;
 
       const morningEnd = activities[activities.length - 1].endTime;
-      const distToLunch = lunchPick ? Math.round(getDistance(morningLat, morningLon, lunchPick.lat, lunchPick.lon)) : 500;
+      const distToLunch = lunchPick ? Math.round(getDistance(morningLat, morningLon, lunchPick.lat, lunchPick.lon)) : 0;
       const lunchTransit = getTransitInfo(modes, 15, distToLunch);
       const earliestLunchStart = addMinutesToTime(morningEnd, lunchTransit.duration);
       const lunchStartTime = earliestLunchStart < '11:30' ? '11:30' : (earliestLunchStart > '13:30' ? '13:30' : earliestLunchStart);
       const lunchDuration = survey?.pace === 'packed' ? 60 : 90;
       const lunchEndTime = addMinutesToTime(lunchStartTime, lunchDuration);
-
-      // 餐後安排 15 分鐘的「餐後散步/緩衝交通」
-      const postLunchWalkMinutes = 15;
-      const afternoonTransit = getTransitInfo(modes, 15 + postLunchWalkMinutes, 5000);
-      if (locale.startsWith('zh')) {
-        afternoonTransit.description = `（含餐後散步 ${postLunchWalkMinutes} 分鐘）` + afternoonTransit.description;
-      } else {
-        afternoonTransit.description = `(incl. ${postLunchWalkMinutes}-min post-meal walk) ` + afternoonTransit.description;
-      }
 
       activities.push({
         id: `act-${i}-2`,
@@ -1487,7 +1478,7 @@ export const aiService = {
           longitude: lunchPick ? lunchPick.lon : (currentDest.longitude || 0)
         },
         duration: lunchDuration,
-        transport: afternoonTransit,
+        transport: lunchTransit,
         links: lunchPick ? [{ label: strings.grabLink, url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lunchPick.localTitle)}`, type: 'info' as const }] : [],
         notes: strings.lunchNotes + (dietaryNote ? `\n${dietaryNote}` : ''),
         isMustVisit: false,
@@ -1498,13 +1489,10 @@ export const aiService = {
       });
 
       // 4. Late Afternoon Activity: 季節日照與日光感知
-      const afternoonStartTime = addMinutesToTime(lunchEndTime, afternoonTransit.duration);
-      const startingHour = parseInt(afternoonStartTime.split(':')[0]) || 14;
-      const startMonth = start.getMonth();
-      const sunsetHour = getSunsetHour(startMonth);
-      const avoidCats = (startingHour >= sunsetHour) ? ['nature', 'beach', 'park'] : [];
+      const lunchLat = lunchPick ? lunchPick.lat : (currentDest.latitude || 0);
+      const lunchLon = lunchPick ? lunchPick.lon : (currentDest.longitude || 0);
 
-      const afternoonIdx = selectAttraction(templates, usedIndices, ['amusement', 'entertainment', 'shopping', 'market', 'beach', 'park', 'viewpoint', 'other'], avoidCats);
+      const afternoonIdx = selectAttraction(templates, usedIndices, ['amusement', 'entertainment', 'shopping', 'market', 'beach', 'park', 'viewpoint', 'other'], []);
       if (afternoonIdx !== -1) usedIndices.add(afternoonIdx);
 
       const afternoonTitle = afternoonIdx !== -1 ? templates.titles[afternoonIdx]! : (locale.startsWith('zh') ? '市區觀光 / 自由活動' : 'City Sightseeing / Free Time');
@@ -1514,6 +1502,17 @@ export const aiService = {
       const afternoonLat = afternoonCoord ? afternoonCoord.lat : (currentDest.latitude || 0);
       const afternoonLon = afternoonCoord ? afternoonCoord.lon : (currentDest.longitude || 0);
 
+      const distToAfternoon = Math.round(getDistance(lunchLat, lunchLon, afternoonLat, afternoonLon));
+      const postLunchWalkMinutes = 15;
+      const afternoonTransit = getTransitInfo(modes, 15 + postLunchWalkMinutes, distToAfternoon);
+      if (locale.startsWith('zh')) {
+        afternoonTransit.description = `（含餐後散步 ${postLunchWalkMinutes} 分鐘）` + afternoonTransit.description;
+      } else {
+        afternoonTransit.description = `(incl. ${postLunchWalkMinutes}-min post-meal walk) ` + afternoonTransit.description;
+      }
+
+      const afternoonStartTime = addMinutesToTime(lunchEndTime, afternoonTransit.duration);
+      
       const isLastDay = i === dayCount - 1;
       const depTime = (returnFlight && returnFlight.departureTime) ? returnFlight.departureTime : '18:00';
       const airportStart = subMinutesFromTime(depTime, 150);
@@ -1521,15 +1520,6 @@ export const aiService = {
       // 檢查最後一天是否有足夠時間吃晚餐
       const afternoonEndTime = addMinutesToTime(afternoonStartTime, afternoonDuration);
       const hasTimeForDinner = !isLastDay || (airportStart >= '19:00');
-
-      // 晚餐後的交通工具 (前往下一個景點或飯店/機場)
-      const postDinnerWalkMinutes = 15;
-      const postDinnerTransit = getTransitInfo(modes, 15 + postDinnerWalkMinutes, 5000);
-      if (locale.startsWith('zh')) {
-        postDinnerTransit.description = `（含餐後散步 ${postDinnerWalkMinutes} 分鐘）` + postDinnerTransit.description;
-      } else {
-        postDinnerTransit.description = `(incl. ${postDinnerWalkMinutes}-min post-meal walk) ` + postDinnerTransit.description;
-      }
 
       activities.push({
         id: `act-${i}-3`,
@@ -1547,7 +1537,7 @@ export const aiService = {
           longitude: afternoonLon
         },
         duration: afternoonDuration,
-        transport: hasTimeForDinner ? postDinnerTransit : getTransitInfo(modes, 15, 5000),
+        transport: afternoonTransit,
         links: [],
         notes: strings.activityNotes,
         isMustVisit: false,
@@ -1562,7 +1552,7 @@ export const aiService = {
         const dinnerPickObj = resolveDiningNearby(afternoonLat, afternoonLon, destRestaurants, usedRestIndices);
         if (dinnerPickObj) usedRestIndices.add(dinnerPickObj.index);
         const dinnerPick = dinnerPickObj?.restaurant;
-        const distToDinner = dinnerPick ? Math.round(getDistance(afternoonLat, afternoonLon, dinnerPick.lat, dinnerPick.lon)) : 500;
+        const distToDinner = dinnerPick ? Math.round(getDistance(afternoonLat, afternoonLon, dinnerPick.lat, dinnerPick.lon)) : 0;
         const dinnerTransit = getTransitInfo(modes, 15, distToDinner);
 
         const earliestDinnerStart = addMinutesToTime(afternoonEndTime, dinnerTransit.duration);
@@ -1586,7 +1576,7 @@ export const aiService = {
             longitude: dinnerPick ? dinnerPick.lon : (currentDest.longitude || 0)
           },
           duration: dinnerDuration,
-          transport: getTransitInfo(modes, 15, 5000),
+          transport: dinnerTransit,
           links: dinnerPick ? [{ label: strings.grabLink, url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dinnerPick.localTitle)}`, type: 'info' as const }] : [],
           notes: dietaryNote ? `\n${dietaryNote}` : '',
           isMustVisit: false,
@@ -1606,11 +1596,21 @@ export const aiService = {
         const eveningLocalTitle = eveningIdx !== -1 ? templates.localTitles[eveningIdx] : eveningTitle;
         const eveningDesc = eveningIdx !== -1 ? templates.descs[eveningIdx] : strings.eveningActivityDesc;
         const eveningCoord = eveningIdx !== -1 ? templates.coords?.[eveningIdx] : null;
+        const eveningLat = eveningCoord ? eveningCoord.lat : (currentDest.latitude || 0);
+        const eveningLon = eveningCoord ? eveningCoord.lon : (currentDest.longitude || 0);
         const eveningPhoto = eveningIdx !== -1 ? templates.images[eveningIdx] : (templates.images[1] || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600');
 
-        const lastActEnd = activities[activities.length - 1].endTime;
-        const eveningTransit = getTransitInfo(modes, 15, 5000);
-        const eveningStartTime = addMinutesToTime(lastActEnd, eveningTransit.duration);
+        const lastAct = activities[activities.length - 1];
+        const distToEvening = Math.round(getDistance(lastAct.location.latitude, lastAct.location.longitude, eveningLat, eveningLon));
+        const postDinnerWalkMinutes = 15;
+        const eveningTransit = getTransitInfo(modes, 15 + postDinnerWalkMinutes, distToEvening);
+        if (locale.startsWith('zh')) {
+          eveningTransit.description = `（含餐後散步 ${postDinnerWalkMinutes} 分鐘）` + eveningTransit.description;
+        } else {
+          eveningTransit.description = `(incl. ${postDinnerWalkMinutes}-min post-meal walk) ` + eveningTransit.description;
+        }
+
+        const eveningStartTime = addMinutesToTime(lastAct.endTime, eveningTransit.duration);
 
         activities.push({
           id: `act-${i}-evening`,
@@ -1624,11 +1624,11 @@ export const aiService = {
           location: {
             name: eveningTitle,
             address: `${currentDest.name}`,
-            latitude: eveningCoord ? eveningCoord.lat : (currentDest.latitude || 0),
-            longitude: eveningCoord ? eveningCoord.lon : (currentDest.longitude || 0)
+            latitude: eveningLat,
+            longitude: eveningLon
           },
           duration: 60,
-          transport: getTransitInfo(modes, 15, 5000),
+          transport: eveningTransit,
           links: [],
           notes: strings.activityNotes,
           isMustVisit: false,
@@ -1641,6 +1641,7 @@ export const aiService = {
 
       // 5. Return to Hotel or Depart to Airport
       if (i === dayCount - 1) {
+
         const titleText = (returnFlight && returnFlight.flightNumber) ? `${strings.arriveAirport} (${returnFlight.flightNumber})` : strings.arriveAirport;
         activities.push({
           id: `act-${i}-end`,
@@ -1668,7 +1669,10 @@ export const aiService = {
         });
       } else {
         const lastAct = activities[activities.length - 1];
-        const returnTransport = getTransitInfo(modes, 15, 5000);
+        const lastActLat = lastAct ? lastAct.location.latitude : hotelLat;
+        const lastActLon = lastAct ? lastAct.location.longitude : hotelLon;
+        const distToHotel = Math.round(getDistance(lastActLat, lastActLon, hotelLat, hotelLon));
+        const returnTransport = getTransitInfo(modes, 15, distToHotel);
         const RETURN_DEADLINE = '21:00';
         const RETURN_DURATION = 30; // 回到飯店後安頓時間
         let returnStartTime = lastAct ? addMinutesToTime(lastAct.endTime, returnTransport.duration) : '18:00';
