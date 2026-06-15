@@ -1095,14 +1095,12 @@ export const aiService = {
     };
     const parseRange = (raw?: string): { startStr: string; endStr: string } | null => {
       if (!raw) return null;
-      const parts = raw.split(/\s*[~]\s*|\s+to\s+/i).map(s => s.trim()).filter(Boolean);
-      let startStr = parts[0];
-      let endStr = parts[1] || parts[0];
-      if (parts.length === 1) {
-        const m = raw.match(/^(\d{4}-\d{2}-\d{2})\s*-\s*(\d{4}-\d{2}-\d{2})$/);
-        if (m) { startStr = m[1]; endStr = m[2]; }
-      }
-      return { startStr, endStr };
+      let s = raw.replace(/\//g, '-');
+      const m2 = s.match(/(\d{4}-\d{2}-\d{2}).*?(\d{4}-\d{2}-\d{2})/);
+      if (m2) return { startStr: m2[1], endStr: m2[2] };
+      const m1 = s.match(/(\d{4}-\d{2}-\d{2})/);
+      if (m1) return { startStr: m1[1], endStr: m1[1] };
+      return null;
     };
     // 找出涵蓋指定日期的住宿名稱（支援日期區間），作為當日 hotel loop 的起訖點。
     // excludeCheckoutDay：若該日恰為住宿區間的最後一天（退房日，且非單日入住），則不視為「當晚住宿」，
@@ -1110,7 +1108,10 @@ export const aiService = {
     const resolveHotelForDate = (dateStr: string, excludeCheckoutDay = false): { name: string; notes: string } | null => {
       for (const loc of userSpecificLocations) {
         if (!isHotelItem(loc.value, loc.notes)) continue;
-        const r = parseRange(loc.preferredDate);
+        const r = loc.preferredDate ? parseRange(loc.preferredDate) : { 
+          startStr: survey?.dates?.startDate ? new Date(survey.dates.startDate).toISOString().split('T')[0] : '1970-01-01', 
+          endStr: survey?.dates?.endDate ? new Date(survey.dates.endDate).toISOString().split('T')[0] : '2999-12-31' 
+        };
         if (!r) continue;
         if (excludeCheckoutDay && dateStr === r.endStr && r.endStr !== r.startStr) continue;
         if (dateStr >= r.startStr && dateStr <= r.endStr) return { name: loc.value, notes: loc.notes || '' };
