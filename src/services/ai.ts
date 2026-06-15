@@ -220,17 +220,23 @@ function selectAttraction(
   avoidCategories: string[] = []
 ): number {
   if (!tpl.titles || !tpl.titles.length) return 0;
+
+  const effectiveAvoid = [...avoidCategories];
+  if (!targetCategories.includes('foods')) {
+    effectiveAvoid.push('foods', 'restaurant', 'cafe', 'accomodations', 'hotel');
+  }
+
   for (let i = 0; i < tpl.titles.length; i++) {
     if (usedIndices.has(i)) continue;
     const cat = getCategory(tpl, i);
-    if (targetCategories.includes(cat) && !avoidCategories.includes(cat)) {
+    if (targetCategories.includes(cat) && !effectiveAvoid.includes(cat)) {
       return i;
     }
   }
   for (let i = 0; i < tpl.titles.length; i++) {
     if (usedIndices.has(i)) continue;
     const cat = getCategory(tpl, i);
-    if (!avoidCategories.includes(cat)) {
+    if (!effectiveAvoid.includes(cat)) {
       return i;
     }
   }
