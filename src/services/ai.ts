@@ -1325,7 +1325,14 @@ export const aiService = {
 
       let matchedMust = matchedSpecific ? null : userMustVisits.find(item => !item.matched && (item.preferredDate === dateStr || item.preferredDay === i + 1));
       if (!matchedSpecific && !matchedMust) {
-         matchedMust = userMustVisits.find(item => !item.matched && !item.preferredDate && !item.preferredDay);
+        matchedMust = userMustVisits.find(item => {
+          if (item.matched || item.preferredDate || item.preferredDay) return false;
+          // 通用型地緣性防護網 (Geographic Fence): 避免將含有「其他目的地」關鍵字的景點排入目前的目的地
+          const belongsToOtherDest = survey?.destinations?.some(d => 
+            d.name !== currentDest.name && item.value.toLowerCase().includes(d.name.toLowerCase())
+          );
+          return !belongsToOtherDest; // 若不屬於其他目的地，則可排入
+        });
       }
       if (matchedMust) matchedMust.matched = true;
 
