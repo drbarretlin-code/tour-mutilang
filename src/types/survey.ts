@@ -161,6 +161,8 @@ export interface MultiModalInput {
   placeId?: string;
   address?: string;
   isAccommodation?: boolean;
+  matched?: boolean; // internally used by generator to track usage
+  preferredDay?: number; // internally used by generator
 }
 
 // ─── Composite Survey Data ───

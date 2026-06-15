@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import { Modal, View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 import { Activity } from '../../types/itinerary';
@@ -48,10 +48,9 @@ export function ReRollModal({ visible, isLoading, alternatives, onClose, onSelec
             </View>
           ) : (
             alternatives.map((alt, index) => (
-              <TouchableOpacity 
+              <View 
                 key={alt.id || index} 
                 style={[styles.altCard, { borderColor: colors.border, borderRadius: borderRadius.md, backgroundColor: colors.surface }]}
-                onPress={() => onSelect(alt)}
               >
                 <View style={styles.altHeader}>
                   <View style={{ flex: 1 }}>
@@ -84,12 +83,28 @@ export function ReRollModal({ visible, isLoading, alternatives, onClose, onSelec
                   {alt.description || alt.notes}
                 </Text>
 
-                <View style={[styles.selectBtn, { backgroundColor: colors.primary50 }]}>
-                  <Text style={[typography.labelMedium, { color: colors.primary600, fontWeight: '700' }]}>
-                    {t('itinerary.reroll.selectBtn', { defaultValue: '選擇此方案 (Select)' })}
-                  </Text>
+                <View style={{ flexDirection: 'row', gap: 10, marginTop: 12 }}>
+                  <TouchableOpacity 
+                    style={[styles.selectBtn, { flex: 1, backgroundColor: '#F3F4F6', borderWidth: 1, borderColor: '#D1D5DB' }]}
+                    onPress={() => Linking.openURL(`https://www.google.com/search?q=${encodeURIComponent(alt.localTitle || alt.title)}`)}
+                  >
+                    <Ionicons name="search" size={16} color="#4B5563" style={{ marginRight: 6 }} />
+                    <Text style={[typography.labelMedium, { color: '#4B5563', fontWeight: '700' }]}>
+                      {t('itinerary.reroll.googleSearch', { defaultValue: 'Google 搜尋' })}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity 
+                    style={[styles.selectBtn, { flex: 1, backgroundColor: colors.primary50 }]}
+                    onPress={() => onSelect(alt)}
+                  >
+                    <Ionicons name="checkmark-circle-outline" size={16} color={colors.primary600} style={{ marginRight: 6 }} />
+                    <Text style={[typography.labelMedium, { color: colors.primary600, fontWeight: '700' }]}>
+                      {t('itinerary.reroll.selectBtn', { defaultValue: '選擇此方案' })}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
+              </View>
             ))
           )}
         </ScrollView>
@@ -171,6 +186,8 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingVertical: 10,
     borderRadius: 8,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   }
 });

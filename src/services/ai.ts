@@ -429,7 +429,8 @@ function healItineraryCoordinates(itinerary: any, survey: TripSurvey) {
           notes: returnFlight ? `航班時間：${depTime}。請務必再三確認護照與隨身行李是否帶齊。` : '請提早2-3小時抵達機場。',
           photoUrl: 'local-asset://airport_map',
           cost: { amount: 0, currency },
-          openingHours: '24小時開放'
+          openingHours: '24小時開放',
+          source: 'ai'
         });
       } else {
         lastAct.photoUrl = 'local-asset://airport_map';
@@ -1333,6 +1334,7 @@ export const aiService = {
           links: [{ label: strings.airportLink, url: 'https://www.klook.com/', type: 'booking' }],
           notes: strings.airportNotes,
           isMustVisit: false,
+          source: 'ai',
           photoUrl: 'local-asset://airport_map',
           cost: { amount: 0, currency },
           openingHours: strings.airportHours
@@ -1359,6 +1361,7 @@ export const aiService = {
           links: [{ label: strings.hotelLink, url: 'https://www.klook.com/', type: 'booking' }],
           notes: nightHotelNotes,
           isMustVisit: false,
+          source: 'ai',
           cost: { amount: 0, currency },
           openingHours: '24小時開放'
         });
@@ -1383,6 +1386,7 @@ export const aiService = {
           links: [{ label: strings.hotelLink, url: 'https://www.klook.com/', type: 'booking' }],
           notes: dayHotelNotes,
           isMustVisit: false,
+          source: 'ai',
           cost: { amount: 0, currency },
           openingHours: '24小時開放'
         });
@@ -1472,6 +1476,7 @@ export const aiService = {
         links: morningLinks,
         notes: matchedSpecific?.notes || strings.attractionNotes,
         isMustVisit: !!matchedSpecific || !!matchedMust,
+        source: matchedSpecific ? 'specific' : matchedMust ? 'must-visit' : userReferences[i] ? 'reference' : 'ai',
         photoUrl: morningPhoto,
         rating: 4.8,
         cost: { amount: 0, currency },
@@ -1516,6 +1521,7 @@ export const aiService = {
         links: lunchPick ? [{ label: strings.grabLink, url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lunchPick.localTitle)}`, type: 'info' as const }] : [],
         notes: strings.lunchNotes + (dietaryNote ? `\n${dietaryNote}` : ''),
         isMustVisit: false,
+        source: 'ai',
         photoUrl: templates.images[2] || templates.images[0],
         rating: 4.7,
         cost: { amount: lunchPick ? (lunchPick.cost || mealAmount) : mealAmount, currency },
@@ -1576,6 +1582,7 @@ export const aiService = {
         links: [],
         notes: strings.activityNotes,
         isMustVisit: false,
+        source: 'ai',
         photoUrl: templates.images[afternoonIdx] || templates.images[1],
         rating: 4.9,
         cost: { amount: 0, currency },
@@ -1615,6 +1622,7 @@ export const aiService = {
           links: dinnerPick ? [{ label: strings.grabLink, url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dinnerPick.localTitle)}`, type: 'info' as const }] : [],
           notes: dietaryNote ? `\n${dietaryNote}` : '',
           isMustVisit: false,
+          source: 'ai',
           photoUrl: templates.images[3] || templates.images[0],
           rating: 4.7,
           cost: { amount: dinnerPick ? (dinnerPick.cost || mealAmount) : mealAmount, currency },
@@ -1668,6 +1676,7 @@ export const aiService = {
           links: [],
           notes: strings.activityNotes,
           isMustVisit: false,
+          source: 'ai',
           photoUrl: eveningPhoto,
           rating: 4.6,
           cost: { amount: 0, currency },
@@ -1699,6 +1708,7 @@ export const aiService = {
           links: [{ label: strings.grabLink, url: 'https://www.grab.com/', type: 'info' }],
           notes: returnFlight ? `航班時間：${returnFlight.departureTime}。請務必再三確認護照與隨身行李是否帶齊。` : strings.airportNotes,
           isMustVisit: false,
+          source: 'ai',
           photoUrl: 'local-asset://airport_map',
           cost: { amount: 0, currency },
           openingHours: strings.airportHours
@@ -1753,6 +1763,7 @@ export const aiService = {
           links: [{ label: strings.grabLink, url: 'https://www.grab.com/', type: 'info' }],
           notes: nightHotelNotes,
           isMustVisit: false,
+          source: 'ai',
           cost: { amount: 0, currency },
           openingHours: '24小時開放'
         });

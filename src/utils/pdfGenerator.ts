@@ -8,6 +8,16 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
   const end = survey?.dates?.endDate ? new Date(survey.dates.endDate) : (days[days.length - 1]?.date ? new Date(days[days.length - 1].date) : new Date(start.getTime() + 86400000 * 3));
   const dayCount = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
 
+  // Helper: 景點來源標籤
+  const getSourceBadge = (source?: string): string => {
+    switch (source) {
+      case 'must-visit': return '<span class="source-badge must-visit">🎯 必訪景點</span>';
+      case 'reference': return '<span class="source-badge reference">📎 參考景點</span>';
+      case 'specific': return '<span class="source-badge specific">📌 指定地點</span>';
+      default: return '';
+    }
+  };
+
   // 1. 行前準備卡片 (基於 survey 資料)
   let preparationCardHtml = '';
   if (survey) {
@@ -182,19 +192,19 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
           <div class="packing-col">
             <span class="packing-sub">💳 證件與重要物品</span>
             <ul class="packing-list-items">
-              ${essentialItems.map(item => `<li><input type="checkbox" style="margin-right:6px;" /> ${item}</li>`).join('')}
+              ${essentialItems.map(item => `<li><input type="checkbox" style="margin-right:4px;" /> ${item}</li>`).join('')}
             </ul>
           </div>
           <div class="packing-col">
             <span class="packing-sub">👕 衣物與穿著</span>
             <ul class="packing-list-items">
-              ${clothingItems.map(item => `<li><input type="checkbox" style="margin-right:6px;" /> ${item}</li>`).join('')}
+              ${clothingItems.map(item => `<li><input type="checkbox" style="margin-right:4px;" /> ${item}</li>`).join('')}
             </ul>
           </div>
           <div class="packing-col">
             <span class="packing-sub">🔌 數位電子配件</span>
             <ul class="packing-list-items">
-              ${electronicItems.map(item => `<li><input type="checkbox" style="margin-right:6px;" /> ${item}</li>`).join('')}
+              ${electronicItems.map(item => `<li><input type="checkbox" style="margin-right:4px;" /> ${item}</li>`).join('')}
             </ul>
           </div>
         </div>
@@ -249,7 +259,7 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
           <div class="qrcode-section">
             ${allLinks.slice(0, 3).map(link => `
               <div class="qrcode-box">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(link.url)}" class="qrcode-img" alt="QR Code" />
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=${encodeURIComponent(link.url)}" class="qrcode-img" alt="QR Code" />
                 <span class="qrcode-label">${link.label}</span>
               </div>
             `).join('')}
@@ -257,13 +267,16 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
         `;
       }
 
+      // 來源標籤
+      const sourceBadge = getSourceBadge(act.source);
+
       activitiesHtml += `
         <div class="activity-card">
           <div class="card-header">
             <span class="time">⏰ ${act.startTime} - ${act.endTime}</span>
             <span class="type-badge">${act.type.toUpperCase()}</span>
           </div>
-          <h3 class="title">${act.title} ${act.localTitle ? `<span class="local-title">(${act.localTitle})</span>` : ''}</h3>
+          <h3 class="title">${act.title} ${act.localTitle ? `<span class="local-title">(${act.localTitle})</span>` : ''}${sourceBadge ? ` ${sourceBadge}` : ''}</h3>
           
           <div class="meta-info">
             <span>⏱️ 停留: ${act.duration || 90} 分鐘</span>
@@ -306,115 +319,141 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
         body {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           color: #0F172A;
-          line-height: 1.6;
-          padding: 30px;
+          line-height: 1.45;
+          padding: 12px 16px;
           margin: 0 auto;
-          max-width: 900px;
+          max-width: 100%;
           background-color: #F8FAFC;
+          font-size: 12px;
         }
         .cover {
           text-align: center;
-          padding: 20px 0 30px 0;
-          border-bottom: 3px solid #3B82F6;
-          margin-bottom: 30px;
+          padding: 10px 0 14px 0;
+          border-bottom: 2px solid #3B82F6;
+          margin-bottom: 14px;
         }
         .cover h1 {
-          font-size: 34px;
+          font-size: 24px;
           color: #1E293B;
           font-weight: 800;
-          margin: 0 0 10px 0;
+          margin: 0 0 4px 0;
           letter-spacing: -0.5px;
         }
         .cover p {
-          font-size: 16px;
+          font-size: 12px;
           color: #64748B;
           margin: 0;
           font-weight: 600;
         }
         .prep-card {
           background: #FFFFFF;
-          border-radius: 12px;
-          padding: 20px;
-          margin-bottom: 25px;
+          border-radius: 8px;
+          padding: 12px;
+          margin-bottom: 10px;
           border: 1px solid #E2E8F0;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.02);
           page-break-inside: avoid;
         }
         .emergency-card {
-          border-left: 4px solid #F59E0B;
+          border-left: 3px solid #F59E0B;
         }
         .section-title {
-          font-size: 18px;
+          font-size: 14px;
           font-weight: 800;
           color: #1E293B;
           margin-top: 0;
-          margin-bottom: 12px;
+          margin-bottom: 6px;
           border-bottom: 1px solid #F1F5F9;
-          padding-bottom: 8px;
+          padding-bottom: 4px;
         }
         .prep-grid {
           display: flex;
           flex-wrap: wrap;
-          gap: 20px;
+          gap: 10px;
         }
         .prep-col {
           flex: 1;
-          min-width: 250px;
+          min-width: 200px;
         }
         .prep-col p {
-          margin: 6px 0;
-          font-size: 14px;
+          margin: 3px 0;
+          font-size: 11px;
         }
         .emergency-list {
-          padding-left: 20px;
-          margin: 4px 0;
-          font-size: 13px;
+          padding-left: 16px;
+          margin: 2px 0;
+          font-size: 11px;
         }
         .emergency-list li {
-          margin-bottom: 4px;
+          margin-bottom: 2px;
         }
         .must-visit-section {
-          margin-top: 15px;
-          padding-top: 12px;
+          margin-top: 8px;
+          padding-top: 6px;
           border-top: 1px dashed #E2E8F0;
-          font-size: 13px;
+          font-size: 11px;
         }
         .must-visit-section ul {
-          margin: 6px 0 0 0;
-          padding-left: 20px;
+          margin: 3px 0 0 0;
+          padding-left: 16px;
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 4px;
+          gap: 2px;
+        }
+        .packing-grid {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .packing-col {
+          flex: 1;
+          min-width: 160px;
+        }
+        .packing-sub {
+          font-size: 11px;
+          font-weight: 700;
+          color: #1E293B;
+          display: block;
+          margin-bottom: 3px;
+        }
+        .packing-list-items {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          font-size: 10px;
+        }
+        .packing-list-items li {
+          margin-bottom: 1px;
+          line-height: 1.5;
         }
         .day-section {
           background: #FFFFFF;
-          border-radius: 12px;
-          padding: 24px;
-          margin-bottom: 30px;
+          border-radius: 8px;
+          padding: 12px;
+          margin-bottom: 12px;
           border: 1px solid #E2E8F0;
           page-break-inside: auto;
         }
         .day-title {
           color: #2563EB;
-          font-size: 24px;
+          font-size: 18px;
           font-weight: 800;
           border-bottom: 2px solid #DBEAFE;
-          padding-bottom: 8px;
+          padding-bottom: 4px;
           margin-top: 0;
-          margin-bottom: 6px;
+          margin-bottom: 4px;
         }
         .day-summary {
           color: #64748B;
-          font-size: 14px;
+          font-size: 11px;
           font-weight: 600;
-          margin: 0 0 20px 0;
+          margin: 0 0 8px 0;
         }
         .activity-card {
           background: #FFFFFF;
           border: 1px solid #E2E8F0;
-          border-radius: 10px;
-          padding: 20px;
-          margin-bottom: 20px;
+          border-radius: 8px;
+          padding: 10px;
+          margin-bottom: 8px;
           page-break-inside: avoid;
           break-inside: avoid;
         }
@@ -422,71 +461,95 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin-bottom: 10px;
+          margin-bottom: 4px;
         }
         .time {
-          font-size: 15px;
+          font-size: 12px;
           font-weight: 700;
           color: #2563EB;
         }
         .type-badge {
           background-color: #EFF6FF;
           color: #1D4ED8;
-          font-size: 11px;
+          font-size: 9px;
           font-weight: 600;
-          padding: 2px 8px;
+          padding: 1px 6px;
           border-radius: 9999px;
           border: 1px solid #BFDBFE;
         }
         .title {
-          margin: 0 0 8px 0;
-          font-size: 18px;
+          margin: 0 0 4px 0;
+          font-size: 14px;
           font-weight: 800;
           color: #0F172A;
         }
         .local-title {
           font-weight: 400;
           color: #64748B;
-          font-size: 14px;
+          font-size: 11px;
+        }
+        .source-badge {
+          display: inline-block;
+          font-size: 9px;
+          font-weight: 700;
+          padding: 1px 6px;
+          border-radius: 4px;
+          margin-left: 4px;
+          vertical-align: middle;
+        }
+        .source-badge.must-visit {
+          background-color: #FEE2E2;
+          color: #DC2626;
+          border: 1px solid #FECACA;
+        }
+        .source-badge.reference {
+          background-color: #DBEAFE;
+          color: #2563EB;
+          border: 1px solid #BFDBFE;
+        }
+        .source-badge.specific {
+          background-color: #EDE9FE;
+          color: #7C3AED;
+          border: 1px solid #DDD6FE;
         }
         .meta-info {
           display: flex;
-          gap: 15px;
-          font-size: 13px;
+          gap: 10px;
+          font-size: 10px;
           color: #475569;
           font-weight: 600;
-          margin-bottom: 12px;
-          padding: 8px 12px;
+          margin-bottom: 4px;
+          padding: 4px 8px;
           background-color: #F8FAFC;
-          border-radius: 6px;
+          border-radius: 4px;
         }
         .desc {
           color: #334155;
-          font-size: 14px;
+          font-size: 11px;
           margin: 0;
-          line-height: 1.6;
+          line-height: 1.5;
         }
         .address {
           color: #64748B;
-          font-size: 13px;
-          margin-top: 12px;
-          padding-top: 10px;
+          font-size: 10px;
+          margin-top: 4px;
+          padding-top: 4px;
           border-top: 1px dashed #E2E8F0;
         }
         .notes-box {
           background-color: #FEF3C7;
-          border-left: 3px solid #D97706;
-          padding: 10px 14px;
-          border-radius: 4px;
-          font-size: 13px;
-          margin-top: 12px;
+          border-left: 2px solid #D97706;
+          padding: 4px 8px;
+          border-radius: 3px;
+          font-size: 10px;
+          margin-top: 4px;
           color: #78350F;
         }
         .qrcode-section {
           display: flex;
-          gap: 20px;
-          margin-top: 15px;
-          padding-top: 12px;
+          gap: 12px;
+          margin-top: 6px;
+          padding-top: 6px;
           border-top: 1px solid #F1F5F9;
         }
         .qrcode-box {
@@ -494,25 +557,25 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
           flex-direction: column;
           align-items: center;
           text-align: center;
-          width: 90px;
+          width: 70px;
         }
         .qrcode-img {
-          width: 70px;
-          height: 70px;
+          width: 55px;
+          height: 55px;
           border: 1px solid #E2E8F0;
-          border-radius: 4px;
-          padding: 2px;
+          border-radius: 3px;
+          padding: 1px;
           background-color: #FFFFFF;
         }
         .qrcode-label {
-          font-size: 10px;
+          font-size: 8px;
           font-weight: 600;
           color: #475569;
-          margin-top: 4px;
+          margin-top: 2px;
         }
         @page {
           size: A4;
-          margin: 10mm;
+          margin: 8mm;
         }
         @media print {
           html, body {
@@ -526,9 +589,9 @@ export const generateItineraryHtml = (itinerary: Itinerary, survey?: TripSurvey 
           }
           .day-section {
             box-shadow: none;
-            padding: 10px 0;
+            padding: 8px 0;
             border: none;
-            border-bottom: 2px solid #E2E8F0;
+            border-bottom: 1px solid #E2E8F0;
           }
           .prep-card {
             box-shadow: none;

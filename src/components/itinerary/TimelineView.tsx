@@ -857,6 +857,23 @@ export function TimelineView({
                       {renderActivityTitle(act)}
                     </Text>
 
+                    {/* 景點來源標籤：必訪景點 / 參考景點 / 指定地點 */}
+                    {act.source === 'must-visit' && (
+                      <View style={{ alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', backgroundColor: '#FEE2E2', borderColor: '#FECACA', borderWidth: 1, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3, marginTop: 4 }}>
+                        <Text style={{ fontSize: 11, fontWeight: '700', color: '#DC2626' }}>🎯 {locale.startsWith('zh') ? '必訪景點' : 'Must Visit'}</Text>
+                      </View>
+                    )}
+                    {act.source === 'reference' && (
+                      <View style={{ alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', backgroundColor: '#DBEAFE', borderColor: '#BFDBFE', borderWidth: 1, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3, marginTop: 4 }}>
+                        <Text style={{ fontSize: 11, fontWeight: '700', color: '#2563EB' }}>📎 {locale.startsWith('zh') ? '參考景點' : 'Reference'}</Text>
+                      </View>
+                    )}
+                    {act.source === 'specific' && (
+                      <View style={{ alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', backgroundColor: '#EDE9FE', borderColor: '#DDD6FE', borderWidth: 1, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3, marginTop: 4 }}>
+                        <Text style={{ fontSize: 11, fontWeight: '700', color: '#7C3AED' }}>📌 {locale.startsWith('zh') ? '指定地點' : 'Specified'}</Text>
+                      </View>
+                    )}
+
                     {/* 景點長介紹（約300字）：可展開／收合，預設顯示前幾行 */}
                     {!!act.description && (
                       <View style={{ marginTop: 6 }}>

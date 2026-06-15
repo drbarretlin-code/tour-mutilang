@@ -59,6 +59,8 @@ export interface Activity {
   bookingRecommended?: boolean;
   photoUrl?: string;
   environment?: 'indoor' | 'outdoor';
+  /** 景點來源標記：must-visit=必訪景點, reference=參考景點, specific=指定地點, ai=系統推薦 */
+  source?: 'must-visit' | 'reference' | 'specific' | 'ai';
 }
 
 export type ActivityType =

@@ -26,6 +26,7 @@ const cacheSet = async (key: string, value: string): Promise<void> => {
 interface ItineraryCollaboratorProps {
   itinerary: Itinerary;
   survey: TripSurvey;
+  onRemoveActivity?: (dayNumber: number, activityId: string) => Promise<void>;
 }
 
 interface VoteData {
@@ -36,7 +37,7 @@ interface VoteData {
 // Mock travelers
 const MOCK_FRIENDS = ['Alice 🏃‍♀️', 'Bob ☕', 'Charlie 📷', 'David 🗺️'];
 
-export function ItineraryCollaborator({ itinerary, survey }: ItineraryCollaboratorProps) {
+export function ItineraryCollaborator({ itinerary, survey, onRemoveActivity }: ItineraryCollaboratorProps) {
   const { colors, spacing, borderRadius, typography, shadows } = useTheme();
   const [selectedDayIdx, setSelectedDayIdx] = useState(0);
   const [votes, setVotes] = useState<Record<string, VoteData>>({});
