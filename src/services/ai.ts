@@ -1097,9 +1097,19 @@ export const aiService = {
     const parseRange = (raw?: string): { startStr: string; endStr: string } | null => {
       if (!raw) return null;
       let s = raw.replace(/\//g, '-');
-      const m2 = s.match(/(\d{4}-\d{2}-\d{2}).*?(\d{4}-\d{2}-\d{2})/);
+      // Ensure zero-padding and year for mm-dd formats
+      if (/^\d{1,2}-\d{1,2}[~\-]\d{1,2}-\d{1,2}$/.test(s)) {
+        const year = survey?.dates?.startDate ? new Date(survey.dates.startDate).getFullYear() : new Date().getFullYear();
+        const parts = s.split(/[~\-]/);
+        s = `${year}-${parts[0]}~${year}-${parts[1]}`;
+      } else if (/^\d{1,2}-\d{1,2}$/.test(s)) {
+        const year = survey?.dates?.startDate ? new Date(survey.dates.startDate).getFullYear() : new Date().getFullYear();
+        s = `${year}-${s}`;
+      }
+      
+      const m2 = s.match(/(\d{4}-\d{1,2}-\d{1,2}).*?(\d{4}-\d{1,2}-\d{1,2})/);
       if (m2) return { startStr: m2[1], endStr: m2[2] };
-      const m1 = s.match(/(\d{4}-\d{2}-\d{2})/);
+      const m1 = s.match(/(\d{4}-\d{1,2}-\d{1,2})/);
       if (m1) return { startStr: m1[1], endStr: m1[1] };
       return null;
     };
@@ -2261,7 +2271,7 @@ function clampFallbackItineraryTimes(activities: Activity[]): Activity[] {
   }
 
   // 6. Clean up: filter out any activity starting after 21:00 and reorder
-  const validActs = activities.filter(act => act.startTime <= ABSOLUTE_END);
+  const validActs = activities.filter(act => act.type === 'hotel' || act.type === 'transport' || act.startTime <= ABSOLUTE_END);
   validActs.forEach((act, idx) => {
     act.order = idx;
     act.duration = typeof act.duration === 'string' ? parseInt(act.duration, 10) : act.duration;
