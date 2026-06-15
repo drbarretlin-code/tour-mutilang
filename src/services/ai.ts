@@ -72,7 +72,6 @@ const CATEGORY_LABEL: Record<string, Record<PoiCategory, string>> = {
 function buildPoiDescription(p: POI, destName: string, label: string, locale: string, localizedTitle?: string): string {
   const zh = locale.startsWith('zh');
   const isCn = locale === 'zh-CN';
-  const zh = locale.startsWith('zh');
   const local = p.localName && p.localName !== p.name ? p.localName : '';
   const title = localizedTitle || p.name;
 
