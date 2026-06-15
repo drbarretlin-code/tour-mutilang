@@ -185,12 +185,12 @@ export function findLocalizedName(poiName: string, lat: number, lon: number, loc
 export function findLocalizedDescription(poiName: string, lat: number, lon: number, locale: string): string | null {
   const lowerName = (poiName || '').toLowerCase();
   
-  // 1. 優先透過座標比對 (經緯度差值小於 0.005，約 500 公尺)
+  // 1. 優先透過座標比對 (經緯度差值小於 0.0005，約 50 公尺)
   for (const d of DATA.destinations) {
     for (const a of d.attractions) {
       const latDiff = Math.abs(a.lat - lat);
       const lonDiff = Math.abs(a.lon - lon);
-      if (latDiff < 0.005 && lonDiff < 0.005) {
+      if (latDiff < 0.0005 && lonDiff < 0.0005) {
         const desc = pickText(a.desc, locale);
         if (desc && desc.length > 0) return desc;
       }
@@ -198,7 +198,7 @@ export function findLocalizedDescription(poiName: string, lat: number, lon: numb
     for (const r of d.restaurants) {
       const latDiff = Math.abs(r.lat - lat);
       const lonDiff = Math.abs(r.lon - lon);
-      if (latDiff < 0.005 && lonDiff < 0.005) {
+      if (latDiff < 0.0005 && lonDiff < 0.0005) {
         const desc = pickText(r.desc, locale);
         if (desc && desc.length > 0) return desc;
       }

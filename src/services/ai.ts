@@ -72,8 +72,14 @@ const CATEGORY_LABEL: Record<string, Record<PoiCategory, string>> = {
 function buildPoiDescription(p: POI, destName: string, label: string, locale: string, localizedTitle?: string): string {
   const zh = locale.startsWith('zh');
   const isCn = locale === 'zh-CN';
+  const zh = locale.startsWith('zh');
   const local = p.localName && p.localName !== p.name ? p.localName : '';
   const title = localizedTitle || p.name;
+
+  // 簡易雜湊函式，用來為同一個景點產生固定的隨機變化
+  let hash = 0;
+  for (let i = 0; i < p.name.length; i++) hash = Math.imul(31, hash) + p.name.charCodeAt(i) | 0;
+  hash = Math.abs(hash);
 
   // 各分類的特色描述（繁中／簡中／英文）
   const traitMap: Record<string, [string, string, string]> = {
@@ -96,16 +102,48 @@ function buildPoiDescription(p: POI, destName: string, label: string, locale: st
     : ['', '', 'a popular local attraction blending regional character with a distinctive atmosphere, well worth exploring']);
   const traitText = zh ? (isCn ? trait[1] : trait[0]) : trait[2];
 
+  // 多種後綴變化
+  const zhSuffixes = [
+    `此地深受國內外旅客喜愛，無論是初次造訪或重遊，都能從不同角度感受其魅力。建議您預留充裕的時間，放慢腳步細細品味周邊的環境與氛圍，並留意現場的指示牌與參觀禮儀；若逢假日或旅遊旺季，人潮可能較多，宜避開尖峰時段以獲得更從容的體驗。周邊通常亦有值得順道走訪的店家、餐飲與景點，可一併規劃延伸行程。實際的開放時間與規定可能調整，出發前請再次確認。`,
+    `這裡融合了深厚的歷史背景與現代活力，不僅是當地居民日常消遣的好去處，也吸引無數外地遊客慕名而來。不論您是喜歡安靜地探索角落，還是熱衷於拍照留念，都能在此找到屬於自己的樂趣。出發前建議確認當天的天氣狀況與營業時間，讓您的行程更加順遂。`,
+    `踏入這個人氣景點，您將會被其獨特的風貌所吸引。這是一個充滿在地故事的地方，每一個細節都值得細細品味。如果時間允許，不妨在附近隨意散步，或許能發掘出意想不到的隱藏版小店或在地美食。`,
+    `做為該地區最具代表性的地點之一，這裡提供了豐富的感官體驗。建議您可以選擇在清晨或傍晚時分造訪，以避開擁擠的人潮，並享受更為舒適的氛圍。當地交通便利，是行程安排中不容錯過的亮點。`
+  ];
+  const cnSuffixes = [
+    `此地深受国内外旅客喜爱，无论是初次造访或重游，都能从不同角度感受其魅力。建议您预留充裕的时间，放慢脚步细细品味周边的环境与氛围，并留意现场的指示牌与参观礼仪；若逢假日或旅游旺季，人潮可能较多，宜避开尖峰时段以获得更从容的体验。周边通常亦有值得顺道走访的店家、餐饮与景点，可一并规划延伸行程。实际的开放时间与规定可能调整，出发前请再次确认。`,
+    `这里融合了深厚的历史背景与现代活力，不仅是当地居民日常消遣的好去处，也吸引无数外地游客慕名而来。不论您是喜欢安静地探索角落，还是热衷于拍照留念，都能在此找到属于自己的乐趣。出发前建议确认当天的天气状况与营业时间，让您的行程更加顺遂。`,
+    `踏入这个人气景点，您将会被其独特的风貌所吸引。这是一个充满在地故事的地方，每一个细节都值得细细品味。如果时间允许，不妨在附近随意散步，或许能发掘出意想不到的隐藏版小店或在地美食。`,
+    `做为该地区最具代表性的地点之一，这里提供了丰富的感官体验。建议您可以选择在清晨或傍晚时分造访，以避开拥挤的人潮，并享受更为舒适的氛围。当地交通便利，是行程安排中不容错过的亮点。`
+  ];
+  const enSuffixes = [
+    `Beloved by both local and international travelers, it rewards first-time visitors and returning guests alike with something new from every angle. Allow yourself ample time to slow down and take in the surroundings and atmosphere; during peak seasons it can get crowded, so consider avoiding peak hours for a more relaxed experience. The area usually offers nearby shops, dining and sights worth combining into an extended outing. Please re-confirm opening hours before you go.`,
+    `Blending deep historical background with modern vibrancy, this spot is not only a great place for locals to spend their free time but also attracts countless tourists. Whether you prefer to quietly explore hidden corners or take memorable photos, you will find your own joy here. We recommend checking the weather and opening hours before you go to ensure a smooth trip.`,
+    `Stepping into this popular destination, you will be captivated by its unique charm. It is a place full of local stories, where every detail is worth savoring. If time permits, take a casual stroll nearby—you might discover unexpected hidden shops or authentic local food.`,
+    `As one of the most representative locations in the area, it offers a rich sensory experience. We recommend visiting in the early morning or late afternoon to avoid the crowds and enjoy a more comfortable atmosphere. Easily accessible by local transport, it is a highlight not to be missed in your itinerary.`
+  ];
+
+  const suffixIdx = hash % 4;
+  const selectedSuffix = zh ? (isCn ? cnSuffixes[suffixIdx] : zhSuffixes[suffixIdx]) : enSuffixes[suffixIdx];
+
+  // 多種開頭變化
+  const introIdx = (hash >> 2) % 3;
+  let introStr = '';
+  if (zh) {
+    if (introIdx === 0) introStr = `「${title}」是位於${destName}、名列${label}的人氣景點，${traitText}。`;
+    if (introIdx === 1) introStr = `來到${destName}，推薦造訪這個著名的${label}——「${title}」。這裡${traitText}。`;
+    if (introIdx === 2) introStr = `「${title}」不僅是${destName}熱門的${label}，更${traitText}。`;
+  } else {
+    if (introIdx === 0) introStr = `${title} is a popular ${label} in ${destName}, ${traitText}.`;
+    if (introIdx === 1) introStr = `When visiting ${destName}, ${title} is a recommended ${label} that is ${traitText}.`;
+    if (introIdx === 2) introStr = `As a well-known ${label} in ${destName}, ${title} is ${traitText}.`;
+  }
+
   if (zh) {
     const localHint = local ? `當地多以「${local}」稱之，現場叫車或使用地圖導航時可直接使用此名稱。` : '';
-    return `「${title}」是位於${destName}、名列${label}的人氣景點，${traitText}。${localHint}` +
-      `此地深受國內外旅客喜愛，無論是初次造訪或重遊，都能從不同角度感受其魅力。建議您預留充裕的時間，放慢腳步細細品味周邊的環境與氛圍，並留意現場的指示牌與參觀禮儀；若逢假日或旅遊旺季，人潮可能較多，宜避開尖峰時段以獲得更從容的體驗。` +
-      `周邊通常亦有值得順道走訪的店家、餐飲與景點，可一併規劃延伸行程。實際的開放時間、票價、公休日與最新參觀規定可能隨季節調整，出發前請務必透過官方管道再次確認，以免向隅。`;
+    return `${introStr}${localHint}${selectedSuffix}`;
   }
   const localHint = local ? ` Locally it is commonly known as "${local}", a name you can use directly when hailing a ride or searching on maps.` : '';
-  return `${title} is a popular ${label} in ${destName}, ${traitText}.${localHint}` +
-    ` Beloved by both local and international travelers, it rewards first-time visitors and returning guests alike with something new from every angle. Allow yourself ample time to slow down and take in the surroundings and atmosphere, and be mindful of on-site signage and visitor etiquette; during weekends and peak seasons it can get crowded, so consider avoiding peak hours for a more relaxed experience.` +
-    ` The area usually offers nearby shops, dining and sights worth combining into an extended outing. Opening hours, ticket prices, closing days and the latest visiting rules may change with the season, so please re-confirm via official channels before you go.`;
+  return `${introStr}${localHint} ${selectedSuffix}`;
 }
 
 /** 由真實 POI 清單組裝出與 getDestTemplates 相容的範本物件 */
