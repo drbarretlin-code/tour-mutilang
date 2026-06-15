@@ -1068,46 +1068,61 @@ export const aiService = {
     else if (modes.includes('walking')) primaryMode = 'walk';
 
     // 取得交通細節輔助函式
-    const getTransitInfo = (mode: 'walk' | 'public' | 'drive' | 'taxi' | 'charter', stdDuration: number, stdDistance: number) => {
+    const getTransitInfo = (preferredModes: string[], stdDuration: number, stdDistance: number) => {
       let actualDuration = stdDuration;
       let actualDistance = stdDistance;
       let cost = 0;
       let desc = '';
       
+      // 動態選擇最適合的交通方式
+      let mode: 'walk' | 'public' | 'drive' | 'taxi' | 'charter' = 'charter';
+      const available = preferredModes.length > 0 ? preferredModes : ['charter'];
+      
+      if (stdDistance <= 1500 && available.includes('walking')) {
+        mode = 'walk';
+      } else if (stdDistance > 1500 && stdDistance <= 5000 && available.includes('public')) {
+        mode = 'public';
+      } else if (available.includes('rental')) {
+        mode = 'drive';
+      } else if (available.includes('taxi')) {
+        mode = 'taxi';
+      } else if (available.includes('charter')) {
+        mode = 'charter';
+      } else if (available.includes('public')) {
+        mode = 'public'; // fallback for longer distances if public is selected but others aren't
+      } else {
+        mode = available[0] as any || 'taxi'; // Absolute fallback
+      }
+
       switch (mode) {
         case 'walk':
           actualDuration = Math.round(stdDuration * 3.0);
-          actualDistance = stdDistance;
           cost = 0;
           desc = locale.startsWith('zh') ? '徒步前行，沿途欣賞街景，環保又健康。' : 'Walk to the next spot, enjoying the street views along the way.';
           break;
         case 'public':
           actualDuration = Math.round(stdDuration * 1.5);
-          actualDistance = stdDistance;
           cost = currency === 'USD' ? 2 : 45;
           desc = locale.startsWith('zh') ? '搭乘當地便捷的大眾運輸系統（公車/地鐵）。' : 'Take the local public transit system (bus/subway).';
           break;
         case 'taxi':
           actualDuration = stdDuration;
-          actualDistance = stdDistance;
           cost = currency === 'USD' ? 12 : 300;
           desc = locale.startsWith('zh') ? '使用叫車 App 或於路邊攔截計程車，方便快捷。' : 'Call a taxi or use a ride-hailing app for a quick and direct transfer.';
           break;
         case 'drive':
           actualDuration = stdDuration;
-          actualDistance = stdDistance;
           cost = 0;
           desc = locale.startsWith('zh') ? '駕駛自租車輛前往，路況良好。' : 'Drive your rental car to the destination, road conditions are good.';
           break;
         case 'charter':
         default:
           actualDuration = stdDuration;
-          actualDistance = stdDistance;
           cost = 0;
           desc = locale.startsWith('zh') ? '搭乘包車前往，司機皆具備良好服務評價。' : 'Ride in a private charter car, driven by a professional driver.';
           break;
       }
-      return { mode, duration: actualDuration, cost, description: desc };
+      return { mode, duration: actualDuration, distance: actualDistance, cost, description: desc };
     };
 
     // 預算等級的飯店及餐費估算
@@ -1232,7 +1247,7 @@ export const aiService = {
             longitude: currentDest.longitude || 0
           },
           duration: 90,
-          transport: getTransitInfo(primaryMode, 45, 30000),
+          transport: getTransitInfo(modes, 45, 30000),
           links: [{ label: strings.airportLink, url: 'https://www.klook.com/', type: 'booking' }],
           notes: strings.airportNotes,
           isMustVisit: false,
@@ -1258,7 +1273,7 @@ export const aiService = {
             longitude: currentDest.longitude || 0
           },
           duration: 30,
-          transport: getTransitInfo(primaryMode, 30, 15000),
+          transport: getTransitInfo(modes, 30, 15000),
           links: [{ label: strings.hotelLink, url: 'https://www.klook.com/', type: 'booking' }],
           notes: '',
           isMustVisit: false,
@@ -1282,7 +1297,7 @@ export const aiService = {
             longitude: currentDest.longitude || 0
           },
           duration: 30,
-          transport: getTransitInfo(primaryMode, 30, 15000),
+          transport: getTransitInfo(modes, 30, 15000),
           links: [{ label: strings.hotelLink, url: 'https://www.klook.com/', type: 'booking' }],
           notes: '',
           isMustVisit: false,
@@ -1370,7 +1385,7 @@ export const aiService = {
           longitude: morningLon
         },
         duration: currentMorningDuration,
-        transport: getTransitInfo(primaryMode, 15, 5000),
+        transport: getTransitInfo(modes, 15, 5000),
         links: morningLinks,
         notes: matchedSpecific?.notes || strings.attractionNotes,
         isMustVisit: !!matchedSpecific || !!matchedMust,
@@ -1392,7 +1407,7 @@ export const aiService = {
 
       const morningEnd = activities[activities.length - 1].endTime;
       const distToLunch = lunchPick ? Math.round(getDistance(morningLat, morningLon, lunchPick.lat, lunchPick.lon)) : 500;
-      const lunchTransit = getTransitInfo(primaryMode, 15, distToLunch);
+      const lunchTransit = getTransitInfo(modes, 15, distToLunch);
       const earliestLunchStart = addMinutesToTime(morningEnd, lunchTransit.duration);
       const lunchStartTime = earliestLunchStart < '11:30' ? '11:30' : (earliestLunchStart > '13:30' ? '13:30' : earliestLunchStart);
       const lunchDuration = survey?.pace === 'packed' ? 60 : 90;
@@ -1400,7 +1415,7 @@ export const aiService = {
 
       // 餐後安排 15 分鐘的「餐後散步/緩衝交通」
       const postLunchWalkMinutes = 15;
-      const afternoonTransit = getTransitInfo(primaryMode, 15 + postLunchWalkMinutes, 5000);
+      const afternoonTransit = getTransitInfo(modes, 15 + postLunchWalkMinutes, 5000);
       if (locale.startsWith('zh')) {
         afternoonTransit.description = `（含餐後散步 ${postLunchWalkMinutes} 分鐘）` + afternoonTransit.description;
       } else {
@@ -1460,7 +1475,7 @@ export const aiService = {
 
       // 晚餐後的交通工具 (前往下一個景點或飯店/機場)
       const postDinnerWalkMinutes = 15;
-      const postDinnerTransit = getTransitInfo(primaryMode, 15 + postDinnerWalkMinutes, 5000);
+      const postDinnerTransit = getTransitInfo(modes, 15 + postDinnerWalkMinutes, 5000);
       if (locale.startsWith('zh')) {
         postDinnerTransit.description = `（含餐後散步 ${postDinnerWalkMinutes} 分鐘）` + postDinnerTransit.description;
       } else {
@@ -1483,7 +1498,7 @@ export const aiService = {
           longitude: afternoonLon
         },
         duration: afternoonDuration,
-        transport: hasTimeForDinner ? postDinnerTransit : getTransitInfo(primaryMode, 15, 5000),
+        transport: hasTimeForDinner ? postDinnerTransit : getTransitInfo(modes, 15, 5000),
         links: [],
         notes: strings.activityNotes,
         isMustVisit: false,
@@ -1499,7 +1514,7 @@ export const aiService = {
         if (dinnerPickObj) usedRestIndices.add(dinnerPickObj.index);
         const dinnerPick = dinnerPickObj?.restaurant;
         const distToDinner = dinnerPick ? Math.round(getDistance(afternoonLat, afternoonLon, dinnerPick.lat, dinnerPick.lon)) : 500;
-        const dinnerTransit = getTransitInfo(primaryMode, 15, distToDinner);
+        const dinnerTransit = getTransitInfo(modes, 15, distToDinner);
 
         const earliestDinnerStart = addMinutesToTime(afternoonEndTime, dinnerTransit.duration);
         const dinnerStartTime = earliestDinnerStart < '18:00' ? '18:00' : (earliestDinnerStart > '20:00' ? '20:00' : earliestDinnerStart);
@@ -1522,7 +1537,7 @@ export const aiService = {
             longitude: dinnerPick ? dinnerPick.lon : (currentDest.longitude || 0)
           },
           duration: dinnerDuration,
-          transport: getTransitInfo(primaryMode, 15, 5000),
+          transport: getTransitInfo(modes, 15, 5000),
           links: dinnerPick ? [{ label: strings.grabLink, url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(dinnerPick.localTitle)}`, type: 'info' as const }] : [],
           notes: dietaryNote ? `\n${dietaryNote}` : '',
           isMustVisit: false,
@@ -1545,7 +1560,7 @@ export const aiService = {
         const eveningPhoto = eveningIdx !== -1 ? templates.images[eveningIdx] : (templates.images[1] || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600');
 
         const lastActEnd = activities[activities.length - 1].endTime;
-        const eveningTransit = getTransitInfo(primaryMode, 15, 5000);
+        const eveningTransit = getTransitInfo(modes, 15, 5000);
         const eveningStartTime = addMinutesToTime(lastActEnd, eveningTransit.duration);
 
         activities.push({
@@ -1564,7 +1579,7 @@ export const aiService = {
             longitude: eveningCoord ? eveningCoord.lon : (currentDest.longitude || 0)
           },
           duration: 60,
-          transport: getTransitInfo(primaryMode, 15, 5000),
+          transport: getTransitInfo(modes, 15, 5000),
           links: [],
           notes: strings.activityNotes,
           isMustVisit: false,
@@ -1594,7 +1609,7 @@ export const aiService = {
             longitude: currentDest.longitude || 0
           },
           duration: 120,
-          transport: getTransitInfo(primaryMode, 45, 30000),
+          transport: getTransitInfo(modes, 45, 30000),
           links: [{ label: strings.grabLink, url: 'https://www.grab.com/', type: 'info' }],
           notes: returnFlight ? `航班時間：${returnFlight.departureTime}。請務必再三確認護照與隨身行李是否帶齊。` : strings.airportNotes,
           isMustVisit: false,
@@ -1604,7 +1619,7 @@ export const aiService = {
         });
       } else {
         const lastAct = activities[activities.length - 1];
-        const returnTransport = getTransitInfo(primaryMode, 15, 5000);
+        const returnTransport = getTransitInfo(modes, 15, 5000);
         const RETURN_DEADLINE = '21:00';
         const RETURN_DURATION = 30; // 回到飯店後安頓時間
         let returnStartTime = lastAct ? addMinutesToTime(lastAct.endTime, returnTransport.duration) : '18:00';
@@ -1643,7 +1658,7 @@ export const aiService = {
             longitude: currentDest.longitude || 0
           },
           duration: 30,
-          transport: getTransitInfo(primaryMode, 30, 15000),
+          transport: getTransitInfo(modes, 30, 15000),
           links: [{ label: strings.grabLink, url: 'https://www.grab.com/', type: 'info' }],
           notes: '',
           isMustVisit: false,
