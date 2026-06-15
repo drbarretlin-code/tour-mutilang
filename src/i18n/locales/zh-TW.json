@@ -356,7 +356,7 @@
         "title": "🌙 結束今日行程：準備返回住宿地",
         "transportAdvice": "建議交通方式：搭乘 %{platforms}，這段車程大約需要 15 分鐘。",
         "shuttleGuideTitle": "🚗 住宿接駁指南：",
-        "shuttleGuideDesc": "飯店若無接駁系統，請使用 %{platforms} 叫車。前往預設住宿地（%{hotelName}）。",
+        "shuttleGuideDesc": "飯店若無接駁系統，請使用 %{platforms} 叫車。前往住宿地點（%{hotelName}）。",
         "yourHotel": "您的飯店",
         "tonightStay": "今晚住宿：%{hotelName}",
         "airportMapHint": "機場入出境大廳平面圖參考",

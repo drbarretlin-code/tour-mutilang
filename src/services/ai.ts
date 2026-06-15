@@ -187,6 +187,7 @@ function buildDestTemplateFromPOIs(pois: POI[], destName: string, locale: string
 }
 
 function getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  if (!lat1 || !lon1 || !lat2 || !lon2) return 0;
   const R = 6371000; // 地球半徑 (公尺)
   const phi1 = lat1 * Math.PI / 180;
   const phi2 = lat2 * Math.PI / 180;
@@ -1106,13 +1107,13 @@ export const aiService = {
     // 找出涵蓋指定日期的住宿名稱（支援日期區間），作為當日 hotel loop 的起訖點。
     // excludeCheckoutDay：若該日恰為住宿區間的最後一天（退房日，且非單日入住），則不視為「當晚住宿」，
     // 因現實邏輯中退房當日不會續住，當晚應改採下一段住宿（由呼叫端再查詢次日日期取得）。
-    const resolveHotelForDate = (dateStr: string, excludeCheckoutDay = false): string | null => {
+    const resolveHotelForDate = (dateStr: string, excludeCheckoutDay = false): { name: string; notes: string } | null => {
       for (const loc of userSpecificLocations) {
         if (!isHotelItem(loc.value, loc.notes)) continue;
         const r = parseRange(loc.preferredDate);
         if (!r) continue;
         if (excludeCheckoutDay && dateStr === r.endStr && r.endStr !== r.startStr) continue;
-        if (dateStr >= r.startStr && dateStr <= r.endStr) return loc.value;
+        if (dateStr >= r.startStr && dateStr <= r.endStr) return { name: loc.value, notes: loc.notes || '' };
       }
       return null;
     };
@@ -1155,28 +1156,28 @@ export const aiService = {
 
       switch (mode) {
         case 'walk':
-          actualDuration = Math.round(stdDuration * 3.0);
+          actualDuration = stdDistance > 0 ? Math.max(1, Math.round(stdDistance / 65)) : Math.round(stdDuration * 3.0);
           cost = 0;
           desc = locale.startsWith('zh') ? '徒步前行，沿途欣賞街景，環保又健康。' : 'Walk to the next spot, enjoying the street views along the way.';
           break;
         case 'public':
-          actualDuration = Math.round(stdDuration * 1.5);
+          actualDuration = stdDistance > 0 ? Math.max(5, Math.round(stdDistance / 250)) : Math.round(stdDuration * 1.5);
           cost = currency === 'USD' ? 2 : 45;
           desc = locale.startsWith('zh') ? '搭乘當地便捷的大眾運輸系統（公車/地鐵）。' : 'Take the local public transit system (bus/subway).';
           break;
         case 'taxi':
-          actualDuration = stdDuration;
+          actualDuration = stdDistance > 0 ? Math.max(5, Math.round(stdDistance / 350)) : stdDuration;
           cost = currency === 'USD' ? 12 : 300;
           desc = locale.startsWith('zh') ? '使用叫車 App 或於路邊攔截計程車，方便快捷。' : 'Call a taxi or use a ride-hailing app for a quick and direct transfer.';
           break;
         case 'drive':
-          actualDuration = stdDuration;
+          actualDuration = stdDistance > 0 ? Math.max(5, Math.round(stdDistance / 350)) : stdDuration;
           cost = 0;
           desc = locale.startsWith('zh') ? '駕駛自租車輛前往，路況良好。' : 'Drive your rental car to the destination, road conditions are good.';
           break;
         case 'charter':
         default:
-          actualDuration = stdDuration;
+          actualDuration = stdDistance > 0 ? Math.max(5, Math.round(stdDistance / 350)) : stdDuration;
           cost = 0;
           desc = locale.startsWith('zh') ? '搭乘包車前往，司機皆具備良好服務評價。' : 'Ride in a private charter car, driven by a professional driver.';
           break;
@@ -1269,15 +1270,19 @@ export const aiService = {
       const usedRestIndices = destUsedRestIndices[currentDest.name];
 
       // 當日起點住宿（昨晚入住、今早從此處出發；依日期區間解析），找不到則退回通用名稱。
-      const dayHotelName = resolveHotelForDate(dateStr) || customHotelName;
+      const dayHotelObj = resolveHotelForDate(dateStr) || { name: customHotelName, notes: '' };
+      const dayHotelName = dayHotelObj.name;
+      const dayHotelNotes = dayHotelObj.notes;
 
       // 當晚住宿（今晚實際入住、回程終點；退房當日不續住，改查次日所屬住宿）。
-      let nightHotelName = customHotelName;
+      let nightHotelObj = { name: customHotelName, notes: '' };
       if (i < dayCount - 1) {
         const nextDayDate = new Date(start.getTime() + (i + 1) * 86400000);
         const nextDateStr = `${nextDayDate.getFullYear()}-${String(nextDayDate.getMonth() + 1).padStart(2, '0')}-${String(nextDayDate.getDate()).padStart(2, '0')}`;
-        nightHotelName = resolveHotelForDate(nextDateStr) || resolveHotelForDate(dateStr, true) || customHotelName;
+        nightHotelObj = resolveHotelForDate(nextDateStr) || resolveHotelForDate(dateStr, true) || { name: customHotelName, notes: '' };
       }
+      const nightHotelName = nightHotelObj.name;
+      const nightHotelNotes = nightHotelObj.notes;
 
       // Activities building
       const activities: Activity[] = [];
@@ -1340,7 +1345,7 @@ export const aiService = {
           duration: 30,
           transport: getTransitInfo(modes, 30, 15000),
           links: [{ label: strings.hotelLink, url: 'https://www.klook.com/', type: 'booking' }],
-          notes: '',
+          notes: nightHotelNotes,
           isMustVisit: false,
           cost: { amount: 0, currency },
           openingHours: '24小時開放'
@@ -1364,7 +1369,7 @@ export const aiService = {
           duration: 30,
           transport: getTransitInfo(modes, 30, 15000),
           links: [{ label: strings.hotelLink, url: 'https://www.klook.com/', type: 'booking' }],
-          notes: '',
+          notes: dayHotelNotes,
           isMustVisit: false,
           cost: { amount: 0, currency },
           openingHours: '24小時開放'
@@ -1732,9 +1737,9 @@ export const aiService = {
             longitude: currentDest.longitude || 0
           },
           duration: 30,
-          transport: getTransitInfo(modes, 30, 15000),
+          transport: returnTransport,
           links: [{ label: strings.grabLink, url: 'https://www.grab.com/', type: 'info' }],
-          notes: '',
+          notes: nightHotelNotes,
           isMustVisit: false,
           cost: { amount: 0, currency },
           openingHours: '24小時開放'
