@@ -1099,6 +1099,16 @@ export const aiService = {
     const parseRange = (raw?: string): { startStr: string; endStr: string } | null => {
       if (!raw) return null;
       let s = raw.replace(/\//g, '-');
+      
+      // Auto-format YYYYMMDD~YYYYMMDD
+      if (/^\d{8}[~\-]\d{8}$/.test(s)) {
+        s = s.replace(/(\d{4})(\d{2})(\d{2})[~\-](\d{4})(\d{2})(\d{2})/, '$1-$2-$3~$4-$5-$6');
+      }
+      // Auto-format MMDD~MMDD
+      else if (/^\d{4}[~\-]\d{4}$/.test(s)) {
+        s = s.replace(/(\d{2})(\d{2})[~\-](\d{2})(\d{2})/, '$1-$2~$3-$4');
+      }
+
       // Ensure zero-padding and year for mm-dd formats
       if (/^\d{1,2}-\d{1,2}[~\-]\d{1,2}-\d{1,2}$/.test(s)) {
         const year = survey?.dates?.startDate ? new Date(survey.dates.startDate).getFullYear() : new Date().getFullYear();

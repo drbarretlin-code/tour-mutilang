@@ -554,7 +554,30 @@ export default function ItineraryScreen() {
       setLoading(true);
       const html = generateItineraryHtml(itinerary, contextSurvey);
 
-      if (Platform.OS === 'web' || Platform.OS === 'macos' || Platform.OS === 'windows') {
+      if (Platform.OS === 'web') {
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        document.body.appendChild(iframe);
+        
+        iframe.contentWindow?.document.open();
+        iframe.contentWindow?.document.write(html);
+        iframe.contentWindow?.document.close();
+        
+        iframe.onload = () => {
+          setTimeout(() => {
+            iframe.contentWindow?.focus();
+            iframe.contentWindow?.print();
+            setTimeout(() => {
+              document.body.removeChild(iframe);
+            }, 1000);
+          }, 500);
+        };
+      } else if (Platform.OS === 'macos' || Platform.OS === 'windows') {
         await Print.printAsync({ html });
       } else {
         const { uri } = await Print.printToFileAsync({ html, base64: false });
