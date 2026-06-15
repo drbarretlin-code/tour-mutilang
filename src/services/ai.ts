@@ -718,22 +718,6 @@ export const aiService = {
     const limitPerDest = Math.max(12, dayCount * 3);
 
     const dests = alignedSurvey?.destinations || [];
-    
-    // 初始化未分配興趣池，用於總體行程興趣全覆蓋
-    const unassignedInterests = new Set<InterestTag>(alignedSurvey?.interests || []);
-    const consumeInterestForSlot = (slotTypes: string[]) => {
-      for (const interest of Array.from(unassignedInterests)) {
-        const kinds = INTEREST_TO_KINDS[interest] || [];
-        const cats = kinds.map(deriveCategory);
-        for (const cat of cats) {
-          if (slotTypes.includes(cat)) {
-            unassignedInterests.delete(interest);
-            return [cat, ...slotTypes.filter(t => t !== cat)];
-          }
-        }
-      }
-      return slotTypes;
-    };
 
     // 預載 OTA Guide Packs (針對非內建目的地)
     const destNames = Array.from(new Set(dests.map(d => d?.name).filter(Boolean))) as string[];
@@ -878,6 +862,22 @@ export const aiService = {
     const start = new Date(survey?.dates?.startDate || Date.now());
     const end = new Date(survey?.dates?.endDate || Date.now() + 86400000 * 3);
     const dayCount = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
+
+    // 初始化未分配興趣池，用於總體行程興趣全覆蓋
+    const unassignedInterests = new Set<InterestTag>(survey?.interests || []);
+    const consumeInterestForSlot = (slotTypes: string[]) => {
+      for (const interest of Array.from(unassignedInterests)) {
+        const kinds = INTEREST_TO_KINDS[interest] || [];
+        const cats = kinds.map(deriveCategory);
+        for (const cat of cats) {
+          if (slotTypes.includes(cat)) {
+            unassignedInterests.delete(interest);
+            return [cat, ...slotTypes.filter(t => t !== cat)];
+          }
+        }
+      }
+      return slotTypes;
+    };
 
     const days: ItineraryDay[] = [];
     const mainDest = survey?.destinations?.[0]?.name || '台北';
